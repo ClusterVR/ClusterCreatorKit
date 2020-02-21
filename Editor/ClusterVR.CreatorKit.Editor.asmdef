@@ -1,0 +1,20 @@
+{
+    "name": "ClusterVR.CreatorKit.Editor",
+    "references": [
+        "ClusterVR.CreatorKit",
+        "ClusterVR.CreatorKit.World",
+        "ClusterVR.CreatorKit.World.Implements",
+        "ClusterVR.CreatorKit.Item",
+        "ClusterVR.CreatorKit.Item.Implements"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

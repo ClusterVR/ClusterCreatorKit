@@ -1,0 +1,14 @@
+{
+    "name": "ClusterVR.CreatorKit.World.Implements",
+    "references": [
+        "ClusterVR.CreatorKit.World"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

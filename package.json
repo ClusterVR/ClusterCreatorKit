@@ -1,0 +1,8 @@
+{
+  "name": "mu.cluster.cluster-creator-kit",
+  "version": "1.0.0",
+  "displayName": "Cluster Creator Kit",
+  "unity": "2019.2",
+  "description": "Cluster Creator Kit \u3067 cluster \u306e\u30ef\u30fc\u30eb\u30c9\u3092\u4f5c\u308d\u3046",
+  "unityRelease": "8f1"
+}
