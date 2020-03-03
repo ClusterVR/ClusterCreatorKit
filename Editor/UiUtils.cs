@@ -7,7 +7,7 @@ namespace ClusterVR.CreatorKit.Editor
     {
         public static VisualElement Separator()
         {
-            return new VisualElement()
+            return new VisualElement
             {
                 style =
                 {

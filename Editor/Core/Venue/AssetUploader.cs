@@ -11,7 +11,7 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
 {
     public static class AssetUploader
     {
-        public static void Upload(string accessToken, VenueID venueId)
+        public static string Upload(string accessToken, VenueID venueId)
         {
             var request = APIServiceClient.PostUploadRequest.CallSync(venueId, accessToken);
             AssetUpload(accessToken, "assetbundle/win", EditorPrefsUtils.LastBuildWin, request.UploadRequestId);
@@ -19,7 +19,8 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
             AssetUpload(accessToken, "assetbundle/android", EditorPrefsUtils.LastBuildAndroid, request.UploadRequestId);
             AssetUpload(accessToken, "assetbundle/ios", EditorPrefsUtils.LastBuildIOS, request.UploadRequestId);
 
-            APIServiceClient.PostNotifyFinishedUpload.CallSync((venueId, request.UploadRequestId), accessToken);
+            var response = APIServiceClient.PostNotifyFinishedUpload.CallSync((venueId, request.UploadRequestId), accessToken);
+            return response.Url;
         }
 
         static void AssetUpload(

@@ -25,7 +25,7 @@ namespace ClusterVR.CreatorKit.Editor.Venue
         bool updatingVenue;
         string errorMessage;
 
-        public EditVenueView(UserInfo userInfo, Core.Venue.Json.Venue venue, Action venueChangeCallback)
+        public EditVenueView(UserInfo userInfo, Core.Venue.Json.Venue venue, ImageView thumbnailView, Action venueChangeCallback)
         {
             Assert.IsNotNull(venue);
 
@@ -36,12 +36,9 @@ namespace ClusterVR.CreatorKit.Editor.Venue
             newVenueName = venue.Name;
             newVenueDesc = venue.Description;
 
-            thumbnailView = new ImageView();
-            var thumbnailUrl = venue.ThumbnailUrls.First(x => x != null);
-            if (thumbnailUrl != null)
-            {
-                thumbnailView.SetImageUrl(thumbnailUrl);
-            }
+            this.thumbnailView = thumbnailView;
+            var thumbnailUrl = venue.ThumbnailUrls.FirstOrDefault(x => x != null);
+            thumbnailView.SetImageUrl(thumbnailUrl ?? new ThumbnailUrl(""));
         }
 
         public VisualElement CreateView()

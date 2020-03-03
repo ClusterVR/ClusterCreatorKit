@@ -30,8 +30,8 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
                 venueId => $"{Constants.VenueApiBaseUrl}/v1/venues/{venueId.Value}/upload/new",
                 UnityWebRequest.kHttpVerbPOST);
 
-        public static readonly RPCClient<(VenueID, UploadRequestID), UploadRequest> PostNotifyFinishedUpload =
-            new RPCClient<(VenueID venueId, UploadRequestID uploadRequestId), UploadRequest>(
+        public static readonly RPCClient<(VenueID, UploadRequestID), VenueUploadRequestCompletionResponse> PostNotifyFinishedUpload =
+            new RPCClient<(VenueID venueId, UploadRequestID uploadRequestId), VenueUploadRequestCompletionResponse>(
                 request => $"{Constants.VenueApiBaseUrl}/v1/venues/{request.venueId.Value}/upload/{request.uploadRequestId.Value}/done",
                 UnityWebRequest.kHttpVerbPOST);
     }

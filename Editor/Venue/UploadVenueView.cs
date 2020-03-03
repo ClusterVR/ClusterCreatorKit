@@ -14,16 +14,20 @@ namespace ClusterVR.CreatorKit.Editor.Venue
     {
         readonly UserInfo userInfo;
         readonly Core.Venue.Json.Venue venue;
+        string worldDetailUrl;
 
         bool executeUpload;
         string errorMessage;
         UploadVenueService currentUploadService;
-
-        public UploadVenueView(UserInfo userInfo, Core.Venue.Json.Venue venue)
+        ImageView thumbnail;
+        
+        public UploadVenueView(UserInfo userInfo, Core.Venue.Json.Venue venue, ImageView thumbnail)
         {
             Assert.IsNotNull(venue);
             this.userInfo = userInfo;
             this.venue = venue;
+            this.thumbnail = thumbnail;
+            worldDetailUrl = venue.WorldDetailUrl;
         }
 
         public VisualElement CreateView()
@@ -58,7 +62,15 @@ namespace ClusterVR.CreatorKit.Editor.Venue
                 currentUploadService = new UploadVenueService(
                     userInfo.VerifiedToken,
                     venue,
-                    () => errorMessage = "",
+                    completionResponse =>
+                    {
+                        errorMessage = "";
+                        worldDetailUrl = completionResponse.Url;
+                        if (EditorPrefsUtils.OpenWorldDetailPageAfterUpload)
+                        {
+                            Application.OpenURL(completionResponse.Url);
+                        }
+                    },
                     exception =>
                     {
                         Debug.LogException(exception);
@@ -73,16 +85,33 @@ namespace ClusterVR.CreatorKit.Editor.Venue
         void DrawUI()
         {
             EditorGUILayout.Space();
+            EditorPrefsUtils.OpenWorldDetailPageAfterUpload = EditorGUILayout.ToggleLeft("アップロード後にワールドページを開く", EditorPrefsUtils.OpenWorldDetailPageAfterUpload);
             EditorGUILayout.HelpBox("アップロードするシーンを開いておいてください。", MessageType.Info);
 
-            if (GUILayout.Button($"'{venue.Name}'としてアップロードする"))
+            if (thumbnail.IsEmpty)
             {
-                executeUpload = EditorUtility.DisplayDialog(
-                    "ワールドをアップロードする",
-                    $"公開ワールド'{venue.Name}'としてアップロードします。よろしいですか？",
-                    "アップロード",
-                    "キャンセル"
-                );
+                EditorGUILayout.HelpBox("サムネイル画像を設定してください。", MessageType.Error);
+            }
+
+            using (new EditorGUI.DisabledScope(thumbnail.IsEmpty))
+            {
+                var uploadButton = GUILayout.Button($"'{venue.Name}'としてアップロードする");
+                if (uploadButton)
+                {
+                    executeUpload = EditorUtility.DisplayDialog(
+                        "ワールドをアップロードする",
+                        $"公開ワールド'{venue.Name}'としてアップロードします。よろしいですか？",
+                        "アップロード",
+                        "キャンセル"
+                    );
+                }
+            }
+            using (new EditorGUI.DisabledGroupScope(string.IsNullOrEmpty(worldDetailUrl)))
+            {
+                if (GUILayout.Button("ワールドページを開く"))
+                {
+                    Application.OpenURL(worldDetailUrl);
+                }
             }
 
             EditorGUILayout.Space();

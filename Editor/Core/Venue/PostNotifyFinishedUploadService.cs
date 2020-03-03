@@ -11,7 +11,7 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
         readonly string accessToken;
         readonly VenueID venueId;
         readonly UploadRequestID uploadRequestId;
-        readonly Action<UploadRequest> onSuccess;
+        readonly Action<VenueUploadRequestCompletionResponse> onSuccess;
         readonly Action<Exception> onError;
 
         bool isProcessing;
@@ -21,7 +21,7 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
             string accessToken,
             VenueID venueId,
             UploadRequestID uploadRequestId,
-            Action<UploadRequest> onSuccess = null,
+            Action<VenueUploadRequestCompletionResponse> onSuccess = null,
             Action<Exception> onError = null
         )
         {
@@ -65,8 +65,8 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
             try
             {
                 Debug.Log(notifyFinishedRequst.downloadHandler.text);
-                var uploadId = JsonUtility.FromJson<UploadRequest>(notifyFinishedRequst.downloadHandler.text);
-                onSuccess?.Invoke(uploadId);
+                var response = JsonUtility.FromJson<VenueUploadRequestCompletionResponse>(notifyFinishedRequst.downloadHandler.text);
+                onSuccess?.Invoke(response);
             }
             catch (Exception e)
             {

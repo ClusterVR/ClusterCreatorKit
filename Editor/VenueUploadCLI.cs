@@ -44,9 +44,9 @@ namespace ClusterVR.CreatorKit.Editor
             var accessToken = GetEnv("ACCESS_TOKEN");
             var venueId = new VenueID(GetEnv("VENUE_ID"));
 
-            AssetUploader.Upload(accessToken, venueId);
+            var worldDetailUrl = AssetUploader.Upload(accessToken, venueId);
 
-            Debug.Log("Upload End");
+            Debug.Log($"Upload End: {worldDetailUrl}");
         }
 
         static string GetEnv(string key)

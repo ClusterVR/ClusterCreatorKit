@@ -13,8 +13,9 @@ namespace ClusterVR.CreatorKit.Editor.Venue
         {
             Assert.IsNotNull(venue);
 
-            editVenueView = new EditVenueView(userInfo, venue, venueChangeCallback);
-            uploadVenueView = new UploadVenueView(userInfo, venue);
+            var thumbnail = new ImageView();
+            editVenueView = new EditVenueView(userInfo, venue, thumbnail, venueChangeCallback);
+            uploadVenueView = new UploadVenueView(userInfo, venue, thumbnail);
         }
 
         public void AddView(VisualElement parent)

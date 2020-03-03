@@ -1,6 +1,7 @@
 using System.IO;
 using ClusterVR.CreatorKit.Editor.Core.Venue;
 using ClusterVR.CreatorKit.Editor.Core.Venue.Json;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,6 +11,7 @@ namespace ClusterVR.CreatorKit.Editor.Venue
     {
         Reactive<Texture2D> reactiveImageTex = new Reactive<Texture2D>();
         Reactive<string> reactiveOverlay = new Reactive<string>();
+        public bool IsEmpty { get; private set; }
 
         public VisualElement CreateView()
         {
@@ -31,9 +33,11 @@ namespace ClusterVR.CreatorKit.Editor.Venue
 
         public void SetImageUrl(ThumbnailUrl url)
         {
-            if (string.IsNullOrEmpty(url.Url))
+            IsEmpty = string.IsNullOrEmpty(url.Url);
+            if (IsEmpty)
             {
-                SetError();
+                reactiveImageTex.Val = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/mu.cluster.cluster-creator-kit/Editor/Texture/require_image.png");
+                reactiveOverlay.Val = "";
                 return;
             }
 
@@ -41,6 +45,7 @@ namespace ClusterVR.CreatorKit.Editor.Venue
                 url, SetSuccess, exc => SetError());
 
             downloadThumbnailService.Run();
+
             reactiveOverlay.Val = "…";
         }
 

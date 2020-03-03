@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Core.Venue.Json
@@ -13,6 +12,7 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue.Json
         [SerializeField] Group group;
         [SerializeField] ThumbnailUrl[] thumbnailUrls;
         [SerializeField] string venueId;
+        [SerializeField] string worldDetailUrl;
 
         public string Description => description;
         public string Name => name;
@@ -20,5 +20,6 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue.Json
         public Group Group => group;
         public ThumbnailUrl[] ThumbnailUrls => thumbnailUrls;
         public VenueID VenueId => new VenueID(venueId);
+        public string WorldDetailUrl => worldDetailUrl;
     }
 }

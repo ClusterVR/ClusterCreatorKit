@@ -27,7 +27,7 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
     {
         readonly string accessToken;
         readonly Json.Venue venue;
-        readonly Action onSuccess;
+        readonly Action<VenueUploadRequestCompletionResponse> onSuccess;
         readonly Action<Exception> onError;
 
         bool isProcessing;
@@ -38,10 +38,12 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
         readonly Dictionary<UploadState, bool> uploadStatus;
         public IDictionary<UploadState, bool> UploadStatus => uploadStatus;
 
+        VenueUploadRequestCompletionResponse completionResponse;
+
         public UploadVenueService(
             string accessToken,
             Json.Venue venue,
-            Action onSuccess = null,
+            Action<VenueUploadRequestCompletionResponse> onSuccess = null,
             Action<Exception> onError = null
         )
         {
@@ -281,6 +283,7 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
                         uploadRequestId = null;
                         postNotifyFinishProcess = true;
                         uploadStatus[UploadState.PostProcess] = true;
+                        completionResponse = request;
                     },
                     exception =>
                     {
@@ -301,7 +304,7 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
                 yield break;
             }
 
-            onSuccess?.Invoke();
+            onSuccess?.Invoke(completionResponse);
             isProcessing = false;
         }
 
