@@ -220,7 +220,7 @@ MonoBehaviour:
   cameraTransform: {fileID: 4742403413904210740}
   characterController: {fileID: 8937530593553008956}
   desktopMouseDragListener: {fileID: 0}
-  moveSpeed: 2
+  moveSpeed: 2.5
 --- !u!1001 &3047062197285841967
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -228,16 +228,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4742403413904210740}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 9fa79218bb5c6a24e9d07677ff7e28ac,
-        type: 3}
-      propertyPath: m_Name
-      value: Vector
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 9fa79218bb5c6a24e9d07677ff7e28ac,
-        type: 3}
-      propertyPath: m_Layer
-      value: 16
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9fa79218bb5c6a24e9d07677ff7e28ac,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -307,6 +297,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9fa79218bb5c6a24e9d07677ff7e28ac,
+        type: 3}
+      propertyPath: m_Name
+      value: Vector
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9fa79218bb5c6a24e9d07677ff7e28ac,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fa79218bb5c6a24e9d07677ff7e28ac, type: 3}

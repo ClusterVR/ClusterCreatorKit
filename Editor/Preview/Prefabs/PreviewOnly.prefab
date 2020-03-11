@@ -39,11 +39,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 590302453393596777}
     m_Modifications:
-    - target: {fileID: 6770039052970230886, guid: 7ee7955dfe59d0d4c93a1115e50782ed,
-        type: 3}
-      propertyPath: m_Name
-      value: CanvasAndEventHandler
-      objectReference: {fileID: 0}
     - target: {fileID: 602914125778850470, guid: 7ee7955dfe59d0d4c93a1115e50782ed,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -99,6 +94,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6770039052970230886, guid: 7ee7955dfe59d0d4c93a1115e50782ed,
+        type: 3}
+      propertyPath: m_Name
+      value: CanvasAndEventHandler
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ee7955dfe59d0d4c93a1115e50782ed, type: 3}
 --- !u!4 &487192698198310436 stripped
@@ -126,21 +126,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 590302453393596777}
     m_Modifications:
-    - target: {fileID: 4566206746035942596, guid: 8e4adf07989e3534f8b84304bc4505ae,
-        type: 3}
-      propertyPath: m_Name
-      value: DesktopPlayerController
-      objectReference: {fileID: 0}
-    - target: {fileID: -648366260665722190, guid: 8e4adf07989e3534f8b84304bc4505ae,
-        type: 3}
-      propertyPath: desktopMouseDragListener
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: -4804867365819599185, guid: 8e4adf07989e3534f8b84304bc4505ae,
         type: 3}
       propertyPath: desktopMouseDragListener
       value: 
       objectReference: {fileID: 8651414842253665255}
+    - target: {fileID: 4566206746035942596, guid: 8e4adf07989e3534f8b84304bc4505ae,
+        type: 3}
+      propertyPath: m_Name
+      value: DesktopPlayerController
+      objectReference: {fileID: 0}
     - target: {fileID: 8613591134409770362, guid: 8e4adf07989e3534f8b84304bc4505ae,
         type: 3}
       propertyPath: m_LocalPosition.x
