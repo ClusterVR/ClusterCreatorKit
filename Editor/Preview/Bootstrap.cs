@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Preview.EditorUI;
 using ClusterVR.CreatorKit.Editor.Preview.World;
+using ClusterVR.CreatorKit.Editor.Venue;
 using ClusterVR.CreatorKit.World;
 using UnityEditor;
 using UnityEngine;
@@ -38,6 +39,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     break;
                 case PlayModeStateChange.EnteredPlayMode:
                     SetIsInGameMode(true);
+
+                    LayerCollisionConfigurer.SetupLayerCollision();
 
                     var rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
 

@@ -3,8 +3,9 @@
     "references": [
         "ClusterVR.CreatorKit.Editor",
         "ClusterVR.CreatorKit.World",
-        "ClusterVR.CreatorKit.Previewu",
-        "Unity.Postprocessing.Runtime"
+        "ClusterVR.CreatorKit.Preview",
+        "Unity.Postprocessing.Runtime",
+        "ClusterVR.CreatorKit.Constants"
     ],
     "includePlatforms": [
         "Editor"

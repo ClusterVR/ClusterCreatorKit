@@ -14,31 +14,40 @@ namespace ClusterVR.CreatorKit.Editor.Venue
             var scene = SceneManager.GetActiveScene();
             var rootObjects = scene.GetRootGameObjects();
 
-            var despawnHeight = rootObjects.SelectMany(x => x.GetComponentsInChildren<IDespawnHeight>());
+            var despawnHeight = rootObjects.SelectMany(x => x.GetComponentsInChildren<IDespawnHeight>(true));
             if (despawnHeight.Count() != 1)
             {
-                errorMessage = $"{nameof(IDespawnHeight)}の数はScene上で1つだけにしてください。現在{nameof(IDespawnHeight)}の数は {despawnHeight.Count()} です。";
+                errorMessage = $"DespawnHeightはワールドに1つ配置されている必要があります。現在配置されているDespawnHeightの数は {despawnHeight.Count()} です";
                 return false;
             }
 
-            var spawnPoints = rootObjects.SelectMany(x => x.GetComponentsInChildren<ISpawnPoint>());
+            var spawnPoints = rootObjects.SelectMany(x => x.GetComponentsInChildren<ISpawnPoint>(true))
+                .Where(x => x.SpawnType == SpawnType.Entrance);
             if (!spawnPoints.Any())
             {
-                errorMessage = $"{nameof(ISpawnPoint)}はScene上に最低でも1つは配置してください";
+                errorMessage = "ワールドにはSpawnTypeが「Entrance」のSpawnPointが1つ以上配置されている必要があります";
                 return false;
             }
 
-            var mainCameras = rootObjects.SelectMany(x => x.GetComponentsInChildren<Camera>()).Where(camera => camera.gameObject.tag == "MainCamera");
+            var mainCameras = rootObjects.SelectMany(x => x.GetComponentsInChildren<Camera>(true))
+                .Where(camera => camera.gameObject.CompareTag("MainCamera"));
             if (mainCameras.Any())
             {
-                errorMessage = $"Scene上にはMainCameraを配置しないでください";
+                errorMessage = $"ワールドにはTagが「MainCamera」の{nameof(Camera)}を配置できません";
                 return false;
             }
 
-            var eventSystems = rootObjects.SelectMany(x => x.GetComponentsInChildren<EventSystem>());
+            var eventSystems = rootObjects.SelectMany(x => x.GetComponentsInChildren<EventSystem>(true));
             if (eventSystems.Any())
             {
-                errorMessage = $"Scene上には、{nameof(EventSystem)}を配置しないでください";
+                errorMessage = $"ワールドには{nameof(EventSystem)}を配置できません";
+                return false;
+            }
+
+            var items = rootObjects.SelectMany(x => x.GetComponentsInChildren<Item.Implements.Item>(true));
+            if (items.Any(i => i.transform.GetComponentsInParent<Item.Implements.Item>(true).Length > 1))
+            {
+                errorMessage = "アイテムの子にアイテムは配置できません";
                 return false;
             }
 

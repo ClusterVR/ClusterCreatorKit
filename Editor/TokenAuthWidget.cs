@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Core;
 using ClusterVR.CreatorKit.Editor.Core.Venue;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -19,11 +18,11 @@ namespace ClusterVR.CreatorKit.Editor
         {
             var container = new VisualElement();
             container.Add(
-                new Button(() => Application.OpenURL(Constants.WebBaseUrl + "/account/tokens"))
+                new Button(() => Application.OpenURL(ClusterVR.CreatorKit.Editor.Core.Constants.WebBaseUrl + "/account/tokens"))
                 {
                     text = "Webでトークンを発行"
                 });
-            
+
             container.Add(UiUtils.Separator());
             container.Add(new Label(){text="アクセストークンを貼り付けてください"});
 
@@ -44,7 +43,7 @@ namespace ClusterVR.CreatorKit.Editor
             };
             ReactiveBinder.Bind(reactiveIsValidToken, useTokenButton.SetEnabled);
             container.Add(useTokenButton);
-            
+
             // TODO: 他のwindowでloginしたときにも自動で同期する
             if (!string.IsNullOrEmpty(EditorPrefsUtils.SavedAccessToken))
             {
@@ -113,7 +112,7 @@ namespace ClusterVR.CreatorKit.Editor
                 reactiveErrorMessage.Val = "不正なアクセストークンです";
                 return;
             }
-            
+
             reactiveIsValidToken.Val = true;
         }
     }

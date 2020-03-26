@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.World.Implements.SpawnPoints
 {
-    [ExecuteInEditMode]
-    public class SpawnPoint : MonoBehaviour, ISpawnPoint
+    [ExecuteInEditMode, DisallowMultipleComponent]
+    public sealed class SpawnPoint : MonoBehaviour, ISpawnPoint
     {
         [SerializeField] SpawnType spawnType;
 

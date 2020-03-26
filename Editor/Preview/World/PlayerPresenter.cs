@@ -1,4 +1,5 @@
 ﻿using System;
+using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Preview.PlayerController;
 using UnityEditor;
 using UnityEngine;
@@ -42,7 +43,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             var postProcessLayer = CameraTransform.gameObject.GetComponent<PostProcessLayer>() ?? CameraTransform.gameObject.AddComponent<PostProcessLayer>();
 
             postProcessLayer.volumeTrigger = CameraTransform;
-            postProcessLayer.volumeLayer = 1 << LayerMask.NameToLayer("PostProcessing");
+            postProcessLayer.volumeLayer = 1 << LayerName.PostProcessing;
 #endif
 
             // Permissionに応じた初期位置にスポーンする
@@ -73,10 +74,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             switch (permissionType)
             {
                 case PermissionType.Performer:
-                    PlayerTransform.gameObject.layer = LayerMask.NameToLayer("Performer");
+                    PlayerTransform.gameObject.layer = LayerName.Performer;
                     break;
                 case PermissionType.Audience:
-                    PlayerTransform.gameObject.layer = LayerMask.NameToLayer("Audience");
+                    PlayerTransform.gameObject.layer = LayerName.Audience;
                     break;
             }
         }

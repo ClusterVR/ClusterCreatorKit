@@ -2,8 +2,8 @@
 
 namespace ClusterVR.CreatorKit.World.Implements.DespawnHeights
 {
-    [ExecuteInEditMode]
-    public class DespawnHeight : MonoBehaviour, IDespawnHeight
+    [ExecuteInEditMode, DisallowMultipleComponent]
+    public sealed class DespawnHeight : MonoBehaviour, IDespawnHeight
     {
         public float Height => transform.position.y;
 

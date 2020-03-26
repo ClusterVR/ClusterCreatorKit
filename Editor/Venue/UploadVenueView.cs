@@ -20,7 +20,7 @@ namespace ClusterVR.CreatorKit.Editor.Venue
         string errorMessage;
         UploadVenueService currentUploadService;
         ImageView thumbnail;
-        
+
         public UploadVenueView(UserInfo userInfo, Core.Venue.Json.Venue venue, ImageView thumbnail)
         {
             Assert.IsNotNull(venue);
@@ -41,6 +41,9 @@ namespace ClusterVR.CreatorKit.Editor.Venue
             {
                 executeUpload = false;
                 currentUploadService = null;
+
+                ItemIdAssigner.AssignItemId();
+                LayerCorrector.CorrectLayer();
 
                 if (!VenueValidator.ValidateVenue(out errorMessage))
                 {

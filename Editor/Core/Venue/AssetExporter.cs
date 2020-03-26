@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -53,8 +54,13 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
 
         static void ExportPreProcess(string tempPath, string assetBundleName)
         {
-            var currentScenePath = SceneManager.GetActiveScene().path;
+            var scene = SceneManager.GetActiveScene();
+            if (scene.isDirty)
+            {
+                EditorSceneManager.SaveScene(scene);
+            }
 
+            var currentScenePath = scene.path;
             if (!AssetDatabase.CopyAsset(currentScenePath, tempPath))
             {
                 throw new Exception($"Fail copy asset, {currentScenePath} to {tempPath}");
