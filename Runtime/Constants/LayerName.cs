@@ -16,5 +16,8 @@
         public const int Performer = 23;
         public const int Audience = 24;
         public const int VenueLayer2 = 29;
+
+        public const int InteractableItemMask = 1 << InteractableItem;
+        public const int PostProcessingMask = 1 << PostProcessing;
     }
 }

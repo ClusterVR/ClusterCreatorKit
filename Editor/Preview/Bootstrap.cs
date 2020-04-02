@@ -23,11 +23,13 @@ namespace ClusterVR.CreatorKit.Editor.Preview
 
         static Bootstrap()
         {
+#if !CLUSTER_CREATOR_KIT_DISABLE_PREVIEW
             EditorApplication.playModeStateChanged += async playMode =>
             {
                 await OnChangePlayModeAsync(playMode);
                 OnChangePlayMode(playMode);
             };
+#endif
         }
 
         static void OnChangePlayMode(PlayModeStateChange playMode)
@@ -100,6 +102,5 @@ namespace ClusterVR.CreatorKit.Editor.Preview
             return rootGameObjects.SelectMany(x =>
                 x.GetComponentsInChildren<T>(true));
         }
-
     }
 }

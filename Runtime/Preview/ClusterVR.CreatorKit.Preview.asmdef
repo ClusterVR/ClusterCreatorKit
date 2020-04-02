@@ -1,6 +1,9 @@
 {
     "name": "ClusterVR.CreatorKit.Preview",
-    "references": [],
+    "references": [
+        "ClusterVR.CreatorKit.Item",
+        "ClusterVR.CreatorKit.Constants"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

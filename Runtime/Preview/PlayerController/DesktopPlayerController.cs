@@ -7,9 +7,10 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
     {
         [SerializeField] Transform cameraTransform;
         [SerializeField] CharacterController characterController;
-        [SerializeField] DesktopMouseDragListener desktopMouseDragListener;
+        [SerializeField] DesktopPointerEventListener desktopPointerEventListener;
         [SerializeField] float moveSpeed;
-        float fallingSpeed;
+        [SerializeField] float jumpSpeed;
+        float velocityY;
 
         public Transform PlayerTransform => characterController.transform;
         public Transform CameraTransform => cameraTransform;
@@ -21,7 +22,7 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
         void Start()
         {
-            desktopMouseDragListener.OnMouseDrag += Rotate;
+            desktopPointerEventListener.OnDragged += Rotate;
         }
 
         void Update()
@@ -31,17 +32,19 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             var direction = new Vector3(x, 0, z);
             direction.Normalize();
             direction = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * direction;
-            var velocity = direction * moveSpeed;
+
             if (characterController.isGrounded)
             {
-                fallingSpeed = 0;
-            }
-            else
-            {
-                fallingSpeed += Time.deltaTime * 9.81f;
+                if (Input.GetKeyDown(KeyCode.Space)) velocityY = jumpSpeed;
+                else
+                {
+                    velocityY = 0f;
+                    if (direction.sqrMagnitude == 0f) return;
+                }
             }
 
-            velocity.y = -fallingSpeed;
+            velocityY -= Time.deltaTime * 9.81f;
+            var velocity = new Vector3(direction.x * moveSpeed, velocityY, direction.z * moveSpeed);
             characterController.Move(velocity * Time.deltaTime);
         }
 

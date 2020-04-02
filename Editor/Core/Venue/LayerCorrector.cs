@@ -18,6 +18,7 @@ namespace ClusterVR.CreatorKit.Editor.Venue
 
         public static void CorrectLayer()
         {
+            if (Application.isPlaying) return;
             var scene = SceneManager.GetActiveScene();
             var rootObjects = scene.GetRootGameObjects();
             var grabbableItems = rootObjects.SelectMany(o => o.GetComponentsInChildren<GrabbableItem>(true));
