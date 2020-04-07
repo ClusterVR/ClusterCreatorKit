@@ -27,7 +27,7 @@ namespace ClusterVR.CreatorKit.Editor.Core
         public static string LastBuildAndroidKey => "LastBuildAndroid";
         public static string LastBuildIOSKey => "LastBuildIOS";
         public static string LastExportPackageKey => "LastExportPackage";
-        public static string OpenWorldDetailPageAfterUploadKey => "OpenWorldDetailPageAfterUpload";
+        public static string OpenWorldManagementPageAfterUploadKey => "OpenWorldManagementPageAfterUpload";
 
         // package の version (SemVer)
         public static string GetCreatorKitVersion()

@@ -277,6 +277,7 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
                     accessToken,
                     venue.VenueId,
                     uploadRequestId,
+                    false,
                     request =>
                     {
                         Debug.Log($"notify finished upload request, Request ID : {request.UploadRequestId}");

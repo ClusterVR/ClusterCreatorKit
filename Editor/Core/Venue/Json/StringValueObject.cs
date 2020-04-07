@@ -36,5 +36,7 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue.Json
         {
             Value = value;
         }
+
+        public override string ToString() => Value;
     }
 }

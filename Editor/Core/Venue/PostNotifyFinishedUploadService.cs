@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Text;
 using ClusterVR.CreatorKit.Editor.Core.Venue.Json;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -11,6 +12,7 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
         readonly string accessToken;
         readonly VenueID venueId;
         readonly UploadRequestID uploadRequestId;
+        readonly bool isPublish;
         readonly Action<VenueUploadRequestCompletionResponse> onSuccess;
         readonly Action<Exception> onError;
 
@@ -21,6 +23,7 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
             string accessToken,
             VenueID venueId,
             UploadRequestID uploadRequestId,
+            bool isPublish,
             Action<VenueUploadRequestCompletionResponse> onSuccess = null,
             Action<Exception> onError = null
         )
@@ -28,6 +31,7 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
             this.accessToken = accessToken;
             this.venueId = venueId;
             this.uploadRequestId = uploadRequestId;
+            this.isPublish = isPublish;
             this.onSuccess = onSuccess;
             this.onError = onError;
         }
@@ -40,9 +44,12 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
         IEnumerator PostNotifyFinishedUpload()
         {
             isProcessing = true;
-            var notifyFinishedUrl = $"{Constants.VenueApiBaseUrl}/v1/venues/{venueId.Value}/upload/{uploadRequestId.Value}/done";
+            // 互換性のためRequestParameterとBody両方に入れる
+            var notifyFinishedUrl = $"{Constants.VenueApiBaseUrl}/v1/venues/{venueId.Value}/upload/{uploadRequestId.Value}/done?isPublish={isPublish}";
             var notifyFinishedRequst = ClusterApiUtil.CreateUnityWebRequest(accessToken, notifyFinishedUrl,UnityWebRequest.kHttpVerbPOST);
             notifyFinishedRequst.downloadHandler = new DownloadHandlerBuffer();
+            var payload = new PostNotifyFinishedUploadPayload {isPublish = isPublish};
+            notifyFinishedRequst.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(JsonUtility.ToJson(payload)));
 
             notifyFinishedRequst.SendWebRequest();
 

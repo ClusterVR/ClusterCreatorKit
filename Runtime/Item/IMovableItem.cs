@@ -11,5 +11,6 @@ namespace ClusterVR.CreatorKit.Item
         void SetPositionAndRotation(Vector3 position, Quaternion rotation);
         // Physics を使う Item の場合は有効化する
         void EnablePhysics();
+        void Respawn();
     }
 }

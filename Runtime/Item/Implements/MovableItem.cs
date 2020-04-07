@@ -19,6 +19,8 @@ namespace ClusterVR.CreatorKit.Item.Implements
         }
 
         bool isInitialized;
+        Vector3 initialPosition;
+        Quaternion initialRotation;
         bool initialIsKinematic;
 
         State state = State.Free;
@@ -32,13 +34,15 @@ namespace ClusterVR.CreatorKit.Item.Implements
         void CacheInitialValue()
         {
             if (isInitialized) return;
+            initialPosition = transform.position;
+            initialRotation = transform.rotation;
             initialIsKinematic = rb.isKinematic;
             isInitialized = true;
         }
 
         void Start()
         {
-            StartCoroutine(Rewind());
+            CacheInitialValue();
         }
 
         public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
@@ -60,39 +64,24 @@ namespace ClusterVR.CreatorKit.Item.Implements
             setAt = Time.realtimeSinceStartup;
             interpolateDurationSeconds = Time.deltaTime;
             state = State.Controlled;
-        }
-
-        void LateUpdate()
-        {
-            if (state == State.Controlled)
-            {
-                transform.position = targetPosition;
-                transform.rotation = targetRotation;
-            }
-        }
-
-        IEnumerator Rewind()
-        {
-            while (true)
-            {
-                yield return new WaitForEndOfFrame();
-                if (state == State.Controlled)
-                {
-                    transform.position = currentPosition;
-                    transform.rotation = currentRotation;
-                }
-            }
+            transform.position = targetPosition;
+            transform.rotation = targetRotation;
         }
 
         void FixedUpdate()
         {
-            if (state != State.Free)
+            if (state == State.Free) return;
+
+            if (state == State.Controlled)
             {
-                var interpolateRate = (Time.realtimeSinceStartup - setAt) / interpolateDurationSeconds;
-                rb.MovePosition(Vector3.Lerp(currentPosition, targetPosition, interpolateRate));
-                rb.MoveRotation(Quaternion.Slerp(currentRotation, targetRotation, interpolateRate));
+                rb.position = currentPosition;
+                rb.rotation = currentRotation;
                 state = State.Interpolated;
             }
+
+            var interpolateRate = (Time.realtimeSinceStartup - setAt) / interpolateDurationSeconds;
+            rb.MovePosition(Vector3.Lerp(currentPosition, targetPosition, interpolateRate));
+            rb.MoveRotation(Quaternion.Slerp(currentRotation, targetRotation, interpolateRate));
         }
 
         public void EnablePhysics()
@@ -110,6 +99,14 @@ namespace ClusterVR.CreatorKit.Item.Implements
             if (deltaAngle > 180f) deltaAngle -= 360f;
             if (deltaAngle == 0f) return Vector3.zero;
             else return deltaAngle * Mathf.Deg2Rad / deltaTime * (from * deltaAngleAxis);
+        }
+
+        public void Respawn()
+        {
+            transform.position = initialPosition;
+            transform.rotation = initialRotation;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
         }
 
         void Reset()

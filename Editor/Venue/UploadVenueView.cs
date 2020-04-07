@@ -15,6 +15,7 @@ namespace ClusterVR.CreatorKit.Editor.Venue
         readonly UserInfo userInfo;
         readonly Core.Venue.Json.Venue venue;
         string worldDetailUrl;
+        readonly string worldManagementUrl;
 
         bool executeUpload;
         string errorMessage;
@@ -28,6 +29,7 @@ namespace ClusterVR.CreatorKit.Editor.Venue
             this.venue = venue;
             this.thumbnail = thumbnail;
             worldDetailUrl = venue.WorldDetailUrl;
+            worldManagementUrl = ClusterVR.CreatorKit.Editor.Core.Constants.WebBaseUrl + "/account/worlds";
         }
 
         public VisualElement CreateView()
@@ -69,9 +71,9 @@ namespace ClusterVR.CreatorKit.Editor.Venue
                     {
                         errorMessage = "";
                         worldDetailUrl = completionResponse.Url;
-                        if (EditorPrefsUtils.OpenWorldDetailPageAfterUpload)
+                        if (EditorPrefsUtils.OpenWorldManagementPageAfterUpload)
                         {
-                            Application.OpenURL(completionResponse.Url);
+                            Application.OpenURL(worldManagementUrl);
                         }
                     },
                     exception =>
@@ -88,7 +90,7 @@ namespace ClusterVR.CreatorKit.Editor.Venue
         void DrawUI()
         {
             EditorGUILayout.Space();
-            EditorPrefsUtils.OpenWorldDetailPageAfterUpload = EditorGUILayout.ToggleLeft("アップロード後にワールドページを開く", EditorPrefsUtils.OpenWorldDetailPageAfterUpload);
+            EditorPrefsUtils.OpenWorldManagementPageAfterUpload = EditorGUILayout.ToggleLeft("アップロード後にワールド管理ページを開く", EditorPrefsUtils.OpenWorldManagementPageAfterUpload);
             EditorGUILayout.HelpBox("アップロードするシーンを開いておいてください。", MessageType.Info);
 
             if (thumbnail.IsEmpty)
@@ -103,18 +105,16 @@ namespace ClusterVR.CreatorKit.Editor.Venue
                 {
                     executeUpload = EditorUtility.DisplayDialog(
                         "ワールドをアップロードする",
-                        $"公開ワールド'{venue.Name}'としてアップロードします。よろしいですか？",
+                        $"'{venue.Name}'としてアップロードします。よろしいですか？",
                         "アップロード",
                         "キャンセル"
                     );
                 }
             }
-            using (new EditorGUI.DisabledGroupScope(string.IsNullOrEmpty(worldDetailUrl)))
+
+            if (GUILayout.Button("ワールド管理ページを開く"))
             {
-                if (GUILayout.Button("ワールドページを開く"))
-                {
-                    Application.OpenURL(worldDetailUrl);
-                }
+                Application.OpenURL(worldManagementUrl);
             }
 
             EditorGUILayout.Space();

@@ -39,10 +39,10 @@ namespace ClusterVR.CreatorKit.Editor.Core
             set => EditorPrefs.SetString(Constants.LastExportPackageKey, value);
         }
 
-        public static bool OpenWorldDetailPageAfterUpload
+        public static bool OpenWorldManagementPageAfterUpload
         {
-            get => EditorPrefs.GetBool(Constants.OpenWorldDetailPageAfterUploadKey, true);
-            set => EditorPrefs.SetBool(Constants.OpenWorldDetailPageAfterUploadKey, value);
+            get => EditorPrefs.GetBool(Constants.OpenWorldManagementPageAfterUploadKey, true);
+            set => EditorPrefs.SetBool(Constants.OpenWorldManagementPageAfterUploadKey, value);
         }
     }
 }

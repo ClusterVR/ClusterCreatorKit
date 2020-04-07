@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClusterVR.CreatorKit.Editor.Preview.EditorSettings;
 using ClusterVR.CreatorKit.Editor.Preview.EditorUI;
 using ClusterVR.CreatorKit.Editor.Preview.World;
 using ClusterVR.CreatorKit.Editor.Venue;
+using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.Preview.Item;
 using ClusterVR.CreatorKit.World;
 using UnityEditor;
 using UnityEngine;
@@ -29,7 +32,13 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                 await OnChangePlayModeAsync(playMode);
                 OnChangePlayMode(playMode);
             };
+            SetupProject();
 #endif
+        }
+
+        static void SetupProject()
+        {
+            ProjectSettingsConfigurer.Setup();
         }
 
         static void OnChangePlayMode(PlayModeStateChange playMode)
@@ -59,6 +68,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     var despawnHeight = GetComponentInGameObjectsChildren<IDespawnHeight>(rootGameObjects).Height;
                     PlayerPresenter = new PlayerPresenter(PermissionType.Audience, enterDeviceType);
                     new AvatarRespawner(despawnHeight, PlayerPresenter);
+
+                    new ItemRespawner(despawnHeight, GetComponentsInGameObjectsChildren<IMovableItem>(rootGameObjects));
 
                     var mainScreenViews = GetComponentsInGameObjectsChildren<IMainScreenView>(rootGameObjects);
                     MainScreenPresenter = new MainScreenPresenter(mainScreenViews);
