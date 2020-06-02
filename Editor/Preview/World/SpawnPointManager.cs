@@ -1,40 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.World;
-using UnityEngine;
 using Random = System.Random;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.World
 {
     public class SpawnPointManager
     {
-        readonly IEnumerable<ISpawnPoint> spawnPointList;
+        readonly SpawnPoint[] spawnPoints;
 
-        public SpawnPointManager(IEnumerable<ISpawnPoint> spawnPointList)
+        public SpawnPointManager(IEnumerable<ISpawnPoint> spawnPoints)
         {
-            this.spawnPointList = spawnPointList;
+            this.spawnPoints = spawnPoints.Select(s => new SpawnPoint(s.SpawnType, s.Position, s.YRotation)).ToArray();
         }
 
-        public void Respawn(PermissionType permissionType,Transform playerTransform, Transform cameraTransform)
+        public SpawnPoint GetRespawnPoint(PermissionType permissionType)
         {
             var rnd = new Random();
-            ISpawnPoint[] spawnCandidates;
-            ISpawnPoint targetSpawnPoint;
+            SpawnPoint[] spawnCandidates;
             if (permissionType == PermissionType.Performer)
             {
-                spawnCandidates = spawnPointList.Where(x => x.SpawnType == SpawnType.OnStage1).ToArray();
+                spawnCandidates = spawnPoints.Where(x => x.SpawnType == SpawnType.OnStage1).ToArray();
                 if (spawnCandidates.Length != 0)
                 {
-                    targetSpawnPoint = spawnCandidates[rnd.Next(spawnCandidates.Length)];
-                    playerTransform.position = targetSpawnPoint.Position;
-                    cameraTransform.eulerAngles = Vector3.up * targetSpawnPoint.YRotation;
-                    return;
+                    return spawnCandidates[rnd.Next(spawnCandidates.Length)];
                 }
             }
-            spawnCandidates = spawnPointList.Where(x => x.SpawnType == SpawnType.Entrance).ToArray();
-            targetSpawnPoint = spawnCandidates[rnd.Next(spawnCandidates.Length)];
-            playerTransform.position = targetSpawnPoint.Position;
-            cameraTransform.eulerAngles = Vector3.up * targetSpawnPoint.YRotation;
+            spawnCandidates = spawnPoints.Where(x => x.SpawnType == SpawnType.Entrance).ToArray();
+            return spawnCandidates[rnd.Next(spawnCandidates.Length)];
         }
     }
 }

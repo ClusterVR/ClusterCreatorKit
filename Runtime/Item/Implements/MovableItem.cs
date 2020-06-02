@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Item.Implements
@@ -9,7 +8,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
         [SerializeField, HideInInspector] Item item;
         [SerializeField, HideInInspector] Rigidbody rb;
 
-        public IItem Item => item;
+        public IItem Item => item != null ? item : item = GetComponent<Item>();
         public Vector3 Position => rb.position;
         public Quaternion Rotation => rb.rotation;
 
@@ -42,14 +41,16 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         void Start()
         {
+            if (rb == null) rb = GetComponent<Rigidbody>();
+
             CacheInitialValue();
         }
 
-        public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
+        public void SetPositionAndRotation(Vector3 position, Quaternion rotation, bool isWarp = false)
         {
             CacheInitialValue();
             rb.isKinematic = true;
-            if (state == State.Free)
+            if (state == State.Free || isWarp)
             {
                 currentPosition = position;
                 currentRotation = rotation;
@@ -103,16 +104,52 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         public void Respawn()
         {
-            transform.position = initialPosition;
-            transform.rotation = initialRotation;
+            WarpTo(initialPosition, initialRotation);
+        }
+
+        public void WarpTo(Vector3 position, Quaternion rotation)
+        {
+            if (state != State.Free) return;
+            transform.position = position;
+            transform.rotation = rotation;
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+        }
+
+        public void AddForce(Vector3 force, ForceMode mode)
+        {
+            if (state != State.Free) return;
+            rb.AddForce(force, mode);
+        }
+
+        public void AddTorque(Vector3 torque, ForceMode mode)
+        {
+            if (state != State.Free) return;
+            rb.AddTorque(torque, mode);
+        }
+
+        public void SetVelocity(Vector3 velocity)
+        {
+            if (state != State.Free) return;
+            rb.velocity = velocity;
+        }
+
+        public void SetAngularVelocity(Vector3 angularVelocity)
+        {
+            if (state != State.Free) return;
+            rb.angularVelocity = angularVelocity;
         }
 
         void Reset()
         {
             item = GetComponent<Item>();
             rb = GetComponent<Rigidbody>();
+        }
+
+        void OnValidate()
+        {
+            if (item == null || item.gameObject != gameObject) item = GetComponent<Item>();
+            if (rb == null || rb.gameObject != gameObject) rb = GetComponent<Rigidbody>();
         }
     }
 }

@@ -17,6 +17,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 
         readonly IPlayerController playerController;
         readonly EnterDeviceType enterDeviceType;
+        readonly SpawnPointManager spawnPointManager;
 
         Vector3? recordedPosition;
         Quaternion? recordedRotation;
@@ -28,10 +29,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 
         public PermissionType PermissionType { get; private set; }
 
-        public PlayerPresenter(PermissionType permissionType, EnterDeviceType enterDeviceType)
+        public PlayerPresenter(PermissionType permissionType, EnterDeviceType enterDeviceType, SpawnPointManager spawnPointManager)
         {
             PermissionType = permissionType;
             this.enterDeviceType = enterDeviceType;
+            this.spawnPointManager = spawnPointManager;
 
             var previewOnlyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(PreviewOnlyPrefabPath());
             var previewOnly = PrefabUtility.InstantiatePrefab(previewOnlyPrefab) as GameObject;
@@ -45,9 +47,15 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             postProcessLayer.volumeTrigger = CameraTransform;
             postProcessLayer.volumeLayer = 1 << LayerName.PostProcessing;
 #endif
+            Respawn();
+        }
 
+        public void Respawn()
+        {
             // Permissionに応じた初期位置にスポーンする
-            Bootstrap.SpawnPointManager.Respawn(permissionType, PlayerTransform, CameraTransform);
+            var spawnPoint = spawnPointManager.GetRespawnPoint(PermissionType);
+            MoveTo(spawnPoint.Position);
+            RotateTo(Quaternion.Euler(0f, spawnPoint.YRotation, 0f));
         }
 
         string PreviewOnlyPrefabPath()
@@ -128,6 +136,16 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 
             playerController.ActivateCharacterController(true);
             isInPersonalCamera = false;
+        }
+
+        public void MoveTo(Vector3 position)
+        {
+            PlayerTransform.position = position;
+        }
+
+        public void RotateTo(Quaternion rotation)
+        {
+            CameraTransform.rotation = rotation;
         }
     }
 

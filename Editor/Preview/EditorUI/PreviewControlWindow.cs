@@ -131,8 +131,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
             userDataSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h2, "リスポーン"));
             var respawnButton = new Button(() =>
             {
-                Bootstrap.SpawnPointManager.Respawn(Bootstrap.PlayerPresenter.PermissionType,
-                    Bootstrap.PlayerPresenter.PlayerTransform, Bootstrap.PlayerPresenter.CameraTransform);
+                Bootstrap.PlayerPresenter.Respawn();
             }) {text = "リスポーンする"};
             userDataSection.Add(respawnButton);
             return userDataSection;

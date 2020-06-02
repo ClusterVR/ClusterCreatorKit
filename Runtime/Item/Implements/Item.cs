@@ -5,9 +5,17 @@ namespace ClusterVR.CreatorKit.Item.Implements
     [DisallowMultipleComponent]
     public sealed class Item : MonoBehaviour, IItem
     {
-        [HideInInspector] public ItemId id;
+        [SerializeField, HideInInspector] ItemId id;
         [SerializeField, Tooltip("アイテムの名前")] string itemName;
-        public ItemId Id => id;
+
+        GameObject IItem.gameObject => this == null ? null : gameObject;
+
+        public ItemId Id
+        {
+            get => id;
+            set => id = value;
+        }
+
         public string ItemName => itemName;
 
         void Reset()

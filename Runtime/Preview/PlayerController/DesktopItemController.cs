@@ -1,12 +1,11 @@
-﻿using System.Linq;
-using ClusterVR.CreatorKit.Item;
-using ClusterVR.CreatorKit.Constants;
+﻿using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Preview.Item;
+using ClusterVR.CreatorKit.Trigger;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
-    public class DesktopItemController : MonoBehaviour
+    public class DesktopItemController : MonoBehaviour, IItemController
     {
         [SerializeField] DesktopPointerEventListener desktopPointerEventListener;
         [SerializeField] Transform grabPoint;
@@ -17,23 +16,46 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         Quaternion grabPointToTargetOffsetRotation;
         Vector3 grabPointToTargetOffsetPosition;
 
+        bool isCursorLocked = false;
+        bool isUsingDown = false;
+
         void Start()
         {
-            desktopPointerEventListener.OnClicked += TryGrab;
-            itemView.OnRelease += Release;
+            desktopPointerEventListener.OnClicked += OnClicked;
         }
 
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Q)) Release();
+            if (grabbingItem != null && !grabbingItem.Item.gameObject.activeInHierarchy) Release();
+            if (Input.GetKeyDown(KeyCode.Escape)) SetCursorLock(false);
+
+            if (isCursorLocked && Input.GetMouseButtonDown(0)) InvokeUseTrigger(true);
+            else if (isUsingDown && Input.GetMouseButtonUp(0)) InvokeUseTrigger(false);
             MoveItem();
         }
 
-        void TryGrab(Vector2 point)
+        void OnClicked(Vector2 point)
         {
-            if (!interactableItemRaycaster.RaycastItem(point, out var item, out var hitPoint)) return;
-            if (item == grabbingItem) return;
-            Release();
-            Grab(item, hitPoint);
+            if (isCursorLocked) return;
+            if (interactableItemRaycaster.RaycastItem(point, out var item, out var hitPoint))
+            {
+                if (item == grabbingItem) return;
+                switch (item)
+                {
+                    case IGrabbableItem grabbableItem:
+                        Release();
+                        Grab(grabbableItem, hitPoint);
+                        break;
+                    case IInteractItemTrigger interactTrigger:
+                        interactTrigger.Invoke();
+                        break;
+                }
+            }
+            else if (grabbingItem != null)
+            {
+                SetCursorLock(true);
+            }
         }
 
         void Grab(IGrabbableItem target, Vector3 hitPoint)
@@ -53,8 +75,11 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
                 // grabPointとGripが同じ姿勢になるようなの値を計算する
                 SetOffsets(target.Grip, target.MovableItem.Position, target.MovableItem.Rotation);
             }
+
+            isUsingDown = false;
+            SetCursorLock(true);
         }
-        
+
         void SetOffsets(Transform from, Vector3 targetPosition, Quaternion targetRotation)
         {
             var inversedFromRotation = Quaternion.Inverse(from.rotation);
@@ -71,13 +96,39 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
                 grabPointRotation * grabPointToTargetOffsetRotation);
         }
 
-        public void Release()
+        void Release()
         {
             if (grabbingItem == null) return;
             grabbingItem.MovableItem.EnablePhysics();
             grabbingItem.OnRelease();
             grabbingItem = null;
             itemView.SetGrabbingItem(null);
+            SetCursorLock(false);
+        }
+
+        void InvokeUseTrigger(bool isDown)
+        {
+            if (grabbingItem == null) return;
+            var useItemTrigger = grabbingItem.Item.gameObject.GetComponent<IUseItemTrigger>();
+            if (useItemTrigger == null) return;
+            useItemTrigger.Invoke(isDown);
+            isUsingDown = isDown;
+        }
+
+        void SetCursorLock(bool isLocked)
+        {
+            Cursor.lockState = isLocked ? CursorLockMode.Locked : CursorLockMode.None;
+            isCursorLocked = isLocked;
+        }
+
+        void IItemController.OnDestroyItem(IItem item)
+        {
+            if (grabbingItem != null && grabbingItem.Item == item)
+            {
+                grabbingItem = null;
+                itemView.SetGrabbingItem(null);
+                SetCursorLock(false);
+            }
         }
     }
 }

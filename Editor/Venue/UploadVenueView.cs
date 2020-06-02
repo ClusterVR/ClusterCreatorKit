@@ -44,15 +44,16 @@ namespace ClusterVR.CreatorKit.Editor.Venue
                 executeUpload = false;
                 currentUploadService = null;
 
-                ItemIdAssigner.AssignItemId();
-                LayerCorrector.CorrectLayer();
-
                 if (!VenueValidator.ValidateVenue(out errorMessage))
                 {
                     Debug.LogError(errorMessage);
                     EditorUtility.DisplayDialog("Cluster Creator Kit", errorMessage, "閉じる");
                     return;
                 }
+
+                ItemIdAssigner.AssignItemId();
+                ItemTemplateIdAssigner.Execute();
+                LayerCorrector.CorrectLayer();
 
                 try
                 {

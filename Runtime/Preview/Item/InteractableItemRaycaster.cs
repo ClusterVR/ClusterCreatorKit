@@ -18,13 +18,13 @@ namespace ClusterVR.CreatorKit.Preview.Item
             raycastLayerMask = ~LayerName.PostProcessingMask;
         }
 
-        public bool RaycastItem(Vector2 raycastPoint, out IGrabbableItem item, out Vector3 hitPoint)
+        public bool RaycastItem(Vector2 raycastPoint, out IInteractableItem item, out Vector3 hitPoint)
         {
             item = default;
             hitPoint = default;
             var ray = targetCamera.ScreenPointToRay(raycastPoint);
             if (!Physics.Raycast(ray, out var hitInfo, RaycastMaxDistance, raycastLayerMask)) return false;
-            item = hitInfo.collider.gameObject.GetComponentInParent<IGrabbableItem>();
+            item = hitInfo.collider.gameObject.GetComponentInParent<IInteractableItem>();
             if (item == null || !interactableItemFinder.InteractableItems.Contains(item)) return false;
             hitPoint = hitInfo.point;
             return true;

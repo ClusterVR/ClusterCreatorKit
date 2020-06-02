@@ -20,12 +20,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             {
                 if (playerPresenter.PlayerTransform.position.y < despawnHeight)
                 {
-                    Bootstrap.SpawnPointManager.Respawn(playerPresenter.PermissionType, playerPresenter.PlayerTransform, playerPresenter.CameraTransform);
+                    playerPresenter.Respawn();
                 }
                 await Task.Delay(300);
             }
         }
-
     }
 
 }

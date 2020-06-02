@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.World.Implements.CommentScreenViews
@@ -11,6 +12,8 @@ namespace ClusterVR.CreatorKit.World.Implements.CommentScreenViews
         const int itemCount = 10;
 
         readonly Queue<StandardCommentScreenViewCell> cells = new Queue<StandardCommentScreenViewCell>();
+
+        public event Action OnDestroyed;
 
         void Awake()
         {
@@ -36,5 +39,9 @@ namespace ClusterVR.CreatorKit.World.Implements.CommentScreenViews
             if (cells.Count > itemCount) Destroy(cells.Dequeue().gameObject);
         }
 
+        void OnDestroy()
+        {
+            OnDestroyed?.Invoke();
+        }
     }
 }

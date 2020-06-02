@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ClusterVR.CreatorKit.World.Implements.MainScreenViews
 {
@@ -7,6 +8,10 @@ namespace ClusterVR.CreatorKit.World.Implements.MainScreenViews
     {
         MeshRenderer meshRenderer;
         MaterialPropertyBlock propertyBlock;
+        [SerializeField] bool useCustomAspectRatio = false;
+        [SerializeField] Vector2 screenAspectRatio = new Vector2(16,9);
+
+        public event Action OnDestroyed;
 
         void Awake()
         {
@@ -27,14 +32,22 @@ namespace ClusterVR.CreatorKit.World.Implements.MainScreenViews
                 return;
             }
 
-            var scaleY = requiresYFlip ? -Mathf.Abs(transform.localScale.y) : Mathf.Abs(transform.localScale.y);
-            var scale = new Vector2(Mathf.Abs(transform.localScale.x), scaleY);
+            var localScale = transform.localScale;
+            var screenScale = useCustomAspectRatio ? screenAspectRatio : new Vector2(localScale.x, localScale.y);
+
+            var scaleY = requiresYFlip ? -Mathf.Abs(screenScale.y) : Mathf.Abs(screenScale.y);
+            var scale = new Vector2(Mathf.Abs(screenScale.x), scaleY);
             var textureSt = TextureSTCalculator.CalcOverlapTextureST(texture, scale);
 
             propertyBlock.SetTexture("_MainTex", texture);
             propertyBlock.SetVector("_MainTex_ST", textureSt);
 
             meshRenderer.SetPropertyBlock(propertyBlock);
+        }
+
+        void OnDestroy()
+        {
+            OnDestroyed?.Invoke();
         }
     }
 }

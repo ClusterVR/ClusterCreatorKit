@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ namespace ClusterVR.CreatorKit.World.Implements.RankingScreenViews
     {
         [SerializeField] List<RankingScreenCell> boardCells;
         [SerializeField] LowRankerCell lowRankerCell;
+
+        public event Action OnDestroyed;
 
         void Start()
         {
@@ -44,6 +47,11 @@ namespace ClusterVR.CreatorKit.World.Implements.RankingScreenViews
             {
                 lowRankerCell.Rankin();
             }
+        }
+
+        void OnDestroy()
+        {
+            OnDestroyed?.Invoke();
         }
     }
 }

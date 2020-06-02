@@ -1,6 +1,6 @@
 using System.Linq;
 using ClusterVR.CreatorKit.Constants;
-using ClusterVR.CreatorKit.Item.Implements;
+using ClusterVR.CreatorKit.Item;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -21,10 +21,10 @@ namespace ClusterVR.CreatorKit.Editor.Venue
             if (Application.isPlaying) return;
             var scene = SceneManager.GetActiveScene();
             var rootObjects = scene.GetRootGameObjects();
-            var grabbableItems = rootObjects.SelectMany(o => o.GetComponentsInChildren<GrabbableItem>(true));
-            foreach (var grabbableItem in grabbableItems)
+            var interactableItems = rootObjects.SelectMany(o => o.GetComponentsInChildren<IInteractableItem>(true));
+            foreach (var interactableItem in interactableItems)
             {
-                grabbableItem.gameObject.SetLayerRecursively(LayerName.InteractableItem);
+                interactableItem.Item.gameObject.SetLayerRecursively(LayerName.InteractableItem);
             }
         }
 

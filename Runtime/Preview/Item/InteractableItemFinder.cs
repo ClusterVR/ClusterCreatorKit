@@ -13,10 +13,10 @@ namespace ClusterVR.CreatorKit.Preview.Item
 
         const int InteractableItemLayerMask = LayerName.InteractableItemMask;
 
-        readonly HashSet<IGrabbableItem> interactableItems = new HashSet<IGrabbableItem>();
+        readonly HashSet<IInteractableItem> interactableItems = new HashSet<IInteractableItem>();
         readonly Collider[] collidings = new Collider[1024];
 
-        public IReadOnlyCollection<IGrabbableItem> InteractableItems => interactableItems;
+        public IReadOnlyCollection<IInteractableItem> InteractableItems => interactableItems;
 
         void Update()
         {
@@ -27,7 +27,7 @@ namespace ClusterVR.CreatorKit.Preview.Item
 
             foreach (var colliding in collidings.Take(collidingsCount))
             {
-                var item = colliding.gameObject.GetComponentInParent<IGrabbableItem>();
+                var item = colliding.gameObject.GetComponentInParent<IInteractableItem>();
                 if (item != null) interactableItems.Add(item);
             }
         }

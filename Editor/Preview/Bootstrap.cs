@@ -3,10 +3,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Preview.EditorSettings;
 using ClusterVR.CreatorKit.Editor.Preview.EditorUI;
+using ClusterVR.CreatorKit.Editor.Preview.Gimmick;
+using ClusterVR.CreatorKit.Editor.Preview.Item;
+using ClusterVR.CreatorKit.Editor.Preview.RoomState;
+using ClusterVR.CreatorKit.Editor.Preview.Trigger;
 using ClusterVR.CreatorKit.Editor.Preview.World;
 using ClusterVR.CreatorKit.Editor.Venue;
+using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Preview.Item;
+using ClusterVR.CreatorKit.Preview.PlayerController;
+using ClusterVR.CreatorKit.Trigger;
 using ClusterVR.CreatorKit.World;
 using UnityEditor;
 using UnityEngine;
@@ -51,6 +58,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                 case PlayModeStateChange.EnteredPlayMode:
                     SetIsInGameMode(true);
 
+                    ItemIdAssigner.AssignItemId();
+                    ItemTemplateIdAssigner.Execute();
                     LayerCollisionConfigurer.SetupLayerCollision();
 
                     var rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
@@ -66,10 +75,12 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     }
 
                     var despawnHeight = GetComponentInGameObjectsChildren<IDespawnHeight>(rootGameObjects).Height;
-                    PlayerPresenter = new PlayerPresenter(PermissionType.Audience, enterDeviceType);
+                    PlayerPresenter = new PlayerPresenter(PermissionType.Audience, enterDeviceType, SpawnPointManager);
                     new AvatarRespawner(despawnHeight, PlayerPresenter);
 
-                    new ItemRespawner(despawnHeight, GetComponentsInGameObjectsChildren<IMovableItem>(rootGameObjects));
+                    var itemCreator = new ItemCreator(GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));
+                    var itemDestroyer = new ItemDestroyer(PlayerPresenter.PlayerTransform.GetComponent<IItemController>());
+                    new ItemRespawner(despawnHeight, itemCreator, itemDestroyer, GetComponentsInGameObjectsChildren<IMovableItem>(rootGameObjects));
 
                     var mainScreenViews = GetComponentsInGameObjectsChildren<IMainScreenView>(rootGameObjects);
                     MainScreenPresenter = new MainScreenPresenter(mainScreenViews);
@@ -81,6 +92,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     var commentScreenViews =
                         GetComponentsInGameObjectsChildren<ICommentScreenView>(rootGameObjects);
                     CommentScreenPresenter = new CommentScreenPresenter(commentScreenViews);
+
+                    SetupTriggerGimmicks(rootGameObjects, itemCreator, itemDestroyer);
+                    
                     break;
             }
         }
@@ -112,6 +126,24 @@ namespace ClusterVR.CreatorKit.Editor.Preview
         {
             return rootGameObjects.SelectMany(x =>
                 x.GetComponentsInChildren<T>(true));
+        }
+
+        static void SetupTriggerGimmicks(IEnumerable<GameObject> rootGameObjects, ItemCreator itemCreator, ItemDestroyer itemDestroyer)
+        {
+            var roomStateRepository = new RoomStateRepository();
+            var gimmickManager = new GimmickManager(roomStateRepository, itemCreator, itemDestroyer);
+            var triggerManager = new TriggerManager(roomStateRepository, itemCreator, gimmickManager);
+            var items = GetComponentsInGameObjectsChildren<IItem>(rootGameObjects).ToArray();
+            triggerManager.Add(items.SelectMany(x => x.gameObject.GetComponents<IItemTrigger>()));
+            gimmickManager.AddGimmicksInScene(GetComponentsInGameObjectsChildren<IGimmick>(rootGameObjects));
+            foreach (var item in items) gimmickManager.AddGimmicksInItem(item.gameObject.GetComponentsInChildren<IGimmick>(true), item.Id.Value);
+
+            new PlayerGimmickManager(PlayerPresenter, itemCreator, GetComponentsInGameObjectsChildren<IPlayerGimmick>(rootGameObjects));
+            new CreateItemGimmickManager(itemCreator, GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));
+            new DestroyItemGimmickManager(itemCreator, itemDestroyer, GetComponentsInGameObjectsChildren<IDestroyItemGimmick>(rootGameObjects));
+            var onCreateItemTriggerManager = new OnCreateItemTriggerManager(itemCreator);
+
+            onCreateItemTriggerManager.Invoke(items.SelectMany(x => x.gameObject.GetComponents<IOnCreateItemTrigger>()));
         }
     }
 }

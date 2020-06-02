@@ -2,7 +2,9 @@
     "name": "ClusterVR.CreatorKit.Preview",
     "references": [
         "ClusterVR.CreatorKit.Item",
-        "ClusterVR.CreatorKit.Constants"
+        "ClusterVR.CreatorKit.Trigger",
+        "ClusterVR.CreatorKit.Constants",
+        "ClusterVR.CreatorKit.World"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

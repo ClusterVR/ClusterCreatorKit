@@ -7,7 +7,11 @@
         "ClusterVR.CreatorKit.Item",
         "ClusterVR.CreatorKit.Item.Implements",
         "ClusterVR.CreatorKit.Extensions",
-        "ClusterVR.CreatorKit.Constants"
+        "ClusterVR.CreatorKit.Constants",
+        "ClusterVR.CreatorKit.Gimmick",
+        "ClusterVR.CreatorKit.Gimmick.Implements",
+        "ClusterVR.CreatorKit.Trigger",
+        "ClusterVR.CreatorKit.Trigger.Implements"
     ],
     "includePlatforms": [
         "Editor"

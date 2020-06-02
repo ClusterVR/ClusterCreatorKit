@@ -1,5 +1,5 @@
-﻿using System;
-using ClusterVR.CreatorKit.Item;
+﻿using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.Trigger;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,16 +8,8 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
     // 掴んでいるアイテムに関連したUIです。
     public class DesktopItemView : MonoBehaviour
     {
-        [SerializeField] Button releaseButton;
-        [SerializeField] GameObject itemLabel;
         [SerializeField] Text itemLabelText;
-
-        public event Action OnRelease;
-
-        void Start()
-        {
-            releaseButton.onClick.AddListener(() => OnRelease?.Invoke());
-        }
+        [SerializeField] GameObject useTooltip;
 
         public void SetGrabbingItem(IGrabbableItem item)
         {
@@ -28,9 +20,10 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             else
             {
                 gameObject.SetActive(true);
-                var itemName = item.MovableItem.Item.ItemName;
-                itemLabel.SetActive(!string.IsNullOrEmpty(itemName));
+                var itemName = item.Item.ItemName;
+                if (string.IsNullOrEmpty(itemName)) itemName = "アイテム";
                 itemLabelText.text = itemName;
+                useTooltip.SetActive(item.Item.gameObject.GetComponent<IUseItemTrigger>() != null);
             }
         }
     }

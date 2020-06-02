@@ -1,0 +1,16 @@
+{
+    "name": "ClusterVR.CreatorKit.Editor.Preview.RoomState",
+    "references": [
+        "ClusterVR.CreatorKit.Gimmick"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

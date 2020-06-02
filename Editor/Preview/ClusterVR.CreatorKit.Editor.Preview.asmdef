@@ -6,7 +6,14 @@
         "ClusterVR.CreatorKit.Preview",
         "Unity.Postprocessing.Runtime",
         "ClusterVR.CreatorKit.Constants",
-        "ClusterVR.CreatorKit.Item"
+        "ClusterVR.CreatorKit.Gimmick",
+        "ClusterVR.CreatorKit.Item",
+        "ClusterVR.CreatorKit.Trigger",
+        "ClusterVR.CreatorKit.Editor.Preview.Gimmick",
+        "ClusterVR.CreatorKit.Editor.Preview.RoomState",
+        "ClusterVR.CreatorKit.Editor.Preview.Trigger",
+        "ClusterVR.CreatorKit.Editor.Preview.Item",
+        "ClusterVR.CreatorKit.Editor.Preview.World"
     ],
     "includePlatforms": [
         "Editor"

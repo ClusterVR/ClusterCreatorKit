@@ -1,0 +1,19 @@
+{
+    "name": "ClusterVR.CreatorKit.Editor.Preview.World",
+    "references": [
+        "ClusterVR.CreatorKit.World",
+        "ClusterVR.CreatorKit.Constants",
+        "ClusterVR.CreatorKit.Preview",
+        "Unity.Postprocessing.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

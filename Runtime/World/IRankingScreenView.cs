@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ClusterVR.CreatorKit.World
 {
@@ -6,5 +7,6 @@ namespace ClusterVR.CreatorKit.World
     {
         void SetVisibility(bool isVisible);
         void UpdateCells(List<Ranking> rankings, Ranking selfRanking);
+        event Action OnDestroyed;
     }
 }

@@ -170,6 +170,8 @@ GameObject:
   - component: {fileID: 1568381616447587692}
   - component: {fileID: 8694671374715215634}
   - component: {fileID: 4417950867447935944}
+  - component: {fileID: 9175425103441531354}
+  - component: {fileID: 669350196327984167}
   m_Layer: 24
   m_Name: DesktopPlayerController
   m_TagString: Player
@@ -290,8 +292,35 @@ MonoBehaviour:
     type: 2}
   candidateOutlineMaterial: {fileID: 2100000, guid: c7159e52351ddc946ab41c9d0a604f5c,
     type: 2}
+  grabbableOutlineMaterial: {fileID: 2100000, guid: 113b379ec6f1ded44b33559f25efd4b0,
+    type: 2}
   interactableOutlineMaterial: {fileID: 2100000, guid: 31a31b0b6b71b4649b030d07543f34f3,
     type: 2}
+--- !u!114 &9175425103441531354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4566206746035942596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d84e0398943c14ed4a5331766cd30226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: -4804867365819599185}
+--- !u!114 &669350196327984167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4566206746035942596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2edcfcc80cbe4adfbccc206593f8a31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4655966486092133194
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,6 +358,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4742403413904210740}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: 9fa79218bb5c6a24e9d07677ff7e28ac,
+        type: 3}
+      propertyPath: m_Name
+      value: Vector
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9fa79218bb5c6a24e9d07677ff7e28ac,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9fa79218bb5c6a24e9d07677ff7e28ac,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -398,16 +437,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 9fa79218bb5c6a24e9d07677ff7e28ac,
-        type: 3}
-      propertyPath: m_Name
-      value: Vector
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 9fa79218bb5c6a24e9d07677ff7e28ac,
-        type: 3}
-      propertyPath: m_Layer
-      value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fa79218bb5c6a24e9d07677ff7e28ac, type: 3}

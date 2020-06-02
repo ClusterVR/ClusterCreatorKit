@@ -3,6 +3,7 @@ using System.Linq;
 using ClusterVR.CreatorKit.Item;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace ClusterVR.CreatorKit.Editor.Venue
@@ -16,14 +17,17 @@ namespace ClusterVR.CreatorKit.Editor.Venue
             var hashSet = new HashSet<ItemId>();
             foreach (var item in rootObjects.SelectMany(o => o.GetComponentsInChildren<Item.Implements.Item>(true)))
             {
-                while (item.id.Value == 0 || hashSet.Contains(item.id))
+                while (item.Id.Value == 0 || hashSet.Contains(item.Id))
                 {
                     var id = ItemId.Create();
-                    item.id = id;
-                    EditorUtility.SetDirty(item);
-                    EditorSceneManager.MarkSceneDirty(scene);
+                    item.Id = id;
+                    if (!Application.isPlaying)
+                    {
+                        EditorUtility.SetDirty(item);
+                        EditorSceneManager.MarkSceneDirty(scene);
+                    }
                 }
-                hashSet.Add(item.id);
+                hashSet.Add(item.Id);
             }
         }
     }

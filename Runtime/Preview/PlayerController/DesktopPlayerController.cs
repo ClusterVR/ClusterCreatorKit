@@ -22,7 +22,7 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
         void Start()
         {
-            desktopPointerEventListener.OnDragged += Rotate;
+            desktopPointerEventListener.OnMoved += Rotate;
         }
 
         void Update()

@@ -1,0 +1,15 @@
+{
+    "name": "ClusterVR.CreatorKit.Gimmick",
+    "references": [
+        "ClusterVR.CreatorKit.Item",
+        "ClusterVR.CreatorKit"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

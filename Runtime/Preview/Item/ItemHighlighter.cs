@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ClusterVR.CreatorKit.Item;
+using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace ClusterVR.CreatorKit.Preview.Item
@@ -10,8 +11,9 @@ namespace ClusterVR.CreatorKit.Preview.Item
         [SerializeField] InteractableItemRaycaster interactableItemRaycaster;
         [SerializeField] Material outlineStencilMaterial;
         [SerializeField] Material candidateOutlineMaterial;
+        [SerializeField] Material grabbableOutlineMaterial;
         [SerializeField] Material interactableOutlineMaterial;
-        
+
         CommandBuffer commandBuffer;
 
         void Start()
@@ -24,15 +26,17 @@ namespace ClusterVR.CreatorKit.Preview.Item
         {
             commandBuffer.Clear();
             // アウトライン部分もステンシルに書き込んでいるので、interactableの方を先に書いて優先する
-            if (interactableItemRaycaster.RaycastItem(Input.mousePosition, out var interactableItem, out _))
+            if (Cursor.lockState != CursorLockMode.Locked &&
+                interactableItemRaycaster.RaycastItem(Input.mousePosition, out var interactableItem, out _))
             {
-                var objectToHighlight = interactableItem.gameObject;
+                var objectToHighlight = interactableItem.Item.gameObject;
                 Draw(objectToHighlight, outlineStencilMaterial);
-                Draw(objectToHighlight, interactableOutlineMaterial);
+                Draw(objectToHighlight, interactableItem is IGrabbableItem ? grabbableOutlineMaterial : interactableOutlineMaterial);
             }
+
             foreach (var candidateItem in interactableItemFinder.InteractableItems)
             {
-                var objectToHighlight = candidateItem.gameObject;
+                var objectToHighlight = candidateItem.Item.gameObject;
                 Draw(objectToHighlight, outlineStencilMaterial);
                 Draw(objectToHighlight, candidateOutlineMaterial);
             }
@@ -42,7 +46,10 @@ namespace ClusterVR.CreatorKit.Preview.Item
         {
             foreach (var renderer in gameObject.GetComponentsInChildren<MeshRenderer>())
             {
-                var submeshCount = renderer.GetComponent<MeshFilter>().sharedMesh.subMeshCount;
+                var meshFilter = renderer.GetComponent<MeshFilter>();
+                if (meshFilter == null) continue;
+                var submeshCount = meshFilter.sharedMesh.subMeshCount;
+                DrawRenderer(renderer, material, submeshCount);
                 DrawRenderer(renderer, material, submeshCount);
             }
             foreach (var renderer in gameObject.GetComponentsInChildren<SkinnedMeshRenderer>())

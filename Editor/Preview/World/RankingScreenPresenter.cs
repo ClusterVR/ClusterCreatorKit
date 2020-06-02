@@ -1,15 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ClusterVR.CreatorKit.World;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.World
 {
     public class RankingScreenPresenter
     {
-        readonly IEnumerable<IRankingScreenView> rankingScreenViews;
+        readonly IList<IRankingScreenView> rankingScreenViews;
 
         public RankingScreenPresenter(IEnumerable<IRankingScreenView> rankingScreenViews)
         {
-            this.rankingScreenViews = rankingScreenViews;
+            this.rankingScreenViews = rankingScreenViews.ToList();
+
+            foreach (var rankingScreenView in rankingScreenViews)
+            {
+                rankingScreenView.OnDestroyed += () => this.rankingScreenViews.Remove(rankingScreenView);
+            }
         }
 
         public void SetRanking(int playerCount)
