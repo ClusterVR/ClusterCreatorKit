@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -29,9 +30,23 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
 
         public static Label GenerateLabel(LabelType labelType, string content)
         {
-            Label label = new Label(content);
+            var label = new Label(content);
             label.style.fontSize = dictLabelAndFontSize[labelType];
             return label;
+        }
+
+        public static Slider GenerateSlider(LabelType labelType, string content)
+        {
+            var slider = new Slider(content);
+            slider.style.fontSize = dictLabelAndFontSize[labelType];
+            return slider;
+        }
+
+        public static Toggle GenerateToggle(LabelType labelType, string content)
+        {
+            var toggle = new Toggle(content);
+            toggle.style.fontSize = dictLabelAndFontSize[labelType];
+            return toggle;
         }
     }
 
