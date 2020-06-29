@@ -14,6 +14,13 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         {
             if (Cursor.lockState == CursorLockMode.Locked)
             {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    // カーソルロックが解除されなくなった時の念の為
+                    Cursor.lockState = CursorLockMode.None;
+                    return;
+                }
+
                 var delta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
                 delta *= 0.002f * Mathf.Pow(4f, CameraControlSettings.Sensitivity);
                 if (CameraControlSettings.InvertHorizontal) delta.x = -delta.x;
@@ -38,5 +45,10 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         }
 
         void IDragHandler.OnDrag(PointerEventData eventData) { }
+
+        void OnApplicationFocus(bool hasFocus)
+        {
+            if (!hasFocus) EventSystem.current.currentInputModule.DeactivateModule();
+        }
     }
 }

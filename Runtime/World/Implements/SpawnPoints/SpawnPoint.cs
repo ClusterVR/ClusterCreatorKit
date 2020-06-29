@@ -6,10 +6,12 @@ namespace ClusterVR.CreatorKit.World.Implements.SpawnPoints
     public sealed class SpawnPoint : MonoBehaviour, ISpawnPoint
     {
         [SerializeField] SpawnType spawnType;
+        [SerializeField] string worldGateKey;
 
         public SpawnType SpawnType => spawnType;
         public Vector3 Position => transform.position;
         public float YRotation => transform.rotation.eulerAngles.y;
+        public string WorldGateKey => worldGateKey;
 
         Quaternion Rotation => Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
 

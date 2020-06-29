@@ -3,6 +3,7 @@
     public enum SpawnType
     {
         Entrance,
-        OnStage1
+        OnStage1,
+        WorldGateDestination,
     }
 }

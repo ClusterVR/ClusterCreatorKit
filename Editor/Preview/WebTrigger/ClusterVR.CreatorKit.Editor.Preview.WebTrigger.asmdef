@@ -1,0 +1,22 @@
+{
+    "name": "ClusterVR.CreatorKit.Editor.Preview.WebTrigger",
+    "references": [
+        "ClusterVR.CreatorKit",
+        "ClusterVR.CreatorKit.Editor",
+        "ClusterVR.CreatorKit.Editor.Preview",
+        "ClusterVR.CreatorKit.Editor.Preview.RoomState",
+        "ClusterVR.CreatorKit.Editor.Preview.Gimmick",
+        "ClusterVR.CreatorKit.Gimmick",
+        "ClusterVR.CreatorKit.Trigger"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

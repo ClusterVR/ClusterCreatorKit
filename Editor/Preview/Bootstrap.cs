@@ -29,6 +29,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview
         public static SpawnPointManager SpawnPointManager { get; private set; }
         public static MainScreenPresenter MainScreenPresenter { get; private set; }
         public static CommentScreenPresenter CommentScreenPresenter { get; private set; }
+
+        public static RoomStateRepository RoomStateRepository { get; private set; }
+        public static GimmickManager GimmickManager { get; private set; }
         public static bool IsInPlayMode { get; private set; }
 
         static Bootstrap()
@@ -130,13 +133,13 @@ namespace ClusterVR.CreatorKit.Editor.Preview
 
         static void SetupTriggerGimmicks(IEnumerable<GameObject> rootGameObjects, ItemCreator itemCreator, ItemDestroyer itemDestroyer)
         {
-            var roomStateRepository = new RoomStateRepository();
-            var gimmickManager = new GimmickManager(roomStateRepository, itemCreator, itemDestroyer);
-            var triggerManager = new TriggerManager(roomStateRepository, itemCreator, gimmickManager);
+            RoomStateRepository = new RoomStateRepository();
+            GimmickManager = new GimmickManager(RoomStateRepository, itemCreator, itemDestroyer);
+            var triggerManager = new TriggerManager(RoomStateRepository, itemCreator, GimmickManager);
             var items = GetComponentsInGameObjectsChildren<IItem>(rootGameObjects).ToArray();
             triggerManager.Add(items.SelectMany(x => x.gameObject.GetComponents<IItemTrigger>()));
-            gimmickManager.AddGimmicksInScene(GetComponentsInGameObjectsChildren<IGimmick>(rootGameObjects));
-            foreach (var item in items) gimmickManager.AddGimmicksInItem(item.gameObject.GetComponentsInChildren<IGimmick>(true), item.Id.Value);
+            GimmickManager.AddGimmicksInScene(GetComponentsInGameObjectsChildren<IGimmick>(rootGameObjects));
+            foreach (var item in items) GimmickManager.AddGimmicksInItem(item.gameObject.GetComponentsInChildren<IGimmick>(true), item.Id.Value);
 
             new PlayerGimmickManager(PlayerPresenter, itemCreator, GetComponentsInGameObjectsChildren<IPlayerGimmick>(rootGameObjects));
             new CreateItemGimmickManager(itemCreator, GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));

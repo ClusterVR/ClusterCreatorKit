@@ -14,11 +14,13 @@ namespace ClusterVR.CreatorKit.World
     {
         public string WorldOrEventId { get; }
         public GameObject EnterObject { get; }
+        public string Key { get; }
 
-        public OnEnterWorldGateEventArgs(string worldOrEventId, GameObject enterObject)
+        public OnEnterWorldGateEventArgs(string worldOrEventId, GameObject enterObject, string key)
         {
             WorldOrEventId = worldOrEventId;
             EnterObject = enterObject;
+            Key = key;
         }
     }
 }

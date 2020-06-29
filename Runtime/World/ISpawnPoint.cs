@@ -7,5 +7,6 @@ namespace ClusterVR.CreatorKit.World
         SpawnType SpawnType { get; }
         Vector3 Position { get; }
         float YRotation { get; }
+        string WorldGateKey { get; }
     }
 }

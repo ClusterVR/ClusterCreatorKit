@@ -26,7 +26,9 @@ namespace ClusterVR.CreatorKit.Preview.WarpPortal
 
         void ShowLog(OnEnterWorldGateEventArgs e)
         {
-            Debug.Log($"ワールドをアップロードすると以下のIdのワールドまたはイベントに移動します。\n{e.WorldOrEventId}");
+            var readableKey = string.IsNullOrEmpty(e.Key) ? "空" : e.Key;
+            var message = $"ワールドをアップロードすると以下のIdのワールドまたはイベントに移動します。\n{e.WorldOrEventId}\n移動先のSpawnPointにTypeが{SpawnType.WorldGateDestination}でWorldGateKeyが{readableKey}のものがあればそこに出現します。";
+            Debug.Log(message);
         }
 
         void OnDestroy()
