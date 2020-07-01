@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -16,26 +17,26 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
             {
                 EditorUtility.DisplayProgressBar("Pre-Process Export Resource", "", 1/3f);
 
-                var tempPath = $"Assets/{sceneName}.unity";
-
-                ExportPreProcess(tempPath, sceneName);
+                var scene = SceneManager.GetActiveScene();
+                if (scene.isDirty)
+                {
+                    EditorSceneManager.SaveScene(scene);
+                }
 
                 if (exportPackage)
                 {
-                    ExportUnityPackage($"{sceneName}.unitypackage", tempPath);
+                    ExportUnityPackage($"{sceneName}.unitypackage", scene.path);
                 }
 
                 EditorUtility.DisplayProgressBar("Building Resources", "", 2/3f);
-                BuildAssetBundles();
+                BuildAssetBundles(scene, sceneName);
 
                 EditorUtility.DisplayProgressBar("Post-Process Export Resource", "", 3/3f);
-                ExportPostProcess(tempPath);
 
                 EditorPrefsUtils.LastBuildWin =
                     $"{Application.temporaryCachePath}/{BuildTarget.StandaloneWindows}/{sceneName}";
                 EditorPrefsUtils.LastBuildMac =
                     $"{Application.temporaryCachePath}/{BuildTarget.StandaloneOSX}/{sceneName}";
-                // NOTE: Androidビルドはない場合もある
                 EditorPrefsUtils.LastBuildAndroid =
                     $"{Application.temporaryCachePath}/{BuildTarget.Android}/{sceneName}";
                 EditorPrefsUtils.LastBuildIOS =
@@ -52,54 +53,23 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
             }
         }
 
-        static void ExportPreProcess(string tempPath, string assetBundleName)
-        {
-            var scene = SceneManager.GetActiveScene();
-            if (scene.isDirty)
-            {
-                EditorSceneManager.SaveScene(scene);
-            }
-
-            var currentScenePath = scene.path;
-            if (!AssetDatabase.CopyAsset(currentScenePath, tempPath))
-            {
-                throw new Exception($"Fail copy asset, {currentScenePath} to {tempPath}");
-            }
-
-            AssetDatabase.Refresh();
-            AssetDatabase.RemoveUnusedAssetBundleNames();
-
-            var assetImporter = AssetImporter.GetAtPath(tempPath);
-            assetImporter.assetBundleName = assetBundleName;
-            assetImporter.SaveAndReimport();
-        }
-
         static void ExportUnityPackage(string packageName, string tempPath)
         {
             EditorUtility.DisplayProgressBar("Exporting unitypackage", "", 1f);
             var exportPath = $"{Application.temporaryCachePath}/{packageName}";
-            ExportCurrentSceneAsUnityPackage(tempPath, exportPath);
+            ExportSceneAsUnityPackage(tempPath, exportPath);
             EditorPrefsUtils.LastExportPackage = exportPath;
         }
 
-        static void ExportPostProcess(string tempPath)
-        {
-            var assetImporter = AssetImporter.GetAtPath(tempPath);
-            assetImporter.assetBundleName = string.Empty;
-            assetImporter.SaveAndReimport();
-            AssetDatabase.DeleteAsset(tempPath);
-            AssetDatabase.RemoveUnusedAssetBundleNames();
-        }
-
-        static void BuildAssetBundles()
+        static void BuildAssetBundles(Scene scene, string sceneName)
         {
             var currentTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
             var currentBuildTarget = EditorUserBuildSettings.activeBuildTarget;
 
-            BuildAssetBundleCore(BuildTarget.StandaloneWindows);
-            BuildAssetBundleCore(BuildTarget.StandaloneOSX);
-            BuildAssetBundleCore(BuildTarget.Android);
-            BuildAssetBundleCore(BuildTarget.iOS);
+            BuildAssetBundle(scene, sceneName, BuildTarget.StandaloneWindows);
+            BuildAssetBundle(scene, sceneName, BuildTarget.StandaloneOSX);
+            BuildAssetBundle(scene, sceneName, BuildTarget.Android);
+            BuildAssetBundle(scene, sceneName, BuildTarget.iOS);
 
             EditorUserBuildSettings.SwitchActiveBuildTarget(
                 currentTargetGroup,
@@ -107,9 +77,12 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
             );
         }
 
-        static void BuildAssetBundleCore(BuildTarget target)
+        static void BuildAssetBundle(Scene scene, string sceneName, BuildTarget target)
         {
+            var tempPath = $"Assets/{sceneName}.unity";
             var exportPath = $"{Application.temporaryCachePath}/{target}";
+
+            PreProcessBuildAssetBundle(scene, tempPath, sceneName, target);
 
             if (!Directory.Exists(exportPath))
             {
@@ -122,9 +95,84 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
                 BuildAssetBundleOptions.None,
                 target
             );
+
+            PostProcessBuildAssetBundle(tempPath);
         }
 
-        static void ExportCurrentSceneAsUnityPackage(string scenePath, string exportPath)
+        static void PreProcessBuildAssetBundle(Scene scene, string tempPath, string assetBundleName, BuildTarget target)
+        {
+            var scenePath = scene.path;
+            if (!AssetDatabase.CopyAsset(scenePath, tempPath))
+            {
+                throw new Exception($"Fail copy asset, {scenePath} to {tempPath}");
+            }
+
+            AssetDatabase.Refresh();
+            AssetDatabase.RemoveUnusedAssetBundleNames();
+
+            RemoveObjectsByPlatform(tempPath, target);
+
+            var assetImporter = AssetImporter.GetAtPath(tempPath);
+            assetImporter.assetBundleName = assetBundleName;
+            assetImporter.SaveAndReimport();
+        }
+
+        static void RemoveObjectsByPlatform(string scenePath, BuildTarget target)
+        {
+            EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
+            var scene = SceneManager.GetSceneByPath(scenePath);
+            var rootGameObjects = scene.GetRootGameObjects();
+
+            bool ShouldRemove(GameObject gameObject)
+            {
+                var loweredName = gameObject.name.ToLower();
+                return loweredName.StartsWith("[remove_if") &&
+                       loweredName.Contains(target.ToString().ToLower());
+            }
+
+            var removeTargets = new List<GameObject>();
+            void GatherRemoveTarget(GameObject gameObject)
+            {
+                if (ShouldRemove(gameObject))
+                {
+                    removeTargets.Add(gameObject);
+                    return;
+                }
+
+                foreach (Transform child in gameObject.transform)
+                {
+                    GatherRemoveTarget(child.gameObject);
+                }
+            }
+            foreach (var rootGameObject in rootGameObjects)
+            {
+                GatherRemoveTarget(rootGameObject);
+            }
+
+            foreach (var removeTarget in removeTargets)
+            {
+                GameObject.DestroyImmediate(removeTarget);
+                EditorSceneManager.MarkSceneDirty(scene);
+            }
+
+            if (scene.isDirty)
+            {
+                EditorSceneManager.SaveScene(scene);
+            }
+
+            EditorSceneManager.CloseScene(scene, true);
+        }
+
+        static void PostProcessBuildAssetBundle(string tempPath)
+        {
+            var assetImporter = AssetImporter.GetAtPath(tempPath);
+            assetImporter.assetBundleName = string.Empty;
+            assetImporter.SaveAndReimport();
+            AssetDatabase.DeleteAsset(tempPath);
+            AssetDatabase.RemoveUnusedAssetBundleNames();
+        }
+
+        static void ExportSceneAsUnityPackage(string scenePath, string exportPath)
         {
             ExportCurrentAssetAsUnityPackage(new List<string>
             {

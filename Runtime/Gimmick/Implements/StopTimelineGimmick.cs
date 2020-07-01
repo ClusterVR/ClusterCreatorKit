@@ -33,9 +33,9 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
             if (playTimelineGimmick != null && value.TimeStamp <= playTimelineGimmick.LastTriggeredAt) return;
             LastTriggeredAt = value.TimeStamp;
 
-            playableDirector.Stop();
             playableDirector.time = playableDirector.initialTime;
             playableDirector.Evaluate();
+            playableDirector.Stop();
 
             OnStopped?.Invoke();
         }
