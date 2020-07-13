@@ -9,30 +9,32 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomPropertyDrawer(typeof(ItemTriggerAttribute), true)]
-    public class ItemTriggerAttributePropertyDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(TriggerParamAttribute), true)]
+    public class TriggerParamAttributePropertyDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            var targetChoices = attribute is ItemTriggerAttribute triggerAttr ?
-                triggerAttr.TargetSelectables :
-                Enum.GetValues(typeof(ItemTriggerTarget)).Cast<ItemTriggerTarget>();
-            return CreatePropertyGUI(property, targetChoices.ToList());
+            var triggerAttr = (TriggerParamAttribute) attribute;
+            return CreatePropertyGUI(property, triggerAttr.TargetSelectables.ToList(), triggerAttr.FormatTarget);
         }
 
-        static VisualElement CreatePropertyGUI(SerializedProperty property, List<ItemTriggerTarget> targetChoices)
+        static VisualElement CreatePropertyGUI(SerializedProperty property, List<TriggerTarget> targetChoices, Func<TriggerTarget, string> formatTarget)
         {
             var container = new VisualElement();
 
             var targetProperty = property.FindPropertyRelative("target");
-            var targetField = new PopupField<ItemTriggerTarget>("Target", targetChoices, (ItemTriggerTarget)targetProperty.enumValueIndex);
+
+            var currentTarget = (TriggerTarget) targetProperty.enumValueIndex;
+            var selectingTarget = targetChoices.Contains(currentTarget) ? currentTarget : targetChoices[0];
+            var targetField = new PopupField<TriggerTarget>("Target", targetChoices, selectingTarget, formatTarget, formatTarget);
+            targetField.SetEnabled(targetChoices.Count > 1);
 
             var specifiedTargetItemField = new PropertyField(property.FindPropertyRelative("specifiedTargetItem"));
-            void SwitchSpecifiedTargetItemField(ItemTriggerTarget itemTriggerTarget)
+            void SwitchSpecifiedTargetItemField(TriggerTarget itemTriggerTarget)
             {
-                specifiedTargetItemField.SetVisibility(itemTriggerTarget == ItemTriggerTarget.SpecifiedItem);
+                specifiedTargetItemField.SetVisibility(itemTriggerTarget == TriggerTarget.SpecifiedItem);
             }
-            SwitchSpecifiedTargetItemField((ItemTriggerTarget) targetProperty.enumValueIndex);
+            SwitchSpecifiedTargetItemField((TriggerTarget) targetProperty.enumValueIndex);
 
             targetField.RegisterValueChangedCallback(e =>
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using ClusterVR.CreatorKit.Editor.Preview.EditorUI;
 using ClusterVR.CreatorKit.Editor.Preview.RoomState;
 using ClusterVR.CreatorKit.Gimmick;
@@ -93,11 +94,12 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
         static bool Validate(WebTrigger webTrigger)
         {
             bool valid = true;
+            var now = DateTime.UtcNow;
             foreach (var trigger in webTrigger.triggers)
             {
                 foreach (var state in trigger.state)
                 {
-                    if (!TryGetGimmickValue(state.type, state.value, out _))
+                    if (!TryGetStateValue(state.type, state.value, now, out _))
                     {
                         Debug.LogError($"{trigger.displayName}の{state.key}のValueのパースに失敗しました");
                         valid = false;
@@ -122,7 +124,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
             {
                 text = trigger.displayName,
             };
-            if (trigger.color.Length >= 3)
+            if (trigger.color != null && trigger.color.Length >= 3)
             {
                 var color = new Color(trigger.color[0], trigger.color[1], trigger.color[2]);
                 button.style.backgroundColor = color;
@@ -147,45 +149,47 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
                 if (!ok) return;
             }
 
+            var now = DateTime.UtcNow;
             foreach (var state in trigger.state)
             {
-                var hasValue = TryGetGimmickValue(state.type, state.value, out var gimmickValue);
+                var hasValue = TryGetStateValue(state.type, state.value, now, out var stateValue);
                 Assert.IsTrue(hasValue);
                 var key = GetStateKey(state.key);
-                Bootstrap.RoomStateRepository.Update(key, gimmickValue);
-                Bootstrap.GimmickManager.Invoke(key, gimmickValue);
+                Bootstrap.RoomStateRepository.Update(key, stateValue);
                 Debug.Log($"{state.key}を更新しました");
             }
+
+            Bootstrap.GimmickManager.OnStateUpdated(trigger.state.Select(s => s.key));
         }
 
         static string GetStateKey(string key) => RoomStateKey.GetGlobalKey(key);
 
-        static bool TryGetGimmickValue(string type, string value, out GimmickValue gimmickValue)
+        static bool TryGetStateValue(string type, string value, DateTime now, out StateValue stateValue)
         {
-            gimmickValue = default;
+            stateValue = default;
             switch (type)
             {
                 case "signal":
-                    gimmickValue = new GimmickValue(DateTime.Now);
+                    stateValue = new StateValue(now);
                     return true;
                 case "bool":
                     if (bool.TryParse(value, out var boolValue))
                     {
-                        gimmickValue = new GimmickValue(boolValue);
+                        stateValue = new StateValue(boolValue);
                         return true;
                     }
                     else return false;
                 case "integer":
                     if (int.TryParse(value, out var integerValue))
                     {
-                        gimmickValue = new GimmickValue(integerValue);
+                        stateValue = new StateValue(integerValue);
                         return true;
                     }
                     else return false;
                 case "float":
                     if (float.TryParse(value, out var floatValue))
                     {
-                        gimmickValue = new GimmickValue(floatValue);
+                        stateValue = new StateValue(floatValue);
                         return true;
                     }
                     else return false;

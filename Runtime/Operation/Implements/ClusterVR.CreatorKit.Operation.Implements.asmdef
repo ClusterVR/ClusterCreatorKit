@@ -1,0 +1,23 @@
+{
+    "name": "ClusterVR.CreatorKit.Operation.Implements",
+    "references": [
+        "ClusterVR.CreatorKit",
+        "ClusterVR.CreatorKit.Constants",
+        "ClusterVR.CreatorKit.Operation",
+        "ClusterVR.CreatorKit.Item",
+        "ClusterVR.CreatorKit.Item.Implements",
+        "ClusterVR.CreatorKit.Trigger",
+        "ClusterVR.CreatorKit.Trigger.Implements",
+        "ClusterVR.CreatorKit.Gimmick",
+        "ClusterVR.CreatorKit.Gimmick.Implements"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

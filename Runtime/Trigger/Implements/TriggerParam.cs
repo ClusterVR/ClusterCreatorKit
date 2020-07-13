@@ -5,19 +5,33 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
     [Serializable]
-    public class ItemTrigger
+    public class TriggerParam
     {
-        [SerializeField] ItemTriggerTarget target;
+        [SerializeField] TriggerTarget target;
         [SerializeField] Item.Implements.Item specifiedTargetItem;
         [SerializeField] string key;
         [SerializeField] ParameterType type;
         [SerializeField] Value value;
 
-        public ItemTriggerTarget Target => target;
+        public TriggerTarget Target => target;
         public IItem SpecifiedTargetItem => specifiedTargetItem;
         public string Key => key;
         public ParameterType Type => type;
-        public TriggerValue Value => value.ToTriggerValue();
+        public Value RawValue => value;
+
+        public Trigger.TriggerParam Convert()
+        {
+            return new Trigger.TriggerParam(target, specifiedTargetItem, key, type, value.ToTriggerValue());
+        }
+
+        public TriggerParam(TriggerTarget target, Item.Implements.Item specifiedTargetItem, string key, ParameterType type, Value value)
+        {
+            this.target = target;
+            this.specifiedTargetItem = specifiedTargetItem;
+            this.key = key;
+            this.type = type;
+            this.value = value;
+        }
     }
 
     [Serializable]

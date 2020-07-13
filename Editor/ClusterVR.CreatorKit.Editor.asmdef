@@ -11,7 +11,9 @@
         "ClusterVR.CreatorKit.Gimmick",
         "ClusterVR.CreatorKit.Gimmick.Implements",
         "ClusterVR.CreatorKit.Trigger",
-        "ClusterVR.CreatorKit.Trigger.Implements"
+        "ClusterVR.CreatorKit.Trigger.Implements",
+        "ClusterVR.CreatorKit.Operation",
+        "ClusterVR.CreatorKit.Operation.Implements"
     ],
     "includePlatforms": [
         "Editor"

@@ -6,38 +6,38 @@ using ClusterVR.CreatorKit.Item;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
 {
-    public sealed class PlayerGimmickManager
+    public sealed class PlayerEffectManager
     {
         readonly PlayerPresenter playerPresenter;
 
-        public PlayerGimmickManager(PlayerPresenter playerPresenter, ItemCreator itemCreator, IEnumerable<IPlayerGimmick> playerGimmicks)
+        public PlayerEffectManager(PlayerPresenter playerPresenter, ItemCreator itemCreator, IEnumerable<IPlayerEffect> playerEffects)
         {
             this.playerPresenter = playerPresenter;
             itemCreator.OnCreate += OnCreateItem;
-            RegisterPlayerGimmicks(playerGimmicks);
+            RegisterPlayerEffects(playerEffects);
         }
 
         void OnCreateItem(IItem item)
         {
-            RegisterPlayerGimmicks(item.gameObject.GetComponentsInChildren<IPlayerGimmick>(true));
+            RegisterPlayerEffects(item.gameObject.GetComponentsInChildren<IPlayerEffect>(true));
         }
 
-        void RegisterPlayerGimmicks(IEnumerable<IPlayerGimmick> playerGimmicks)
+        void RegisterPlayerEffects(IEnumerable<IPlayerEffect> playerEffects)
         {
-            foreach (var playerGimmick in playerGimmicks)
+            foreach (var playerEffect in playerEffects)
             {
-                RegisterPlayerGimmick(playerGimmick);
+                RegisterPlayerEffect(playerEffect);
             }
         }
 
-        void RegisterPlayerGimmick(IPlayerGimmick playerGimmick)
+        void RegisterPlayerEffect(IPlayerEffect playerEffect)
         {
-            playerGimmick.OnRun += Run;
+            playerEffect.OnRun += Run;
         }
 
-        void Run(IPlayerGimmick playerGimmick)
+        void Run(IPlayerEffect playerEffect)
         {
-            switch (playerGimmick)
+            switch (playerEffect)
             {
                 case IWarpPlayerGimmick warpPlayerGimmick:
                     if (!warpPlayerGimmick.KeepPosition)

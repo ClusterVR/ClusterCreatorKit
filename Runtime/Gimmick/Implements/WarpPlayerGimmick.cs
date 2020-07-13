@@ -14,7 +14,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
-        public event PlayerGimmickEventHandler OnRun;
+        public event PlayerEffectEventHandler OnRun;
         public Vector3 TargetPosition => targetTransform.position;
         public Quaternion TargetRotation => targetTransform.rotation;
         public bool KeepPosition => keepPosition;

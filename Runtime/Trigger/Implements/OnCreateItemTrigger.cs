@@ -1,3 +1,4 @@
+using System.Linq;
 using ClusterVR.CreatorKit.Item;
 using UnityEngine;
 
@@ -10,14 +11,11 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         IItem IItemTrigger.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         public event TriggerEventHandler TriggerEvent;
 
-        [SerializeField][ItemTrigger] ItemTrigger[] triggers;
+        [SerializeField] [ItemTriggerParam] TriggerParam[] triggers;
 
         public void Invoke()
         {
-            foreach (var trigger in triggers)
-            {
-                TriggerEvent?.Invoke(this, new TriggerEventArgs(trigger.Target, trigger.SpecifiedTargetItem, null, trigger.Key, trigger.Type, trigger.Value));
-            }
+            TriggerEvent?.Invoke(this, new TriggerEventArgs(triggers.Select(t => t.Convert()).ToArray()));
         }
 
         void Reset()

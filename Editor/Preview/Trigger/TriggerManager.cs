@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ClusterVR.CreatorKit.Editor.Preview.Gimmick;
 using ClusterVR.CreatorKit.Editor.Preview.Item;
 using ClusterVR.CreatorKit.Editor.Preview.RoomState;
-using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Trigger;
 using UnityEngine;
@@ -26,6 +26,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
         void OnCreateItem(IItem item)
         {
             Add(item.gameObject.GetComponents<IItemTrigger>());
+            Add(item.gameObject.GetComponentsInChildren<IPlayerTrigger>(true));
         }
 
         public void Add(IEnumerable<IItemTrigger> triggers)
@@ -36,48 +37,78 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
             }
         }
 
-        void OnTriggered(object sender, TriggerEventArgs args)
+        public void Add(IEnumerable<IPlayerTrigger> triggers)
         {
-            var senderTrigger = (IItemTrigger) sender;
-            var senderItem = senderTrigger.Item;
-            if (!TryGetKey(args.Target, senderItem, args.SpecifiedTargetItem, args.CollidedObject, args.Key, out var key)) return;
-            var gimmickValue = GetGimmickValue(args.Type, args.Value);
-            roomStateRepository.Update(key, gimmickValue);
-            gimmickManager.Invoke(key, gimmickValue);
+            foreach (var trigger in triggers)
+            {
+                trigger.TriggerEvent += OnTriggered;
+            }
         }
 
-        bool TryGetKey(ItemTriggerTarget target, IItem senderItem, IItem specifiedTarget, GameObject collidedObject, string triggerKey, out string key)
+        void OnTriggered(IItemTrigger sender, TriggerEventArgs args)
+        {
+            UpdateState(GetStateChange(args, sender.Item.Id).ToArray());
+        }
+
+        void OnTriggered(IPlayerTrigger _, TriggerEventArgs args)
+        {
+            UpdateState(GetStateChange(args).ToArray());
+        }
+
+        void UpdateState(IReadOnlyCollection<KeyValuePair<string, StateValue>> stateChange)
+        {
+            if (stateChange.Count == 0) return;
+            foreach (var state in stateChange)
+            {
+                roomStateRepository.Update(state.Key, state.Value);
+            }
+
+            gimmickManager.OnStateUpdated(stateChange.Select(s => s.Key));
+        }
+
+        static IEnumerable<KeyValuePair<string, StateValue>> GetStateChange(TriggerEventArgs args, ItemId senderItemId = default)
+        {
+            var now = DateTime.UtcNow;
+            foreach (var trigger in args.TriggerParams)
+            {
+                if (!TryGetKey(trigger.Target, senderItemId, trigger.SpecifiedTargetItem, args.CollidedObject, trigger.Key, out var key)) continue;
+                var value = GetStateValue(trigger.Type, trigger.Value, now);
+                yield return new KeyValuePair<string, StateValue>(key, value);
+            }
+        }
+
+        static bool TryGetKey(TriggerTarget target, ItemId senderItemId, IItem specifiedTarget, GameObject collidedObject, string triggerKey, out string key)
         {
             key = default;
             switch (target)
             {
-                case ItemTriggerTarget.This:
-                    key = RoomStateKey.GetItemKey(senderItem.Id.Value, triggerKey);
+                case TriggerTarget.Item:
+                    key = RoomStateKey.GetItemKey(senderItemId.Value, triggerKey);
                     return true;
-                case ItemTriggerTarget.SpecifiedItem:
+                case TriggerTarget.SpecifiedItem:
                     if (specifiedTarget == null) return false;
                     if (specifiedTarget.gameObject == null) return false;
                     key = RoomStateKey.GetItemKey(specifiedTarget.Id.Value, triggerKey);
                     return true;
-                case ItemTriggerTarget.Owner:
+                case TriggerTarget.Player:
                     key = RoomStateKey.GetPlayerKey(triggerKey);
                     return true;
-                case ItemTriggerTarget.CollidedItemOrPlayer:
+                case TriggerTarget.CollidedItemOrPlayer:
                     if (collidedObject.CompareTag("Player"))
                     {
                         key = RoomStateKey.GetPlayerKey(triggerKey);
                         return true;
                     }
-                    
+
                     var collidedItem = collidedObject.GetComponentInParent<IItem>();
                     if (collidedItem != null)
                     {
                         key = RoomStateKey.GetItemKey(collidedItem.Id.Value, triggerKey);
                         return true;
                     }
-                    
+
                     return false;
-                case ItemTriggerTarget.Global:
+                case TriggerTarget.Global:
                     key = RoomStateKey.GetGlobalKey(triggerKey);
                     return true;
                 default:
@@ -85,18 +116,18 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
             }
         }
 
-        GimmickValue GetGimmickValue(ParameterType type, TriggerValue triggerValue)
+        static StateValue GetStateValue(ParameterType type, TriggerValue triggerValue, DateTime now)
         {
             switch (type)
             {
                 case ParameterType.Signal:
-                    return new GimmickValue(DateTime.Now);
+                    return new StateValue(now);
                 case ParameterType.Bool:
-                    return new GimmickValue(triggerValue.BoolValue);
+                    return new StateValue(triggerValue.BoolValue);
                 case ParameterType.Integer:
-                    return new GimmickValue(triggerValue.IntegerValue);
+                    return new StateValue(triggerValue.IntegerValue);
                 case ParameterType.Float:
-                    return new GimmickValue(triggerValue.FloatValue);
+                    return new StateValue(triggerValue.FloatValue);
                 default:
                     throw new NotImplementedException();
             }

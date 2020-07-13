@@ -1,10 +1,10 @@
 namespace ClusterVR.CreatorKit.Trigger
 {
-    public enum ItemTriggerTarget
+    public enum TriggerTarget
     {
-        This,
+        Item,
         SpecifiedItem,
-        Owner,
+        Player,
         CollidedItemOrPlayer,
         Global,
     }

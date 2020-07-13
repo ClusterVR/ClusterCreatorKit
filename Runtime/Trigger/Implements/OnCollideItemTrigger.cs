@@ -1,3 +1,4 @@
+using System.Linq;
 using ClusterVR.CreatorKit.Item;
 using UnityEngine;
 
@@ -12,7 +13,9 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         [SerializeField] CollisionEventType collisionEventType;
         [SerializeField] CollisionType collisionType = CollisionType.Everything;
-        [SerializeField, CollideItemTrigger] ItemTrigger[] triggers;
+        [SerializeField, CollideItemTriggerParam] TriggerParam[] triggers;
+
+        Trigger.TriggerParam[] triggersCache;
 
         void OnCollisionEnter(Collision other)
         {
@@ -46,12 +49,9 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
             }
         }
 
-        void Invoke(GameObject other)
+        void Invoke(GameObject collidedObject)
         {
-            foreach (var trigger in triggers)
-            {
-                TriggerEvent?.Invoke(this, new TriggerEventArgs(trigger.Target, trigger.SpecifiedTargetItem, other.gameObject, trigger.Key, trigger.Type, trigger.Value));
-            }
+            TriggerEvent?.Invoke(this, new TriggerEventArgs(triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray()), collidedObject));
         }
 
         void Reset()

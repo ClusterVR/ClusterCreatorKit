@@ -11,7 +11,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
-        public event PlayerGimmickEventHandler OnRun;
+        public event PlayerEffectEventHandler OnRun;
 
         DateTime lastTriggeredAt;
 

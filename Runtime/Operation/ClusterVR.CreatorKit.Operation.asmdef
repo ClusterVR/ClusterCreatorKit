@@ -1,11 +1,11 @@
 {
-    "name": "ClusterVR.CreatorKit.Editor.Preview.RoomState",
+    "name": "ClusterVR.CreatorKit.Operation",
     "references": [
-        "ClusterVR.CreatorKit"
+        "ClusterVR.CreatorKit",
+        "ClusterVR.CreatorKit.Trigger",
+        "ClusterVR.CreatorKit.Gimmick"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

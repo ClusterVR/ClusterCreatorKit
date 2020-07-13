@@ -1,6 +1,7 @@
 ﻿{
     "name": "ClusterVR.CreatorKit.Editor.Preview.Gimmick",
     "references": [
+        "ClusterVR.CreatorKit",
         "ClusterVR.CreatorKit.Constants",
         "ClusterVR.CreatorKit.Item",
         "ClusterVR.CreatorKit.Gimmick",

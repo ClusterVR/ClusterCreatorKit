@@ -1,3 +1,4 @@
+using System.Linq;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
 using UnityEngine;
@@ -8,18 +9,21 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
     public class UseItemTrigger : MonoBehaviour, IUseItemTrigger
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
-        [SerializeField, ItemTrigger] ItemTrigger[] downTriggers;
-        [SerializeField, ItemTrigger] ItemTrigger[] upTriggers;
+        [SerializeField, ItemTriggerParam] TriggerParam[] downTriggers;
+        [SerializeField, ItemTriggerParam] TriggerParam[] upTriggers;
 
         IItem IItemTrigger.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         public event TriggerEventHandler TriggerEvent;
 
+        Trigger.TriggerParam[] downTriggersCache;
+        Trigger.TriggerParam[] upTriggersCache;
+
         public void Invoke(bool isDown)
         {
-            foreach (var trigger in isDown ? downTriggers : upTriggers)
-            {
-                TriggerEvent?.Invoke(this, new TriggerEventArgs(trigger.Target, trigger.SpecifiedTargetItem, null, trigger.Key, trigger.Type, trigger.Value));
-            }
+            var triggers = isDown ?
+                downTriggersCache ?? (downTriggersCache = downTriggers.Select(t => t.Convert()).ToArray()) :
+                upTriggersCache ?? (upTriggersCache = upTriggers.Select(t => t.Convert()).ToArray());
+            TriggerEvent?.Invoke(this, new TriggerEventArgs(triggers));
         }
 
         void Reset()

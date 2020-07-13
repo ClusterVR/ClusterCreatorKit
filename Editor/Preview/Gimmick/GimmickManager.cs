@@ -46,12 +46,12 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
 
         void OnCreateItemCompleted(IItem item)
         {
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             foreach (var gimmick in item.gameObject.GetComponentsInChildren<IGimmick>(true))
             {
                 var key = GetGimmickKey(gimmick);
                 if (!roomStateRepository.TryGetValue(key, out var value)) continue;
-                gimmick.Run(value, now);
+                Run(gimmick, value, now);
             }
         }
 
@@ -85,27 +85,55 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
             if (gimmickSet.Count == 0) gimmicks.Remove(key);
         }
 
-        public void Invoke(string key, GimmickValue value)
+        public void OnStateUpdated(IEnumerable<string> keys)
         {
-            if (!this.gimmicks.TryGetValue(key, out var gimmicks)) return;
-            var now = DateTime.Now;
-            foreach (var gimmick in gimmicks.ToArray())
+            var now = DateTime.UtcNow;
+            foreach (var key in keys)
             {
-                gimmick.Run(value, now);
+                if (this.gimmicks.TryGetValue(key, out var gimmicks) && roomStateRepository.TryGetValue(key, out var value))
+                {
+                    foreach (var gimmick in gimmicks.ToArray())
+                    {
+                        Run(gimmick, value, now);
+                    }
+                }
             }
         }
+
+        void Run(IGimmick gimmick, StateValue value, DateTime now)
+            => gimmick.Run(GetGimmickValue(gimmick.ParameterType, value), now);
 
         string GetGimmickKey(IGimmick gimmick)
         {
             switch (gimmick.Target)
             {
-                case Target.Global: return RoomStateKey.GetGlobalKey(gimmick.Key);
-                case Target.Player: return RoomStateKey.GetPlayerKey(gimmick.Key);
+                case Target.Global:
+                    return RoomStateKey.GetGlobalKey(gimmick.Key);
+                case Target.Player:
+                    return RoomStateKey.GetPlayerKey(gimmick.Key);
                 case Target.Item:
                     if (gimmick is IItemGimmick itemGimmick) return RoomStateKey.GetItemKey(itemGimmick.Item.Id.Value, gimmick.Key);
                     if (gimmick is IGlobalGimmick globalGimmick) return RoomStateKey.GetItemKey(globalGimmick.ItemId.Value, gimmick.Key);
                     throw new InvalidOperationException();
-                default: throw new NotImplementedException();
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        GimmickValue GetGimmickValue(ParameterType type, StateValue value)
+        {
+            switch (type)
+            {
+                case ParameterType.Signal:
+                    return new GimmickValue(value.ToDateTime());
+                case ParameterType.Bool:
+                    return new GimmickValue(value.ToBool());
+                case ParameterType.Integer:
+                    return new GimmickValue(value.ToInt());
+                case ParameterType.Float:
+                    return new GimmickValue(value.ToFloat());
+                default:
+                    throw new NotImplementedException();
             }
         }
     }

@@ -1,6 +1,6 @@
 namespace ClusterVR.CreatorKit.Gimmick
 {
-    public interface IRespawnPlayerGimmick : IPlayerGimmick
+    public interface IRespawnPlayerGimmick : IPlayerEffect
     {
     }
 }

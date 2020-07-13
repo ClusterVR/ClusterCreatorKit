@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Extensions;
 using ClusterVR.CreatorKit.Item;
@@ -11,10 +12,12 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
     public class InteractItemTrigger : InteractableItem, IInteractItemTrigger
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
-        [SerializeField, ItemTrigger] ItemTrigger[] triggers;
+        [SerializeField, ItemTriggerParam] TriggerParam[] triggers;
 
         public override IItem Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         public event TriggerEventHandler TriggerEvent;
+
+        Trigger.TriggerParam[] triggersCache;
 
         void Start()
         {
@@ -23,10 +26,7 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         public void Invoke()
         {
-            foreach (var trigger in triggers)
-            {
-                TriggerEvent?.Invoke(this, new TriggerEventArgs(trigger.Target, trigger.SpecifiedTargetItem, null, trigger.Key, trigger.Type, trigger.Value));
-            }
+            TriggerEvent?.Invoke(this, new TriggerEventArgs(triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
         }
 
         void Reset()

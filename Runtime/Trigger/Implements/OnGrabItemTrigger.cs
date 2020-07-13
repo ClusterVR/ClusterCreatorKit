@@ -1,3 +1,4 @@
+using System.Linq;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
 using UnityEngine;
@@ -8,10 +9,12 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
     public class OnGrabItemTrigger : MonoBehaviour, IItemTrigger
     {
         [SerializeField, HideInInspector] GrabbableItem grabbableItem;
-        [SerializeField, ItemTrigger] ItemTrigger[] triggers;
+        [SerializeField, ItemTriggerParam] TriggerParam[] triggers;
 
         IItem IItemTrigger.Item => grabbableItem != null ? grabbableItem.Item : (grabbableItem = GetComponent<GrabbableItem>()).Item;
         public event TriggerEventHandler TriggerEvent;
+
+        Trigger.TriggerParam[] triggersCache;
 
         void Start()
         {
@@ -21,10 +24,7 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         void Invoke()
         {
-            foreach (var trigger in triggers)
-            {
-                TriggerEvent?.Invoke(this, new TriggerEventArgs(trigger.Target, trigger.SpecifiedTargetItem, null, trigger.Key, trigger.Type, trigger.Value));
-            }
+            TriggerEvent?.Invoke(this, new TriggerEventArgs(triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
         }
 
         void Reset()

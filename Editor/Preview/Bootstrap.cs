@@ -97,7 +97,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     CommentScreenPresenter = new CommentScreenPresenter(commentScreenViews);
 
                     SetupTriggerGimmicks(rootGameObjects, itemCreator, itemDestroyer);
-                    
+
                     break;
             }
         }
@@ -138,10 +138,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview
             var triggerManager = new TriggerManager(RoomStateRepository, itemCreator, GimmickManager);
             var items = GetComponentsInGameObjectsChildren<IItem>(rootGameObjects).ToArray();
             triggerManager.Add(items.SelectMany(x => x.gameObject.GetComponents<IItemTrigger>()));
+            triggerManager.Add(GetComponentsInGameObjectsChildren<IPlayerTrigger>(rootGameObjects));
             GimmickManager.AddGimmicksInScene(GetComponentsInGameObjectsChildren<IGimmick>(rootGameObjects));
             foreach (var item in items) GimmickManager.AddGimmicksInItem(item.gameObject.GetComponentsInChildren<IGimmick>(true), item.Id.Value);
 
-            new PlayerGimmickManager(PlayerPresenter, itemCreator, GetComponentsInGameObjectsChildren<IPlayerGimmick>(rootGameObjects));
+            new PlayerEffectManager(PlayerPresenter, itemCreator, GetComponentsInGameObjectsChildren<IPlayerEffect>(rootGameObjects));
             new CreateItemGimmickManager(itemCreator, GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));
             new DestroyItemGimmickManager(itemCreator, itemDestroyer, GetComponentsInGameObjectsChildren<IDestroyItemGimmick>(rootGameObjects));
             var onCreateItemTriggerManager = new OnCreateItemTriggerManager(itemCreator);

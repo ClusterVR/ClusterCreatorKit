@@ -14,10 +14,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            var targetChoices = attribute is GimmickKeyAttribute keyAttr ?
-                keyAttr.TargetSelectables :
-                Enum.GetValues(typeof(Target)).Cast<Target>();
-            return CreatePropertyGUI(property, targetChoices.ToList());
+            var keyAttr = (GimmickKeyAttribute) attribute;
+            return CreatePropertyGUI(property, keyAttr.TargetSelectables.ToList());
         }
 
         static VisualElement CreatePropertyGUI(SerializedProperty property, List<Target> targetChoices)
@@ -26,6 +24,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var targetProperty = property.FindPropertyRelative("target");
             var targetField = new PopupField<Target>("Target", targetChoices, (Target)targetProperty.enumValueIndex, FormatListItem, FormatListItem);
+            targetField.SetEnabled(targetChoices.Count > 1);
             targetField.RegisterValueChangedCallback(e =>
             {
                 targetProperty.enumValueIndex = (int) e.newValue;
