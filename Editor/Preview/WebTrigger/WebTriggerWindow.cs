@@ -159,7 +159,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
                 Debug.Log($"{state.key}を更新しました");
             }
 
-            Bootstrap.GimmickManager.OnStateUpdated(trigger.state.Select(s => s.key));
+            Bootstrap.GimmickManager.OnStateUpdated(trigger.state.Select(s => s.key).Select(GetStateKey));
         }
 
         static string GetStateKey(string key) => RoomStateKey.GetGlobalKey(key);
