@@ -9,13 +9,13 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
     public class AddInstantTorqueItemGimmick : MonoBehaviour, IItemGimmick
     {
         [SerializeField, HideInInspector] MovableItem movableItem;
-        [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(Target.Item);
+        [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);
         [SerializeField] Transform space;
         [SerializeField] Vector3 torque;
         [SerializeField] bool ignoreMass;
 
         IItem IItemGimmick.Item => movableItem != null ? movableItem.Item : (movableItem = GetComponent<MovableItem>()).Item;
-        Target IGimmick.Target => key.Target;
+        GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 

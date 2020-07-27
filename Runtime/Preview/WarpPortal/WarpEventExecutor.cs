@@ -16,7 +16,7 @@ namespace ClusterVR.CreatorKit.Preview.WarpPortal
             var rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
             foreach (var rootGameObject in rootGameObjects)
             {
-                var portals = rootGameObject.GetComponentsInChildren<IWarpPortal>();
+                var portals = rootGameObject.GetComponentsInChildren<IWarpPortal>(true);
                 warpPortals.AddRange(portals);
             }
 

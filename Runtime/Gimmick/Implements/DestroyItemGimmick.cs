@@ -8,10 +8,10 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
     public sealed class DestroyItemGimmick : MonoBehaviour, IItemGimmick, IDestroyItemGimmick
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
-        [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(Target.Item);
+        [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);
 
         IItem IItemGimmick.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
-        Target IGimmick.Target => key.Target;
+        GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 

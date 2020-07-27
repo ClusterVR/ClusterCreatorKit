@@ -5,7 +5,8 @@
         "ClusterVR.CreatorKit.Gimmick",
         "ClusterVR.CreatorKit.Item",
         "ClusterVR.CreatorKit.Item.Implements",
-        "ClusterVR.CreatorKit"
+        "ClusterVR.CreatorKit",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

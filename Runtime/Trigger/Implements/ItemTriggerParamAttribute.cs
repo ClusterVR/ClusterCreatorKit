@@ -66,4 +66,12 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         {
         }
     }
+
+    public class GlobalOperationTriggerParamAttribute : TriggerParamAttribute
+    {
+        public GlobalOperationTriggerParamAttribute()
+            : base(TriggerTarget.Global)
+        {
+        }
+    }
 }

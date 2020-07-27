@@ -18,12 +18,12 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             return CreatePropertyGUI(property, keyAttr.TargetSelectables.ToList());
         }
 
-        static VisualElement CreatePropertyGUI(SerializedProperty property, List<Target> targetChoices)
+        static VisualElement CreatePropertyGUI(SerializedProperty property, List<GimmickTarget> targetChoices)
         {
             var container = new VisualElement();
 
             var targetProperty = property.FindPropertyRelative("target");
-            var targetField = new PopupField<Target>("Target", targetChoices, (Target)targetProperty.enumValueIndex, FormatListItem, FormatListItem);
+            var targetField = new PopupField<GimmickTarget>("Target", targetChoices, (GimmickTarget)targetProperty.enumValueIndex, FormatListItem, FormatListItem);
             targetField.SetEnabled(targetChoices.Count > 1);
             targetField.RegisterValueChangedCallback(e =>
             {
@@ -39,11 +39,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             return container;
         }
 
-        static string FormatListItem(Target target)
+        static string FormatListItem(GimmickTarget target)
         {
             switch (target)
             {
-                case Target.Item:
+                case GimmickTarget.Item:
                     return "This";
                 default:
                     return target.ToString();

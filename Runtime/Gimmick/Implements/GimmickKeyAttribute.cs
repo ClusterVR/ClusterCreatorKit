@@ -4,9 +4,9 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     public class GimmickKeyAttribute : PropertyAttribute
     {
-        public Target[] TargetSelectables { get; }
+        public GimmickTarget[] TargetSelectables { get; }
 
-        public GimmickKeyAttribute(params Target[] targetSelectables)
+        public GimmickKeyAttribute(params GimmickTarget[] targetSelectables)
         {
             TargetSelectables = targetSelectables;
         }
@@ -15,7 +15,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
     public class ItemGimmickKeyAttribute : GimmickKeyAttribute
     {
         public ItemGimmickKeyAttribute()
-            : base(Target.Item, Target.Global)
+            : base(GimmickTarget.Item, GimmickTarget.Global)
         {
         }
     }
@@ -23,7 +23,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
     public class PlayerGimmickKeyAttribute : GimmickKeyAttribute
     {
         public PlayerGimmickKeyAttribute()
-            : base(Target.Player, Target.Global)
+            : base(GimmickTarget.Player, GimmickTarget.Global)
         {
         }
     }

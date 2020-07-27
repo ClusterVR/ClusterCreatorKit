@@ -25,6 +25,8 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             direction.Normalize();
             direction = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * direction;
             var velocity = direction * moveSpeed;
+            characterController.Move(velocity * Time.deltaTime);
+
             if (characterController.isGrounded)
             {
                 fallingSpeed = 0;
@@ -35,11 +37,6 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             }
 
             velocity.y = -fallingSpeed;
-
-            if (velocity.magnitude > 0.01)
-            {
-                characterController.Move(velocity * Time.deltaTime);
-            }
         }
     }
 }

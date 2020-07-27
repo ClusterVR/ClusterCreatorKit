@@ -1,6 +1,6 @@
 namespace ClusterVR.CreatorKit.Gimmick
 {
-    public enum Target
+    public enum GimmickTarget
     {
         Item,
         Player,

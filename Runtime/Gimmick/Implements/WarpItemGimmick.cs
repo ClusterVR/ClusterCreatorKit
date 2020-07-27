@@ -9,12 +9,12 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
     public class WarpItemGimmick : MonoBehaviour, IItemGimmick
     {
         [SerializeField, HideInInspector] MovableItem movableItem;
-        [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(Target.Item);
+        [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);
         [SerializeField, RequiredTransform] Transform targetTransform;
         [SerializeField] bool positionOnly;
 
         IItem IItemGimmick.Item => movableItem != null ? movableItem.Item : (movableItem = GetComponent<MovableItem>()).Item;
-        Target IGimmick.Target => key.Target;
+        GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 

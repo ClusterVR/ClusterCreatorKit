@@ -12,7 +12,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         static readonly ParameterType[] selectableTypes = { ParameterType.Bool, ParameterType.Float, ParameterType.Integer };
 
         [SerializeField, HideInInspector] MovableItem movableItem;
-        [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(Target.Item);
+        [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);
         [SerializeField, ParameterTypeField(ParameterType.Bool, ParameterType.Float, ParameterType.Integer)]
         ParameterType parameterType = selectableTypes[0];
         [SerializeField] Transform space;
@@ -20,7 +20,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         [SerializeField] bool ignoreMass;
 
         IItem IItemGimmick.Item => movableItem != null ? movableItem.Item : (movableItem = GetComponent<MovableItem>()).Item;
-        Target IGimmick.Target => key.Target;
+        GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => parameterType;
 

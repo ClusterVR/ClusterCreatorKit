@@ -37,6 +37,11 @@ namespace ClusterVR.CreatorKit.Item
             return Value.GetHashCode();
         }
 
+        public bool IsReserved()
+        {
+            return value == 0L || value == ulong.MaxValue;
+        }
+
         // TODO: 動的に Item 生成するときに速度評価する
         public static ItemId Create()
         {

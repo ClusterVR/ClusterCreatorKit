@@ -16,15 +16,15 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var keyProperty = property.FindPropertyRelative("key");
             var targetProperty = keyProperty.FindPropertyRelative("target");
-            var targetChoices = new List<Target> { Target.Global, Target.Item };
-            var targetField = new PopupField<Target>("Target", targetChoices, (Target)targetProperty.enumValueIndex);
+            var targetChoices = new List<GimmickTarget> { GimmickTarget.Global, GimmickTarget.Item };
+            var targetField = new PopupField<GimmickTarget>("Target", targetChoices, (GimmickTarget)targetProperty.enumValueIndex);
             var keyField = new PropertyField(keyProperty.FindPropertyRelative("key"));
 
             var itemContainer = CreateItemContainer(property.FindPropertyRelative("item"));
 
-            void SwitchDisplayItem(Target target)
+            void SwitchDisplayItem(GimmickTarget target)
             {
-                itemContainer.SetVisibility(target == Target.Item);
+                itemContainer.SetVisibility(target == GimmickTarget.Item);
             }
 
             targetField.RegisterValueChangedCallback(e =>
@@ -34,7 +34,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 SwitchDisplayItem(e.newValue);
             });
 
-            SwitchDisplayItem((Target) targetProperty.enumValueIndex);
+            SwitchDisplayItem((GimmickTarget) targetProperty.enumValueIndex);
 
             container.Add(targetField);
             container.Add(keyField);
@@ -47,7 +47,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
         {
             var container = new VisualElement();
 
-            var helpBox = new IMGUIContainer(() => EditorGUILayout.HelpBox($"{nameof(Target)} を {nameof(Target.Item)} にするには {nameof(Item)} を指定する必要があります。", MessageType.Warning));
+            var helpBox = new IMGUIContainer(() => EditorGUILayout.HelpBox($"{nameof(GimmickTarget)} を {nameof(GimmickTarget.Item)} にするには {nameof(Item)} を指定する必要があります。", MessageType.Warning));
             var itemField = new PropertyField(property);
 
             itemField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(e =>

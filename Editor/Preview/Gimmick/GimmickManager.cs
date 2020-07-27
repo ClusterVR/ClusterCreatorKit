@@ -107,11 +107,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
         {
             switch (gimmick.Target)
             {
-                case Target.Global:
+                case GimmickTarget.Global:
                     return RoomStateKey.GetGlobalKey(gimmick.Key);
-                case Target.Player:
+                case GimmickTarget.Player:
                     return RoomStateKey.GetPlayerKey(gimmick.Key);
-                case Target.Item:
+                case GimmickTarget.Item:
                     if (gimmick is IItemGimmick itemGimmick) return RoomStateKey.GetItemKey(itemGimmick.Item.Id.Value, gimmick.Key);
                     if (gimmick is IGlobalGimmick globalGimmick) return RoomStateKey.GetItemKey(globalGimmick.ItemId.Value, gimmick.Key);
                     throw new InvalidOperationException();

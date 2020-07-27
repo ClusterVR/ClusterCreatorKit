@@ -14,11 +14,17 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
     {
         readonly RoomStateRepository roomStateRepository;
         readonly GimmickManager gimmickManager;
+        readonly SignalGenerator signalGenerator;
 
-        public TriggerManager(RoomStateRepository roomStateRepository, ItemCreator itemCreator, GimmickManager gimmickManager)
+        public TriggerManager(
+            RoomStateRepository roomStateRepository,
+            ItemCreator itemCreator,
+            GimmickManager gimmickManager,
+            SignalGenerator signalGenerator)
         {
             this.roomStateRepository = roomStateRepository;
             this.gimmickManager = gimmickManager;
+            this.signalGenerator = signalGenerator;
 
             itemCreator.OnCreate += OnCreateItem;
         }
@@ -27,6 +33,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
         {
             Add(item.gameObject.GetComponents<IItemTrigger>());
             Add(item.gameObject.GetComponentsInChildren<IPlayerTrigger>(true));
+            Add(item.gameObject.GetComponentsInChildren<IGlobalTrigger>(true));
         }
 
         public void Add(IEnumerable<IItemTrigger> triggers)
@@ -45,12 +52,22 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
             }
         }
 
+        public void Add(IEnumerable<IGlobalTrigger> triggers)
+        {
+            foreach (var trigger in triggers)
+            {
+                trigger.TriggerEvent += OnTriggered;
+            }
+        }
+
         void OnTriggered(IItemTrigger sender, TriggerEventArgs args)
         {
             UpdateState(GetStateChange(args, sender.Item.Id).ToArray());
         }
 
-        void OnTriggered(IPlayerTrigger _, TriggerEventArgs args)
+        void OnTriggered(IPlayerTrigger _, TriggerEventArgs args) => OnTriggered(args);
+
+        void OnTriggered(TriggerEventArgs args)
         {
             UpdateState(GetStateChange(args).ToArray());
         }
@@ -66,13 +83,14 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
             gimmickManager.OnStateUpdated(stateChange.Select(s => s.Key));
         }
 
-        static IEnumerable<KeyValuePair<string, StateValue>> GetStateChange(TriggerEventArgs args, ItemId senderItemId = default)
+        IEnumerable<KeyValuePair<string, StateValue>> GetStateChange(TriggerEventArgs args, ItemId senderItemId = default)
         {
-            var now = DateTime.UtcNow;
+            if (!signalGenerator.TryGet(out var signal)) yield break;
+
             foreach (var trigger in args.TriggerParams)
             {
                 if (!TryGetKey(trigger.Target, senderItemId, trigger.SpecifiedTargetItem, args.CollidedObject, trigger.Key, out var key)) continue;
-                var value = GetStateValue(trigger.Type, trigger.Value, now);
+                var value = GetStateValue(trigger.Type, trigger.Value, signal);
                 yield return new KeyValuePair<string, StateValue>(key, value);
             }
         }
@@ -116,12 +134,12 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
             }
         }
 
-        static StateValue GetStateValue(ParameterType type, TriggerValue triggerValue, DateTime now)
+        static StateValue GetStateValue(ParameterType type, TriggerValue triggerValue, StateValue signal)
         {
             switch (type)
             {
                 case ParameterType.Signal:
-                    return new StateValue(now);
+                    return signal;
                 case ParameterType.Bool:
                     return new StateValue(triggerValue.BoolValue);
                 case ParameterType.Integer:

@@ -5,12 +5,14 @@ using ClusterVR.CreatorKit.Editor.Preview.EditorSettings;
 using ClusterVR.CreatorKit.Editor.Preview.EditorUI;
 using ClusterVR.CreatorKit.Editor.Preview.Gimmick;
 using ClusterVR.CreatorKit.Editor.Preview.Item;
+using ClusterVR.CreatorKit.Editor.Preview.Operation;
 using ClusterVR.CreatorKit.Editor.Preview.RoomState;
 using ClusterVR.CreatorKit.Editor.Preview.Trigger;
 using ClusterVR.CreatorKit.Editor.Preview.World;
 using ClusterVR.CreatorKit.Editor.Venue;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.Operation;
 using ClusterVR.CreatorKit.Preview.Item;
 using ClusterVR.CreatorKit.Preview.PlayerController;
 using ClusterVR.CreatorKit.Trigger;
@@ -32,6 +34,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview
 
         public static RoomStateRepository RoomStateRepository { get; private set; }
         public static GimmickManager GimmickManager { get; private set; }
+        public static SignalGenerator SignalGenerator { get; private set; }
         public static bool IsInPlayMode { get; private set; }
 
         static Bootstrap()
@@ -135,13 +138,20 @@ namespace ClusterVR.CreatorKit.Editor.Preview
         {
             RoomStateRepository = new RoomStateRepository();
             GimmickManager = new GimmickManager(RoomStateRepository, itemCreator, itemDestroyer);
-            var triggerManager = new TriggerManager(RoomStateRepository, itemCreator, GimmickManager);
+            SignalGenerator = new SignalGenerator();
+            var triggerManager = new TriggerManager(RoomStateRepository, itemCreator, GimmickManager, SignalGenerator);
             var items = GetComponentsInGameObjectsChildren<IItem>(rootGameObjects).ToArray();
             triggerManager.Add(items.SelectMany(x => x.gameObject.GetComponents<IItemTrigger>()));
             triggerManager.Add(GetComponentsInGameObjectsChildren<IPlayerTrigger>(rootGameObjects));
+            triggerManager.Add(GetComponentsInGameObjectsChildren<IGlobalTrigger>(rootGameObjects));
             GimmickManager.AddGimmicksInScene(GetComponentsInGameObjectsChildren<IGimmick>(rootGameObjects));
             foreach (var item in items) GimmickManager.AddGimmicksInItem(item.gameObject.GetComponentsInChildren<IGimmick>(true), item.Id.Value);
 
+            new LogicManager(itemCreator, RoomStateRepository, GimmickManager,
+                GetComponentsInGameObjectsChildren<IItemLogic>(rootGameObjects),
+                GetComponentsInGameObjectsChildren<IPlayerLogic>(rootGameObjects),
+                GetComponentsInGameObjectsChildren<IGlobalLogic>(rootGameObjects),
+                SignalGenerator);
             new PlayerEffectManager(PlayerPresenter, itemCreator, GetComponentsInGameObjectsChildren<IPlayerEffect>(rootGameObjects));
             new CreateItemGimmickManager(itemCreator, GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));
             new DestroyItemGimmickManager(itemCreator, itemDestroyer, GetComponentsInGameObjectsChildren<IDestroyItemGimmick>(rootGameObjects));

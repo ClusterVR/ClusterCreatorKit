@@ -1,6 +1,6 @@
 ﻿namespace ClusterVR.CreatorKit.Constants
 {
-    public static class LayerName
+    public static partial class LayerName
     {
         public const int Default = 0;
         public const int TransparentFX = 1;

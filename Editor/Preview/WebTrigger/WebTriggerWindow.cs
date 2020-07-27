@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using ClusterVR.CreatorKit.Editor.Preview.EditorUI;
 using ClusterVR.CreatorKit.Editor.Preview.RoomState;
 using ClusterVR.CreatorKit.Gimmick;
@@ -94,12 +95,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
         static bool Validate(WebTrigger webTrigger)
         {
             bool valid = true;
-            var now = DateTime.UtcNow;
             foreach (var trigger in webTrigger.triggers)
             {
                 foreach (var state in trigger.state)
                 {
-                    if (!TryGetStateValue(state.type, state.value, now, out _))
+                    if (!TryGetStateValue(state.type, state.value, default, out _))
                     {
                         Debug.LogError($"{trigger.displayName}の{state.key}のValueのパースに失敗しました");
                         valid = false;
@@ -149,10 +149,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
                 if (!ok) return;
             }
 
-            var now = DateTime.UtcNow;
+            if(!Bootstrap.SignalGenerator.TryGet(out var signal)) return;
             foreach (var state in trigger.state)
             {
-                var hasValue = TryGetStateValue(state.type, state.value, now, out var stateValue);
+                var hasValue = TryGetStateValue(state.type, state.value, signal, out var stateValue);
                 Assert.IsTrue(hasValue);
                 var key = GetStateKey(state.key);
                 Bootstrap.RoomStateRepository.Update(key, stateValue);
@@ -164,13 +164,13 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
 
         static string GetStateKey(string key) => RoomStateKey.GetGlobalKey(key);
 
-        static bool TryGetStateValue(string type, string value, DateTime now, out StateValue stateValue)
+        static bool TryGetStateValue(string type, string value, StateValue signal, out StateValue stateValue)
         {
             stateValue = default;
             switch (type)
             {
                 case "signal":
-                    stateValue = new StateValue(now);
+                    stateValue = signal;
                     return true;
                 case "bool":
                     if (bool.TryParse(value, out var boolValue))

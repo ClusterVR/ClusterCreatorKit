@@ -5,9 +5,9 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     public class RespawnPlayerGimmick : MonoBehaviour, IRespawnPlayerGimmick
     {
-        [SerializeField, PlayerGimmickKey] GimmickKey key = new GimmickKey(Target.Player, "respawn");
+        [SerializeField, PlayerGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Player, "respawn");
 
-        Target IGimmick.Target => key.Target;
+        GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 

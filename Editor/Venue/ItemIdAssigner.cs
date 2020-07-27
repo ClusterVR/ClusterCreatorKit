@@ -17,7 +17,7 @@ namespace ClusterVR.CreatorKit.Editor.Venue
             var hashSet = new HashSet<ItemId>();
             foreach (var item in rootObjects.SelectMany(o => o.GetComponentsInChildren<Item.Implements.Item>(true)))
             {
-                while (item.Id.Value == 0 || hashSet.Contains(item.Id))
+                while (item.Id.IsReserved() || hashSet.Contains(item.Id))
                 {
                     var id = ItemId.Create();
                     item.Id = id;

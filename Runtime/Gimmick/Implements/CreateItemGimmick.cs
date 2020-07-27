@@ -8,13 +8,13 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
     public sealed class CreateItemGimmick : MonoBehaviour, IItemGimmick, ICreateItemGimmick
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
-        [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(Target.Item);
+        [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);
         [SerializeField] Item.Implements.Item itemTemplate;
         [SerializeField, HideInInspector] ItemTemplateId itemTemplateId;
         [SerializeField] Transform spawnPoint;
 
         IItem IItemGimmick.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
-        Target IGimmick.Target => key.Target;
+        GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
         public Transform SpawnPoint => spawnPoint;

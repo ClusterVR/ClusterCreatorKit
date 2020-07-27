@@ -13,7 +13,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
     public class ItemTimer : MonoBehaviour, IItemTrigger, IItemGimmick
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
-        [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(Target.Item);
+        [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);
         [SerializeField] float delayTimeSeconds = 1;
         [SerializeField, ItemOperationTriggerParam] Trigger.Implements.TriggerParam[] triggers;
 
@@ -21,7 +21,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         IItem IItemTrigger.Item => Item;
         IItem IItemGimmick.Item => Item;
 
-        Target IGimmick.Target => key.Target;
+        GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 

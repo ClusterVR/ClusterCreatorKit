@@ -5,12 +5,12 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     public class WarpPlayerGimmick : MonoBehaviour, IWarpPlayerGimmick
     {
-        [SerializeField, PlayerGimmickKey] GimmickKey key = new GimmickKey(Target.Player);
+        [SerializeField, PlayerGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Player);
         [SerializeField] Transform targetTransform;
         [SerializeField] bool keepPosition;
         [SerializeField] bool keepRotation;
 
-        Target IGimmick.Target => key.Target;
+        GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 

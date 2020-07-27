@@ -33,19 +33,15 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             direction.Normalize();
             direction = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * direction;
 
+            var velocity = new Vector3(direction.x * moveSpeed, velocityY, direction.z * moveSpeed);
+            characterController.Move(velocity * Time.deltaTime);
+
             if (characterController.isGrounded)
             {
                 if (Input.GetKeyDown(KeyCode.Space)) velocityY = jumpSpeed;
-                else
-                {
-                    velocityY = 0f;
-                    if (direction.sqrMagnitude == 0f) return;
-                }
+                else velocityY = 0f;
             }
-
             velocityY -= Time.deltaTime * 9.81f;
-            var velocity = new Vector3(direction.x * moveSpeed, velocityY, direction.z * moveSpeed);
-            characterController.Move(velocity * Time.deltaTime);
         }
 
         void Rotate(Vector2 delta)

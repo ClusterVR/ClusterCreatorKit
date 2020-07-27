@@ -1,0 +1,23 @@
+﻿{
+	"name": "ClusterVR.CreatorKit.Editor.Preview.Operation",
+	"references": [
+		"ClusterVR.CreatorKit",
+		"ClusterVR.CreatorKit.Item",
+		"ClusterVR.CreatorKit.Gimmick",
+		"ClusterVR.CreatorKit.Operation",
+		"ClusterVR.CreatorKit.Editor.Preview.Item",
+		"ClusterVR.CreatorKit.Editor.Preview.Gimmick",
+		"ClusterVR.CreatorKit.Editor.Preview.RoomState",
+		"ClusterVR.CreatorKit.Editor.Preview.Trigger"
+	],
+	"includePlatforms": [
+		"Editor"
+	],
+	"excludePlatforms": [],
+	"allowUnsafeCode": false,
+	"overrideReferences": false,
+	"precompiledReferences": [],
+	"autoReferenced": true,
+	"defineConstraints": [],
+	"versionDefines": []
+}

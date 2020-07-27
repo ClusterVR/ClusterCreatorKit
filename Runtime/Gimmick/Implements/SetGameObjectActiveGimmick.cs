@@ -10,7 +10,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         [SerializeField] GlobalGimmickKey globalGimmickKey;
 
         ItemId IGlobalGimmick.ItemId => globalGimmickKey.ItemId;
-        Target IGimmick.Target => globalGimmickKey.Key.Target;
+        GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
         string IGimmick.Key => globalGimmickKey.Key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Bool;
 

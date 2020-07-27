@@ -10,11 +10,11 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 {
     public class PlayerTimer : MonoBehaviour, IPlayerTrigger, IPlayerGimmick
     {
-        [SerializeField, PlayerGimmickKey] GimmickKey key = new GimmickKey(Target.Player);
+        [SerializeField, PlayerGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Player);
         [SerializeField] float delayTimeSeconds = 1;
         [SerializeField, PlayerOperationTriggerParam] Trigger.Implements.TriggerParam[] triggers;
 
-        Target IGimmick.Target => key.Target;
+        GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 

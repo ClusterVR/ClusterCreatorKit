@@ -4,8 +4,9 @@
         "ClusterVR.CreatorKit",
         "ClusterVR.CreatorKit.Editor",
         "ClusterVR.CreatorKit.Editor.Preview",
-        "ClusterVR.CreatorKit.Editor.Preview.RoomState",
         "ClusterVR.CreatorKit.Editor.Preview.Gimmick",
+        "ClusterVR.CreatorKit.Editor.Preview.RoomState",
+        "ClusterVR.CreatorKit.Editor.Preview.Trigger",
         "ClusterVR.CreatorKit.Gimmick",
         "ClusterVR.CreatorKit.Trigger"
     ],
