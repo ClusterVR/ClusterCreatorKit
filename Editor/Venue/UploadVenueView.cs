@@ -44,10 +44,22 @@ namespace ClusterVR.CreatorKit.Editor.Venue
                 executeUpload = false;
                 currentUploadService = null;
 
-                if (!VenueValidator.ValidateVenue(out errorMessage))
+                if (!VenueValidator.ValidateVenue(out errorMessage, out var invalidObjects))
                 {
-                    Debug.LogError(errorMessage);
                     EditorUtility.DisplayDialog("Cluster Creator Kit", errorMessage, "閉じる");
+                    if (invalidObjects.Any())
+                    {
+                        foreach (var invalidObject in invalidObjects)
+                        {
+                            Debug.LogError(errorMessage, invalidObject);
+                            EditorGUIUtility.PingObject(invalidObject);
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError(errorMessage);
+                    }
+                    Selection.objects = invalidObjects.ToArray();
                     return;
                 }
 

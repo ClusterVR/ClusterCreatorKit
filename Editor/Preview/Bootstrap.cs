@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Preview.EditorSettings;
@@ -36,6 +37,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview
         public static GimmickManager GimmickManager { get; private set; }
         public static SignalGenerator SignalGenerator { get; private set; }
         public static bool IsInPlayMode { get; private set; }
+        public static event OnInitializeEventHandler OnInitializedEvent;
+        public delegate void OnInitializeEventHandler();
 
         static Bootstrap()
         {
@@ -101,6 +104,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview
 
                     SetupTriggerGimmicks(rootGameObjects, itemCreator, itemDestroyer);
 
+                    OnInitializedEvent?.Invoke();
                     break;
             }
         }

@@ -13,7 +13,7 @@ namespace ClusterVR.CreatorKit.Editor
         {
             OpenTargetScene();
 
-            if (!VenueValidator.ValidateVenue(out var errorMessage))
+            if (!VenueValidator.ValidateVenue(out var errorMessage, out _))
             {
                 Debug.LogError($"ValidationError:{errorMessage}");
             }
