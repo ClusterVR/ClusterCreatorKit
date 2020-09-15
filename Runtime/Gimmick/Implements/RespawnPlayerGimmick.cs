@@ -1,14 +1,16 @@
 using System;
+using ClusterVR.CreatorKit.Item;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     public class RespawnPlayerGimmick : MonoBehaviour, IRespawnPlayerGimmick
     {
-        [SerializeField, PlayerGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Player, "respawn");
+        [SerializeField] PlayerGimmickKey key = new PlayerGimmickKey("respawn");
 
-        GimmickTarget IGimmick.Target => key.Target;
-        string IGimmick.Key => key.Key;
+        GimmickTarget IGimmick.Target => key.Key.Target;
+        string IGimmick.Key => key.Key.Key;
+        ItemId IGimmick.ItemId => key.ItemId;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
         public event PlayerEffectEventHandler OnRun;

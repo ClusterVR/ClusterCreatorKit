@@ -31,7 +31,7 @@ namespace ClusterVR.CreatorKit.Editor.Venue
         {
             selector = new VisualElement() {style = {flexGrow = 1}};
             parent.Add(selector);
-            RefreshVenueSelector();
+            _ = RefreshVenueSelector();
         }
 
         public void RefetchVenueWithoutChangingSelection()
@@ -39,11 +39,11 @@ namespace ClusterVR.CreatorKit.Editor.Venue
             var currentVenue = reactiveCurrentVenue.Val;
             if (currentVenue != null)
             {
-                RefreshVenueSelector(currentVenue.Group.Id, currentVenue.VenueId);
+                _ = RefreshVenueSelector(currentVenue.Group.Id, currentVenue.VenueId);
             }
             else
             {
-                RefreshVenueSelector();
+                _ = RefreshVenueSelector();
             }
         }
 
@@ -67,7 +67,7 @@ namespace ClusterVR.CreatorKit.Editor.Venue
                 {
                     allVenues[group.Id] = await APIServiceClient.GetGroupVenues.Call(group.Id, userInfo.VerifiedToken, 3);
                 }
-                
+
                 // Construct menu
                 selector.Clear();
                 selector.Add(new Label("所属チーム"));
@@ -83,17 +83,17 @@ namespace ClusterVR.CreatorKit.Editor.Venue
 
                     var groupToSelect = groups.List.Find(group => group.Id == groupIdToSelect) ?? groups.List[0];
                     teamMenu.SetValueWithoutNotify(groupToSelect);
-                    
+
                     RecreateVenuePicker(groupToSelect.Id);
                 }
-                
+
                 selector.Add(UiUtils.Separator());
-                
+
                 selector.Add(new Label(){text="ワールド"});
                 selector.Add(venuePickerHolder);
 
                 selector.Add(UiUtils.Separator());
-                
+
                 selector.Add(new Label("ユーザーID"));
                 var userSelector = new VisualElement(){style = {flexShrink = 0}};
                 userSelector.Add(new Label(userInfo.Username));
@@ -147,7 +147,7 @@ namespace ClusterVR.CreatorKit.Editor.Venue
                     newVenuePayload,
                     venue =>
                     {
-                        RefreshVenueSelector(groupId, venue.VenueId);
+                        _ = RefreshVenueSelector(groupId, venue.VenueId);
                         reactiveCurrentVenue.Val = venue;
                     },
                     exception =>

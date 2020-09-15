@@ -1,17 +1,19 @@
 ﻿using System;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
+using ClusterVR.CreatorKit.Item;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Operation.Implements
 {
     public class PlayerLogic : MonoBehaviour, IPlayerLogic
     {
-        [SerializeField, PlayerGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Player);
+        [SerializeField] PlayerGimmickKey key;
         [SerializeField, PlayerLogic] Logic logic;
 
-        GimmickTarget IGimmick.Target => key.Target;
-        string IGimmick.Key => key.Key;
+        GimmickTarget IGimmick.Target => key.Key.Target;
+        string IGimmick.Key => key.Key.Key;
+        ItemId IGimmick.ItemId => key.ItemId;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
         public event RunPlayerLogicEventHandler OnRunPlayerLogic;

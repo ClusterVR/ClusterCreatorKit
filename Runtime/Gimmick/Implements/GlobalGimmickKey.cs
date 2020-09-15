@@ -5,10 +5,10 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [Serializable]
-    public class GlobalGimmickKey
+    public sealed class GlobalGimmickKey
     {
         [SerializeField] GimmickKey key = new GimmickKey(GimmickTarget.Global);
-        [SerializeField] Item.Implements.Item item;
+        [SerializeField, GimmickKeyItem] Item.Implements.Item item;
 
         public GimmickKey Key => key;
         public ItemId ItemId => item != null ? item.Id : default;

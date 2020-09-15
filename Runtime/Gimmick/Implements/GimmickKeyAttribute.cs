@@ -19,12 +19,4 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         {
         }
     }
-
-    public class PlayerGimmickKeyAttribute : GimmickKeyAttribute
-    {
-        public PlayerGimmickKeyAttribute()
-            : base(GimmickTarget.Player, GimmickTarget.Global)
-        {
-        }
-    }
 }

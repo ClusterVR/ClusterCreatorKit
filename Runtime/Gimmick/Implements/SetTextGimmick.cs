@@ -9,21 +9,15 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
     public class SetTextGimmick : MonoBehaviour, IGlobalGimmick
     {
         [SerializeField, HideInInspector] Text  text;
-        [SerializeField] GlobalGimmickKey globalGimmickKey;
+        [SerializeField, LocalizableGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
         [SerializeField] ParameterType parameterType;
         [SerializeField, Tooltip("Textに設定するフォーマット"), Multiline] string format = DefaultFormat;
 
         const string DefaultFormat = "{0}";
-        ItemId IGlobalGimmick.ItemId => globalGimmickKey.ItemId;
+        ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
         string IGimmick.Key => globalGimmickKey.Key.Key;
         ParameterType IGimmick.ParameterType => parameterType;
-
-        void Start()
-        {
-            if (text == null) text = GetComponent<Text>();
-            if (string.IsNullOrWhiteSpace(format)) format = DefaultFormat;
-        }
 
         public void Run(GimmickValue value, DateTime current)
         {
@@ -46,7 +40,19 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void SetText<T>(T value)
         {
-            text.text = string.Format(format, value);
+            if (text == null) text = GetComponent<Text>();
+            if (string.IsNullOrWhiteSpace(format)) format = DefaultFormat;
+
+            try
+            {
+                text.text = string.Format(format, value);
+            }
+            catch (FormatException e)
+            {
+#if UNITY_EDITOR
+                Debug.LogException(e, this);
+#endif
+            }
         }
 
         void OnValidate()

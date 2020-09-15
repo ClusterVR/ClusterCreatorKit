@@ -13,7 +13,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         [SerializeField, RequiredTransform] Transform targetTransform;
         [SerializeField] bool positionOnly;
 
-        IItem IItemGimmick.Item => movableItem != null ? movableItem.Item : (movableItem = GetComponent<MovableItem>()).Item;
+        ItemId IGimmick.ItemId => (movableItem != null ? movableItem.Item : (movableItem = GetComponent<MovableItem>()).Item).Id;
         GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;

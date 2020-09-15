@@ -112,9 +112,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
                 case GimmickTarget.Player:
                     return RoomStateKey.GetPlayerKey(gimmick.Key);
                 case GimmickTarget.Item:
-                    if (gimmick is IItemGimmick itemGimmick) return RoomStateKey.GetItemKey(itemGimmick.Item.Id.Value, gimmick.Key);
-                    if (gimmick is IGlobalGimmick globalGimmick) return RoomStateKey.GetItemKey(globalGimmick.ItemId.Value, gimmick.Key);
-                    throw new InvalidOperationException();
+                    return RoomStateKey.GetItemKey(gimmick.ItemId.Value, gimmick.Key);
                 default:
                     throw new NotImplementedException();
             }

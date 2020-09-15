@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [Serializable]
-    public class GimmickKey
+    public sealed class GimmickKey
     {
         [SerializeField] GimmickTarget target;
         [SerializeField] string key;

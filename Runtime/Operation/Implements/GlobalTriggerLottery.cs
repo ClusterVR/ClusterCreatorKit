@@ -11,7 +11,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 {
     public sealed class GlobalTriggerLottery : MonoBehaviour, IGlobalTrigger, IGlobalGimmick
     {
-        [SerializeField] GlobalGimmickKey globalGimmickKey;
+        [SerializeField, ConsistentlySyncGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
         [SerializeField] Choice[] choices;
 
         [Serializable]
@@ -37,7 +37,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         }
 
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
-        ItemId IGlobalGimmick.ItemId => globalGimmickKey.ItemId;
+        ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
 
         string IGimmick.Key => globalGimmickKey.Key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;

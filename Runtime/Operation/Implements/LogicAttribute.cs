@@ -31,6 +31,8 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             {
                 case TargetStateTarget.Item:
                     return "This";
+                case TargetStateTarget.Player:
+                    return "Owner";
                 default:
                     return target.ToString();
             }
@@ -42,6 +44,8 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             {
                 case GimmickTarget.Item:
                     return "This";
+                case GimmickTarget.Player:
+                    return "Owner";
                 default:
                     return target.ToString();
             }

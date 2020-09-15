@@ -9,9 +9,9 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
     public class StopTimelineGimmick : MonoBehaviour, IStopTimelineGimmick, IGlobalGimmick
     {
         [SerializeField, HideInInspector] PlayableDirector playableDirector;
-        [SerializeField] GlobalGimmickKey globalGimmickKey;
+        [SerializeField, ConsistentlySyncGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
 
-        ItemId IGlobalGimmick.ItemId => globalGimmickKey.ItemId;
+        ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
         string IGimmick.Key => globalGimmickKey.Key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;

@@ -189,7 +189,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var targetProperty = property.FindPropertyRelative("target");
             var currentTarget = (TargetStateTarget) targetProperty.intValue;
             var selectingTarget = targetChoices.Contains(currentTarget) ? currentTarget : targetChoices[0];
-            var targetField = CreateEnumField(targetProperty, targetChoices, selectingTarget, formatTarget);
+            var targetField = EnumField.Create(targetProperty, targetChoices, selectingTarget, formatTarget);
             container.Add(targetField);
 
             var keyProperty = property.FindPropertyRelative("key");
@@ -203,7 +203,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             container.Add(keyField);
 
             var parameterTypeProperty = property.FindPropertyRelative("parameterType");
-            var parameterTypeField = CreateEnumField<ParameterType>(parameterTypeProperty);
+            var parameterTypeField = EnumField.Create<ParameterType>(parameterTypeProperty);
             container.Add(parameterTypeField);
 
             return container;
@@ -291,7 +291,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             });
             container.Insert(0, typeOperatorField);
 
-            var typeField = CreateEnumFieldAsStringPopupField<ExpressionType>(typeProperty, newValue =>
+            var typeField = EnumField.CreateAsStringPopupField<ExpressionType>(typeProperty, newValue =>
             {
                 typeOperatorField.SetValueWithoutNotify(newValue == ExpressionType.Value ? ExpressionTypeValue : operatorProperty.intValue);
                 OnTypeChanged(newValue);
@@ -299,7 +299,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             typeField.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
             container.Add(typeField);
 
-            var operatorField = CreateEnumFieldAsStringPopupField<Operator>(operatorProperty, newValue =>
+            var operatorField = EnumField.CreateAsStringPopupField<Operator>(operatorProperty, newValue =>
             {
                 typeOperatorField.SetValueWithoutNotify(typeProperty.intValue == (int) ExpressionType.Value ? ExpressionTypeValue : (int) newValue);
                 OnOperatorChanged(newValue);
@@ -367,7 +367,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             container.Add(sourceStateField);
 
             var typeProperty = property.FindPropertyRelative("type");
-            var typeField = CreateEnumField<ValueType>(typeProperty, OnTypeChanged);
+            var typeField = EnumField.Create<ValueType>(typeProperty, OnTypeChanged);
             container.Insert(0, typeField);
 
             void OnTypeChanged(ValueType type)
@@ -426,7 +426,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var typeChoices = new List<ParameterType> { ParameterType.Bool, ParameterType.Float, ParameterType.Integer };
             var currentType = (ParameterType) typeProperty.intValue;
             var selectingTarget = typeChoices.Contains(currentType) ? currentType : typeChoices[0];
-            var typeField = CreateEnumField(typeProperty, typeChoices, selectingTarget, SwitchField);
+            var typeField = EnumField.Create(typeProperty, typeChoices, selectingTarget, SwitchField);
             container.Insert(0, typeField);
 
             void SwitchField(ParameterType type)
@@ -457,7 +457,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var targetProperty = property.FindPropertyRelative("target");
             var currentTarget = (GimmickTarget) targetProperty.intValue;
             var selectingTarget = targetChoices.Contains(currentTarget) ? currentTarget : targetChoices[0];
-            var targetField = CreateEnumField(targetProperty, targetChoices, selectingTarget, formatTarget);
+            var targetField = EnumField.Create(targetProperty, targetChoices, selectingTarget, formatTarget);
             container.Add(targetField);
 
             var keyProperty = property.FindPropertyRelative("key");
@@ -487,134 +487,6 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 container.Add(field);
             }
             return container;
-        }
-
-        static VisualElement CreateEnumField<TEnum>(SerializedProperty property, Action<TEnum> onValueChanged = null)
-            where TEnum : struct, Enum
-        {
-            var defaultValue = (TEnum) (object) property.intValue;
-            var choices = Enum.GetValues(typeof(TEnum)).Cast<TEnum>().ToList();
-
-            return CreateEnumField(property, choices, defaultValue, null, onValueChanged);
-        }
-
-        static VisualElement CreateEnumField<TEnum>(SerializedProperty property, List<TEnum> choices, TEnum defaultValue, Action<TEnum> onValueChanged = null)
-            where TEnum : struct, Enum
-        {
-            string Format(TEnum e)
-            {
-                return e.ToString();
-            }
-
-            return CreateEnumField(property, choices, defaultValue, Format, onValueChanged);
-        }
-
-        static VisualElement CreateEnumField<TEnum>(SerializedProperty property, List<TEnum> choices, TEnum defaultValue, Func<TEnum, string> format, Action<TEnum> onValueChanged = null)
-            where TEnum : struct, Enum
-        {
-            // Enum の SerializedProperty type が int になることがある(深さによって発生する)
-            //Assert.AreEqual(property.propertyType, SerializedPropertyType.Enum);
-            var container = new VisualElement
-            {
-                style = { flexGrow = new StyleFloat(1) }
-            };
-
-            void UpdateProperty(TEnum value)
-            {
-                var newValue = (int)(object) value;
-                if (property.intValue == newValue) return;
-                property.intValue = newValue;
-                property.serializedObject.ApplyModifiedProperties();
-            }
-            UpdateProperty(defaultValue);
-
-            var popupField = new PopupField<TEnum>(choices, defaultValue, format, format)
-            {
-                style = { flexGrow = new StyleFloat(1) }
-            };
-            popupField.RegisterValueChangedCallback(e =>
-            {
-                UpdateProperty(e.newValue);
-#if !UNITY_2019_3_OR_NEWER
-                onValueChanged?.Invoke(e.newValue);
-#endif
-            });
-            popupField.SetEnabled(choices.Count > 1);
-            container.Add(popupField);
-
-            VisualElement CreateFieldAsEnum()
-            {
-                Assert.AreEqual(property.propertyType, SerializedPropertyType.Enum);
-                var enumField = CreateEnumFieldAsStringPopupField<TEnum>(property, newValue =>
-                {
-                    popupField.SetValueWithoutNotify(newValue);
-                    onValueChanged?.Invoke(newValue);
-                });
-                return enumField;
-            }
-
-            VisualElement CreateFieldAsInt()
-            {
-                Assert.AreEqual(property.propertyType, SerializedPropertyType.Integer);
-                var intField = new IntegerField
-                {
-                    bindingPath = property.propertyPath
-                };
-                intField.Bind(property.serializedObject);
-                intField.RegisterValueChangedCallback(e =>
-                {
-                    var newValue = (TEnum)(object) e.newValue;
-                    popupField.SetValueWithoutNotify(newValue);
-                    onValueChanged?.Invoke(newValue);
-                });
-                return intField;
-            }
-
-            VisualElement CreateFieldByType()
-            {
-                switch (property.propertyType)
-                {
-                    case SerializedPropertyType.Enum:
-                    {
-                        return CreateFieldAsEnum();
-                    }
-                    // HACK: Enum の SerializedProperty type が int になることがある(深さによって発生する)
-                    case SerializedPropertyType.Integer:
-                    {
-                        return CreateFieldAsInt();
-                    }
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-
-            var field = CreateFieldByType();
-            field.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
-            container.Add(field);
-
-            return container;
-        }
-
-        static VisualElement CreateEnumFieldAsStringPopupField<TEnum>(SerializedProperty property, Action<TEnum> onValueChanged = null)
-            where TEnum : struct, Enum
-        {
-            Assert.AreEqual(property.propertyType, SerializedPropertyType.Enum);
-            // HACK: `Field type UnityEditor.UIElements.EnumField is not compatible with Enum property "myEnum"` in 2019.2
-            // ref: https://forum.unity.com/threads/cant-create-bindings-for-an-enum-not-compatible.728111/#post-4873661
-            var enumField = new PopupField<string>
-            {
-                bindingPath = property.propertyPath
-            };
-            // HACK: `NullReferenceException: Object reference not set to an instance of an object` in 2019.2
-#if UNITY_2019_3_OR_NEWER
-            enumField.Bind(property.serializedObject);
-#endif
-            enumField.RegisterValueChangedCallback(e =>
-            {
-                var newValue = (TEnum) Enum.Parse(typeof(TEnum), e.newValue.Replace(" ", ""), true);
-                onValueChanged?.Invoke(newValue);
-            });
-            return enumField;
         }
     }
 }

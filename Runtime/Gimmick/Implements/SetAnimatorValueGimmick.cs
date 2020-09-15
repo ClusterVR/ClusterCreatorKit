@@ -8,11 +8,11 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
     public class SetAnimatorValueGimmick : MonoBehaviour, IGlobalGimmick
     {
         [SerializeField, HideInInspector] Animator animator;
-        [SerializeField] GlobalGimmickKey globalGimmickKey;
+        [SerializeField, LocalizableGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
         [SerializeField] ParameterType parameterType;
         [SerializeField, Tooltip("AnimatorのParameter名")] string animatorParameterName;
 
-        ItemId IGlobalGimmick.ItemId => globalGimmickKey.ItemId;
+        ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
         string IGimmick.Key => globalGimmickKey.Key.Key;
         ParameterType IGimmick.ParameterType => parameterType;

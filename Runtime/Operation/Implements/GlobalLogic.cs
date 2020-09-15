@@ -8,12 +8,12 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 {
     public class GlobalLogic : MonoBehaviour, IGlobalLogic
     {
-        [SerializeField] GlobalGimmickKey globalGimmickKey;
+        [SerializeField, ConsistentlySyncGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
         [SerializeField, GlobalLogic] Logic logic;
 
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
         string IGimmick.Key => globalGimmickKey.Key.Key;
-        ItemId IGlobalGimmick.ItemId => globalGimmickKey.ItemId;
+        ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
         public event RunGlobalLogicEventHandler OnRunGlobalLogic;

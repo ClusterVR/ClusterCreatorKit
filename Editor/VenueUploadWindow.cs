@@ -44,7 +44,7 @@ namespace ClusterVR.CreatorKit.Editor
 
         VisualElement CreateVenueUi(TokenAuthWidget tokenAuth, VisualElement tokenAuthView, UserInfo? userInfo)
         {
-            var container = new VisualElement()
+            var container = new VisualElement
             {
                 style =
                 {
@@ -52,17 +52,24 @@ namespace ClusterVR.CreatorKit.Editor
                     flexGrow = 1,
                 }
             };
-            var sidePane = new VisualElement()
+            var sidePane = new VisualElement
             {
                 style =
                 {
+#if UNITY_2019_3_OR_NEWER
+                    borderLeftColor = new StyleColor(Color.gray),
+                    borderRightColor = new StyleColor(Color.gray),
+                    borderTopColor = new StyleColor(Color.gray),
+                    borderBottomColor = new StyleColor(Color.gray),
+#else
                     borderColor = new StyleColor(Color.gray),
+#endif
                     borderRightWidth = 1,
                     width = 250,
                 }
             };
             sidePane.EnableInClassList("pane", true);
-            var mainPane = new VisualElement()
+            var mainPane = new VisualElement
             {
                 style = {flexGrow = 1}
             };
@@ -72,7 +79,7 @@ namespace ClusterVR.CreatorKit.Editor
 
             // Side
             sidePane.Add(tokenAuthView);
-            
+
             if (userInfo.HasValue)
             {
                 var sideMenu = new SideMenuVenueList(userInfo.Value);
@@ -84,7 +91,7 @@ namespace ClusterVR.CreatorKit.Editor
                         tokenAuth.Logout();
                     }
                 });
-                
+
                 // Main
                 ReactiveBinder.Bind(sideMenu.reactiveCurrentVenue, currentVenue =>
                 {

@@ -22,7 +22,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         sealed class Choice
         {
             [SerializeField] float weight;
-            [SerializeField, ItemOperationTriggerParam] Trigger.Implements.TriggerParam[] triggers;
+            [SerializeField, ItemTriggerLotteryTriggerParam] Trigger.Implements.TriggerParam[] triggers;
 
             Trigger.TriggerParam[] triggersCache;
 
@@ -33,7 +33,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             {
                 if (weight < 0f) weight = 0f;
                 triggers = triggers?.Select(trigger =>
-                    trigger.Target != TriggerTarget.Item ?
+                    trigger.Target != TriggerTarget.Item && trigger.Target != TriggerTarget.Player ?
                         new Trigger.Implements.TriggerParam(TriggerTarget.Item, null, trigger.Key, trigger.Type, trigger.RawValue) :
                         trigger)
                     .ToArray();
@@ -42,7 +42,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         IItem Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         IItem IItemTrigger.Item => Item;
-        IItem IItemGimmick.Item => Item;
+        ItemId IGimmick.ItemId => Item.Id;
 
         GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;

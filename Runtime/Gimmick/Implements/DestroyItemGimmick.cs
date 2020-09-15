@@ -10,7 +10,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         [SerializeField, HideInInspector] Item.Implements.Item item;
         [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);
 
-        IItem IItemGimmick.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
+        ItemId IGimmick.ItemId => (item != null ? item : item = GetComponent<Item.Implements.Item>()).Id;
         GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;

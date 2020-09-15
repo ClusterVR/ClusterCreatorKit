@@ -28,8 +28,7 @@ namespace ClusterVR.CreatorKit.Preview.WarpPortal
 
         void WarpTo(OnEnterWarpPortalEventArgs e)
         {
-            if (playerController == null) return;
-
+            if (playerController == null || !e.Target.CompareTag("Player")) return;
             if (!e.KeepPosition)
             {
                 playerController.PlayerTransform.position = e.ToPosition;

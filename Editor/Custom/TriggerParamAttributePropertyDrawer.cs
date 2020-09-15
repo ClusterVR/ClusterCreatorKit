@@ -26,22 +26,16 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var currentTarget = (TriggerTarget) targetProperty.enumValueIndex;
             var selectingTarget = targetChoices.Contains(currentTarget) ? currentTarget : targetChoices[0];
-            var targetField = new PopupField<TriggerTarget>("Target", targetChoices, selectingTarget, formatTarget, formatTarget);
-            targetField.SetEnabled(targetChoices.Count > 1);
-
             var specifiedTargetItemField = new PropertyField(property.FindPropertyRelative("specifiedTargetItem"));
             void SwitchSpecifiedTargetItemField(TriggerTarget itemTriggerTarget)
             {
                 specifiedTargetItemField.SetVisibility(itemTriggerTarget == TriggerTarget.SpecifiedItem);
             }
-            SwitchSpecifiedTargetItemField((TriggerTarget) targetProperty.enumValueIndex);
 
-            targetField.RegisterValueChangedCallback(e =>
-            {
-                targetProperty.enumValueIndex = (int) e.newValue;
-                property.serializedObject.ApplyModifiedProperties();
-                SwitchSpecifiedTargetItemField(e.newValue);
-            });
+            var targetField = EnumField.Create(targetProperty.displayName, targetProperty, targetChoices, selectingTarget, formatTarget, SwitchSpecifiedTargetItemField);
+            targetField.SetEnabled(targetChoices.Count > 1);
+
+            SwitchSpecifiedTargetItemField((TriggerTarget) targetProperty.enumValueIndex);
 
             var keyField = new PropertyField(property.FindPropertyRelative("key"));
             var typeProperty = property.FindPropertyRelative("type");

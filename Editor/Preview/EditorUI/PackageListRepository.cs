@@ -19,7 +19,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
 
         static PackageListRepository()
         {
-            UpdatePackageList();
+            _ = UpdatePackageList();
         }
 
         public static async Task UpdatePackageList()

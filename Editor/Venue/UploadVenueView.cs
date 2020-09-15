@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClusterVR.CreatorKit.Editor.Core;
@@ -92,26 +93,32 @@ namespace ClusterVR.CreatorKit.Editor.Venue
                     exception =>
                     {
                         Debug.LogException(exception);
-                        errorMessage = $"ワールドのアップロードに失敗しました。時間をあけてリトライしてみてください。";
                         EditorWindow.GetWindow<VenueUploadWindow>().Repaint();
+                        if (exception is FileNotFoundException)
+                        {
+                            errorMessage = $"ワールドのアップロードに失敗しました。必要なBuild Supportが全てインストールされているか確認してください。";
+                            var ok = EditorUtility.DisplayDialog("ビルドに失敗しました", "必要なBuild Supportが全てインストールされているか確認してください。", "詳細を開く", "閉じる");
+                            if (ok) Application.OpenURL("https://clustervr.gitbook.io/creatorkit/installation/install-unity");
+                        }
+                        else
+                        {
+                            errorMessage = $"ワールドのアップロードに失敗しました。時間をあけてリトライしてみてください。";
+                        }
                     });
                 currentUploadService.Run();
                 errorMessage = null;
             }
         }
-
+        
         void DrawUI()
         {
             EditorGUILayout.Space();
             EditorPrefsUtils.OpenWorldManagementPageAfterUpload = EditorGUILayout.ToggleLeft("アップロード後にワールド管理ページを開く", EditorPrefsUtils.OpenWorldManagementPageAfterUpload);
             EditorGUILayout.HelpBox("アップロードするシーンを開いておいてください。", MessageType.Info);
 
-            if (thumbnail.IsEmpty)
-            {
-                EditorGUILayout.HelpBox("サムネイル画像を設定してください。", MessageType.Error);
-            }
-
-            using (new EditorGUI.DisabledScope(thumbnail.IsEmpty))
+            var isVenueUploadSettingValid = IsVenueUploadSettingValid(out var uploadSettingErrorMessage);
+            if (!isVenueUploadSettingValid) EditorGUILayout.HelpBox(uploadSettingErrorMessage, MessageType.Error);
+            using (new EditorGUI.DisabledScope(!isVenueUploadSettingValid))
             {
                 var uploadButton = GUILayout.Button($"'{venue.Name}'としてアップロードする");
                 if (uploadButton)
@@ -198,6 +205,22 @@ namespace ClusterVR.CreatorKit.Editor.Venue
                 var fileInfo = new FileInfo(EditorPrefsUtils.LastBuildIOS);
                 EditorGUILayout.LabelField("iOSサイズ",$"{(double) fileInfo.Length / (1024 * 1024):F2} MB"); // Byte => MByte
             }
+        }
+        
+        bool IsVenueUploadSettingValid(out string uploadSettingErrorMessage)
+        {
+            if (thumbnail.IsEmpty)
+            {
+                uploadSettingErrorMessage = "サムネイル画像を設定してください。";
+                return false;
+            }
+            if (EditorApplication.isPlaying)
+            {
+                uploadSettingErrorMessage = "エディターの再生を停止してください。";
+                return false;
+            }
+            uploadSettingErrorMessage = default;
+            return true;
         }
     }
 }

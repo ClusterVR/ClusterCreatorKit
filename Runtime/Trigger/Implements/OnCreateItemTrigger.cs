@@ -8,10 +8,9 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
     public class OnCreateItemTrigger : MonoBehaviour, IOnCreateItemTrigger
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
+        [SerializeField, ItemTriggerParam] TriggerParam[] triggers;
         IItem IItemTrigger.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         public event TriggerEventHandler TriggerEvent;
-
-        [SerializeField] [ItemTriggerParam] TriggerParam[] triggers;
 
         public void Invoke()
         {

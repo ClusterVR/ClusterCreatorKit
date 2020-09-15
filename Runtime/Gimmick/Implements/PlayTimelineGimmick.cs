@@ -9,9 +9,9 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
     public class PlayTimelineGimmick : MonoBehaviour, IPlayTimelineGimmick, IGlobalGimmick
     {
         [SerializeField, HideInInspector] PlayableDirector playableDirector;
-        [SerializeField] GlobalGimmickKey globalGimmickKey;
+        [SerializeField, ConsistentlySyncGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
 
-        ItemId IGlobalGimmick.ItemId => globalGimmickKey.ItemId;
+        ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
         string IGimmick.Key => globalGimmickKey.Key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
@@ -20,7 +20,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         public DateTime LastTriggeredAt { get; private set; }
         public event Action OnPlay;
         IStopTimelineGimmick stopTimelineGimmick;
-        
+
         void Start()
         {
             if (playableDirector == null) playableDirector = GetComponent<PlayableDirector>();

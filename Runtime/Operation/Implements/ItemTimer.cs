@@ -15,11 +15,11 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         [SerializeField, HideInInspector] Item.Implements.Item item;
         [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);
         [SerializeField] float delayTimeSeconds = 1;
-        [SerializeField, ItemOperationTriggerParam] Trigger.Implements.TriggerParam[] triggers;
+        [SerializeField, ItemTimerTriggerParam] Trigger.Implements.TriggerParam[] triggers;
 
         IItem Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         IItem IItemTrigger.Item => Item;
-        IItem IItemGimmick.Item => Item;
+        ItemId IGimmick.ItemId => Item.Id;
 
         GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;

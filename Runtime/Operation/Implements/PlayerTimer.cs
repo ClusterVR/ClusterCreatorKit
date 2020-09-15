@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
+using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Trigger;
 using ClusterVR.CreatorKit.Trigger.Implements;
 using UnityEngine;
@@ -10,12 +11,13 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 {
     public class PlayerTimer : MonoBehaviour, IPlayerTrigger, IPlayerGimmick
     {
-        [SerializeField, PlayerGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Player);
+        [SerializeField] PlayerGimmickKey key;
         [SerializeField] float delayTimeSeconds = 1;
         [SerializeField, PlayerOperationTriggerParam] Trigger.Implements.TriggerParam[] triggers;
 
-        GimmickTarget IGimmick.Target => key.Target;
-        string IGimmick.Key => key.Key;
+        GimmickTarget IGimmick.Target => key.Key.Target;
+        string IGimmick.Key => key.Key.Key;
+        ItemId IGimmick.ItemId => key.ItemId;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
         public event PlayerTriggerEventHandler TriggerEvent;

@@ -11,11 +11,11 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         static readonly ParameterType[] selectableTypes = { ParameterType.Signal, ParameterType.Bool };
 
         [SerializeField] AudioSource audioSource;
-        [SerializeField] GlobalGimmickKey globalGimmickKey;
+        [SerializeField, LocalizableGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
         [SerializeField, ParameterTypeField(ParameterType.Signal, ParameterType.Bool)]
         ParameterType parameterType = selectableTypes[0];
 
-        ItemId IGlobalGimmick.ItemId => globalGimmickKey.ItemId;
+        ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
         string IGimmick.Key => globalGimmickKey.Key.Key;
         ParameterType IGimmick.ParameterType => parameterType;

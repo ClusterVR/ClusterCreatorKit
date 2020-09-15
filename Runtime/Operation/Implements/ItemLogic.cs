@@ -14,7 +14,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         [SerializeField, ItemLogic] Logic logic;
 
         IItem Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
-        IItem IItemGimmick.Item => Item;
+        ItemId IGimmick.ItemId => Item.Id;
 
         GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;

@@ -68,7 +68,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Operation
 
         void OnRunItemLogic(IItemLogic sender, RunItemLogicEventArgs args)
         {
-            var itemId = sender.Item.Id;
+            var itemId = sender.ItemId;
             if (itemId.Value == 0) return;
             Execute(args.Logic, itemId);
         }

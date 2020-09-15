@@ -11,13 +11,13 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 {
     public class GlobalTimer : MonoBehaviour, IGlobalTrigger, IGlobalGimmick
     {
-        [SerializeField] GlobalGimmickKey globalGimmickKey;
+        [SerializeField, ConsistentlySyncGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
         [SerializeField] float delayTimeSeconds = 1;
         [SerializeField, GlobalOperationTriggerParam] Trigger.Implements.TriggerParam[] triggers;
 
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
         string IGimmick.Key => globalGimmickKey.Key.Key;
-        ItemId IGlobalGimmick.ItemId => globalGimmickKey.ItemId;
+        ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
         public event GlobalTriggerEventHandler TriggerEvent;

@@ -51,15 +51,36 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         }
     }
 
-    public class ItemOperationTriggerParamAttribute : ItemTriggerParamAttribute
+    public class ItemTimerTriggerParamAttribute : ItemTriggerParamAttribute
     {
-        public ItemOperationTriggerParamAttribute()
+        public ItemTimerTriggerParamAttribute()
             : base(TriggerTarget.Item)
         {
         }
     }
 
-    public class PlayerOperationTriggerParamAttribute : TriggerParamAttribute
+    public class ItemTriggerLotteryTriggerParamAttribute : ItemTriggerParamAttribute
+    {
+        public ItemTriggerLotteryTriggerParamAttribute()
+            : base(TriggerTarget.Item)
+        {
+        }
+    }
+
+    public class PlayerTriggerParamAttribute : TriggerParamAttribute
+    {
+        protected PlayerTriggerParamAttribute(params TriggerTarget[] targetSelectables)
+            : base(targetSelectables)
+        {
+        }
+
+        public PlayerTriggerParamAttribute()
+            : base(TriggerTarget.Player, TriggerTarget.SpecifiedItem, TriggerTarget.Global)
+        {
+        }
+    }
+
+    public class PlayerOperationTriggerParamAttribute : PlayerTriggerParamAttribute
     {
         public PlayerOperationTriggerParamAttribute()
             : base(TriggerTarget.Player)

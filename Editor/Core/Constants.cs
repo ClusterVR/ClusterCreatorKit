@@ -1,17 +1,18 @@
 ﻿using System.Reflection;
-using UnityEngine;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace ClusterVR.CreatorKit.Editor.Core
 {
     public static class Constants
     {
-        static BuildSetting buildSetting;
+        const string host = "cluster.mu";
+        static string overridingHost = "";
+        static string Host => string.IsNullOrEmpty(overridingHost) ? host : overridingHost;
 
-        static BuildSetting BuildSetting =>
-            buildSetting ?? (buildSetting = JsonUtility.FromJson<BuildSetting>(Resources.Load<TextAsset>("BuildSetting").text));
-
-        static string Host => BuildSetting.Host;
+        public static void OverrideHost(string host)
+        {
+            overridingHost = host;
+        }
 
         public static string UserApiBaseUrl => $"https://user-api.{Host}";
 
@@ -28,6 +29,7 @@ namespace ClusterVR.CreatorKit.Editor.Core
         public static string LastBuildIOSKey => "LastBuildIOS";
         public static string LastExportPackageKey => "LastExportPackage";
         public static string OpenWorldManagementPageAfterUploadKey => "OpenWorldManagementPageAfterUpload";
+        public static string RecommendedUnityEditorVersion => "2019.4";
 
         // package の version (SemVer)
         public static string GetCreatorKitVersion()

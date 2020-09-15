@@ -107,7 +107,6 @@ namespace ClusterVR.CreatorKit.Editor.Core.Venue
 
                 var form = BuildForm(fileBytes, policy);
                 var uploadFileWebRequest = UnityWebRequest.Post(policy.uploadUrl, form);
-                uploadFileWebRequest.chunkedTransfer = false;
 
                 uploadFileWebRequest.SendWebRequest();
                 while (!uploadFileWebRequest.isDone)
