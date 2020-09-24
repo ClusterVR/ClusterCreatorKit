@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using UnityEditor;
@@ -24,7 +23,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 itemContainer.SetVisibility(target == GimmickTarget.Item);
             }
             SwitchDisplayItem((GimmickTarget) targetProperty.enumValueIndex);
-            var targetField = EnumField.Create(targetProperty.displayName, targetProperty, new List<GimmickTarget> {GimmickTarget.Player, GimmickTarget.Global}, (GimmickTarget)targetProperty.enumValueIndex, SwitchDisplayItem);
+
+            var targetField = EnumField.Create<GimmickTarget>(targetProperty.displayName, targetProperty, SwitchDisplayItem);
 
             var keyField = new PropertyField(keyProperty);
 

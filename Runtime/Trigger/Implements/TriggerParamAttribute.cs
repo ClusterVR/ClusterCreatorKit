@@ -62,7 +62,7 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
     public class ItemTriggerLotteryTriggerParamAttribute : ItemTriggerParamAttribute
     {
         public ItemTriggerLotteryTriggerParamAttribute()
-            : base(TriggerTarget.Item)
+            : base(TriggerTarget.Item, TriggerTarget.Player)
         {
         }
     }
