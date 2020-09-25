@@ -159,11 +159,14 @@ namespace ClusterVR.CreatorKit.Editor.Preview
             new PlayerEffectManager(PlayerPresenter, itemCreator, GetComponentsInGameObjectsChildren<IPlayerEffect>(rootGameObjects));
             new CreateItemGimmickManager(itemCreator, GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));
             new DestroyItemGimmickManager(itemCreator, itemDestroyer, GetComponentsInGameObjectsChildren<IDestroyItemGimmick>(rootGameObjects));
+
+            var onReceiveOwnershipItemTriggerManager = new OnReceiveOwnershipItemTriggerManager(itemCreator);
             var onCreateItemTriggerManager = new OnCreateItemTriggerManager(itemCreator);
             var onJoinPlayerTriggerManager = new OnJoinPlayerTriggerManager();
 
             onCreateItemTriggerManager.Invoke(items.SelectMany(x => x.gameObject.GetComponents<IOnCreateItemTrigger>()));
             onJoinPlayerTriggerManager.Invoke(GetComponentsInGameObjectsChildren<IOnJoinPlayerTrigger>(rootGameObjects));
+            onReceiveOwnershipItemTriggerManager.InvokeOnStart(items.SelectMany(x => x.gameObject.GetComponents<IOnReceiveOwnershipItemTrigger>()));
         }
     }
 }
