@@ -122,11 +122,7 @@ namespace ClusterVR.CreatorKit.Operation
 
     public enum Operator
     {
-        Not, Minus,
-        Add, Multiply, Subtract, Divide, Modulo,
-        Equals, NotEquals, GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual,
-        And, Or,
-        Condition,
+        Not, Minus, Add, Multiply, Subtract, Divide, Modulo, Equals, NotEquals, GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual, And, Or, Condition, Min, Max, Clamp,
     }
 
     public static class OperatorExtensions
@@ -141,8 +137,10 @@ namespace ClusterVR.CreatorKit.Operation
                 case Operator.Equals: case Operator.NotEquals: case Operator.GreaterThan: case Operator.GreaterThanOrEqual:
                 case Operator.LessThan: case Operator.LessThanOrEqual:
                 case Operator.And: case Operator.Or:
+                case Operator.Min: case Operator.Max:
                     return 2;
                 case Operator.Condition:
+                case Operator.Clamp:
                     return 3;
                 default: throw new NotImplementedException();
             }
@@ -206,6 +204,6 @@ namespace ClusterVR.CreatorKit.Operation
         public GimmickTarget Target => target;
         public string Key => key;
 
-        public bool IsValid() => !String.IsNullOrWhiteSpace(key);
+        public bool IsValid() => !string.IsNullOrWhiteSpace(key);
     }
 }

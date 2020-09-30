@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Gimmick
 {
-    public interface IWarpPlayerGimmick : IPlayerEffect
+    public interface IWarpPlayerEffect : IPlayerEffect
     {
         Vector3 TargetPosition { get; }
         Quaternion TargetRotation { get; }

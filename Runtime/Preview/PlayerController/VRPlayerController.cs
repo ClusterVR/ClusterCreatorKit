@@ -5,8 +5,9 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
     public class VRPlayerController : MonoBehaviour, IPlayerController
     {
         [SerializeField] CharacterController characterController;
-        [SerializeField] float moveSpeed;
+        [SerializeField] float baseMoveSpeed;
         [SerializeField] Transform cameraTransform;
+        float moveSpeedRate = 1f;
         float fallingSpeed;
 
         public Transform PlayerTransform => characterController.transform;
@@ -17,6 +18,11 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             characterController.enabled = isActive;
         }
 
+        void IPlayerController.SetMoveSpeedRate(float moveSpeedRate)
+        {
+            this.moveSpeedRate = moveSpeedRate;
+        }
+
         void Update()
         {
             var x = Input.GetAxisRaw("Horizontal");
@@ -24,7 +30,7 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             var direction = new Vector3(x, 0, z);
             direction.Normalize();
             direction = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * direction;
-            var velocity = direction * moveSpeed;
+            var velocity = baseMoveSpeed * moveSpeedRate * direction;
             characterController.Move(velocity * Time.deltaTime);
 
             if (characterController.isGrounded)

@@ -8,9 +8,10 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         [SerializeField] Transform cameraTransform;
         [SerializeField] CharacterController characterController;
         [SerializeField] DesktopPointerEventListener desktopPointerEventListener;
-        [SerializeField] float moveSpeed;
+        [SerializeField] float baseMoveSpeed;
         [SerializeField] float jumpSpeed;
         float velocityY;
+        float moveSpeedRate = 1f;
 
         public Transform PlayerTransform => characterController.transform;
         public Transform CameraTransform => cameraTransform;
@@ -18,6 +19,11 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         public void ActivateCharacterController(bool isActive)
         {
             characterController.enabled = isActive;
+        }
+
+        void IPlayerController.SetMoveSpeedRate(float moveSpeedRate)
+        {
+            this.moveSpeedRate = moveSpeedRate;
         }
 
         void Start()
@@ -33,6 +39,7 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             direction.Normalize();
             direction = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * direction;
 
+            var moveSpeed = baseMoveSpeed * moveSpeedRate;
             var velocity = new Vector3(direction.x * moveSpeed, velocityY, direction.z * moveSpeed);
             characterController.Move(velocity * Time.deltaTime);
 

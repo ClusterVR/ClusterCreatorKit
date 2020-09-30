@@ -147,6 +147,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
         {
             CameraTransform.rotation = rotation;
         }
+
+        public void SetMoveSpeedRate(float moveSpeedRate)
+        {
+            playerController.SetMoveSpeedRate(moveSpeedRate);
+        }
     }
 
     public enum PermissionType

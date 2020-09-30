@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
-    public class WarpPlayerGimmick : MonoBehaviour, IWarpPlayerGimmick
+    public class WarpPlayerGimmick : MonoBehaviour, IPlayerEffectGimmick, IWarpPlayerEffect
     {
         [SerializeField] PlayerGimmickKey key;
         [SerializeField] Transform targetTransform;

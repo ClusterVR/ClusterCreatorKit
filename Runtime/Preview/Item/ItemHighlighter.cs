@@ -48,14 +48,15 @@ namespace ClusterVR.CreatorKit.Preview.Item
             {
                 var meshFilter = renderer.GetComponent<MeshFilter>();
                 if (meshFilter == null) continue;
-                var submeshCount = meshFilter.sharedMesh.subMeshCount;
-                DrawRenderer(renderer, material, submeshCount);
-                DrawRenderer(renderer, material, submeshCount);
+                var sharedMesh = meshFilter.sharedMesh;
+                if (sharedMesh == null) continue;
+                DrawRenderer(renderer, material, sharedMesh.subMeshCount);
             }
             foreach (var renderer in gameObject.GetComponentsInChildren<SkinnedMeshRenderer>())
             {
-                var submeshCount = renderer.sharedMesh.subMeshCount;
-                DrawRenderer(renderer, material, submeshCount);
+                var sharedMesh = renderer.sharedMesh;
+                if (sharedMesh == null) continue;
+                DrawRenderer(renderer, material, sharedMesh.subMeshCount);
             }
         }
 

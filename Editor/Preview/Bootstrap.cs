@@ -156,7 +156,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                 GetComponentsInGameObjectsChildren<IPlayerLogic>(rootGameObjects),
                 GetComponentsInGameObjectsChildren<IGlobalLogic>(rootGameObjects),
                 SignalGenerator);
-            new PlayerEffectManager(PlayerPresenter, itemCreator, GetComponentsInGameObjectsChildren<IPlayerEffect>(rootGameObjects));
+            new PlayerEffectManager(PlayerPresenter, itemCreator, GetComponentsInGameObjectsChildren<IPlayerEffectGimmick>(rootGameObjects));
             new CreateItemGimmickManager(itemCreator, GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));
             new DestroyItemGimmickManager(itemCreator, itemDestroyer, GetComponentsInGameObjectsChildren<IDestroyItemGimmick>(rootGameObjects));
 

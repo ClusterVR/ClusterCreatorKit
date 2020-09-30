@@ -208,6 +208,13 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Operation
                 case Operator.Condition:
                     return GetOperand(0).ToBool() ? GetOperand(1) : GetOperand(2);
 
+                case Operator.Min:
+                    return new StateValue(Math.Min(GetOperand(0).ToDouble(), GetOperand(1).ToDouble()));
+                case Operator.Max:
+                    return new StateValue(Math.Max(GetOperand(0).ToDouble(), GetOperand(1).ToDouble()));
+                case Operator.Clamp:
+                    return new StateValue(Math.Min(Math.Max(GetOperand(0).ToDouble(), GetOperand(1).ToDouble()), GetOperand(2).ToDouble()));
+
                 default: throw new NotImplementedException();
             }
         }

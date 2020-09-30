@@ -10,47 +10,50 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
     {
         readonly PlayerPresenter playerPresenter;
 
-        public PlayerEffectManager(PlayerPresenter playerPresenter, ItemCreator itemCreator, IEnumerable<IPlayerEffect> playerEffects)
+        public PlayerEffectManager(PlayerPresenter playerPresenter, ItemCreator itemCreator, IEnumerable<IPlayerEffectGimmick> playerEffectGimmicks)
         {
             this.playerPresenter = playerPresenter;
             itemCreator.OnCreate += OnCreateItem;
-            RegisterPlayerEffects(playerEffects);
+            RegisterPlayerEffects(playerEffectGimmicks);
         }
 
         void OnCreateItem(IItem item)
         {
-            RegisterPlayerEffects(item.gameObject.GetComponentsInChildren<IPlayerEffect>(true));
+            RegisterPlayerEffects(item.gameObject.GetComponentsInChildren<IPlayerEffectGimmick>(true));
         }
 
-        void RegisterPlayerEffects(IEnumerable<IPlayerEffect> playerEffects)
+        void RegisterPlayerEffects(IEnumerable<IPlayerEffectGimmick> playerEffectGimmicks)
         {
-            foreach (var playerEffect in playerEffects)
+            foreach (var playerEffectGimmick in playerEffectGimmicks)
             {
-                RegisterPlayerEffect(playerEffect);
+                RegisterPlayerEffect(playerEffectGimmick);
             }
         }
 
-        void RegisterPlayerEffect(IPlayerEffect playerEffect)
+        void RegisterPlayerEffect(IPlayerEffectGimmick playerEffectGimmick)
         {
-            playerEffect.OnRun += Run;
+            playerEffectGimmick.OnRun += Run;
         }
 
         void Run(IPlayerEffect playerEffect)
         {
             switch (playerEffect)
             {
-                case IWarpPlayerGimmick warpPlayerGimmick:
-                    if (!warpPlayerGimmick.KeepPosition)
+                case IWarpPlayerEffect warpPlayerEffect:
+                    if (!warpPlayerEffect.KeepPosition)
                     {
-                        playerPresenter.MoveTo(warpPlayerGimmick.TargetPosition);
+                        playerPresenter.MoveTo(warpPlayerEffect.TargetPosition);
                     }
-                    if (!warpPlayerGimmick.KeepRotation)
+                    if (!warpPlayerEffect.KeepRotation)
                     {
-                        playerPresenter.RotateTo(warpPlayerGimmick.TargetRotation);
+                        playerPresenter.RotateTo(warpPlayerEffect.TargetRotation);
                     }
                     break;
-                case IRespawnPlayerGimmick _:
+                case IRespawnPlayerEffect _:
                     playerPresenter.Respawn();
+                    break;
+                case ISetMoveSpeedRatePlayerEffect setMoveSpeedRatePlayerEffect:
+                    playerPresenter.SetMoveSpeedRate(setMoveSpeedRatePlayerEffect.MoveSpeedRate);
                     break;
             }
         }
