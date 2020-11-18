@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
-    [RequireComponent(typeof(Slider)), DisallowMultipleComponent]
+    [RequireComponent(typeof(Slider)), DisallowMultipleComponent, LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
     public class SetSliderValueGimmick : MonoBehaviour, IGlobalGimmick
     {
         [SerializeField, HideInInspector] Slider slider;
-        [SerializeField, LocalizableGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
+        [SerializeField] GlobalGimmickKey globalGimmickKey;
         [SerializeField, ParameterTypeField(ParameterType.Integer, ParameterType.Float)] ParameterType parameterType = ParameterType.Float;
 
         ItemId IGimmick.ItemId => globalGimmickKey.ItemId;

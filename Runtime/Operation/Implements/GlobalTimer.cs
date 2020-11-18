@@ -11,7 +11,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 {
     public class GlobalTimer : MonoBehaviour, IGlobalTrigger, IGlobalGimmick
     {
-        [SerializeField, ConsistentlySyncGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
+        [SerializeField] GlobalGimmickKey globalGimmickKey;
         [SerializeField] float delayTimeSeconds = 1;
         [SerializeField, GlobalOperationTriggerParam] Trigger.Implements.TriggerParam[] triggers;
 

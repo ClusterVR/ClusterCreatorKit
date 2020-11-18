@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
-    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(Animator)), LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
     public class SetAnimatorValueGimmick : MonoBehaviour, IGlobalGimmick
     {
         [SerializeField, HideInInspector] Animator animator;
-        [SerializeField, LocalizableGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
+        [SerializeField] GlobalGimmickKey globalGimmickKey;
         [SerializeField] ParameterType parameterType;
         [SerializeField, Tooltip("AnimatorのParameter名")] string animatorParameterName;
 

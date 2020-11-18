@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.Item;
 using UnityEditor;
@@ -33,8 +32,7 @@ namespace ClusterVR.CreatorKit.Editor.Venue
             }
 
             var scene = SceneManager.GetActiveScene();
-            var createItemGimmickGroup = GatherCreateItemGimmicks(scene)
-                .GroupBy(x => x.ItemTemplate);
+            var createItemGimmickGroup = ItemTemplateGatherer.GatherCreateItemGimmicksForItemTemplates(scene);
 
             foreach (var gimmicks in createItemGimmickGroup)
             {
@@ -49,28 +47,6 @@ namespace ClusterVR.CreatorKit.Editor.Venue
             }
 
             if (!Application.isPlaying) EditorSceneManager.MarkSceneDirty(scene);
-        }
-
-        static IEnumerable<CreateItemGimmick> GatherCreateItemGimmicks(Scene scene)
-        {
-            var createItemGimmicks = new HashSet<CreateItemGimmick>();
-            void AddCreateItemGimmick(CreateItemGimmick createItemGimmick)
-            {
-                if (createItemGimmick.ItemTemplate == null) return;
-                if (!createItemGimmicks.Add(createItemGimmick)) return;
-                foreach (var innerCreateItemGimmick in createItemGimmick.ItemTemplate.gameObject.GetComponents<CreateItemGimmick>())
-                {
-                    AddCreateItemGimmick(innerCreateItemGimmick);
-                }
-            }
-
-            foreach (var createItemGimmickItem in scene.GetRootGameObjects()
-                .SelectMany(o => o.GetComponentsInChildren<CreateItemGimmick>(true)))
-            {
-                AddCreateItemGimmick(createItemGimmickItem);
-            }
-
-            return createItemGimmicks;
         }
     }
 }

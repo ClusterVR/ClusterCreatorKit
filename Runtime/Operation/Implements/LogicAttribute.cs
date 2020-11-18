@@ -23,7 +23,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
     public class ItemLogicAttribute : LogicAttribute
     {
         public override List<TargetStateTarget> TargetStateTargetSelectables => new List<TargetStateTarget> {TargetStateTarget.Item, TargetStateTarget.Player};
-        public override List<GimmickTarget> SourceStateTargetSelectables => new List<GimmickTarget> {GimmickTarget.Item, GimmickTarget.Global};
+        public override List<GimmickTarget> SourceStateTargetSelectables => new List<GimmickTarget> {GimmickTarget.Item, GimmickTarget.Player, GimmickTarget.Global};
 
         public override string FormatTargetStateTarget(TargetStateTarget target)
         {

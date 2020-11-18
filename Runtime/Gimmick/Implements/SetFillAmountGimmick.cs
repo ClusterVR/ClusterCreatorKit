@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
-    [RequireComponent(typeof(Image)), DisallowMultipleComponent]
+    [RequireComponent(typeof(Image)), DisallowMultipleComponent, LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
     public class SetFillAmountGimmick : MonoBehaviour, IGlobalGimmick
     {
         [SerializeField, HideInInspector] Image image;
-        [SerializeField, LocalizableGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
+        [SerializeField] GlobalGimmickKey globalGimmickKey;
         [SerializeField, ParameterTypeField(ParameterType.Integer, ParameterType.Float)] ParameterType parameterType = ParameterType.Float;
         [SerializeField, Tooltip("FillAmountが0となるときの値")] float minValue = 0f;
         [SerializeField, Tooltip("FillAmountが1となるときの値")] float maxValue = 1f;

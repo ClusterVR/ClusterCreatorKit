@@ -6,10 +6,10 @@ using UnityEngine.Playables;
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [DisallowMultipleComponent, RequireComponent(typeof(PlayableDirector))]
-    public class PlayTimelineGimmick : MonoBehaviour, IPlayTimelineGimmick, IGlobalGimmick
+    public class PlayTimelineGimmick : MonoBehaviour, IPlayTimelineGimmick, IGlobalGimmick, IRerunOnPauseResumedGimmick
     {
         [SerializeField, HideInInspector] PlayableDirector playableDirector;
-        [SerializeField, ConsistentlySyncGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
+        [SerializeField] GlobalGimmickKey globalGimmickKey;
 
         ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
@@ -27,10 +27,21 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
             stopTimelineGimmick = GetComponent<IStopTimelineGimmick>();
         }
 
-        public void Run(GimmickValue value, DateTime current)
+        public void Run(GimmickValue value, DateTime current) => Run(value, current, false);
+
+        void IRerunnableGimmick.Rerun(GimmickValue value, DateTime current) => Run(value, current, true);
+
+        void Run(GimmickValue value, DateTime current, bool useSameValue)
         {
             if (playableDirector == null) return;
-            if (value.TimeStamp <= LastTriggeredAt) return;
+            if (useSameValue)
+            {
+                if (value.TimeStamp < LastTriggeredAt) return;
+            }
+            else
+            {
+                if (value.TimeStamp <= LastTriggeredAt) return;
+            }
             if (stopTimelineGimmick != null && value.TimeStamp < stopTimelineGimmick.LastTriggeredAt) return;
             LastTriggeredAt = value.TimeStamp;
 

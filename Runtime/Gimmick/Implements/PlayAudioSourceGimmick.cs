@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
-    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(AudioSource)), LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.Always)]
     public class PlayAudioSourceGimmick : MonoBehaviour, IGlobalGimmick
     {
         static readonly ParameterType[] selectableTypes = { ParameterType.Signal, ParameterType.Bool };
 
         [SerializeField] AudioSource audioSource;
-        [SerializeField, LocalizableGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
+        [SerializeField] GlobalGimmickKey globalGimmickKey;
         [SerializeField, ParameterTypeField(ParameterType.Signal, ParameterType.Bool)]
         ParameterType parameterType = selectableTypes[0];
 
@@ -64,6 +64,14 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
             if (!selectableTypes.Contains(parameterType))
             {
                 parameterType = selectableTypes[0];
+            }
+
+            var canvas = GetComponentsInParent<Canvas>(true).FirstOrDefault();
+            if (canvas != null && canvas.rootCanvas.renderMode != RenderMode.WorldSpace)
+            {
+                audioSource.spatialize = false;
+                audioSource.spatializePostEffects = false;
+                audioSource.spatialBlend = 0.0f;
             }
         }
     }

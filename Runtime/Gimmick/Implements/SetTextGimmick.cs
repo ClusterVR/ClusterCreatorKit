@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
-    [DisallowMultipleComponent, RequireComponent(typeof(Text))]
+    [DisallowMultipleComponent, RequireComponent(typeof(Text)), LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
     public class SetTextGimmick : MonoBehaviour, IGlobalGimmick
     {
         [SerializeField, HideInInspector] Text  text;
-        [SerializeField, LocalizableGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
+        [SerializeField] GlobalGimmickKey globalGimmickKey;
         [SerializeField] ParameterType parameterType;
         [SerializeField, Tooltip("Textに設定するフォーマット"), Multiline] string format = DefaultFormat;
 

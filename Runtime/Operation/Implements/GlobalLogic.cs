@@ -8,7 +8,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 {
     public class GlobalLogic : MonoBehaviour, IGlobalLogic
     {
-        [SerializeField, ConsistentlySyncGlobalGimmickKey] GlobalGimmickKey globalGimmickKey;
+        [SerializeField] GlobalGimmickKey globalGimmickKey;
         [SerializeField, GlobalLogic] Logic logic;
 
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
