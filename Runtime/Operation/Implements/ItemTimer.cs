@@ -10,7 +10,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Operation.Implements
 {
     [RequireComponent(typeof(Item.Implements.Item))]
-    public class ItemTimer : MonoBehaviour, IItemTrigger, IItemGimmick
+    public class ItemTimer : MonoBehaviour, IItemTrigger, IItemGimmick, IRerunOnReceiveOwnershipInvoluntaryGimmick
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
         [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);
@@ -39,7 +39,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
             var dueTime = value.TimeStamp.AddSeconds(delayTimeSeconds) - current;
             if (dueTime.TotalSeconds < -Constants.Gimmick.TriggerExpireSeconds) return;
-            var expireAt = Time.realtimeSinceStartup + dueTime.TotalSeconds + Constants.Gimmick.TriggerExpireSeconds;
+            var expireAt = Time.realtimeSinceStartup + dueTime.TotalSeconds + Constants.Trigger.OwnershipExpireExpectedSeconds;
 
             void Action()
             {
@@ -50,6 +50,16 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             schedulerCancellation?.Dispose();
             schedulerCancellation = new Scheduler.Cancellation();
             Scheduler.Schedule(dueTime, Action, schedulerCancellation);
+        }
+
+        void IRerunnableGimmick.Rerun(GimmickValue value, DateTime current)
+        {
+            var executeAt = value.TimeStamp.AddSeconds(delayTimeSeconds);
+            if (current - TimeSpan.FromSeconds(Constants.Trigger.OwnershipExpireExpectedSeconds) < executeAt && executeAt < current)
+            {
+                schedulerCancellation?.Dispose();
+                Invoke();
+            }
         }
 
         void Invoke()

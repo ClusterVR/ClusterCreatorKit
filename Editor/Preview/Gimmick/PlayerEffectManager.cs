@@ -3,6 +3,7 @@ using ClusterVR.CreatorKit.Editor.Preview.Item;
 using ClusterVR.CreatorKit.Editor.Preview.World;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Item;
+using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
 {
@@ -54,6 +55,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
                     break;
                 case ISetMoveSpeedRatePlayerEffect setMoveSpeedRatePlayerEffect:
                     playerPresenter.SetMoveSpeedRate(setMoveSpeedRatePlayerEffect.MoveSpeedRate);
+                    break;
+                case ISetJumpHeightRatePlayerEffect setJumpHeightRatePlayerEffect:
+                    playerPresenter.SetJumpSpeedRate(Mathf.Sqrt(setJumpHeightRatePlayerEffect.JumpHeightRate));
                     break;
             }
         }

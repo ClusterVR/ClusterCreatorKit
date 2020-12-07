@@ -9,9 +9,26 @@ namespace ClusterVR.CreatorKit.Gimmick
         public int IntegerValue { get; }
         public DateTime TimeStamp { get; }
 
-        public GimmickValue(bool value) => BoolValue = value;
-        public GimmickValue(float value) => FloatValue = value;
-        public GimmickValue(int value) => IntegerValue = value;
-        public GimmickValue(DateTime value) => TimeStamp = value;
+        public GimmickValue(ParameterType type, StateValue value)
+        {
+            switch (type)
+            {
+                case ParameterType.Signal:
+                    TimeStamp = value.ToDateTime();
+                    return;
+                case ParameterType.Bool:
+                    BoolValue = value.ToBool();
+                    return;
+                case ParameterType.Integer:
+                    IntegerValue = value.ToInt();
+                    return;
+                case ParameterType.Float:
+                    FloatValue = value.ToFloat();
+                    return;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
     }
 }

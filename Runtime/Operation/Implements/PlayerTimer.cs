@@ -34,17 +34,10 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
             var dueTime = value.TimeStamp.AddSeconds(delayTimeSeconds) - current;
             if (dueTime.TotalSeconds < -Constants.Gimmick.TriggerExpireSeconds) return;
-            var expireAt = Time.realtimeSinceStartup + dueTime.TotalSeconds + Constants.Gimmick.TriggerExpireSeconds;
-
-            void Action()
-            {
-                if (expireAt < Time.realtimeSinceStartup) return;
-                Invoke();
-            }
 
             schedulerCancellation?.Dispose();
             schedulerCancellation = new Scheduler.Cancellation();
-            Scheduler.Schedule(dueTime, Action, schedulerCancellation);
+            Scheduler.Schedule(dueTime, Invoke, schedulerCancellation);
         }
 
         void Invoke()

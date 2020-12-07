@@ -9,9 +9,10 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         [SerializeField] CharacterController characterController;
         [SerializeField] DesktopPointerEventListener desktopPointerEventListener;
         [SerializeField] float baseMoveSpeed;
-        [SerializeField] float jumpSpeed;
+        [SerializeField] float baseJumpSpeed;
         float velocityY;
         float moveSpeedRate = 1f;
+        float jumpSpeedRate = 1f;
 
         public Transform PlayerTransform => characterController.transform;
         public Transform CameraTransform => cameraTransform;
@@ -24,6 +25,11 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         void IPlayerController.SetMoveSpeedRate(float moveSpeedRate)
         {
             this.moveSpeedRate = moveSpeedRate;
+        }
+
+        void IPlayerController.SetJumpSpeedRate(float jumpSpeedRate)
+        {
+            this.jumpSpeedRate = jumpSpeedRate;
         }
 
         void Start()
@@ -45,7 +51,7 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
             if (characterController.isGrounded)
             {
-                if (Input.GetKeyDown(KeyCode.Space)) velocityY = jumpSpeed;
+                if (Input.GetKeyDown(KeyCode.Space)) velocityY = baseJumpSpeed * jumpSpeedRate;
                 else velocityY = 0f;
             }
             velocityY -= Time.deltaTime * 9.81f;

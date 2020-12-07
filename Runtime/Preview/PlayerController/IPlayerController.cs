@@ -8,5 +8,6 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         Transform CameraTransform { get; }
         void ActivateCharacterController(bool isActive);
         void SetMoveSpeedRate(float moveSpeedRate);
+        void SetJumpSpeedRate(float jumpSpeedRate);
     }
 }

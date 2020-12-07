@@ -152,6 +152,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
         {
             playerController.SetMoveSpeedRate(moveSpeedRate);
         }
+        
+        public void SetJumpSpeedRate(float jumpSpeedRate)
+        {
+            playerController.SetJumpSpeedRate(jumpSpeedRate);
+        }
     }
 
     public enum PermissionType

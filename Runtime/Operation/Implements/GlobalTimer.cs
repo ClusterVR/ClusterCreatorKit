@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Operation.Implements
 {
-    public class GlobalTimer : MonoBehaviour, IGlobalTrigger, IGlobalGimmick
+    public class GlobalTimer : MonoBehaviour, IGlobalTrigger, IGlobalGimmick, IRerunOnReceiveOwnershipInvoluntaryGimmick
     {
         [SerializeField] GlobalGimmickKey globalGimmickKey;
         [SerializeField] float delayTimeSeconds = 1;
@@ -34,7 +34,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
             var dueTime = value.TimeStamp.AddSeconds(delayTimeSeconds) - current;
             if (dueTime.TotalSeconds < -Constants.Gimmick.TriggerExpireSeconds) return;
-            var expireAt = Time.realtimeSinceStartup + dueTime.TotalSeconds + Constants.Gimmick.TriggerExpireSeconds;
+            var expireAt = Time.realtimeSinceStartup + dueTime.TotalSeconds + Constants.Trigger.OwnershipExpireExpectedSeconds;
 
             void Action()
             {
@@ -45,6 +45,16 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             schedulerCancellation?.Dispose();
             schedulerCancellation = new Scheduler.Cancellation();
             Scheduler.Schedule(dueTime, Action, schedulerCancellation);
+        }
+
+        void IRerunnableGimmick.Rerun(GimmickValue value, DateTime current)
+        {
+            var executeAt = value.TimeStamp.AddSeconds(delayTimeSeconds);
+            if (current - TimeSpan.FromSeconds(Constants.Trigger.OwnershipExpireExpectedSeconds) < executeAt && executeAt < current)
+            {
+                schedulerCancellation?.Dispose();
+                Invoke();
+            }
         }
 
         void Invoke()

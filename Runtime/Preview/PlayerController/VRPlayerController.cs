@@ -23,6 +23,11 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             this.moveSpeedRate = moveSpeedRate;
         }
 
+        void IPlayerController.SetJumpSpeedRate(float jumpSpeedRate)
+        {
+            // jump is not supported
+        }
+
         void Update()
         {
             var x = Input.GetAxisRaw("Horizontal");

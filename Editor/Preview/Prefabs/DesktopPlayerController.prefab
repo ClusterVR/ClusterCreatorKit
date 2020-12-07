@@ -228,7 +228,7 @@ MonoBehaviour:
   characterController: {fileID: 8937530593553008956}
   desktopPointerEventListener: {fileID: 0}
   baseMoveSpeed: 2.5
-  jumpSpeed: 4
+  baseJumpSpeed: 4
 --- !u!114 &8081063683009738272
 MonoBehaviour:
   m_ObjectHideFlags: 0

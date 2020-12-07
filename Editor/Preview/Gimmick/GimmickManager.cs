@@ -101,7 +101,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
         }
 
         void Run(IGimmick gimmick, StateValue value, DateTime now)
-            => gimmick.Run(GetGimmickValue(gimmick.ParameterType, value), now);
+            => gimmick.Run(new GimmickValue(gimmick.ParameterType, value), now);
 
         string GetGimmickKey(IGimmick gimmick)
         {
@@ -113,23 +113,6 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
                     return RoomStateKey.GetPlayerKey(gimmick.Key);
                 case GimmickTarget.Item:
                     return RoomStateKey.GetItemKey(gimmick.ItemId.Value, gimmick.Key);
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        GimmickValue GetGimmickValue(ParameterType type, StateValue value)
-        {
-            switch (type)
-            {
-                case ParameterType.Signal:
-                    return new GimmickValue(value.ToDateTime());
-                case ParameterType.Bool:
-                    return new GimmickValue(value.ToBool());
-                case ParameterType.Integer:
-                    return new GimmickValue(value.ToInt());
-                case ParameterType.Float:
-                    return new GimmickValue(value.ToFloat());
                 default:
                     throw new NotImplementedException();
             }
