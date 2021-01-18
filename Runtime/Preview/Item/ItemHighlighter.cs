@@ -25,7 +25,7 @@ namespace ClusterVR.CreatorKit.Preview.Item
         void Update()
         {
             commandBuffer.Clear();
-            // アウトライン部分もステンシルに書き込んでいるので、interactableの方を先に書いて優先する
+
             if (Cursor.lockState != CursorLockMode.Locked &&
                 interactableItemRaycaster.RaycastItem(Input.mousePosition, out var interactableItem, out _))
             {

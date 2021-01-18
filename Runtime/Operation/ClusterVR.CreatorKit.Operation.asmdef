@@ -2,6 +2,7 @@
     "name": "ClusterVR.CreatorKit.Operation",
     "references": [
         "ClusterVR.CreatorKit",
+        "ClusterVR.CreatorKit.Item",
         "ClusterVR.CreatorKit.Trigger",
         "ClusterVR.CreatorKit.Gimmick"
     ],

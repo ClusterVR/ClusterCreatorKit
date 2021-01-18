@@ -1,0 +1,47 @@
+TemplateContainer {
+    height: 100%;
+}
+
+Label {
+    font-size: 14px;
+    white-space: normal;
+    margin: 0 8px 4px 8px;
+}
+
+#open-settings-window {
+    margin: 0 4px 8px 4px;
+    padding: 2px 0;
+}
+
+.logo-container {
+    padding: 8px;
+    width: 100%;
+    height: 100%;
+}
+
+.logo {
+    width: 100%;
+    height: 100%;
+    background-image: resource("Packages/mu.cluster.cluster-creator-kit/Editor/Window/Texture/about.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.link {
+    cursor: link;
+    width: auto;
+    -unity-text-align: middle-left;
+    background-color: initial;
+    border-color: initial;
+    border-radius: initial;
+    color: #728dbc;
+    padding: 0;
+    margin: 0 8px;
+    font-size: 12px;
+}
+
+.border {
+    border-top-width: 1px;
+    border-color: white;
+    margin: 8px;
+}
+

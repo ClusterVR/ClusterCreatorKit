@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.Trigger;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Operation.Implements
@@ -17,6 +19,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
         public event RunPlayerLogicEventHandler OnRunPlayerLogic;
+        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => logic.GetTriggerParams();
 
         DateTime lastTriggeredAt;
         bool validated;
@@ -28,7 +31,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             if (!isValid) return;
             if (value.TimeStamp <= lastTriggeredAt) return;
             lastTriggeredAt = value.TimeStamp;
-            if ((current - value.TimeStamp).TotalSeconds > Constants.Gimmick.TriggerExpireSeconds) return;
+            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
 
             OnRunPlayerLogic?.Invoke(new RunPlayerLogicEventArgs(logic));
         }

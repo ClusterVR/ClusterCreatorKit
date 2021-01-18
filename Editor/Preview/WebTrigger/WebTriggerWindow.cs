@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using ClusterVR.CreatorKit.Editor.Preview.EditorUI;
 using ClusterVR.CreatorKit.Editor.Preview.RoomState;
+using ClusterVR.CreatorKit.Editor.Window.View;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -14,11 +15,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
     {
         const string messageWhenNotPlayMode = "ウェブトリガーは実行中のみ使用可能です";
 
-        [MenuItem("Cluster/Preview/WebTriggerWindow")]
+        [MenuItem("Cluster/Preview/WebTriggerWindow", priority = 111)]
         public static void ShowWindow()
         {
             var window = GetWindow<WebTriggerWindow>();
-            window.titleContent = new GUIContent("WebTriggerWindow");
+            window.titleContent = new GUIContent("Preview Web Trigger Window");
         }
 
         [SerializeField] WebTrigger trigger;

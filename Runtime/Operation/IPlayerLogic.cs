@@ -3,7 +3,7 @@ using ClusterVR.CreatorKit.Gimmick;
 
 namespace ClusterVR.CreatorKit.Operation
 {
-    public interface IPlayerLogic : IPlayerGimmick
+    public interface IPlayerLogic : IPlayerGimmick, ILogic
     {
         event RunPlayerLogicEventHandler OnRunPlayerLogic;
     }

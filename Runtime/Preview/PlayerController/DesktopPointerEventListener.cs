@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
-    // 画面上のクリックやドラッグを受け取る用のComponentです。PreviewOnly内CanvasのPanelにアタッチされています。
+
     public class DesktopPointerEventListener : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
     {
         public event Action<Vector2> OnMoved;
@@ -16,7 +16,7 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    // カーソルロックが解除されなくなった時の念の為
+
                     Cursor.lockState = CursorLockMode.None;
                     return;
                 }

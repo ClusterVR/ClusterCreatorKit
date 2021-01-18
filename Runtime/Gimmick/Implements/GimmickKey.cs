@@ -7,7 +7,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
     public sealed class GimmickKey
     {
         [SerializeField] GimmickTarget target;
-        [SerializeField] string key;
+        [SerializeField, StateKeyString] string key;
 
         public GimmickTarget Target => target;
         public string Key => key;

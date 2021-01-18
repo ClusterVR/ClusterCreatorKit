@@ -66,13 +66,13 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
             if (target.Grip == null)
             {
-                // hitPointをgripに重ねたときの値
+
                 SetOffsets(grabPoint, target.MovableItem.Position + (grabPoint.position - hitPoint),
                     target.MovableItem.Rotation);
             }
             else
             {
-                // grabPointとGripが同じ姿勢になるようなの値を計算する
+
                 SetOffsets(target.Grip, target.MovableItem.Position, target.MovableItem.Rotation);
             }
 

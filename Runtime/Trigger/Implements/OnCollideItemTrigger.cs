@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Item;
 using UnityEngine;
@@ -8,12 +9,13 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
     public class OnCollideItemTrigger : MonoBehaviour, IItemTrigger
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
-        IItem IItemTrigger.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
-        public event TriggerEventHandler TriggerEvent;
-
         [SerializeField] CollisionEventType collisionEventType;
         [SerializeField] CollisionType collisionType = CollisionType.Everything;
         [SerializeField, CollideItemTriggerParam] TriggerParam[] triggers;
+
+        IItem IItemTrigger.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
+        public event TriggerEventHandler TriggerEvent;
+        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
 
         Trigger.TriggerParam[] triggersCache;
 

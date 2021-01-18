@@ -2,7 +2,7 @@ using ClusterVR.CreatorKit.Item;
 
 namespace ClusterVR.CreatorKit.Trigger
 {
-    public interface IItemTrigger
+    public interface IItemTrigger : ITrigger
     {
         IItem Item { get; }
         event TriggerEventHandler TriggerEvent;

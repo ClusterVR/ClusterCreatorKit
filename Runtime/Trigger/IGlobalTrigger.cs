@@ -1,6 +1,6 @@
 namespace ClusterVR.CreatorKit.Trigger
 {
-    public interface IGlobalTrigger
+    public interface IGlobalTrigger : ITrigger
     {
         event GlobalTriggerEventHandler TriggerEvent;
     }

@@ -14,19 +14,19 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
             PlayerPrefs.SetInt(UseVRKey, 1);
         }
 
-        [MenuItem("Cluster/Preview/UseVR/EnableVR", true)]
+        [MenuItem("Cluster/Preview/UseVR/EnableVR", true, 1)]
         public static bool EnableVRMenuValidate()
         {
             return !EnabledVR();
         }
 
-        [MenuItem("Cluster/Preview/UseVR/DisableVR", false, 1)]
+        [MenuItem("Cluster/Preview/UseVR/DisableVR", false, 2)]
         public static void DisableVRMenu()
         {
             PlayerPrefs.SetInt(UseVRKey, 0);
         }
 
-        [MenuItem("Cluster/Preview/UseVR/DisableVR", true)]
+        [MenuItem("Cluster/Preview/UseVR/DisableVR", true, 2)]
         public static bool DisableVRMenuValidate()
         {
             return EnabledVR();

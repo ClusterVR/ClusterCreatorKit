@@ -10,7 +10,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
     [InitializeOnLoad]
     public static class PackageListRepository
     {
-        //クライアントに入っているpackageを取得するClient.Listが非同期処理で、実際取得時にわかる程度のディレイが入ってしまうためある程度の時間はキャッシュしたものを使うようにする。
+
         static PackageCollection packageCollection;
         static StatusCode status = StatusCode.Failure;
         static float lastUpdateTime;

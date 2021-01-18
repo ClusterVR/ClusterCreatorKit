@@ -9,7 +9,7 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
     {
         [SerializeField] TriggerTarget target;
         [SerializeField] Item.Implements.Item specifiedTargetItem;
-        [SerializeField] string key;
+        [SerializeField, StateKeyString] string key;
         [SerializeField] ParameterType type;
         [SerializeField] Value value;
 

@@ -34,7 +34,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
 
         void OnInvoked(DestroyItemEventArgs args)
         {
-            if (args.TimestampDiffSeconds > Constants.Gimmick.TriggerExpireSeconds) return;
+            if (args.TimestampDiffSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
             itemDestroyer.Destroy(args.Item);
         }
     }

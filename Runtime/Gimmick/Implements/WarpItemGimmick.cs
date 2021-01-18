@@ -34,7 +34,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
             if (targetTransform == null) return;
             if (value.TimeStamp <= lastTriggeredAt) return;
             lastTriggeredAt = value.TimeStamp;
-            if ((current - value.TimeStamp).TotalSeconds > Constants.Gimmick.TriggerExpireSeconds) return;
+            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
             movableItem.WarpTo(targetTransform.position, positionOnly ? transform.rotation : targetTransform.rotation);
         }
 

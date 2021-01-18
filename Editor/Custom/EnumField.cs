@@ -52,8 +52,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
         public static VisualElement Create<TEnum>(string label, SerializedProperty property, List<TEnum> choices, TEnum defaultValue, Func<TEnum, string> format, Action<TEnum> onValueChanged = null)
             where TEnum : struct, Enum
         {
-            // Enum の SerializedProperty type が int になることがある(深さによって発生する)
-            //Assert.AreEqual(property.propertyType, SerializedPropertyType.Enum);
+
+
             var container = new VisualElement
             {
                 style = { flexGrow = new StyleFloat(1) }
@@ -118,7 +118,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                     {
                         return CreateFieldAsEnum();
                     }
-                    // HACK: Enum の SerializedProperty type が int になることがある(深さによって発生する)
+
                     case SerializedPropertyType.Integer:
                     {
                         return CreateFieldAsInt();
@@ -154,13 +154,13 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             enumField.Bind(property.serializedObject);
             return enumField;
 #else
-            // HACK: `Field type UnityEditor.UIElements.EnumField is not compatible with Enum property "myEnum"` in 2019.2
-            // ref: https://forum.unity.com/threads/cant-create-bindings-for-an-enum-not-compatible.728111/#post-4873661
+
+
             var enumField = new PopupField<string>
             {
                 bindingPath = property.propertyPath
             };
-            // HACK: `NullReferenceException: Object reference not set to an instance of an object` in 2019.2
+
             enumField.RegisterValueChangedCallback(_ =>
             {
                 onValueChanged?.Invoke((TEnum)(object) enumField.index);

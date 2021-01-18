@@ -3,7 +3,7 @@ using ClusterVR.CreatorKit.Gimmick;
 
 namespace ClusterVR.CreatorKit.Operation
 {
-    public interface IGlobalLogic : IGlobalGimmick
+    public interface IGlobalLogic : IGlobalGimmick, ILogic
     {
         event RunGlobalLogicEventHandler OnRunGlobalLogic;
     }

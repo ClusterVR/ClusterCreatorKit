@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
@@ -14,6 +15,7 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         IItem IItemTrigger.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         public event TriggerEventHandler TriggerEvent;
+        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => downTriggers.Concat(upTriggers).Select(t => t.Convert());
 
         Trigger.TriggerParam[] downTriggersCache;
         Trigger.TriggerParam[] upTriggersCache;

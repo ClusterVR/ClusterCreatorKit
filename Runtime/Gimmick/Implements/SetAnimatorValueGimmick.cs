@@ -31,7 +31,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
                 case ParameterType.Signal:
                     if (value.TimeStamp <= lastTriggeredAt) return;
                     lastTriggeredAt = value.TimeStamp;
-                    if ((current - value.TimeStamp).TotalSeconds > Constants.Gimmick.TriggerExpireSeconds) return;
+                    if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
                     animator.SetTrigger(animatorParameterName);
                     break;
                 case ParameterType.Bool:

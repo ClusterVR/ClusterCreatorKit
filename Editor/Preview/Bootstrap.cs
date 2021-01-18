@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClusterVR.CreatorKit.Editor.Fixer;
 using ClusterVR.CreatorKit.Editor.Preview.EditorSettings;
 using ClusterVR.CreatorKit.Editor.Preview.EditorUI;
 using ClusterVR.CreatorKit.Editor.Preview.Gimmick;
@@ -10,11 +10,10 @@ using ClusterVR.CreatorKit.Editor.Preview.Operation;
 using ClusterVR.CreatorKit.Editor.Preview.RoomState;
 using ClusterVR.CreatorKit.Editor.Preview.Trigger;
 using ClusterVR.CreatorKit.Editor.Preview.World;
-using ClusterVR.CreatorKit.Editor.Venue;
+using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Operation;
-using ClusterVR.CreatorKit.Preview.Item;
 using ClusterVR.CreatorKit.Preview.PlayerController;
 using ClusterVR.CreatorKit.Trigger;
 using ClusterVR.CreatorKit.World;
@@ -76,7 +75,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     var spawnPoints = GetComponentsInGameObjectsChildren<ISpawnPoint>(rootGameObjects);
                     SpawnPointManager = new SpawnPointManager(spawnPoints);
 
-                    // 疑似Playerの設定
+
                     var enterDeviceType = EnterDeviceType.Desktop;
                     if (XRSettings.enabled)
                     {

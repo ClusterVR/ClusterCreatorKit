@@ -1,7 +1,0 @@
-.pane {
-    padding: 8px;
-}
-
-Button, PopupField {
-    height: 24px;
-}

@@ -5,7 +5,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
 {
     public static class PackageInstaller
     {
-        [MenuItem("Cluster/Preview/PackageInstaller")]
+        [MenuItem("Cluster/Preview/PackageInstaller", priority = 112)]
         static void Initialize()
         {
             AsyncInitialize();
@@ -27,7 +27,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
 
     public readonly struct PackageStates
     {
-        //各packageがインストールされているかどうかをboolで表現する
+
         public readonly bool TimeLine;
         public readonly bool TMPro;
         public readonly bool PostProcessingStack;

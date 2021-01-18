@@ -25,7 +25,7 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
         void IPlayerController.SetJumpSpeedRate(float jumpSpeedRate)
         {
-            // jump is not supported
+
         }
 
         void Update()

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
-    // 掴んでいるアイテムに関連したUIです。
+
     public class DesktopItemView : MonoBehaviour
     {
         [SerializeField] Text itemLabelText;

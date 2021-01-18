@@ -1,9 +1,10 @@
 ﻿using System;
 using ClusterVR.CreatorKit.Gimmick;
+using ClusterVR.CreatorKit.Trigger;
 
 namespace ClusterVR.CreatorKit.Operation
 {
-    public interface IItemLogic : IItemGimmick
+    public interface IItemLogic : IItemGimmick, ILogic
     {
         event RunItemLogicEventHandler OnRunItemLogic;
     }

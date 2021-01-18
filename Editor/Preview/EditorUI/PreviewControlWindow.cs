@@ -1,4 +1,5 @@
 using ClusterVR.CreatorKit.Editor.Preview.World;
+using ClusterVR.CreatorKit.Editor.Window.View;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,11 +10,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
     {
         const string messageWhenNotPlayMode = "プレビューオプションは実行中のみ使用可能です";
 
-        [MenuItem("Cluster/Preview/ControlWindow")]
+        [MenuItem("Cluster/Preview/ControlWindow", priority = 113)]
         public static void ShowWindow()
         {
             var window = GetWindow<PreviewControlWindow>();
-            window.titleContent = new GUIContent("PreviewControlWindow");
+            window.titleContent = new GUIContent("Preview Control Window");
         }
 
         public void OnEnable()

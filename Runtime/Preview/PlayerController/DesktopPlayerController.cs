@@ -2,7 +2,7 @@
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
-    //プレビュー時にインスタンス生成されるプレイヤーキャラを操作するためのComponentです。PreviewOnly内PlayerControllerにアタッチされています。
+
     public class DesktopPlayerController : MonoBehaviour, IPlayerController
     {
         [SerializeField] Transform cameraTransform;

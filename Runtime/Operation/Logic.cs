@@ -151,7 +151,7 @@ namespace ClusterVR.CreatorKit.Operation
     public class TargetState
     {
         [SerializeField] TargetStateTarget target;
-        [SerializeField] string key;
+        [SerializeField, StateKeyString] string key;
         [SerializeField] ParameterType parameterType;
         public TargetStateTarget Target => target;
         public string Key => key;
@@ -200,7 +200,7 @@ namespace ClusterVR.CreatorKit.Operation
     public class SourceState
     {
         [SerializeField] GimmickTarget target;
-        [SerializeField] string key;
+        [SerializeField, StateKeyString] string key;
         public GimmickTarget Target => target;
         public string Key => key;
 

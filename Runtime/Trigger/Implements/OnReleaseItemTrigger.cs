@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
@@ -13,6 +14,7 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         IItem IItemTrigger.Item => grabbableItem != null ? grabbableItem.Item : (grabbableItem = GetComponent<GrabbableItem>()).Item;
         public event TriggerEventHandler TriggerEvent;
+        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
 
         Trigger.TriggerParam[] triggersCache;
 

@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Editor.Window.View;
 using ClusterVR.CreatorKit.Preview.PlayerController;
 using UnityEditor;
 using UnityEngine;
@@ -7,11 +8,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
 {
     public class SettingsWindow : EditorWindow
     {
-        [MenuItem("Cluster/Preview/Settings")]
+        [MenuItem("Cluster/Preview/Settings", priority = 114)]
         public static void ShowWindow()
         {
             var window = GetWindow<SettingsWindow>();
-            window.titleContent = new GUIContent("SettingsWindow");
+            window.titleContent = new GUIContent("Preview Settings");
         }
 
         public void OnEnable()

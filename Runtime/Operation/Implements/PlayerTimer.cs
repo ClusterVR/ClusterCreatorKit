@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
@@ -21,6 +22,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
         public event PlayerTriggerEventHandler TriggerEvent;
+        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
 
         Trigger.TriggerParam[] triggersCache;
 
@@ -33,7 +35,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             lastTriggerReceivedAt = value.TimeStamp;
 
             var dueTime = value.TimeStamp.AddSeconds(delayTimeSeconds) - current;
-            if (dueTime.TotalSeconds < -Constants.Gimmick.TriggerExpireSeconds) return;
+            if (dueTime.TotalSeconds < -Constants.TriggerGimmick.TriggerExpireSeconds) return;
 
             schedulerCancellation?.Dispose();
             schedulerCancellation = new Scheduler.Cancellation();

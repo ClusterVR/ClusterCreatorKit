@@ -7,11 +7,13 @@ namespace ClusterVR.CreatorKit.Trigger
     {
         public TriggerParam[] TriggerParams { get; }
         public GameObject CollidedObject { get; }
+        public bool DontOverride { get; }
 
-        public TriggerEventArgs(TriggerParam[] triggerParams, GameObject collidedObject = null)
+        public TriggerEventArgs(TriggerParam[] triggerParams, GameObject collidedObject = null, bool dontOverride = false)
         {
             TriggerParams = triggerParams;
             CollidedObject = collidedObject;
+            DontOverride = dontOverride;
         }
     }
 }

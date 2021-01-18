@@ -20,7 +20,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
         {
             var root = rootVisualElement;
 
-            //全部そろってたらウィンドウを表示しない
+
             if (packageStates.TimeLine && packageStates.TMPro && packageStates.PostProcessingStack &&
                 packageStates.OpenVR)
             {

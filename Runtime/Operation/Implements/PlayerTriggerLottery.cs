@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
@@ -24,7 +25,8 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             Trigger.TriggerParam[] triggersCache;
 
             internal float Weight => weight;
-            internal Trigger.TriggerParam[] Triggers => triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray());
+            internal IEnumerable<Trigger.TriggerParam> Triggers => triggers.Select(t => t.Convert());
+            internal Trigger.TriggerParam[] CachedTriggers => triggersCache ?? (triggersCache = Triggers.ToArray());
 
             public void Correct()
             {
@@ -43,6 +45,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
         public event PlayerTriggerEventHandler TriggerEvent;
+        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => choices.SelectMany(c => c.Triggers);
 
         DateTime lastTriggeredAt;
 
@@ -51,7 +54,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             if (choices.Length == 0) return;
             if (value.TimeStamp <= lastTriggeredAt) return;
             lastTriggeredAt = value.TimeStamp;
-            if ((current - value.TimeStamp).TotalSeconds > Constants.Gimmick.TriggerExpireSeconds) return;
+            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
             lastTriggeredAt = value.TimeStamp;
 
             Invoke();
@@ -61,7 +64,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         {
             if (Lottery.TryGetWeightRandom(choices, c => c.Weight, out var result))
             {
-                TriggerEvent?.Invoke(this, new TriggerEventArgs(result.Triggers));
+                TriggerEvent?.Invoke(this, new TriggerEventArgs(result.CachedTriggers));
             }
         }
 

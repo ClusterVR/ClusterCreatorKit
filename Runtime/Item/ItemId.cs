@@ -42,7 +42,7 @@ namespace ClusterVR.CreatorKit.Item
             return value == 0L || value == ulong.MaxValue;
         }
 
-        // TODO: 動的に Item 生成するときに速度評価する
+
         public static ItemId Create()
         {
             var bs = new byte[sizeof(ulong)];
