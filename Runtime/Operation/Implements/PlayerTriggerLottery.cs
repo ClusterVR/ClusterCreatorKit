@@ -7,14 +7,13 @@ using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Trigger;
 using ClusterVR.CreatorKit.Trigger.Implements;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace ClusterVR.CreatorKit.Operation.Implements
 {
     public sealed class PlayerTriggerLottery : MonoBehaviour, IPlayerTrigger, IPlayerGimmick
     {
         [SerializeField] PlayerGimmickKey key;
-        [SerializeField] Choice[] choices;
+        [SerializeField, LotteryChoice] Choice[] choices;
 
         [Serializable]
         sealed class Choice

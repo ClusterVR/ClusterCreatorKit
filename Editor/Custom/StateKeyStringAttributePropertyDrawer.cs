@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine.Assertions;
 using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
@@ -9,9 +10,16 @@ namespace ClusterVR.CreatorKit.Editor.Custom
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
+            return CreateStateKeyPropertyGUI(property, property.displayName);
+        }
+
+        public static VisualElement CreateStateKeyPropertyGUI(SerializedProperty property, string displayName = "")
+        {
+            Assert.AreEqual(property.propertyType, SerializedPropertyType.String);
             var container = new VisualElement();
-            
-            var keyLengthErrorBox = new IMGUIContainer(() => EditorGUILayout.HelpBox($"{property.displayName} は {Constants.TriggerGimmick.MaxKeyLength}文字以下である必要があります。", MessageType.Error));
+
+            var propertyDisplayName = property.displayName;
+            var keyLengthErrorBox = new IMGUIContainer(() => EditorGUILayout.HelpBox($"{propertyDisplayName} は {Constants.TriggerGimmick.MaxKeyLength}文字以下である必要があります。", MessageType.Error));
 
             void SetKeyLengthErrorBoxVisibility(string key)
             {
@@ -19,7 +27,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             }
 
             SetKeyLengthErrorBoxVisibility(property.stringValue);
-            var keyField = new TextField(property.displayName)
+            var keyField = new TextField(displayName)
             {
                 bindingPath = property.propertyPath,
             };

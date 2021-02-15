@@ -5,12 +5,12 @@ using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Editor.Builder;
-using ClusterVR.CreatorKit.Editor.Fixer;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using ClusterVR.CreatorKit.Editor.Validator;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
@@ -84,6 +84,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 currentUploadService = new UploadVenueService(
                     userInfo.VerifiedToken,
                     venue,
+                    WorldDescriptorCreator.Create(SceneManager.GetActiveScene()),
                     completionResponse =>
                     {
                         errorMessage = "";

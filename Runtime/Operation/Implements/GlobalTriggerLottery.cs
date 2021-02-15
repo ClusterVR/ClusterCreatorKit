@@ -13,7 +13,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
     public sealed class GlobalTriggerLottery : MonoBehaviour, IGlobalTrigger, IGlobalGimmick
     {
         [SerializeField] GlobalGimmickKey globalGimmickKey;
-        [SerializeField] Choice[] choices;
+        [SerializeField, LotteryChoice] Choice[] choices;
 
         [Serializable]
         sealed class Choice

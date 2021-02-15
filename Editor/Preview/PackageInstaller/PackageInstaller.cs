@@ -27,7 +27,6 @@ namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
 
     public readonly struct PackageStates
     {
-
         public readonly bool TimeLine;
         public readonly bool TMPro;
         public readonly bool PostProcessingStack;

@@ -52,8 +52,6 @@ namespace ClusterVR.CreatorKit.Editor.Custom
         public static VisualElement Create<TEnum>(string label, SerializedProperty property, List<TEnum> choices, TEnum defaultValue, Func<TEnum, string> format, Action<TEnum> onValueChanged = null)
             where TEnum : struct, Enum
         {
-
-
             var container = new VisualElement
             {
                 style = { flexGrow = new StyleFloat(1) }
@@ -118,7 +116,6 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                     {
                         return CreateFieldAsEnum();
                     }
-
                     case SerializedPropertyType.Integer:
                     {
                         return CreateFieldAsInt();
@@ -154,13 +151,10 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             enumField.Bind(property.serializedObject);
             return enumField;
 #else
-
-
             var enumField = new PopupField<string>
             {
                 bindingPath = property.propertyPath
             };
-
             enumField.RegisterValueChangedCallback(_ =>
             {
                 onValueChanged?.Invoke((TEnum)(object) enumField.index);

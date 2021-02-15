@@ -1,6 +1,5 @@
 namespace ClusterVR.CreatorKit.Editor.Api.User
 {
-
     public readonly struct UserInfo
     {
         public readonly string Username;

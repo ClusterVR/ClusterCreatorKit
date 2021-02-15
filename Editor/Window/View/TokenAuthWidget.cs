@@ -55,7 +55,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             var savedAccessToken = EditorPrefsUtils.SavedAccessToken;
             accessToken.value = EditorPrefsUtils.SavedAccessToken.RawValue;
 
-
             _ = Login(savedAccessToken, loginErrorLabel);
             return container;
         }

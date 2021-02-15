@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 
@@ -14,7 +15,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             while (iterator.NextVisible(false))
             {
-                var propertyField = new PropertyField(iterator.Copy()) { name = "PropertyField:" + iterator.propertyPath };
+                var propertyField = CreateField(iterator.Copy());
 
                 if (iterator.propertyPath == "m_Script" && serializedObject.targetObject != null)
                     propertyField.SetEnabled(false);
@@ -25,6 +26,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             container.Bind(serializedObject);
 
             return container;
+        }
+
+        protected virtual VisualElement CreateField(SerializedProperty serializedProperty)
+        {
+            return new PropertyField(serializedProperty) { name = "PropertyField:" + serializedProperty.propertyPath };
         }
     }
 }

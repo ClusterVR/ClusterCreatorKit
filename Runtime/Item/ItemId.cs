@@ -42,7 +42,6 @@ namespace ClusterVR.CreatorKit.Item
             return value == 0L || value == ulong.MaxValue;
         }
 
-
         public static ItemId Create()
         {
             var bs = new byte[sizeof(ulong)];

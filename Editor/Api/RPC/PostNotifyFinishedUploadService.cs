@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
+using ClusterVR.CreatorKit.Proto;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
@@ -13,12 +14,14 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         readonly Action<VenueUploadRequestCompletionResponse> onSuccess;
         readonly UploadRequestID uploadRequestId;
         readonly VenueID venueId;
+        readonly WorldDescriptor worldDescriptor;
 
         public PostNotifyFinishedUploadService(
             string accessToken,
             VenueID venueId,
             UploadRequestID uploadRequestId,
             bool isPublish,
+            WorldDescriptor worldDescriptor,
             Action<VenueUploadRequestCompletionResponse> onSuccess = null,
             Action<Exception> onError = null
         )
@@ -27,6 +30,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             this.venueId = venueId;
             this.uploadRequestId = uploadRequestId;
             this.isPublish = isPublish;
+            this.worldDescriptor = worldDescriptor;
             this.onSuccess = onSuccess;
             this.onError = onError;
         }
@@ -38,7 +42,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         async Task PostNotifyFinishedUploadAsync()
         {
-            var payload = new PostNotifyFinishedUploadPayload(isPublish);
+            var payload = new PostNotifyFinishedUploadPayload(isPublish, worldDescriptor);
             try
             {
                 var response = await APIServiceClient.PostNotifyFinishedUpload(venueId, uploadRequestId, payload, accessToken);

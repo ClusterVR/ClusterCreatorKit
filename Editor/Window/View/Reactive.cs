@@ -7,7 +7,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
     {
     }
 
-
     public class Reactive<T> : ReactiveBase
     {
         T val;
@@ -22,7 +21,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             }
         }
     }
-
 
     public class ReactiveBinder
     {

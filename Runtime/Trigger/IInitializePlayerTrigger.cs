@@ -1,6 +1,6 @@
 ﻿namespace ClusterVR.CreatorKit.Trigger
 {
-    public interface IOnCreatePlayerTrigger : IPlayerTrigger
+    public interface IInitializePlayerTrigger : IPlayerTrigger
     {
         void Invoke();
     }

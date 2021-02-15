@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ClusterVR.CreatorKit.Editor.Fixer;
+using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Editor.Preview.EditorSettings;
 using ClusterVR.CreatorKit.Editor.Preview.EditorUI;
 using ClusterVR.CreatorKit.Editor.Preview.Gimmick;
@@ -35,6 +35,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview
         public static RoomStateRepository RoomStateRepository { get; private set; }
         public static GimmickManager GimmickManager { get; private set; }
         public static SignalGenerator SignalGenerator { get; private set; }
+        public static PersistedRoomStateManager PersistedRoomStateManager { get; private set; }
         public static bool IsInPlayMode { get; private set; }
         public static event OnInitializeEventHandler OnInitializedEvent;
         public delegate void OnInitializeEventHandler();
@@ -62,6 +63,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview
             {
                 case PlayModeStateChange.ExitingPlayMode:
                     SetIsInGameMode(false);
+                    SaveRoomState();
                     break;
                 case PlayModeStateChange.EnteredPlayMode:
                     SetIsInGameMode(true);
@@ -74,7 +76,6 @@ namespace ClusterVR.CreatorKit.Editor.Preview
 
                     var spawnPoints = GetComponentsInGameObjectsChildren<ISpawnPoint>(rootGameObjects);
                     SpawnPointManager = new SpawnPointManager(spawnPoints);
-
 
                     var enterDeviceType = EnterDeviceType.Desktop;
                     if (XRSettings.enabled)
@@ -161,11 +162,28 @@ namespace ClusterVR.CreatorKit.Editor.Preview
 
             var onReceiveOwnershipItemTriggerManager = new OnReceiveOwnershipItemTriggerManager(itemCreator);
             var onCreateItemTriggerManager = new OnCreateItemTriggerManager(itemCreator);
-            var onJoinPlayerTriggerManager = new OnJoinPlayerTriggerManager();
+            var initialPlayerTriggerManager = new InitialPlayerTriggerManager();
 
+            PersistedRoomStateManager = PersistedRoomStateManager.CreateFromActiveScene();
+
+            LoadPersistedRoomState();
             onCreateItemTriggerManager.Invoke(items.SelectMany(x => x.gameObject.GetComponents<IOnCreateItemTrigger>()));
-            onJoinPlayerTriggerManager.Invoke(GetComponentsInGameObjectsChildren<IOnJoinPlayerTrigger>(rootGameObjects));
+            initialPlayerTriggerManager.Invoke(
+                GetComponentsInGameObjectsChildren<IInitializePlayerTrigger>(rootGameObjects),
+                GetComponentsInGameObjectsChildren<IOnJoinPlayerTrigger>(rootGameObjects));
             onReceiveOwnershipItemTriggerManager.InvokeOnStart(items.SelectMany(x => x.gameObject.GetComponents<IOnReceiveOwnershipItemTrigger>()));
+        }
+
+        static void LoadPersistedRoomState()
+        {
+            if (PersistedRoomStateManager == null) return;
+            var updatedKeys = PersistedRoomStateManager.Load(RoomStateRepository);
+            GimmickManager.OnStateUpdated(updatedKeys);
+        }
+
+        static void SaveRoomState()
+        {
+            PersistedRoomStateManager?.Save(RoomStateRepository);
         }
     }
 }

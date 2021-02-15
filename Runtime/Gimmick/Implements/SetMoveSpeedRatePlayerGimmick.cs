@@ -6,7 +6,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     public sealed class SetMoveSpeedRatePlayerGimmick : MonoBehaviour, IPlayerEffectGimmick
     {
-        [SerializeField] PlayerGimmickKey key = new PlayerGimmickKey();
+        [SerializeField] PlayerGimmickKey key = new PlayerGimmickKey("moveSpeed");
 
         GimmickTarget IGimmick.Target => key.Key.Target;
         string IGimmick.Key => key.Key.Key;

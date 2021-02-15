@@ -7,8 +7,6 @@ using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Trigger;
 using ClusterVR.CreatorKit.Trigger.Implements;
 using UnityEngine;
-using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
 
 namespace ClusterVR.CreatorKit.Operation.Implements
 {
@@ -17,7 +15,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
         [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);
-        [SerializeField] Choice[] choices;
+        [SerializeField, LotteryChoice] Choice[] choices;
 
         [Serializable]
         sealed class Choice

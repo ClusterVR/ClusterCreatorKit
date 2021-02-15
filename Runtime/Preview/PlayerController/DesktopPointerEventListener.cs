@@ -4,7 +4,6 @@ using UnityEngine.EventSystems;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
-
     public class DesktopPointerEventListener : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
     {
         public event Action<Vector2> OnMoved;
@@ -16,7 +15,6 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-
                     Cursor.lockState = CursorLockMode.None;
                     return;
                 }

@@ -2,7 +2,6 @@
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
-
     public class DesktopPlayerController : MonoBehaviour, IPlayerController
     {
         [SerializeField] Transform cameraTransform;

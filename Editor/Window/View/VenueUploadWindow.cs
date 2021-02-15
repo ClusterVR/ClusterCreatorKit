@@ -95,7 +95,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             container.Add(sidePane);
             container.Add(mainPane);
 
-
             sidePane.Add(tokenAuthView);
 
             if (userInfo.HasValue)
@@ -109,7 +108,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                         tokenAuth.Logout();
                     }
                 });
-
 
                 ReactiveBinder.Bind(sideMenu.reactiveCurrentVenue, currentVenue =>
                 {

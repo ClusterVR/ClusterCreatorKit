@@ -25,7 +25,6 @@ namespace ClusterVR.CreatorKit.Preview.Item
         void Update()
         {
             commandBuffer.Clear();
-
             if (Cursor.lockState != CursorLockMode.Locked &&
                 interactableItemRaycaster.RaycastItem(Input.mousePosition, out var interactableItem, out _))
             {

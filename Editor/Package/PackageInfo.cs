@@ -8,7 +8,6 @@ namespace ClusterVR.CreatorKit.Editor.Package
     {
         public const string RecommendedUnityEditorVersion = "2019.4";
 
-
         public static string GetCreatorKitVersion()
         {
             var type = MethodBase.GetCurrentMethod().DeclaringType;

@@ -26,7 +26,6 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
                 return false;
             }
 
-
             value = new StateValue(now + TimeSpan.FromTicks(100000L / MaxCountPerFrame * indexInFrame));
             ++indexInFrame;
             return true;

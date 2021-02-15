@@ -1,5 +1,5 @@
 using System.Linq;
-using ClusterVR.CreatorKit.Editor.Fixer;
+using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Trigger;
 using ClusterVR.CreatorKit.World;

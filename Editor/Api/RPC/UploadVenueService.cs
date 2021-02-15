@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Editor.Builder;
+using ClusterVR.CreatorKit.Proto;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
@@ -15,13 +16,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         Mac,
         Android,
         IOS,
-
         PostProcess,
     }
-
-
-
-
 
     public class UploadVenueService
     {
@@ -37,6 +33,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         public IDictionary<UploadState, bool> UploadStatus => uploadStatus;
         readonly Venue.Venue venue;
 
+        readonly WorldDescriptor worldDescriptor;
+
         VenueUploadRequestCompletionResponse completionResponse;
 
         UploadRequestID uploadRequestId;
@@ -44,15 +42,16 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         public UploadVenueService(
             string accessToken,
             Venue.Venue venue,
+            WorldDescriptor worldDescriptor,
             Action<VenueUploadRequestCompletionResponse> onSuccess = null,
             Action<Exception> onError = null
         )
         {
             this.accessToken = accessToken;
             this.venue = venue;
+            this.worldDescriptor = worldDescriptor;
             this.onSuccess = onSuccess;
             this.onError = onError;
-
 
             uploadStatus = new Dictionary<UploadState, bool>
             {
@@ -61,7 +60,6 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 {UploadState.Mac, false},
                 {UploadState.Android, false},
                 {UploadState.IOS, false},
-
                 {UploadState.PostProcess, false}
             };
         }
@@ -91,11 +89,6 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 onError?.Invoke(new FileNotFoundException("iOS Build"));
                 return;
             }
-
-
-
-
-
 
 
             EditorCoroutine.Start(UploadVenue());
@@ -143,7 +136,6 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             var macAssetUploadProcess = uploadStatus[UploadState.Mac];
             var androidAssetUploadProcess = uploadStatus[UploadState.Android];
             var iosAssetUploadProcess = uploadStatus[UploadState.IOS];
-
 
             if (!uploadStatus[UploadState.Windows])
             {
@@ -234,29 +226,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             uploadAssetServiceList.ForEach(x => x.Run());
-
 
             while (!winAssetUploadProcess || !macAssetUploadProcess || !androidAssetUploadProcess || !iosAssetUploadProcess)
             {
@@ -279,13 +249,14 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                     venue.VenueId,
                     uploadRequestId,
                     false,
-                    request =>
+                    worldDescriptor,
+                    response =>
                     {
-                        Debug.Log($"notify finished upload request, Request ID : {request.UploadRequestId}");
+                        Debug.Log($"notify finished upload request, Request ID : {response.UploadRequestId}");
                         uploadRequestId = null;
                         postNotifyFinishProcess = true;
                         uploadStatus[UploadState.PostProcess] = true;
-                        completionResponse = request;
+                        completionResponse = response;
                     },
                     exception =>
                     {

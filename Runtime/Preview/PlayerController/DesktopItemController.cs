@@ -66,13 +66,11 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
             if (target.Grip == null)
             {
-
                 SetOffsets(grabPoint, target.MovableItem.Position + (grabPoint.position - hitPoint),
                     target.MovableItem.Rotation);
             }
             else
             {
-
                 SetOffsets(target.Grip, target.MovableItem.Position, target.MovableItem.Rotation);
             }
 

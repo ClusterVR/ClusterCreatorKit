@@ -4,7 +4,7 @@ using UnityEditor;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomEditor(typeof(OnGrabItemTrigger)), CanEditMultipleObjects]
-    public class OnGrabItemTriggerEditor : VisualElementEditor
+    public class OnGrabItemTriggerEditor : TriggerEditor
     {
     }
 }

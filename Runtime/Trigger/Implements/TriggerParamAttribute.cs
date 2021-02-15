@@ -5,6 +5,7 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
     public class TriggerParamAttribute : PropertyAttribute
     {
         public TriggerTarget[] TargetSelectables { get; }
+        public virtual string ValueLabelText => "Value";
 
         protected TriggerParamAttribute(params TriggerTarget[] targetSelectables)
         {
@@ -83,6 +84,16 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
     public class PlayerOperationTriggerParamAttribute : PlayerTriggerParamAttribute
     {
         public PlayerOperationTriggerParamAttribute()
+            : base(TriggerTarget.Player)
+        {
+        }
+    }
+
+    public class InitializePlayerTriggerParamAttribute : PlayerTriggerParamAttribute
+    {
+        public override string ValueLabelText => "Initial Value";
+
+        public InitializePlayerTriggerParamAttribute()
             : base(TriggerTarget.Player)
         {
         }

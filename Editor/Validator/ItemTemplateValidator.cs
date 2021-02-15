@@ -13,10 +13,6 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Validator
 {
-
-
-
-
     public static class ItemTemplateValidator
     {
         public readonly struct Result

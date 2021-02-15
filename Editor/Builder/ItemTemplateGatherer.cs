@@ -4,7 +4,7 @@ using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.Item;
 using UnityEngine.SceneManagement;
 
-namespace ClusterVR.CreatorKit.Editor.Fixer
+namespace ClusterVR.CreatorKit.Editor.Builder
 {
     public static class ItemTemplateGatherer
     {

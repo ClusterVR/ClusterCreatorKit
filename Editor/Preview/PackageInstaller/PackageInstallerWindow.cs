@@ -20,7 +20,6 @@ namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
         {
             var root = rootVisualElement;
 
-
             if (packageStates.TimeLine && packageStates.TMPro && packageStates.PostProcessingStack &&
                 packageStates.OpenVR)
             {

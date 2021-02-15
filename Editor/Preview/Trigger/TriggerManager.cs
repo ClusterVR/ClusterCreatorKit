@@ -90,6 +90,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
             foreach (var trigger in args.TriggerParams)
             {
                 if (!TryGetKey(trigger.Target, senderItemId, trigger.SpecifiedTargetItem, args.CollidedObject, trigger.Key, out var key)) continue;
+                if (args.DontOverride && roomStateRepository.TryGetValue(key, out _)) continue;
                 var value = GetStateValue(trigger.Type, trigger.Value, signal);
                 yield return new KeyValuePair<string, StateValue>(key, value);
             }

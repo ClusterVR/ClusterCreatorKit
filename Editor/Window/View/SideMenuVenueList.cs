@@ -62,13 +62,11 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             try
             {
-
                 var groups = await APIServiceClient.GetGroups(userInfo.VerifiedToken);
                 foreach (var group in groups.List)
                 {
                     allVenues[group.Id] = await APIServiceClient.GetGroupVenues(group.Id, userInfo.VerifiedToken);
                 }
-
 
                 selector.Clear();
                 selector.Add(new Label("所属チーム"));

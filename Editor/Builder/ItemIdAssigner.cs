@@ -6,7 +6,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace ClusterVR.CreatorKit.Editor.Fixer
+namespace ClusterVR.CreatorKit.Editor.Builder
 {
     public static class ItemIdAssigner
     {

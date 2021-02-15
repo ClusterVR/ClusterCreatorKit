@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -47,6 +48,13 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
             var toggle = new Toggle(content);
             toggle.style.fontSize = dictLabelAndFontSize[labelType];
             return toggle;
+        }
+
+        public static Button GenerateButton(LabelType labelType, string content, Action clickEvent = null)
+        {
+            var button = new Button(clickEvent) {text = content};
+            button.style.fontSize = dictLabelAndFontSize[labelType];
+            return button;
         }
     }
 

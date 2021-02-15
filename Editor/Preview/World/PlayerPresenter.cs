@@ -52,7 +52,6 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 
         public void Respawn()
         {
-
             var spawnPoint = spawnPointManager.GetRespawnPoint(PermissionType);
             MoveTo(spawnPoint.Position);
             RotateTo(Quaternion.Euler(0f, spawnPoint.YRotation, 0f));
@@ -93,12 +92,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
         public void SetPointOfView(Transform targetPoint)
         {
             isInPersonalCamera = true;
-
             if (enterDeviceType == EnterDeviceType.VR)
             {
                 recordedPosition = PlayerTransform.position;
                 recordedRotation = PlayerTransform.rotation;
-
                 var targetPosition = new Vector3(targetPoint.position.x, targetPoint.position.y - CameraTransform.localPosition.y, targetPoint.position.z);
                 PlayerTransform.SetPositionAndRotation(targetPosition, targetPoint.rotation);
             }
@@ -118,7 +115,6 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             {
                 return;
             }
-
 
             if (!recordedPosition.HasValue || !recordedRotation.HasValue)
             {

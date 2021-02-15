@@ -10,7 +10,6 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
     [InitializeOnLoad]
     public static class PackageListRepository
     {
-
         static PackageCollection packageCollection;
         static StatusCode status = StatusCode.Failure;
         static float lastUpdateTime;

@@ -1,5 +1,3 @@
-
-
 #pragma warning disable 1591, 0612, 3021
 #region Designer generated code
 
@@ -9,11 +7,9 @@ using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
 namespace ClusterVR.CreatorKit.Proto {
 
-
   public static partial class CreatorKitEventReflection {
 
     #region Descriptor
-
     public static pbr::FileDescriptor Descriptor {
       get { return descriptor; }
     }
@@ -66,11 +62,6 @@ namespace ClusterVR.CreatorKit.Proto {
 
   }
   #region Messages
-
-
-
-
-
   public sealed partial class CreatorKitEventPayload : pb::IMessage<CreatorKitEventPayload> {
     private static readonly pb::MessageParser<CreatorKitEventPayload> _parser = new pb::MessageParser<CreatorKitEventPayload>(() => new CreatorKitEventPayload());
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -106,14 +97,8 @@ namespace ClusterVR.CreatorKit.Proto {
       return new CreatorKitEventPayload(this);
     }
 
-
     public const int TmpUserIdFieldNumber = 1;
     private string tmpUserId_ = "";
-
-
-
-
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string TmpUserId {
       get { return tmpUserId_; }
@@ -122,14 +107,8 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-
     public const int SessionIdFieldNumber = 2;
     private string sessionId_ = "";
-
-
-
-
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string SessionId {
       get { return sessionId_; }
@@ -138,12 +117,8 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-
     public const int EnvironmentFieldNumber = 3;
     private global::ClusterVR.CreatorKit.Proto.CreatorKitEnvironment environment_;
-
-
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::ClusterVR.CreatorKit.Proto.CreatorKitEnvironment Environment {
       get { return environment_; }
@@ -151,7 +126,6 @@ namespace ClusterVR.CreatorKit.Proto {
         environment_ = value;
       }
     }
-
 
     public const int EventTypeFieldNumber = 4;
     private global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType eventType_ = 0;
@@ -290,16 +264,9 @@ namespace ClusterVR.CreatorKit.Proto {
     }
 
     #region Nested types
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static partial class Types {
-
-
-
       public enum EventType {
-
-
-
         [pbr::OriginalName("PING")] Ping = 0,
       }
 
@@ -307,11 +274,6 @@ namespace ClusterVR.CreatorKit.Proto {
     #endregion
 
   }
-
-
-
-
-
 
   public sealed partial class CreatorKitEnvironment : pb::IMessage<CreatorKitEnvironment> {
     private static readonly pb::MessageParser<CreatorKitEnvironment> _parser = new pb::MessageParser<CreatorKitEnvironment>(() => new CreatorKitEnvironment());
@@ -368,7 +330,6 @@ namespace ClusterVR.CreatorKit.Proto {
       return new CreatorKitEnvironment(this);
     }
 
-
     public const int BatteryStatusFieldNumber = 1;
     private string batteryStatus_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -378,7 +339,6 @@ namespace ClusterVR.CreatorKit.Proto {
         batteryStatus_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
-
 
     public const int DeviceModelFieldNumber = 2;
     private string deviceModel_ = "";
@@ -390,7 +350,6 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-
     public const int DeviceTypeFieldNumber = 3;
     private string deviceType_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -400,7 +359,6 @@ namespace ClusterVR.CreatorKit.Proto {
         deviceType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
-
 
     public const int DeviceUniqueIdentifierFieldNumber = 4;
     private string deviceUniqueIdentifier_ = "";
@@ -412,7 +370,6 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-
     public const int GraphicsDeviceNameFieldNumber = 5;
     private string graphicsDeviceName_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -422,7 +379,6 @@ namespace ClusterVR.CreatorKit.Proto {
         graphicsDeviceName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
-
 
     public const int GraphicsDeviceTypeFieldNumber = 6;
     private string graphicsDeviceType_ = "";
@@ -434,7 +390,6 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-
     public const int GraphicsDeviceVendorFieldNumber = 7;
     private string graphicsDeviceVendor_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -444,7 +399,6 @@ namespace ClusterVR.CreatorKit.Proto {
         graphicsDeviceVendor_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
-
 
     public const int GraphicsDeviceVersionFieldNumber = 8;
     private string graphicsDeviceVersion_ = "";
@@ -456,7 +410,6 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-
     public const int GraphicsMemorySizeFieldNumber = 9;
     private int graphicsMemorySize_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -466,7 +419,6 @@ namespace ClusterVR.CreatorKit.Proto {
         graphicsMemorySize_ = value;
       }
     }
-
 
     public const int GraphicsMultiThreadedFieldNumber = 10;
     private bool graphicsMultiThreaded_;
@@ -478,7 +430,6 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-
     public const int GraphicsShaderLevelFieldNumber = 11;
     private int graphicsShaderLevel_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -488,7 +439,6 @@ namespace ClusterVR.CreatorKit.Proto {
         graphicsShaderLevel_ = value;
       }
     }
-
 
     public const int OperatingSystemFieldNumber = 12;
     private string operatingSystem_ = "";
@@ -500,7 +450,6 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-
     public const int OperatingSystemFamilyFieldNumber = 13;
     private string operatingSystemFamily_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -510,7 +459,6 @@ namespace ClusterVR.CreatorKit.Proto {
         operatingSystemFamily_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
-
 
     public const int ProcessorCountFieldNumber = 14;
     private int processorCount_;
@@ -522,7 +470,6 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-
     public const int ProcessorFrequencyFieldNumber = 15;
     private int processorFrequency_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -532,7 +479,6 @@ namespace ClusterVR.CreatorKit.Proto {
         processorFrequency_ = value;
       }
     }
-
 
     public const int ProcessorTypeFieldNumber = 16;
     private string processorType_ = "";
@@ -544,7 +490,6 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-
     public const int SystemMemorySizeFieldNumber = 17;
     private int systemMemorySize_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -554,7 +499,6 @@ namespace ClusterVR.CreatorKit.Proto {
         systemMemorySize_ = value;
       }
     }
-
 
     public const int IsFocusedFieldNumber = 18;
     private bool isFocused_;
@@ -566,7 +510,6 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-
     public const int IsPlayingFieldNumber = 19;
     private bool isPlaying_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -576,7 +519,6 @@ namespace ClusterVR.CreatorKit.Proto {
         isPlaying_ = value;
       }
     }
-
 
     public const int PlatformFieldNumber = 20;
     private string platform_ = "";
@@ -588,7 +530,6 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-
     public const int SystemLanguageFieldNumber = 21;
     private string systemLanguage_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -598,7 +539,6 @@ namespace ClusterVR.CreatorKit.Proto {
         systemLanguage_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
-
 
     public const int UnityVersionFieldNumber = 22;
     private string unityVersion_ = "";
@@ -610,7 +550,6 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-
     public const int XrDeviceIsPresentFieldNumber = 23;
     private bool xrDeviceIsPresent_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -620,7 +559,6 @@ namespace ClusterVR.CreatorKit.Proto {
         xrDeviceIsPresent_ = value;
       }
     }
-
 
     public const int XrDeviceModelFieldNumber = 24;
     private string xrDeviceModel_ = "";

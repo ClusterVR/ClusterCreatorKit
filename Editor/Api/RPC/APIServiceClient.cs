@@ -50,7 +50,6 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         public static Task<VenueUploadRequestCompletionResponse> PostNotifyFinishedUpload(VenueID venueId, UploadRequestID uploadRequestId, PostNotifyFinishedUploadPayload payload, string accessToken)
         {
-
             return ApiClient.Post<PostNotifyFinishedUploadPayload, VenueUploadRequestCompletionResponse>(payload, accessToken,
                 $"{Constants.ApiBaseUrl}/v1/venues/{venueId.Value}/upload/{uploadRequestId.Value}/done?isPublish={payload.IsPublish}");
         }

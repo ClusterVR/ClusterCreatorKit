@@ -65,15 +65,15 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             void DeleteArrayElementAt(int i)
             {
-                if (property.GetArrayElementAtIndex(i) != null)
-                    property.DeleteArrayElementAtIndex(i);
+                if (property.GetArrayElementAtIndex(i) == null) return;
+                property.DeleteArrayElementAtIndex(i);
                 property.serializedObject.ApplyModifiedProperties();
             }
 
             void MoveArrayElement(int srcIndex, int dstIndex)
             {
-                if (property.GetArrayElementAtIndex(srcIndex) != null)
-                    property.MoveArrayElement(srcIndex, dstIndex);
+                if (property.GetArrayElementAtIndex(srcIndex) == null) return;
+                property.MoveArrayElement(srcIndex, dstIndex);
                 property.serializedObject.ApplyModifiedProperties();
             }
 
@@ -194,12 +194,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var keyProperty = property.FindPropertyRelative("key");
             Assert.AreEqual(keyProperty.propertyType, SerializedPropertyType.String);
-            var keyField = new TextField
-            {
-                bindingPath = keyProperty.propertyPath,
-                style = { flexGrow = new StyleFloat(4) }
-            };
-            keyField.Bind(keyProperty.serializedObject);
+            var keyField = StateKeyStringAttributePropertyDrawer.CreateStateKeyPropertyGUI(keyProperty);
+            keyField.style.flexGrow = new StyleFloat(4);
             container.Add(keyField);
 
             var parameterTypeProperty = property.FindPropertyRelative("parameterType");
@@ -462,12 +458,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var keyProperty = property.FindPropertyRelative("key");
             Assert.AreEqual(keyProperty.propertyType, SerializedPropertyType.String);
-            var keyField = new TextField
-            {
-                bindingPath = keyProperty.propertyPath,
-                style = { flexGrow = new StyleFloat(9) }
-            };
-            keyField.Bind(keyProperty.serializedObject);
+            var keyField = StateKeyStringAttributePropertyDrawer.CreateStateKeyPropertyGUI(keyProperty);
+            keyField.style.flexGrow = new StyleFloat(9);
             container.Add(keyField);
 
             return container;

@@ -20,8 +20,6 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         bool isProcessing;
 
-
-
         public PatchVenueSettingService(
             string accessToken,
             Venue.Venue venue,
