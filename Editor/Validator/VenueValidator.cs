@@ -2,6 +2,7 @@ using System.Linq;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Trigger;
+using ClusterVR.CreatorKit.Trigger.Implements;
 using ClusterVR.CreatorKit.World;
 using ClusterVR.CreatorKit.World.Implements.DespawnHeights;
 using ClusterVR.CreatorKit.World.Implements.PlayerLocalUI;
@@ -116,6 +117,14 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                     invalidObjects = new[] {itemTemplate.gameObject}; // Validation結果ではprefab内部がSelectされないためrootを返している
                     return false;
                 }
+            }
+
+            var persistedKeys = PersistedPlayerStateKeysGatherer.Gather(scene);
+            if (persistedKeys.Count > Constants.TriggerGimmick.PersistedPlayerStateKeysCount)
+            {
+                errorMessage = $"{nameof(InitializePlayerTrigger)} の Key は {Constants.TriggerGimmick.PersistedPlayerStateKeysCount}種類以下である必要があります。";
+                invalidObjects = new GameObject[] { };
+                return false;
             }
 
             Debug.Log("Venue Validation is Passed.");
