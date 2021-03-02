@@ -19,4 +19,12 @@ namespace ClusterVR.CreatorKit.Gimmick
         public Vector3 Position;
         public Quaternion Rotation;
     }
+
+    public static class ICreateItemGimmickExtensions
+    {
+        public static bool IsValid(this ICreateItemGimmick createItemGimmick)
+        {
+            return createItemGimmick.ItemTemplate != null && createItemGimmick.ItemTemplate.gameObject != null;
+        }
+    }
 }

@@ -65,6 +65,10 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             return "Win";
 #elif UNITY_EDITOR_OSX
             return "Mac";
+#elif UNITY_EDITOR_LINUX
+            return "Linux";
+#else
+            return "Unknown";
 #endif
         }
     }

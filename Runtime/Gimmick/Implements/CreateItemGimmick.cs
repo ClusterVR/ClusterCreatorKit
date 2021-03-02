@@ -40,6 +40,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         public void Run(GimmickValue value, DateTime current)
         {
+            if (!this.IsValid()) return;
             if (value.TimeStamp <= lastTriggeredAt) return;
             lastTriggeredAt = value.TimeStamp;
             if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;

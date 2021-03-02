@@ -19,10 +19,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Item
 
         void AddItemTemplate(ICreateItemGimmick gimmick)
         {
-            var template = gimmick.ItemTemplate;
-            if (template == null || template.gameObject == null) return;
+            if (!gimmick.IsValid()) return;
             var templateId = gimmick.ItemTemplateId;
             if (itemTemplates.ContainsKey(templateId)) return;
+            var template = gimmick.ItemTemplate;
             itemTemplates.Add(templateId, template);
             foreach (var descendantGimmick in template.gameObject.GetComponents<ICreateItemGimmick>())
             {

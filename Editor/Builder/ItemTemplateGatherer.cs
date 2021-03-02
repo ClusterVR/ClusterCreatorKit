@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.Item;
 using UnityEngine.SceneManagement;
@@ -24,9 +25,10 @@ namespace ClusterVR.CreatorKit.Editor.Builder
         static IEnumerable<CreateItemGimmick> GatherValidCreateItemGimmicks(Scene scene)
         {
             var createItemGimmicks = new HashSet<CreateItemGimmick>();
+
             void AddCreateItemGimmick(CreateItemGimmick createItemGimmick)
             {
-                if (createItemGimmick.ItemTemplate == null) return;
+                if (!createItemGimmick.IsValid()) return;
                 if (!createItemGimmicks.Add(createItemGimmick)) return;
                 foreach (var innerCreateItemGimmick in createItemGimmick.ItemTemplate.gameObject.GetComponents<CreateItemGimmick>())
                 {
