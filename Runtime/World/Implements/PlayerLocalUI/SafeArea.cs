@@ -16,8 +16,8 @@ namespace ClusterVR.CreatorKit.World.Implements.PlayerLocalUI
             SetSafeArea(
                 new Vector2(safeArea.xMin / Screen.width, safeArea.yMin / Screen.height),
                 new Vector2(safeArea.xMax / Screen.width, safeArea.yMax / Screen.height),
-                new Vector2(60f, 80f),
-                -new Vector2(60f, 60f));
+                new Vector2(56f, 72f),
+                -new Vector2(56f, 0f));
         }
 #endif
 

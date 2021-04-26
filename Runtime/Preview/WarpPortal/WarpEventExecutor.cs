@@ -36,7 +36,7 @@ namespace ClusterVR.CreatorKit.Preview.WarpPortal
 
             if (!e.KeepRotation)
             {
-                playerController.CameraTransform.rotation = e.ToRotation;
+                playerController.CameraTransform.rotation = Quaternion.Euler(0f, e.ToRotation.y, 0f);
             }
         }
 
