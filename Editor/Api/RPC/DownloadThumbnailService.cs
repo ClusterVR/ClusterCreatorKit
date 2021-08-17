@@ -46,7 +46,10 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
             downloadThumbnailRequest.SendWebRequest();
 
-            while (!downloadThumbnailRequest.isDone) yield return null;
+            while (!downloadThumbnailRequest.isDone)
+            {
+                yield return null;
+            }
 
             if (downloadThumbnailRequest.isNetworkError)
             {

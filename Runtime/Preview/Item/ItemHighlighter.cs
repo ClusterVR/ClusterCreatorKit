@@ -1,4 +1,5 @@
-﻿using ClusterVR.CreatorKit.Item;
+﻿#if UNITY_EDITOR
+using ClusterVR.CreatorKit.Item;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -30,7 +31,8 @@ namespace ClusterVR.CreatorKit.Preview.Item
             {
                 var objectToHighlight = interactableItem.Item.gameObject;
                 Draw(objectToHighlight, outlineStencilMaterial);
-                Draw(objectToHighlight, interactableItem is IGrabbableItem ? grabbableOutlineMaterial : interactableOutlineMaterial);
+                Draw(objectToHighlight,
+                    interactableItem is IGrabbableItem ? grabbableOutlineMaterial : interactableOutlineMaterial);
             }
 
             foreach (var candidateItem in interactableItemFinder.InteractableItems)
@@ -46,22 +48,36 @@ namespace ClusterVR.CreatorKit.Preview.Item
             foreach (var renderer in gameObject.GetComponentsInChildren<MeshRenderer>())
             {
                 var meshFilter = renderer.GetComponent<MeshFilter>();
-                if (meshFilter == null) continue;
+                if (meshFilter == null)
+                {
+                    continue;
+                }
                 var sharedMesh = meshFilter.sharedMesh;
-                if (sharedMesh == null) continue;
+                if (sharedMesh == null)
+                {
+                    continue;
+                }
                 DrawRenderer(renderer, material, sharedMesh.subMeshCount);
             }
+
             foreach (var renderer in gameObject.GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 var sharedMesh = renderer.sharedMesh;
-                if (sharedMesh == null) continue;
+                if (sharedMesh == null)
+                {
+                    continue;
+                }
                 DrawRenderer(renderer, material, sharedMesh.subMeshCount);
             }
         }
 
         void DrawRenderer(Renderer renderer, Material material, int submeshCount)
         {
-            for (var index = 0; index < submeshCount; ++index) commandBuffer.DrawRenderer(renderer, material, index);
+            for (var index = 0; index < submeshCount; ++index)
+            {
+                commandBuffer.DrawRenderer(renderer, material, index);
+            }
         }
     }
 }
+#endif

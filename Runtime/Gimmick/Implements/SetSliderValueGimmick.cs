@@ -5,12 +5,15 @@ using UnityEngine.UI;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
-    [RequireComponent(typeof(Slider)), DisallowMultipleComponent, LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
+    [RequireComponent(typeof(Slider)), DisallowMultipleComponent,
+        LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
     public class SetSliderValueGimmick : MonoBehaviour, IGlobalGimmick
     {
         [SerializeField, HideInInspector] Slider slider;
         [SerializeField] GlobalGimmickKey globalGimmickKey;
-        [SerializeField, ParameterTypeField(ParameterType.Integer, ParameterType.Float)] ParameterType parameterType = ParameterType.Float;
+
+        [SerializeField, ParameterTypeField(ParameterType.Integer, ParameterType.Float)]
+        ParameterType parameterType = ParameterType.Float;
 
         ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
@@ -19,13 +22,19 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         public void Run(GimmickValue value, DateTime current)
         {
-            if (slider == null) slider = GetComponent<Slider>();
+            if (slider == null)
+            {
+                slider = GetComponent<Slider>();
+            }
             slider.value = parameterType == ParameterType.Integer ? value.IntegerValue : value.FloatValue;
         }
 
         void OnValidate()
         {
-            if (slider == null || slider.gameObject != gameObject) slider = GetComponent<Slider>();
+            if (slider == null || slider.gameObject != gameObject)
+            {
+                slider = GetComponent<Slider>();
+            }
         }
 
         void Reset()

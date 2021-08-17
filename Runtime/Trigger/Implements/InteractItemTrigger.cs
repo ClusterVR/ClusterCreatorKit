@@ -27,7 +27,8 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         public void Invoke()
         {
-            TriggerEvent?.Invoke(this, new TriggerEventArgs(triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
+            TriggerEvent?.Invoke(this,
+                new TriggerEventArgs(triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
         }
 
         void Reset()
@@ -38,7 +39,10 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         void OnValidate()
         {
-            if (item == null || item.gameObject != gameObject) item = GetComponent<Item.Implements.Item>();
+            if (item == null || item.gameObject != gameObject)
+            {
+                item = GetComponent<Item.Implements.Item>();
+            }
         }
     }
 }

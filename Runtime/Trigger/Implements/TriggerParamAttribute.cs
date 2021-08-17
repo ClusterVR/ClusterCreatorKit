@@ -47,7 +47,8 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
     public class CollideItemTriggerParamAttribute : ItemTriggerParamAttribute
     {
         public CollideItemTriggerParamAttribute()
-            : base(TriggerTarget.Item, TriggerTarget.SpecifiedItem, TriggerTarget.Player, TriggerTarget.CollidedItemOrPlayer, TriggerTarget.Global)
+            : base(TriggerTarget.Item, TriggerTarget.SpecifiedItem, TriggerTarget.Player,
+                TriggerTarget.CollidedItemOrPlayer, TriggerTarget.Global)
         {
         }
     }

@@ -46,7 +46,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         {
             try
             {
-                var policy = await APIServiceClient.PostUploadAssetPolicy(uploadRequestId, payload, accessToken, JsonConvert.DeserializeObject<AssetUploadPolicy>);
+                var policy = await APIServiceClient.PostUploadAssetPolicy(uploadRequestId, payload, accessToken,
+                    JsonConvert.DeserializeObject<AssetUploadPolicy>);
                 EditorCoroutine.Start(Upload(policy));
             }
             catch (Exception e)

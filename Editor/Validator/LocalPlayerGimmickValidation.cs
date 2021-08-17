@@ -13,13 +13,19 @@ namespace ClusterVR.CreatorKit.Editor.Validator
     {
         public static bool IsValid(IGlobalGimmick globalGimmick)
         {
-            if (globalGimmick.Target != GimmickTarget.Player) return true;
+            if (globalGimmick.Target != GimmickTarget.Player)
+            {
+                return true;
+            }
             return IsLocalizableConditionSatisfied((Component) globalGimmick);
         }
 
         public static bool IsValid(GimmickTarget gimmickTarget, Component component)
         {
-            if (gimmickTarget != GimmickTarget.Player) return true;
+            if (gimmickTarget != GimmickTarget.Player)
+            {
+                return true;
+            }
             return IsLocalizableConditionSatisfied(component);
         }
 
@@ -31,8 +37,15 @@ namespace ClusterVR.CreatorKit.Editor.Validator
         static bool IsLocalizableConditionSatisfied(Component component)
         {
             var localizableAttribute = GetLocalizableAttribute(component);
-            if (localizableAttribute == null) return false;
-            if (localizableAttribute.LocalizableCondition == LocalizableGlobalGimmickAttribute.Condition.Always) return true;
+            if (localizableAttribute == null)
+            {
+                return false;
+            }
+            if (localizableAttribute.LocalizableCondition ==
+                LocalizableGlobalGimmickAttribute.Condition.Always)
+            {
+                return true;
+            }
             return IsInPlayerLocal(component);
         }
 

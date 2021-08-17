@@ -31,10 +31,16 @@ namespace ClusterVR.CreatorKit.Gimmick.Supplements
 
         void OnPlay(DateTime triggeredAt, PlayableDirector played)
         {
-            if (triggeredAt < lastTriggeredAt) return;
+            if (triggeredAt < lastTriggeredAt)
+            {
+                return;
+            }
             foreach (var playableDirector in playableDirectors)
             {
-                if (playableDirector == null) continue;
+                if (playableDirector == null)
+                {
+                    continue;
+                }
                 if (playableDirector == played)
                 {
                     playableDirector.gameObject.SetActive(true);

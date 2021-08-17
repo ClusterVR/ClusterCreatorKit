@@ -21,7 +21,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         public PlayerGimmickKey(string key)
         {
-            this.target = GimmickTarget.Player;
+            target = GimmickTarget.Player;
             this.key = key;
         }
     }

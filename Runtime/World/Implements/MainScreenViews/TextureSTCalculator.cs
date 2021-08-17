@@ -6,7 +6,10 @@ namespace ClusterVR.CreatorKit.World.Implements.MainScreenViews
     {
         public static Vector4 CalcOverlapTextureST(Texture texture, Vector2 screenSize)
         {
-            if (texture == null) return new Vector4(1, 1, 0, 0);
+            if (texture == null)
+            {
+                return new Vector4(1, 1, 0, 0);
+            }
 
             var mainTexPosition = Vector2.zero;
             var mainTexScale = Vector2.one;

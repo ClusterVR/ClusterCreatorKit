@@ -35,11 +35,13 @@ namespace ClusterVR.CreatorKit.Editor.Preview.RoomState
             {
                 PlayerPrefs.DeleteKey(GetPersistedDataKey(path));
             }
+
             PlayerPrefs.DeleteKey(PersistedSceneGuidsKey);
             PlayerPrefs.Save();
         }
 
-        public static bool TryGetPersistedRoomStateData(string sceneGuid, out PersistedRoomStateData persistedRoomStateData)
+        public static bool TryGetPersistedRoomStateData(string sceneGuid,
+            out PersistedRoomStateData persistedRoomStateData)
         {
             var key = GetPersistedDataKey(sceneGuid);
             if (!PlayerPrefs.HasKey(key))
@@ -85,7 +87,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.RoomState
         static PersistedRoomStateSceneGuids GetPersistedSceneGuids()
         {
             var json = PlayerPrefs.GetString(PersistedSceneGuidsKey);
-            if (string.IsNullOrEmpty(json)) return new PersistedRoomStateSceneGuids();
+            if (string.IsNullOrEmpty(json))
+            {
+                return new PersistedRoomStateSceneGuids();
+            }
             return JsonUtility.FromJson<PersistedRoomStateSceneGuids>(json);
         }
 
@@ -109,14 +114,20 @@ namespace ClusterVR.CreatorKit.Editor.Preview.RoomState
 
         public bool TryAdd(string guid)
         {
-            if (sceneGuids.Contains(guid)) return false;
+            if (sceneGuids.Contains(guid))
+            {
+                return false;
+            }
             sceneGuids = sceneGuids.Append(guid).ToArray();
             return true;
         }
 
         public bool TryRemove(string guid)
         {
-            if (!sceneGuids.Contains(guid)) return false;
+            if (!sceneGuids.Contains(guid))
+            {
+                return false;
+            }
             sceneGuids = sceneGuids.Where(g => g != guid).ToArray();
             return true;
         }

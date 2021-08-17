@@ -13,7 +13,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.RoomState
         {
             var scene = SceneManager.GetActiveScene();
             var persistedPlayerStateKeys = PersistedPlayerStateKeysGatherer.Gather(scene);
-            if (!persistedPlayerStateKeys.Any()) return null;
+            if (!persistedPlayerStateKeys.Any())
+            {
+                return null;
+            }
 
             var sceneGuid = AssetDatabase.AssetPathToGUID(scene.path);
 
@@ -22,7 +25,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.RoomState
                 Debug.LogWarning("プレビューでセーブ機能を利用するにはシーンを保存する必要があります。今回のプレビューではセーブ機能は利用されません。");
                 return null;
             }
-            
+
             return new PersistedRoomStateManager(sceneGuid, persistedPlayerStateKeys);
         }
 
@@ -37,7 +40,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.RoomState
 
         public IEnumerable<string> Load(RoomStateRepository roomStateRepository)
         {
-            if (!PersistedRoomStateRepository.TryGetPersistedRoomStateData(sceneGuid, out var saveData)) return Enumerable.Empty<string>();
+            if (!PersistedRoomStateRepository.TryGetPersistedRoomStateData(sceneGuid, out var saveData))
+            {
+                return Enumerable.Empty<string>();
+            }
             var updatedKeys = new List<string>();
             foreach (var state in saveData.Player.State)
             {
@@ -56,10 +62,16 @@ namespace ClusterVR.CreatorKit.Editor.Preview.RoomState
             var states = new List<State>();
             foreach (var key in persistedPlayerStateKeys)
             {
-                if (roomStateRepository.TryGetValue(key, out var value)) states.Add(new State(key, value));
+                if (roomStateRepository.TryGetValue(key, out var value))
+                {
+                    states.Add(new State(key, value));
+                }
             }
 
-            if (!states.Any()) return;
+            if (!states.Any())
+            {
+                return;
+            }
             var saveData = new PersistedRoomStateData(new RoomStateSegment(states.ToArray()));
             PersistedRoomStateRepository.Update(sceneGuid, saveData);
         }

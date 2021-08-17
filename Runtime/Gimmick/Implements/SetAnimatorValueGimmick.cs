@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
-    [RequireComponent(typeof(Animator)), LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
+    [RequireComponent(typeof(Animator)),
+        LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
     public class SetAnimatorValueGimmick : MonoBehaviour, IGlobalGimmick
     {
         [SerializeField, HideInInspector] Animator animator;
@@ -21,7 +22,10 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void Start()
         {
-            if (animator == null) animator = GetComponent<Animator>();
+            if (animator == null)
+            {
+                animator = GetComponent<Animator>();
+            }
         }
 
         public void Run(GimmickValue value, DateTime current)
@@ -29,9 +33,16 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
             switch (parameterType)
             {
                 case ParameterType.Signal:
-                    if (value.TimeStamp <= lastTriggeredAt) return;
+                    if (value.TimeStamp <= lastTriggeredAt)
+                    {
+                        return;
+                    }
                     lastTriggeredAt = value.TimeStamp;
-                    if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
+                    if ((current - value.TimeStamp).TotalSeconds >
+                        Constants.TriggerGimmick.TriggerExpireSeconds)
+                    {
+                        return;
+                    }
                     animator.SetTrigger(animatorParameterName);
                     break;
                 case ParameterType.Bool:
@@ -48,7 +59,10 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void OnValidate()
         {
-            if (animator == null || animator.gameObject != gameObject) animator = GetComponent<Animator>();
+            if (animator == null || animator.gameObject != gameObject)
+            {
+                animator = GetComponent<Animator>();
+            }
         }
 
         void Reset()

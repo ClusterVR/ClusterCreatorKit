@@ -15,16 +15,18 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         IItem IItemTrigger.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         public event TriggerEventHandler TriggerEvent;
-        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => downTriggers.Concat(upTriggers).Select(t => t.Convert());
+
+        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams =>
+            downTriggers.Concat(upTriggers).Select(t => t.Convert());
 
         Trigger.TriggerParam[] downTriggersCache;
         Trigger.TriggerParam[] upTriggersCache;
 
         public void Invoke(bool isDown)
         {
-            var triggers = isDown ?
-                downTriggersCache ?? (downTriggersCache = downTriggers.Select(t => t.Convert()).ToArray()) :
-                upTriggersCache ?? (upTriggersCache = upTriggers.Select(t => t.Convert()).ToArray());
+            var triggers = isDown
+                ? downTriggersCache ?? (downTriggersCache = downTriggers.Select(t => t.Convert()).ToArray())
+                : upTriggersCache ?? (upTriggersCache = upTriggers.Select(t => t.Convert()).ToArray());
             TriggerEvent?.Invoke(this, new TriggerEventArgs(triggers));
         }
 
@@ -35,7 +37,10 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         void OnValidate()
         {
-            if (item == null || item.gameObject != gameObject) item = GetComponent<Item.Implements.Item>();
+            if (item == null || item.gameObject != gameObject)
+            {
+                item = GetComponent<Item.Implements.Item>();
+            }
         }
     }
 }

@@ -10,7 +10,8 @@ namespace ClusterVR.CreatorKit.Trigger
         public ParameterType Type { get; }
         public TriggerValue Value { get; }
 
-        public TriggerParam(TriggerTarget target, IItem specifiedTargetItem, string key, ParameterType type, TriggerValue value)
+        public TriggerParam(TriggerTarget target, IItem specifiedTargetItem, string key, ParameterType type,
+            TriggerValue value)
         {
             Target = target;
             SpecifiedTargetItem = specifiedTargetItem;

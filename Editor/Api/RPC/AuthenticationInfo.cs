@@ -29,7 +29,10 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         static bool IsValidToken(string token, ref string errorMessage)
         {
-            if (string.IsNullOrEmpty(token)) return false;
+            if (string.IsNullOrEmpty(token))
+            {
+                return false;
+            }
             if (token.Length != 64)
             {
                 errorMessage = "不正なアクセストークンです";

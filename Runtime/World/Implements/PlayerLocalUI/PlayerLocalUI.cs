@@ -30,7 +30,7 @@ namespace ClusterVR.CreatorKit.World.Implements.PlayerLocalUI
             canvasScaler.matchWidthOrHeight = 0.5f;
             canvasScaler.referencePixelsPerUnit = 100f;
         }
-        
+
         void OnValidate()
         {
             var canvas = GetComponent<Canvas>();
@@ -38,14 +38,23 @@ namespace ClusterVR.CreatorKit.World.Implements.PlayerLocalUI
             LimitSortingOrder(canvas);
             foreach (var childCanvas in gameObject.GetComponentsInChildren<Canvas>(true))
             {
-                if (childCanvas.overrideSorting) LimitSortingOrder(childCanvas);
+                if (childCanvas.overrideSorting)
+                {
+                    LimitSortingOrder(childCanvas);
+                }
             }
         }
 
         void LimitSortingOrder(Canvas canvas)
         {
-            if (canvas.sortingOrder > 100) canvas.sortingOrder = 100;
-            else if (canvas.sortingOrder < -100) canvas.sortingOrder = -100;
+            if (canvas.sortingOrder > 100)
+            {
+                canvas.sortingOrder = 100;
+            }
+            else if (canvas.sortingOrder < -100)
+            {
+                canvas.sortingOrder = -100;
+            }
         }
 
         void Reset()
@@ -55,11 +64,16 @@ namespace ClusterVR.CreatorKit.World.Implements.PlayerLocalUI
             {
                 foreach (Transform child in transform)
                 {
-                    if (child.GetComponent<SafeArea>() != null) return;
+                    if (child.GetComponent<SafeArea>() != null)
+                    {
+                        return;
+                    }
                 }
+
                 var safeArea = ObjectFactory.CreateGameObject("SafeArea", typeof(SafeArea));
                 safeArea.transform.SetParent(transform);
             }
+
             CreateSafeAreaIfNot();
 #endif
         }

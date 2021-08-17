@@ -20,13 +20,19 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 foreach (var createItemGimmick in createItemGimmicks)
                 {
                     templateId = createItemGimmick.ItemTemplateId;
-                    if (templateId.Value == 0 || templateIdItems.ContainsKey(templateId)) continue;
+                    if (templateId.Value == 0 || templateIdItems.ContainsKey(templateId))
+                    {
+                        continue;
+                    }
                     templateIdItems.Add(templateId, item);
                     return templateId;
                 }
 
-                do templateId = ItemTemplateId.Create();
-                while (templateId.Value == 0 || templateIdItems.ContainsKey(templateId));
+                do
+                {
+                    templateId = ItemTemplateId.Create();
+                } while (templateId.Value == 0 || templateIdItems.ContainsKey(templateId));
+
                 templateIdItems.Add(templateId, item);
                 return templateId;
             }
@@ -40,13 +46,22 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 var templateId = GetOrCreateTemplateId(item, gimmicks);
                 foreach (var gimmick in gimmicks)
                 {
-                    if (gimmick.ItemTemplateId.Equals(templateId)) continue;
+                    if (gimmick.ItemTemplateId.Equals(templateId))
+                    {
+                        continue;
+                    }
                     gimmick.ItemTemplateId = templateId;
-                    if (!Application.isPlaying) EditorUtility.SetDirty(gimmick);
+                    if (!Application.isPlaying)
+                    {
+                        EditorUtility.SetDirty(gimmick);
+                    }
                 }
             }
 
-            if (!Application.isPlaying) EditorSceneManager.MarkSceneDirty(scene);
+            if (!Application.isPlaying)
+            {
+                EditorSceneManager.MarkSceneDirty(scene);
+            }
         }
     }
 }

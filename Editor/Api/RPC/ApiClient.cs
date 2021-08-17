@@ -18,7 +18,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             return CallWithRetry<TReq, TResp>(request, accessToken, url, UnityWebRequest.kHttpVerbPOST);
         }
 
-        public static Task<TResp> Post<TReq, TResp>(TReq request, string accessToken, string url, Func<string, TResp> deserializer)
+        public static Task<TResp> Post<TReq, TResp>(TReq request, string accessToken, string url,
+            Func<string, TResp> deserializer)
         {
             return CallWithRetry(request, accessToken, url, UnityWebRequest.kHttpVerbPOST, deserializer);
         }
@@ -30,7 +31,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         public static async Task PostAnalyticsEvent<TReq>(TReq request, string accessToken, string url)
         {
-            using (var webRequest = ClusterApiUtil.CreateUnityWebRequestAsAnalytics(accessToken, url, UnityWebRequest.kHttpVerbPOST))
+            using (var webRequest =
+                ClusterApiUtil.CreateUnityWebRequestAsAnalytics(accessToken, url, UnityWebRequest.kHttpVerbPOST))
             {
                 await Call(webRequest, request);
             }
@@ -41,7 +43,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             return CallWithRetry(request, accessToken, url, httpVerb, JsonDeserializer<TResp>);
         }
 
-        static async Task<TResp> CallWithRetry<TReq, TResp>(TReq request, string accessToken, string url, string httpVerb, Func<string, TResp> deserializer, int numRetries = 3)
+        static async Task<TResp> CallWithRetry<TReq, TResp>(TReq request, string accessToken, string url,
+            string httpVerb, Func<string, TResp> deserializer, int numRetries = 3)
         {
             float backoffMs = 500;
 
@@ -61,7 +64,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             return await Call(request, accessToken, url, httpVerb, deserializer);
         }
 
-        static async Task<TResp> Call<TReq, TResp>(TReq request, string accessToken, string url, string httpVerb, Func<string, TResp> deserializer)
+        static async Task<TResp> Call<TReq, TResp>(TReq request, string accessToken, string url, string httpVerb,
+            Func<string, TResp> deserializer)
         {
             using (var webRequest = ClusterApiUtil.CreateUnityWebRequest(accessToken, url, httpVerb))
             {

@@ -29,7 +29,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 
         static RankingData GenerateRankingData(int playerCount)
         {
-            var rankingData = new RankingData {rankings = new List<Ranking>()};
+            var rankingData = new RankingData { rankings = new List<Ranking>() };
             for (var i = 0; i < playerCount; i++)
             {
                 var user = new User("displayName" + i, "userName" + i, _ => { });

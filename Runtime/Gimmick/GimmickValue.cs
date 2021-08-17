@@ -29,6 +29,5 @@ namespace ClusterVR.CreatorKit.Gimmick
                     throw new NotImplementedException();
             }
         }
-
     }
 }

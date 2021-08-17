@@ -29,11 +29,15 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
             public void Correct()
             {
-                if (weight < 0f) weight = 0f;
+                if (weight < 0f)
+                {
+                    weight = 0f;
+                }
                 triggers = triggers?.Select(trigger =>
-                    trigger.Target != TriggerTarget.Player ?
-                        new Trigger.Implements.TriggerParam(TriggerTarget.Player, null, trigger.Key, trigger.Type, trigger.RawValue) :
-                        trigger)
+                        trigger.Target != TriggerTarget.Player
+                            ? new Trigger.Implements.TriggerParam(TriggerTarget.Player, null, trigger.Key, trigger.Type,
+                                trigger.RawValue)
+                            : trigger)
                     .ToArray();
             }
         }
@@ -50,10 +54,19 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         public void Run(GimmickValue value, DateTime current)
         {
-            if (choices.Length == 0) return;
-            if (value.TimeStamp <= lastTriggeredAt) return;
+            if (choices.Length == 0)
+            {
+                return;
+            }
+            if (value.TimeStamp <= lastTriggeredAt)
+            {
+                return;
+            }
             lastTriggeredAt = value.TimeStamp;
-            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
+            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds)
+            {
+                return;
+            }
             lastTriggeredAt = value.TimeStamp;
 
             Invoke();
@@ -69,7 +82,13 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         void OnValidate()
         {
-            if (choices != null) foreach (var choice in choices) choice.Correct();
+            if (choices != null)
+            {
+                foreach (var choice in choices)
+                {
+                    choice.Correct();
+                }
+            }
         }
     }
 }

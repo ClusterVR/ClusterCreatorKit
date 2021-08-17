@@ -18,7 +18,10 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
 
         public static void CorrectLayer()
         {
-            if (Application.isPlaying) return;
+            if (Application.isPlaying)
+            {
+                return;
+            }
             var scene = SceneManager.GetActiveScene();
             var rootObjects = scene.GetRootGameObjects();
             var interactableItems = rootObjects.SelectMany(o => o.GetComponentsInChildren<IInteractableItem>(true));
@@ -36,6 +39,7 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
                 EditorUtility.SetDirty(gameObject);
                 EditorSceneManager.MarkSceneDirty(gameObject.scene);
             }
+
             foreach (Transform t in gameObject.transform)
             {
                 SetLayerRecursively(t.gameObject, layer);

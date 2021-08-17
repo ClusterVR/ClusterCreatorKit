@@ -85,7 +85,9 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             }
 
             var payload = new PatchVenuePayload(name, description,
-                string.IsNullOrEmpty(thumbnailUrl) ? thumbnailUrls : new List<ThumbnailUrl> {new ThumbnailUrl(thumbnailUrl)});
+                string.IsNullOrEmpty(thumbnailUrl)
+                    ? thumbnailUrls
+                    : new List<ThumbnailUrl> { new ThumbnailUrl(thumbnailUrl) });
             _ = PatchVenueAsync(payload);
         }
 

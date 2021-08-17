@@ -22,9 +22,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
                 {
                     playerPresenter.Respawn();
                 }
+
                 await Task.Delay(300);
             }
         }
     }
-
 }

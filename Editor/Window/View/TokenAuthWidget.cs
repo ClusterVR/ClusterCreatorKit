@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
-using ClusterVR.CreatorKit.Editor.Custom;
 using ClusterVR.CreatorKit.Editor.Builder;
+using ClusterVR.CreatorKit.Editor.Custom;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,7 +24,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 });
 
             container.Add(UiUtils.Separator());
-            container.Add(new Label {text="アクセストークンを貼り付けてください"});
+            container.Add(new Label { text = "アクセストークンを貼り付けてください" });
 
             var accessToken = new TextField();
             container.Add(accessToken);
@@ -39,7 +39,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             var useTokenButton = new Button(() => _ = Login(new AuthenticationInfo(accessToken.value), loginErrorLabel))
             {
-                text = "このトークンを使用",
+                text = "このトークンを使用"
             };
             container.Add(useTokenButton);
 
@@ -85,6 +85,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     errorLabel.SetVisibility(true);
                     return;
                 }
+
                 reactiveUserInfo.Val = new UserInfo(user.Username, authInfo.Token);
                 errorLabel.SetVisibility(false);
 

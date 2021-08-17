@@ -1,0 +1,344 @@
+﻿/* ========= Copyright 2016-2017, HTC Corporation. All rights reserved. =========== */
+
+using System;
+using UnityEngine;
+using UnityEngine.Assertions;
+using UnityEngine.XR;
+
+namespace ClusterVR.CreatorKit.World.Implements.Mirror
+{
+    [DisallowMultipleComponent, RequireComponent(typeof(MeshRenderer))]
+    public class Mirror : MonoBehaviour
+    {
+        enum Eye
+        {
+            Monaural,
+            Left,
+            Right
+        }
+
+#if UNITY_IOS || UNITY_ANDROID
+        const int MaxResolution = 1024;
+#else
+        const int MaxResolution = 2048;
+#endif
+        const int MsaaLevel = 4;
+
+        static readonly Rect FullViewport = new Rect(0f, 0f, 1f, 1f);
+        static readonly int LeftEyeTextureId = Shader.PropertyToID("_LeftEyeTexture");
+        static readonly int RightEyeTextureId = Shader.PropertyToID("_RightEyeTexture");
+
+        static bool insideRendering;
+
+        Camera preRenderCamera;
+        Renderer cachedRenderer;
+        Material material;
+        RenderTexture leftRenderTexture;
+        RenderTexture rightRenderTexture;
+
+        protected virtual LayerMask CullingMask { get; } = 704472087;
+
+        void Start()
+        {
+            preRenderCamera = new GameObject("PreRenderCamera").AddComponent<Camera>();
+            preRenderCamera.transform.SetParent(transform);
+            preRenderCamera.enabled = false;
+
+            cachedRenderer = GetComponent<Renderer>();
+            material = cachedRenderer.material;
+        }
+
+        void OnWillRenderObject()
+        {
+            if (insideRendering)
+            {
+                return;
+            }
+            insideRendering = true;
+
+            var scale = transform.lossyScale;
+            if (Mathf.Approximately(scale.x, 0f) || Mathf.Approximately(scale.y, 0f) ||
+                Mathf.Approximately(scale.z, 0f))
+            {
+                insideRendering = false;
+                return;
+            }
+
+            var targetCamera = Camera.current;
+
+            preRenderCamera.cullingMask = CullingMask;
+
+            Shader.EnableKeyword("IS_MIRROR_RENDERING");
+            GL.invertCulling = true;
+
+            GetRenderTextureSize(out var width, out var height);
+
+            if (targetCamera.stereoEnabled)
+            {
+                var leftTexture = GetOrCreateRenderTexture(Eye.Left, width, height);
+                var rightTexture = GetOrCreateRenderTexture(Eye.Right, width, height);
+
+                RenderForSingleEye(leftTexture, targetCamera, Eye.Left, width, height);
+                RenderForSingleEye(rightTexture, targetCamera, Eye.Right, width, height);
+
+                material.SetTexture(LeftEyeTextureId, leftTexture);
+                material.SetTexture(RightEyeTextureId, rightTexture);
+            }
+            else
+            {
+                var texture = GetOrCreateRenderTexture(Eye.Monaural, width, height);
+
+                Render(texture, targetCamera.worldToCameraMatrix, targetCamera.projectionMatrix, Eye.Monaural, width,
+                    height);
+
+                material.SetTexture(LeftEyeTextureId, texture);
+                material.SetTexture(RightEyeTextureId, texture);
+            }
+
+            GL.invertCulling = false;
+            Shader.DisableKeyword("IS_MIRROR_RENDERING");
+
+            insideRendering = false;
+        }
+
+        void RenderForSingleEye(RenderTexture texture, Camera targetCamera, Eye eye, int width, int height)
+        {
+            var stereoscopicEye = eye == Eye.Left ? Camera.StereoscopicEye.Left : Camera.StereoscopicEye.Right;
+            Render(texture,
+                targetCamera.GetStereoViewMatrix(stereoscopicEye),
+                targetCamera.GetStereoProjectionMatrix(stereoscopicEye),
+                eye, width, height);
+        }
+
+        RenderTexture GetOrCreateRenderTexture(Eye eye, int width, int height)
+        {
+            if (eye == Eye.Left)
+            {
+                Assert.IsNull(leftRenderTexture);
+                if (leftRenderTexture == null) // safety
+                {
+                    leftRenderTexture = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.Default,
+                        RenderTextureReadWrite.Default, MsaaLevel);
+                }
+
+                return leftRenderTexture;
+            }
+            else
+            {
+                Assert.IsNull(rightRenderTexture);
+                if (rightRenderTexture == null) // safety
+                {
+                    rightRenderTexture = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.Default,
+                        RenderTextureReadWrite.Default, MsaaLevel);
+                }
+
+                return rightRenderTexture;
+            }
+        }
+
+        void Render(RenderTexture targetRenderTexture, Matrix4x4 sourceWorldToCameraMatrix,
+            Matrix4x4 sourceProjectionMatrix, Eye eye, int width, int height)
+        {
+            var mirrorPosition = transform.position;
+            var mirrorNormal = -transform.forward;
+            var rect = GetScissorRect(sourceProjectionMatrix * sourceWorldToCameraMatrix, width, height);
+            if (rect.width <= 0f || rect.height <= 0f)
+            {
+                return;
+            }
+            var reflection = CalculateReflectionMatrix(GetPlane(mirrorPosition, mirrorNormal));
+            var worldToCameraMatrix = sourceWorldToCameraMatrix * reflection;
+            preRenderCamera.worldToCameraMatrix = worldToCameraMatrix;
+            preRenderCamera.projectionMatrix = GetScissorMatrix(rect) * sourceProjectionMatrix;
+            var localPos = worldToCameraMatrix.MultiplyPoint(mirrorPosition);
+            var localNormal = worldToCameraMatrix.MultiplyVector(mirrorNormal);
+            var localPlane = new Vector4(localNormal.x, localNormal.y, localNormal.z,
+                -Vector3.Dot(localPos, localNormal));
+            preRenderCamera.projectionMatrix = preRenderCamera.CalculateObliqueMatrix(localPlane);
+            SetRect(rect, preRenderCamera, material, eye);
+            preRenderCamera.targetTexture = targetRenderTexture;
+            preRenderCamera.Render();
+        }
+
+        Rect GetScissorRect(Matrix4x4 mat, int pixelWidth, int pixelHeight)
+        {
+            var bounds = cachedRenderer.bounds;
+            var cen = bounds.center;
+            var ext = bounds.extents;
+            var extentPoints = new Vector3[8]
+            {
+                WorldPointToViewport(mat, new Vector3(cen.x - ext.x, cen.y - ext.y, cen.z - ext.z)),
+                WorldPointToViewport(mat, new Vector3(cen.x + ext.x, cen.y - ext.y, cen.z - ext.z)),
+                WorldPointToViewport(mat, new Vector3(cen.x - ext.x, cen.y - ext.y, cen.z + ext.z)),
+                WorldPointToViewport(mat, new Vector3(cen.x + ext.x, cen.y - ext.y, cen.z + ext.z)),
+                WorldPointToViewport(mat, new Vector3(cen.x - ext.x, cen.y + ext.y, cen.z - ext.z)),
+                WorldPointToViewport(mat, new Vector3(cen.x + ext.x, cen.y + ext.y, cen.z - ext.z)),
+                WorldPointToViewport(mat, new Vector3(cen.x - ext.x, cen.y + ext.y, cen.z + ext.z)),
+                WorldPointToViewport(mat, new Vector3(cen.x + ext.x, cen.y + ext.y, cen.z + ext.z))
+            };
+
+            Vector2 min = extentPoints[0];
+            Vector2 max = extentPoints[0];
+            foreach (var v in extentPoints)
+            {
+                if (v.z < 0)
+                {
+                    return FullViewport;
+                }
+
+                min = Vector2.Min(min, v);
+                max = Vector2.Max(max, v);
+            }
+
+            min = Vector2.Max(min, Vector2.zero);
+            max = Vector2.Min(max, Vector2.one);
+
+            return Rect.MinMaxRect(min.x, min.y, max.x, max.y);
+        }
+
+        static Matrix4x4 GetScissorMatrix(Rect rect)
+        {
+            var m2 = Matrix4x4.TRS(
+                new Vector3(1 / rect.width - 1, 1 / rect.height - 1, 0),
+                Quaternion.identity,
+                new Vector3(1 / rect.width, 1 / rect.height, 1));
+
+            var m3 = Matrix4x4.TRS(
+                new Vector3(-rect.x * 2 / rect.width, -rect.y * 2 / rect.height, 0),
+                Quaternion.identity,
+                Vector3.one);
+
+            return m3 * m2;
+        }
+
+        static Vector3 WorldPointToViewport(Matrix4x4 mat, Vector3 point)
+        {
+            Vector3 result;
+            result.x = mat.m00 * point.x + mat.m01 * point.y + mat.m02 * point.z + mat.m03;
+            result.y = mat.m10 * point.x + mat.m11 * point.y + mat.m12 * point.z + mat.m13;
+            result.z = mat.m20 * point.x + mat.m21 * point.y + mat.m22 * point.z + mat.m23;
+
+            var a = mat.m30 * point.x + mat.m31 * point.y + mat.m32 * point.z + mat.m33;
+            a = 1.0f / a;
+            result.x *= a;
+            result.y *= a;
+            result.z = a;
+
+            point = result;
+            point.x = point.x * 0.5f + 0.5f;
+            point.y = point.y * 0.5f + 0.5f;
+
+            return point;
+        }
+
+        static void SetRect(Rect rect, Camera camera, Material material, Eye eye)
+        {
+            switch (eye)
+            {
+                case Eye.Monaural:
+                    SetInversedST(material, LeftEyeTextureId, rect);
+                    SetInversedST(material, RightEyeTextureId, rect);
+                    break;
+                case Eye.Left:
+                    SetInversedST(material, LeftEyeTextureId, rect);
+                    break;
+                case Eye.Right:
+                    SetInversedST(material, RightEyeTextureId, rect);
+                    break;
+            }
+        }
+
+        static void SetInversedST(Material material, int textureId, Rect rect)
+        {
+            var inversedSize = new Vector2(1f / rect.width, 1f / rect.height);
+            material.SetTextureOffset(textureId, -rect.min * inversedSize);
+            material.SetTextureScale(textureId, inversedSize);
+        }
+
+        void OnRenderObject()
+        {
+            if (!insideRendering)
+            {
+                ReleaseTemporalRenderTextures();
+            }
+        }
+
+        void OnDestroy()
+        {
+            ReleaseTemporalRenderTextures();
+        }
+
+        void ReleaseTemporalRenderTextures()
+        {
+            if (leftRenderTexture != null)
+            {
+                RenderTexture.ReleaseTemporary(leftRenderTexture);
+                leftRenderTexture = null;
+            }
+
+            if (rightRenderTexture != null)
+            {
+                RenderTexture.ReleaseTemporary(rightRenderTexture);
+                rightRenderTexture = null;
+            }
+        }
+
+        static int renderTextureWidth;
+        static int renderTextureHeight;
+        static int renderTextureUpdatedFrame;
+        const int KeepSizeFrames = 60;
+
+        static void GetRenderTextureSize(out int width, out int height)
+        {
+            var currentFrameCount = Time.frameCount;
+            if (renderTextureUpdatedFrame > 0 && currentFrameCount < renderTextureUpdatedFrame + KeepSizeFrames)
+            {
+                width = renderTextureWidth;
+                height = renderTextureHeight;
+                return;
+            }
+
+            var preferredWidth = XRSettings.enabled ? XRSettings.eyeTextureWidth : Screen.width;
+            var preferredHeight = XRSettings.enabled ? XRSettings.eyeTextureHeight : Screen.height;
+            width = Math.Min(preferredWidth, MaxResolution);
+            height = Math.Min(preferredHeight, MaxResolution);
+            if (width != renderTextureWidth || height != renderTextureHeight)
+            {
+                renderTextureWidth = width;
+                renderTextureHeight = height;
+                renderTextureUpdatedFrame = currentFrameCount;
+            }
+        }
+
+        static Vector4 GetPlane(Vector3 position, Vector3 normal)
+        {
+            var w = Vector3.Dot(normal, position);
+            return new Vector4(normal.x, normal.y, normal.z, -w);
+        }
+
+        static Matrix4x4 CalculateReflectionMatrix(Vector4 plane)
+        {
+            Matrix4x4 reflectionMat;
+            reflectionMat.m00 = 1F - 2F * plane[0] * plane[0];
+            reflectionMat.m01 = -2F * plane[0] * plane[1];
+            reflectionMat.m02 = -2F * plane[0] * plane[2];
+            reflectionMat.m03 = -2F * plane[3] * plane[0];
+
+            reflectionMat.m10 = -2F * plane[1] * plane[0];
+            reflectionMat.m11 = 1F - 2F * plane[1] * plane[1];
+            reflectionMat.m12 = -2F * plane[1] * plane[2];
+            reflectionMat.m13 = -2F * plane[3] * plane[1];
+
+            reflectionMat.m20 = -2F * plane[2] * plane[0];
+            reflectionMat.m21 = -2F * plane[2] * plane[1];
+            reflectionMat.m22 = 1F - 2F * plane[2] * plane[2];
+            reflectionMat.m23 = -2F * plane[3] * plane[2];
+
+            reflectionMat.m30 = 0F;
+            reflectionMat.m31 = 0F;
+            reflectionMat.m32 = 0F;
+            reflectionMat.m33 = 1F;
+            return reflectionMat;
+        }
+    }
+}

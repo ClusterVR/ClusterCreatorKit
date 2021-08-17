@@ -13,7 +13,9 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         [SerializeField, RequiredTransform] Transform targetTransform;
         [SerializeField] bool positionOnly;
 
-        ItemId IGimmick.ItemId => (movableItem != null ? movableItem.Item : (movableItem = GetComponent<MovableItem>()).Item).Id;
+        ItemId IGimmick.ItemId =>
+            (movableItem != null ? movableItem.Item : (movableItem = GetComponent<MovableItem>()).Item).Id;
+
         GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
@@ -26,21 +28,36 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void Start()
         {
-            if (movableItem == null) movableItem = GetComponent<MovableItem>();
+            if (movableItem == null)
+            {
+                movableItem = GetComponent<MovableItem>();
+            }
         }
 
         public void Run(GimmickValue value, DateTime current)
         {
-            if (targetTransform == null) return;
-            if (value.TimeStamp <= lastTriggeredAt) return;
+            if (targetTransform == null)
+            {
+                return;
+            }
+            if (value.TimeStamp <= lastTriggeredAt)
+            {
+                return;
+            }
             lastTriggeredAt = value.TimeStamp;
-            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
+            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds)
+            {
+                return;
+            }
             movableItem.WarpTo(targetTransform.position, positionOnly ? transform.rotation : targetTransform.rotation);
         }
 
         void OnValidate()
         {
-            if (movableItem == null || movableItem.gameObject != gameObject) movableItem = GetComponent<MovableItem>();
+            if (movableItem == null || movableItem.gameObject != gameObject)
+            {
+                movableItem = GetComponent<MovableItem>();
+            }
         }
 
         void Reset()

@@ -16,7 +16,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             {
                 if (!canvas.isRootCanvas)
                 {
-                    EditorGUILayout.HelpBox($"{nameof(PlayerLocalUI)} は {nameof(Canvas)} の子ではないところに配置してください。", MessageType.Warning);
+                    EditorGUILayout.HelpBox($"{nameof(PlayerLocalUI)} は {nameof(Canvas)} の子ではないところに配置してください。",
+                        MessageType.Warning);
                 }
             });
             container.Add(warningBox);

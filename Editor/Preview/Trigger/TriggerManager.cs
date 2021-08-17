@@ -65,7 +65,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
             UpdateState(GetStateChange(args, sender.Item.Id).ToArray());
         }
 
-        void OnTriggered(IPlayerTrigger _, TriggerEventArgs args) => OnTriggered(args);
+        void OnTriggered(IPlayerTrigger _, TriggerEventArgs args)
+        {
+            OnTriggered(args);
+        }
 
         void OnTriggered(TriggerEventArgs args)
         {
@@ -74,7 +77,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
 
         void UpdateState(IReadOnlyCollection<KeyValuePair<string, StateValue>> stateChange)
         {
-            if (stateChange.Count == 0) return;
+            if (stateChange.Count == 0)
+            {
+                return;
+            }
             foreach (var state in stateChange)
             {
                 roomStateRepository.Update(state.Key, state.Value);
@@ -83,20 +89,32 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
             gimmickManager.OnStateUpdated(stateChange.Select(s => s.Key));
         }
 
-        IEnumerable<KeyValuePair<string, StateValue>> GetStateChange(TriggerEventArgs args, ItemId senderItemId = default)
+        IEnumerable<KeyValuePair<string, StateValue>> GetStateChange(TriggerEventArgs args,
+            ItemId senderItemId = default)
         {
-            if (!signalGenerator.TryGet(out var signal)) yield break;
+            if (!signalGenerator.TryGet(out var signal))
+            {
+                yield break;
+            }
 
             foreach (var trigger in args.TriggerParams)
             {
-                if (!TryGetKey(trigger.Target, senderItemId, trigger.SpecifiedTargetItem, args.CollidedObject, trigger.Key, out var key)) continue;
-                if (args.DontOverride && roomStateRepository.TryGetValue(key, out _)) continue;
+                if (!TryGetKey(trigger.Target, senderItemId, trigger.SpecifiedTargetItem, args.CollidedObject,
+                    trigger.Key, out var key))
+                {
+                    continue;
+                }
+                if (args.DontOverride && roomStateRepository.TryGetValue(key, out _))
+                {
+                    continue;
+                }
                 var value = GetStateValue(trigger.Type, trigger.Value, signal);
                 yield return new KeyValuePair<string, StateValue>(key, value);
             }
         }
 
-        static bool TryGetKey(TriggerTarget target, ItemId senderItemId, IItem specifiedTarget, GameObject collidedObject, string triggerKey, out string key)
+        static bool TryGetKey(TriggerTarget target, ItemId senderItemId, IItem specifiedTarget,
+            GameObject collidedObject, string triggerKey, out string key)
         {
             key = default;
             switch (target)
@@ -105,8 +123,14 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
                     key = RoomStateKey.GetItemKey(senderItemId.Value, triggerKey);
                     return true;
                 case TriggerTarget.SpecifiedItem:
-                    if (specifiedTarget == null) return false;
-                    if (specifiedTarget.gameObject == null) return false;
+                    if (specifiedTarget == null)
+                    {
+                        return false;
+                    }
+                    if (specifiedTarget.gameObject == null)
+                    {
+                        return false;
+                    }
                     key = RoomStateKey.GetItemKey(specifiedTarget.Id.Value, triggerKey);
                     return true;
                 case TriggerTarget.Player:

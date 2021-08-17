@@ -8,7 +8,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
     public sealed class DestroyItemGimmickManager
     {
         readonly ItemDestroyer itemDestroyer;
-        
+
         public DestroyItemGimmickManager(
             ItemCreator itemCreator,
             ItemDestroyer itemDestroyer,
@@ -34,7 +34,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
 
         void OnInvoked(DestroyItemEventArgs args)
         {
-            if (args.TimestampDiffSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
+            if (args.TimestampDiffSeconds > Constants.TriggerGimmick.TriggerExpireSeconds)
+            {
+                return;
+            }
             itemDestroyer.Destroy(args.Item);
         }
     }

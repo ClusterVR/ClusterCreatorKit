@@ -9,7 +9,7 @@ namespace ClusterVR.CreatorKit.World.Implements.MainScreenViews
         MeshRenderer meshRenderer;
         MaterialPropertyBlock propertyBlock;
         [SerializeField] bool useCustomAspectRatio = false;
-        [SerializeField] Vector2 screenAspectRatio = new Vector2(16,9);
+        [SerializeField] Vector2 screenAspectRatio = new Vector2(16, 9);
 
         public event Action OnDestroyed;
 

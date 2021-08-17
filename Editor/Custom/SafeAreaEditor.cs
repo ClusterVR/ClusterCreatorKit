@@ -18,10 +18,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             {
                 if (!IsChildOfPlayerLocalUI((SafeArea) target))
                 {
-                    EditorGUILayout.HelpBox($"{nameof(SafeArea)} が正しく動作するためには {nameof(PlayerLocalUI)} の子である必要があります。", MessageType.Warning);
+                    EditorGUILayout.HelpBox($"{nameof(SafeArea)} が正しく動作するためには {nameof(PlayerLocalUI)} の子である必要があります。",
+                        MessageType.Warning);
                 }
             });
-            var autoLayoutButton = new Button(AutoAnchor) {text = AutoAnchorActionName};
+            var autoLayoutButton = new Button(AutoAnchor) { text = AutoAnchorActionName };
             container.Add(warningBox);
             container.Add(autoLayoutButton);
             return container;
@@ -29,8 +30,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
         void AutoAnchor()
         {
-            if (!EditorUtility.DisplayDialog(AutoAnchorActionName, "Anchorを自動設定します。子オブジェクトが端や中央のうち最も近い場所に追従するようになります", "OK", "Cancel"))
+            if (!EditorUtility.DisplayDialog(AutoAnchorActionName, "Anchorを自動設定します。子オブジェクトが端や中央のうち最も近い場所に追従するようになります",
+                "OK", "Cancel"))
+            {
                 return;
+            }
 
             var thisRectTransform = ((SafeArea) target).GetComponent<RectTransform>();
             var thisRect = thisRectTransform.rect;
@@ -38,7 +42,10 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var yBorder = thisRect.height / 6;
             foreach (Transform c in thisRectTransform)
             {
-                if (!(c is RectTransform child)) continue;
+                if (!(c is RectTransform child))
+                {
+                    continue;
+                }
                 Undo.RecordObject(child, AutoAnchorActionName);
                 var pos = child.localPosition;
                 var anchorX = pos.x < -xBorder ? 0.0f : pos.x < xBorder ? 0.5f : 1f;
@@ -61,7 +68,10 @@ namespace ClusterVR.CreatorKit.Editor.Custom
         static void OnDrawGizmo(SafeArea safeArea, GizmoType gizmoType)
         {
             var canvas = safeArea.GetComponentInParent<Canvas>();
-            if (canvas == null || canvas.rootCanvas.renderMode == RenderMode.WorldSpace) return;
+            if (canvas == null || canvas.rootCanvas.renderMode == RenderMode.WorldSpace)
+            {
+                return;
+            }
             var safeAreaRectTransform = safeArea.GetComponent<RectTransform>();
             if ((gizmoType & GizmoType.InSelectionHierarchy) > 0 ||
                 Selection.activeTransform != null && Selection.activeTransform.IsChildOf(safeAreaRectTransform))

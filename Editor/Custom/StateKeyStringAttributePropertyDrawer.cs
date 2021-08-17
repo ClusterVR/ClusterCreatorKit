@@ -19,7 +19,10 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var container = new VisualElement();
 
             var propertyDisplayName = property.displayName;
-            var keyLengthErrorBox = new IMGUIContainer(() => EditorGUILayout.HelpBox($"{propertyDisplayName} は {Constants.TriggerGimmick.MaxKeyLength}文字以下である必要があります。", MessageType.Error));
+            var keyLengthErrorBox = new IMGUIContainer(() =>
+                EditorGUILayout.HelpBox(
+                    $"{propertyDisplayName} は {Constants.TriggerGimmick.MaxKeyLength}文字以下である必要があります。",
+                    MessageType.Error));
 
             void SetKeyLengthErrorBoxVisibility(string key)
             {
@@ -29,7 +32,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             SetKeyLengthErrorBoxVisibility(property.stringValue);
             var keyField = new TextField(displayName)
             {
-                bindingPath = property.propertyPath,
+                bindingPath = property.propertyPath
             };
             keyField.Bind(property.serializedObject);
             keyField.RegisterCallback<ChangeEvent<string>>(e => SetKeyLengthErrorBoxVisibility(e.newValue));

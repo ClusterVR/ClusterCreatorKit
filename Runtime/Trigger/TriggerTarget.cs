@@ -6,6 +6,6 @@ namespace ClusterVR.CreatorKit.Trigger
         SpecifiedItem,
         Player,
         CollidedItemOrPlayer,
-        Global,
+        Global
     }
 }

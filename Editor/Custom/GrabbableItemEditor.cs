@@ -8,7 +8,10 @@ namespace ClusterVR.CreatorKit.Editor.Custom
     {
         void OnSceneGUI()
         {
-            if (!(target is GrabbableItem grabbableItem)) return;
+            if (!(target is GrabbableItem grabbableItem))
+            {
+                return;
+            }
             MoveAndRotateHandle.Draw(grabbableItem.Grip, "Grip");
         }
     }

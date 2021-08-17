@@ -22,8 +22,11 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
     public class ItemLogicAttribute : LogicAttribute
     {
-        public override List<TargetStateTarget> TargetStateTargetSelectables => new List<TargetStateTarget> {TargetStateTarget.Item, TargetStateTarget.Player};
-        public override List<GimmickTarget> SourceStateTargetSelectables => new List<GimmickTarget> {GimmickTarget.Item, GimmickTarget.Player, GimmickTarget.Global};
+        public override List<TargetStateTarget> TargetStateTargetSelectables => new List<TargetStateTarget>
+            { TargetStateTarget.Item, TargetStateTarget.Player };
+
+        public override List<GimmickTarget> SourceStateTargetSelectables => new List<GimmickTarget>
+            { GimmickTarget.Item, GimmickTarget.Player, GimmickTarget.Global };
 
         public override string FormatTargetStateTarget(TargetStateTarget target)
         {
@@ -54,14 +57,19 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
     public class PlayerLogicAttribute : LogicAttribute
     {
-        public override List<TargetStateTarget> TargetStateTargetSelectables => new List<TargetStateTarget> {TargetStateTarget.Player};
-        public override List<GimmickTarget> SourceStateTargetSelectables => new List<GimmickTarget> {GimmickTarget.Player, GimmickTarget.Global};
+        public override List<TargetStateTarget> TargetStateTargetSelectables =>
+            new List<TargetStateTarget> { TargetStateTarget.Player };
+
+        public override List<GimmickTarget> SourceStateTargetSelectables => new List<GimmickTarget>
+            { GimmickTarget.Player, GimmickTarget.Global };
     }
 
     public class GlobalLogicAttribute : LogicAttribute
     {
-        public override List<TargetStateTarget> TargetStateTargetSelectables => new List<TargetStateTarget> {TargetStateTarget.Global};
-        public override List<GimmickTarget> SourceStateTargetSelectables => new List<GimmickTarget> {GimmickTarget.Global};
+        public override List<TargetStateTarget> TargetStateTargetSelectables =>
+            new List<TargetStateTarget> { TargetStateTarget.Global };
+
+        public override List<GimmickTarget> SourceStateTargetSelectables =>
+            new List<GimmickTarget> { GimmickTarget.Global };
     }
 }
-

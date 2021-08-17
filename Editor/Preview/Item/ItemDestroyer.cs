@@ -1,7 +1,7 @@
 ﻿using System;
 using ClusterVR.CreatorKit.Item;
-using UnityEngine;
 using ClusterVR.CreatorKit.Preview.PlayerController;
+using Object = UnityEngine.Object;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.Item
 {
@@ -19,7 +19,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Item
         {
             OnDestroy?.Invoke(item);
             itemController?.OnDestroyItem(item);
-            GameObject.Destroy(item.gameObject);
+            Object.Destroy(item.gameObject);
         }
     }
 }

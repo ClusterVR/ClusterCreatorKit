@@ -31,16 +31,26 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         public void Run(GimmickValue value, DateTime current)
         {
-            if (lastTriggerReceivedAt == value.TimeStamp) return;
+            if (lastTriggerReceivedAt == value.TimeStamp)
+            {
+                return;
+            }
             lastTriggerReceivedAt = value.TimeStamp;
 
             var dueTime = value.TimeStamp.AddSeconds(delayTimeSeconds) - current;
-            if (dueTime.TotalSeconds < -Constants.TriggerGimmick.TriggerExpireSeconds) return;
-            var expireAt = Time.realtimeSinceStartup + dueTime.TotalSeconds + Constants.TriggerGimmick.OwnershipExpireExpectedSeconds;
+            if (dueTime.TotalSeconds < -Constants.TriggerGimmick.TriggerExpireSeconds)
+            {
+                return;
+            }
+            var expireAt = Time.realtimeSinceStartup + dueTime.TotalSeconds +
+                Constants.TriggerGimmick.OwnershipExpireExpectedSeconds;
 
             void Action()
             {
-                if (expireAt < Time.realtimeSinceStartup) return;
+                if (expireAt < Time.realtimeSinceStartup)
+                {
+                    return;
+                }
                 Invoke();
             }
 
@@ -52,7 +62,8 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         void IRerunnableGimmick.Rerun(GimmickValue value, DateTime current)
         {
             var executeAt = value.TimeStamp.AddSeconds(delayTimeSeconds);
-            if (current - TimeSpan.FromSeconds(Constants.TriggerGimmick.OwnershipExpireExpectedSeconds) < executeAt && executeAt < current)
+            if (current - TimeSpan.FromSeconds(Constants.TriggerGimmick.OwnershipExpireExpectedSeconds) < executeAt &&
+                executeAt < current)
             {
                 schedulerCancellation?.Dispose();
                 Invoke();
@@ -61,7 +72,8 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         void Invoke()
         {
-            TriggerEvent?.Invoke(new TriggerEventArgs(triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
+            TriggerEvent?.Invoke(new TriggerEventArgs(triggersCache ??
+                (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
         }
 
         void OnDestroy()

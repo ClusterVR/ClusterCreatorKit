@@ -12,7 +12,10 @@ namespace ClusterVR.CreatorKit.Item.Implements
         [SerializeField, Tooltip("持ち手（任意）")] Transform grip;
 
         public override IItem Item => MovableItem.Item;
-        public IMovableItem MovableItem => movableItem != null ? movableItem : movableItem = GetComponent<MovableItem>();
+
+        public IMovableItem MovableItem =>
+            movableItem != null ? movableItem : movableItem = GetComponent<MovableItem>();
+
         public Transform Grip => grip;
 
         public event Action OnGrabbed;
@@ -43,7 +46,10 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         void OnValidate()
         {
-            if (movableItem == null || movableItem.gameObject != gameObject) movableItem = GetComponent<MovableItem>();
+            if (movableItem == null || movableItem.gameObject != gameObject)
+            {
+                movableItem = GetComponent<MovableItem>();
+            }
         }
     }
 }

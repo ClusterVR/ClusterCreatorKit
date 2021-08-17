@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
-    public class DesktopPlayerController : MonoBehaviour, IPlayerController
+    public sealed class DesktopPlayerController : MonoBehaviour, IPlayerController
     {
         [SerializeField] Transform cameraTransform;
         [SerializeField] CharacterController characterController;
@@ -50,9 +51,16 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
             if (characterController.isGrounded)
             {
-                if (Input.GetKeyDown(KeyCode.Space)) velocityY = baseJumpSpeed * jumpSpeedRate;
-                else velocityY = 0f;
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    velocityY = baseJumpSpeed * jumpSpeedRate;
+                }
+                else
+                {
+                    velocityY = 0f;
+                }
             }
+
             velocityY -= Time.deltaTime * 9.81f;
         }
 
@@ -75,3 +83,4 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         }
     }
 }
+#endif

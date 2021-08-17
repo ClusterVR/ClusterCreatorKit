@@ -21,7 +21,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     borderColor = new StyleColor(Color.gray),
 #endif
                     marginTop = 8,
-                    marginBottom = 8,
+                    marginBottom = 8
                 }
             };
         }

@@ -26,7 +26,10 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         void OnValidate()
         {
-            if (item == null || item.gameObject != gameObject) item = GetComponent<Item.Implements.Item>();
+            if (item == null || item.gameObject != gameObject)
+            {
+                item = GetComponent<Item.Implements.Item>();
+            }
         }
     }
 }

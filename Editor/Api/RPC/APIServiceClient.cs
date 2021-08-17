@@ -48,19 +48,23 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 $"{Constants.ApiBaseUrl}/v1/venues/{venueId.Value}/upload/new");
         }
 
-        public static Task<VenueUploadRequestCompletionResponse> PostNotifyFinishedUpload(VenueID venueId, UploadRequestID uploadRequestId, PostNotifyFinishedUploadPayload payload, string accessToken)
+        public static Task<VenueUploadRequestCompletionResponse> PostNotifyFinishedUpload(VenueID venueId,
+            UploadRequestID uploadRequestId, PostNotifyFinishedUploadPayload payload, string accessToken)
         {
-            return ApiClient.Post<PostNotifyFinishedUploadPayload, VenueUploadRequestCompletionResponse>(payload, accessToken,
+            return ApiClient.Post<PostNotifyFinishedUploadPayload, VenueUploadRequestCompletionResponse>(payload,
+                accessToken,
                 $"{Constants.ApiBaseUrl}/v1/venues/{venueId.Value}/upload/{uploadRequestId.Value}/done?isPublish={payload.IsPublish}");
         }
 
-        public static Task<ThumbnailUploadPolicy> PostUploadThumbnailPolicy(PostUploadThumbnailPolicyPayload payload, string accessToken, Func<string, ThumbnailUploadPolicy> jsonDeserializer)
+        public static Task<ThumbnailUploadPolicy> PostUploadThumbnailPolicy(PostUploadThumbnailPolicyPayload payload,
+            string accessToken, Func<string, ThumbnailUploadPolicy> jsonDeserializer)
         {
             return ApiClient.Post(payload, accessToken,
                 $"{Constants.ApiBaseUrl}/v1/upload/venue/thumbnail/policies", jsonDeserializer);
         }
 
-        public static Task<AssetUploadPolicy> PostUploadAssetPolicy(UploadRequestID uploadRequestId, PostUploadAssetPolicyPayload payload, string accessToken, Func<string, AssetUploadPolicy> jsonDeserializer)
+        public static Task<AssetUploadPolicy> PostUploadAssetPolicy(UploadRequestID uploadRequestId,
+            PostUploadAssetPolicyPayload payload, string accessToken, Func<string, AssetUploadPolicy> jsonDeserializer)
         {
             return ApiClient.Post(payload, accessToken,
                 $"{Constants.ApiBaseUrl}/v1/upload/venue/{uploadRequestId.Value}/policies", jsonDeserializer);

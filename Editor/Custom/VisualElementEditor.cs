@@ -1,6 +1,7 @@
 using UnityEditor;
-using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using UnityEngine.UIElements;
+
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
@@ -11,14 +12,19 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var container = new VisualElement();
 
             var iterator = serializedObject.GetIterator();
-            if (!iterator.NextVisible(true)) return container;
+            if (!iterator.NextVisible(true))
+            {
+                return container;
+            }
 
             while (iterator.NextVisible(false))
             {
                 var propertyField = CreateField(iterator.Copy());
 
                 if (iterator.propertyPath == "m_Script" && serializedObject.targetObject != null)
+                {
                     propertyField.SetEnabled(false);
+                }
 
                 container.Add(propertyField);
             }

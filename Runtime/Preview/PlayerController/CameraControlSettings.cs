@@ -16,6 +16,7 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         }
 
         static float sensitivity;
+
         public static float Sensitivity
         {
             get => sensitivity;
@@ -27,6 +28,7 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         }
 
         static bool invertVertical;
+
         public static bool InvertVertical
         {
             get => invertVertical;
@@ -38,6 +40,7 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         }
 
         static bool invertHorizontal;
+
         public static bool InvertHorizontal
         {
             get => invertHorizontal;

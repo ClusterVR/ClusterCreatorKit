@@ -9,8 +9,7 @@ namespace ClusterVR.CreatorKit.Editor.MenuItems
         static void CreatePlayerLocalUI()
         {
             var playerLocalUI = ObjectFactory.CreateGameObject(nameof(PlayerLocalUI), typeof(PlayerLocalUI));
-            var activeGameObject = Selection.activeGameObject;
-            if (activeGameObject != null) playerLocalUI.transform.SetParent(activeGameObject.transform);
+            playerLocalUI.transform.SetParent(MenuItemUtilities.GetActiveContentsRoot());
             Selection.activeGameObject = playerLocalUI;
         }
     }

@@ -31,11 +31,17 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         public void Run(GimmickValue value, DateTime current)
         {
-            if (lastTriggerReceivedAt == value.TimeStamp) return;
+            if (lastTriggerReceivedAt == value.TimeStamp)
+            {
+                return;
+            }
             lastTriggerReceivedAt = value.TimeStamp;
 
             var dueTime = value.TimeStamp.AddSeconds(delayTimeSeconds) - current;
-            if (dueTime.TotalSeconds < -Constants.TriggerGimmick.TriggerExpireSeconds) return;
+            if (dueTime.TotalSeconds < -Constants.TriggerGimmick.TriggerExpireSeconds)
+            {
+                return;
+            }
 
             schedulerCancellation?.Dispose();
             schedulerCancellation = new Scheduler.Cancellation();
@@ -44,7 +50,8 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         void Invoke()
         {
-            TriggerEvent?.Invoke(this, new TriggerEventArgs(triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
+            TriggerEvent?.Invoke(this,
+                new TriggerEventArgs(triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
         }
 
         void OnDestroy()

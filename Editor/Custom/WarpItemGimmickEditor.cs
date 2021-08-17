@@ -8,7 +8,10 @@ namespace ClusterVR.CreatorKit.Editor.Custom
     {
         void OnSceneGUI()
         {
-            if (!(target is WarpItemGimmick warpItemGimmick)) return;
+            if (!(target is WarpItemGimmick warpItemGimmick))
+            {
+                return;
+            }
             MoveAndRotateHandle.Draw(warpItemGimmick.TargetTransform, "TargetTransform");
         }
     }

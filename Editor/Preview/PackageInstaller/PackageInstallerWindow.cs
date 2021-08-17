@@ -31,13 +31,21 @@ namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
             VisualElement notExistLabel = new Label("プレビューに必要なパッケージがインポートされていません");
             var notExistingPackage = new Label();
             if (!packageStates.TimeLine)
+            {
                 notExistingPackage.text += "TimeLine\n";
+            }
             if (!packageStates.TMPro)
+            {
                 notExistingPackage.text += "TextMeshPro\n";
+            }
             if (!packageStates.PostProcessingStack)
+            {
                 notExistingPackage.text += "PostProcessingStack\n";
+            }
             if (!packageStates.OpenVR)
+            {
                 notExistingPackage.text += "OpenVR";
+            }
 
             VisualElement certificationLabel = new Label("これらのパッケージをインポートしますか？");
 
@@ -61,13 +69,21 @@ namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
         void ImportPackages(PackageStates packageStates)
         {
             if (!packageStates.TimeLine)
+            {
                 Client.Add("com.unity.timeline");
+            }
             if (!packageStates.TMPro)
+            {
                 Client.Add("com.unity.textmeshpro");
+            }
             if (!packageStates.PostProcessingStack)
+            {
                 Client.Add("com.unity.postprocessing");
+            }
             if (!packageStates.OpenVR)
+            {
                 Client.Add("com.unity.xr.openvr.standalone");
+            }
             Close();
         }
     }

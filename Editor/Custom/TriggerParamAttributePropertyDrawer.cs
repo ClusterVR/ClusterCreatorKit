@@ -17,10 +17,12 @@ namespace ClusterVR.CreatorKit.Editor.Custom
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var triggerAttr = (TriggerParamAttribute) attribute;
-            return CreatePropertyGUI(property, triggerAttr.TargetSelectables.ToList(), triggerAttr.FormatTarget, triggerAttr.ValueLabelText);
+            return CreatePropertyGUI(property, triggerAttr.TargetSelectables.ToList(), triggerAttr.FormatTarget,
+                triggerAttr.ValueLabelText);
         }
 
-        static VisualElement CreatePropertyGUI(SerializedProperty property, List<TriggerTarget> targetChoices, Func<TriggerTarget, string> formatTarget, string valueLabelText)
+        static VisualElement CreatePropertyGUI(SerializedProperty property, List<TriggerTarget> targetChoices,
+            Func<TriggerTarget, string> formatTarget, string valueLabelText)
         {
             var container = new VisualElement
             {
@@ -38,7 +40,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             return container;
         }
 
-        static VisualElement CreateTargetPropertyGUI(SerializedProperty property, List<TriggerTarget> targetChoices, Func<TriggerTarget, string> formatTarget)
+        static VisualElement CreateTargetPropertyGUI(SerializedProperty property, List<TriggerTarget> targetChoices,
+            Func<TriggerTarget, string> formatTarget)
         {
             var container = new VisualElement
             {
@@ -75,7 +78,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var targetProperty = property.FindPropertyRelative("target");
             var currentTarget = (TriggerTarget) targetProperty.enumValueIndex;
             var selectingTarget = targetChoices.Contains(currentTarget) ? currentTarget : targetChoices[0];
-            var targetField = EnumField.Create(targetProperty, targetChoices, selectingTarget, formatTarget, SwitchSpecifiedTargetItemField);
+            var targetField = EnumField.Create(targetProperty, targetChoices, selectingTarget, formatTarget,
+                SwitchSpecifiedTargetItemField);
             targetField.SetEnabled(targetChoices.Count > 1);
 
             SwitchSpecifiedTargetItemField((TriggerTarget) targetProperty.enumValueIndex);
@@ -169,10 +173,10 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 floatValueField.SetVisibility(type == ParameterType.Float);
                 integerValueField.SetVisibility(type == ParameterType.Integer);
             }
+
             SwitchTriggerValueField((ParameterType) typeProperty.enumValueIndex);
 
             return container;
         }
-
     }
 }

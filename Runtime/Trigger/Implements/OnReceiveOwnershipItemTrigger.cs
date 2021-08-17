@@ -20,7 +20,7 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
             Involuntary = 1 << 1,
             Always = ~0
         }
-        
+
         IItem IItemTrigger.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         public event TriggerEventHandler TriggerEvent;
         IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
@@ -30,7 +30,12 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         void IOnReceiveOwnershipItemTrigger.Invoke(bool voluntary)
         {
             var type = voluntary ? EventType.Voluntary : EventType.Involuntary;
-            if ((type & eventType) > 0) TriggerEvent?.Invoke(this, new TriggerEventArgs(triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
+            if ((type & eventType) > 0)
+            {
+                TriggerEvent?.Invoke(this,
+                    new TriggerEventArgs(triggersCache ??
+                        (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
+            }
         }
 
         void Reset()
@@ -40,7 +45,10 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         void OnValidate()
         {
-            if (item == null || item.gameObject != gameObject) item = GetComponent<Item.Implements.Item>();
+            if (item == null || item.gameObject != gameObject)
+            {
+                item = GetComponent<Item.Implements.Item>();
+            }
         }
     }
 }

@@ -16,7 +16,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             return Create(null, property, onValueChanged);
         }
 
-        public static VisualElement Create<TEnum>(string label, SerializedProperty property, Action<TEnum> onValueChanged = null)
+        public static VisualElement Create<TEnum>(string label, SerializedProperty property,
+            Action<TEnum> onValueChanged = null)
             where TEnum : struct, Enum
         {
             var defaultValue = (TEnum) (object) property.intValue;
@@ -25,13 +26,15 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             return Create(label, property, choices, defaultValue, null, onValueChanged);
         }
 
-        public static VisualElement Create<TEnum>(SerializedProperty property, List<TEnum> choices, TEnum defaultValue, Action<TEnum> onValueChanged = null)
+        public static VisualElement Create<TEnum>(SerializedProperty property, List<TEnum> choices, TEnum defaultValue,
+            Action<TEnum> onValueChanged = null)
             where TEnum : struct, Enum
         {
             return Create(null, property, choices, defaultValue, onValueChanged);
         }
 
-        public static VisualElement Create<TEnum>(string label, SerializedProperty property, List<TEnum> choices, TEnum defaultValue, Action<TEnum> onValueChanged = null)
+        public static VisualElement Create<TEnum>(string label, SerializedProperty property, List<TEnum> choices,
+            TEnum defaultValue, Action<TEnum> onValueChanged = null)
             where TEnum : struct, Enum
         {
             string Format(TEnum e)
@@ -49,7 +52,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             return Create(null, property, choices, defaultValue, format, onValueChanged);
         }
 
-        public static VisualElement Create<TEnum>(string label, SerializedProperty property, List<TEnum> choices, TEnum defaultValue, Func<TEnum, string> format, Action<TEnum> onValueChanged = null)
+        public static VisualElement Create<TEnum>(string label, SerializedProperty property, List<TEnum> choices,
+            TEnum defaultValue, Func<TEnum, string> format, Action<TEnum> onValueChanged = null)
             where TEnum : struct, Enum
         {
             var container = new VisualElement
@@ -59,11 +63,15 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             void UpdateProperty(TEnum value)
             {
-                var newValue = (int)(object) value;
-                if (property.intValue == newValue) return;
+                var newValue = (int) (object) value;
+                if (property.intValue == newValue)
+                {
+                    return;
+                }
                 property.intValue = newValue;
                 property.serializedObject.ApplyModifiedProperties();
             }
+
             UpdateProperty(defaultValue);
 
             var popupField = new PopupField<TEnum>(label, choices, defaultValue, format, format)
@@ -101,7 +109,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 intField.Bind(property.serializedObject);
                 intField.RegisterValueChangedCallback(e =>
                 {
-                    var newValue = (TEnum)(object) e.newValue;
+                    var newValue = (TEnum) (object) e.newValue;
                     popupField.SetValueWithoutNotify(newValue);
                     onValueChanged?.Invoke(newValue);
                 });
@@ -113,13 +121,13 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 switch (property.propertyType)
                 {
                     case SerializedPropertyType.Enum:
-                    {
-                        return CreateFieldAsEnum();
-                    }
+                        {
+                            return CreateFieldAsEnum();
+                        }
                     case SerializedPropertyType.Integer:
-                    {
-                        return CreateFieldAsInt();
-                    }
+                        {
+                            return CreateFieldAsInt();
+                        }
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -132,7 +140,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             return container;
         }
 
-        public static VisualElement CreateAsStringPopupField<TEnum>(SerializedProperty property, Action<TEnum> onValueChanged = null)
+        public static VisualElement CreateAsStringPopupField<TEnum>(SerializedProperty property,
+            Action<TEnum> onValueChanged = null)
             where TEnum : struct, Enum
         {
             Assert.AreEqual(property.propertyType, SerializedPropertyType.Enum);
@@ -157,7 +166,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             };
             enumField.RegisterValueChangedCallback(_ =>
             {
-                onValueChanged?.Invoke((TEnum)(object) enumField.index);
+                onValueChanged?.Invoke((TEnum) (object) enumField.index);
             });
             return enumField;
 #endif

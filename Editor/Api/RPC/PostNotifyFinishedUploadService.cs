@@ -45,7 +45,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             var payload = new PostNotifyFinishedUploadPayload(isPublish, worldDescriptor);
             try
             {
-                var response = await APIServiceClient.PostNotifyFinishedUpload(venueId, uploadRequestId, payload, accessToken);
+                var response =
+                    await APIServiceClient.PostNotifyFinishedUpload(venueId, uploadRequestId, payload, accessToken);
                 onSuccess?.Invoke(response);
             }
             catch (Exception e)

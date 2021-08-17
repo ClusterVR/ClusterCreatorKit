@@ -5,13 +5,15 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
-    [RequireComponent(typeof(AudioSource)), LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.Always)]
+    [RequireComponent(typeof(AudioSource)),
+        LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.Always)]
     public class PlayAudioSourceGimmick : MonoBehaviour, IGlobalGimmick
     {
         static readonly ParameterType[] selectableTypes = { ParameterType.Signal, ParameterType.Bool };
 
         [SerializeField] AudioSource audioSource;
         [SerializeField] GlobalGimmickKey globalGimmickKey;
+
         [SerializeField, ParameterTypeField(ParameterType.Signal, ParameterType.Bool)]
         ParameterType parameterType = selectableTypes[0];
 
@@ -24,18 +26,31 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void Start()
         {
-            if (audioSource == null) audioSource = GetComponentInChildren<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = GetComponentInChildren<AudioSource>();
+            }
         }
 
         public void Run(GimmickValue value, DateTime current)
         {
-            if (audioSource == null) return;
+            if (audioSource == null)
+            {
+                return;
+            }
             switch (parameterType)
             {
                 case ParameterType.Signal:
-                    if (value.TimeStamp <= lastTriggeredAt) return;
+                    if (value.TimeStamp <= lastTriggeredAt)
+                    {
+                        return;
+                    }
                     lastTriggeredAt = value.TimeStamp;
-                    if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
+                    if ((current - value.TimeStamp).TotalSeconds >
+                        Constants.TriggerGimmick.TriggerExpireSeconds)
+                    {
+                        return;
+                    }
                     audioSource.Play();
                     break;
                 case ParameterType.Bool:
@@ -47,6 +62,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
                     {
                         audioSource.Stop();
                     }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -60,7 +76,10 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void OnValidate()
         {
-            if (audioSource == null || audioSource.gameObject != gameObject) audioSource = GetComponent<AudioSource>();
+            if (audioSource == null || audioSource.gameObject != gameObject)
+            {
+                audioSource = GetComponent<AudioSource>();
+            }
             if (!selectableTypes.Contains(parameterType))
             {
                 parameterType = selectableTypes[0];

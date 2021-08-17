@@ -9,7 +9,8 @@ namespace ClusterVR.CreatorKit.Editor.Builder
 {
     public static class ItemTemplateGatherer
     {
-        public static IEnumerable<IGrouping<IItem, CreateItemGimmick>> GatherCreateItemGimmicksForItemTemplates(Scene scene)
+        public static IEnumerable<IGrouping<IItem, CreateItemGimmick>> GatherCreateItemGimmicksForItemTemplates(
+            Scene scene)
         {
             return GatherValidCreateItemGimmicks(scene)
                 .GroupBy(x => x.ItemTemplate);
@@ -28,9 +29,16 @@ namespace ClusterVR.CreatorKit.Editor.Builder
 
             void AddCreateItemGimmick(CreateItemGimmick createItemGimmick)
             {
-                if (!createItemGimmick.IsValid()) return;
-                if (!createItemGimmicks.Add(createItemGimmick)) return;
-                foreach (var innerCreateItemGimmick in createItemGimmick.ItemTemplate.gameObject.GetComponents<CreateItemGimmick>())
+                if (!createItemGimmick.IsValid())
+                {
+                    return;
+                }
+                if (!createItemGimmicks.Add(createItemGimmick))
+                {
+                    return;
+                }
+                foreach (var innerCreateItemGimmick in createItemGimmick.ItemTemplate.gameObject
+                    .GetComponents<CreateItemGimmick>())
                 {
                     AddCreateItemGimmick(innerCreateItemGimmick);
                 }

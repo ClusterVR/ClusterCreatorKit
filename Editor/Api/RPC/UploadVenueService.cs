@@ -5,6 +5,7 @@ using System.IO;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Proto;
+using UnityEditor;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
@@ -16,7 +17,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         Mac,
         Android,
         IOS,
-        PostProcess,
+        PostProcess
     }
 
     public class UploadVenueService
@@ -55,41 +56,40 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
             uploadStatus = new Dictionary<UploadState, bool>
             {
-                {UploadState.PreProcess, false},
-                {UploadState.Windows, false},
-                {UploadState.Mac, false},
-                {UploadState.Android, false},
-                {UploadState.IOS, false},
-                {UploadState.PostProcess, false}
+                { UploadState.PreProcess, false },
+                { UploadState.Windows, false },
+                { UploadState.Mac, false },
+                { UploadState.Android, false },
+                { UploadState.IOS, false },
+                { UploadState.PostProcess, false }
             };
         }
 
         public void Run()
         {
-            if (!File.Exists(EditorPrefsUtils.LastBuildWin))
+            if (!File.Exists(BuiltAssetBundlePaths.instance.Find(BuildTarget.StandaloneWindows)))
             {
                 onError?.Invoke(new FileNotFoundException("Windows Build"));
                 return;
             }
 
-            if (!File.Exists(EditorPrefsUtils.LastBuildMac))
+            if (!File.Exists(BuiltAssetBundlePaths.instance.Find(BuildTarget.StandaloneOSX)))
             {
                 onError?.Invoke(new FileNotFoundException("Mac Build"));
                 return;
             }
 
-            if (!File.Exists(EditorPrefsUtils.LastBuildAndroid))
+            if (!File.Exists(BuiltAssetBundlePaths.instance.Find(BuildTarget.Android)))
             {
                 onError?.Invoke(new FileNotFoundException("Android Build"));
                 return;
             }
 
-            if (!File.Exists(EditorPrefsUtils.LastBuildIOS))
+            if (!File.Exists(BuiltAssetBundlePaths.instance.Find(BuildTarget.iOS)))
             {
                 onError?.Invoke(new FileNotFoundException("iOS Build"));
                 return;
             }
-
 
             EditorCoroutine.Start(UploadVenue());
         }
@@ -142,7 +142,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 var winAssetUploadService = new UploadAssetService(
                     accessToken,
                     "assetbundle/win",
-                    EditorPrefsUtils.LastBuildWin,
+                    BuiltAssetBundlePaths.instance.Find(BuildTarget.StandaloneWindows),
                     uploadRequestId,
                     request =>
                     {
@@ -164,7 +164,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 var macAssetUploadService = new UploadAssetService(
                     accessToken,
                     "assetbundle/mac",
-                    EditorPrefsUtils.LastBuildMac,
+                    BuiltAssetBundlePaths.instance.Find(BuildTarget.StandaloneOSX),
                     uploadRequestId,
                     request =>
                     {
@@ -186,7 +186,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 var androidAssetUploadService = new UploadAssetService(
                     accessToken,
                     "assetbundle/android",
-                    EditorPrefsUtils.LastBuildAndroid,
+                    BuiltAssetBundlePaths.instance.Find(BuildTarget.Android),
                     uploadRequestId,
                     request =>
                     {
@@ -208,7 +208,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 var iosAssetUploadService = new UploadAssetService(
                     accessToken,
                     "assetbundle/ios",
-                    EditorPrefsUtils.LastBuildIOS,
+                    BuiltAssetBundlePaths.instance.Find(BuildTarget.iOS),
                     uploadRequestId,
                     request =>
                     {
@@ -225,10 +225,10 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 uploadAssetServiceList.Add(iosAssetUploadService);
             }
 
-
             uploadAssetServiceList.ForEach(x => x.Run());
 
-            while (!winAssetUploadProcess || !macAssetUploadProcess || !androidAssetUploadProcess || !iosAssetUploadProcess)
+            while (!winAssetUploadProcess || !macAssetUploadProcess || !androidAssetUploadProcess ||
+                !iosAssetUploadProcess)
             {
                 yield return null;
             }

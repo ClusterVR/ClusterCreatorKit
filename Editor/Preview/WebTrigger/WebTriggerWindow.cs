@@ -49,7 +49,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
         VisualElement GenerateControlSection()
         {
             var controlSection = EditorUIGenerator.GenerateSection();
-            var loadJsonButton = new Button(LoadJsonTrigger) {text = "JSONを読み込む"};
+            var loadJsonButton = new Button(LoadJsonTrigger) { text = "JSONを読み込む" };
             controlSection.Add(loadJsonButton);
 
             return controlSection;
@@ -58,7 +58,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
         void LoadJsonTrigger()
         {
             var filePath = EditorUtility.OpenFilePanel("JSONを読み込む", "", "json");
-            if (string.IsNullOrEmpty(filePath)) return;
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return;
+            }
             if (TryLoadTriggerJson(filePath, out var trigger))
             {
                 this.trigger = trigger;
@@ -84,7 +87,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
         void UpdateTriggerButtons(WebTrigger webTrigger)
         {
             triggersRoot.Clear();
-            if (trigger == null) return;
+            if (trigger == null)
+            {
+                return;
+            }
             foreach (var trigger in webTrigger.triggers)
             {
                 triggersRoot.Add(GenerateTriggerButton(trigger));
@@ -93,7 +99,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
 
         static bool Validate(WebTrigger webTrigger)
         {
-            bool valid = true;
+            var valid = true;
             foreach (var trigger in webTrigger.triggers)
             {
                 foreach (var state in trigger.state)
@@ -121,13 +127,14 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
         {
             var button = new Button(() => OnTriggerPressed(trigger))
             {
-                text = trigger.displayName,
+                text = trigger.displayName
             };
             if (trigger.color != null && trigger.color.Length >= 3)
             {
                 var color = new Color(trigger.color[0], trigger.color[1], trigger.color[2]);
                 button.style.backgroundColor = color;
             }
+
             return button;
         }
 
@@ -145,10 +152,16 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
                     $"Category: {trigger.category}",
                     "トリガーを実行する",
                     "キャンセル");
-                if (!ok) return;
+                if (!ok)
+                {
+                    return;
+                }
             }
 
-            if(!Bootstrap.SignalGenerator.TryGet(out var signal)) return;
+            if (!Bootstrap.SignalGenerator.TryGet(out var signal))
+            {
+                return;
+            }
             foreach (var state in trigger.state)
             {
                 var hasValue = TryGetStateValue(state.type, state.value, signal, out var stateValue);
@@ -161,7 +174,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
             Bootstrap.GimmickManager.OnStateUpdated(trigger.state.Select(s => s.key).Select(GetStateKey));
         }
 
-        static string GetStateKey(string key) => RoomStateKey.GetGlobalKey(key);
+        static string GetStateKey(string key)
+        {
+            return RoomStateKey.GetGlobalKey(key);
+        }
 
         static bool TryGetStateValue(string type, string value, StateValue signal, out StateValue stateValue)
         {
@@ -177,21 +193,30 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
                         stateValue = new StateValue(boolValue);
                         return true;
                     }
-                    else return false;
+                    else
+                    {
+                        return false;
+                    }
                 case "integer":
                     if (int.TryParse(value, out var integerValue))
                     {
                         stateValue = new StateValue(integerValue);
                         return true;
                     }
-                    else return false;
+                    else
+                    {
+                        return false;
+                    }
                 case "float":
                     if (float.TryParse(value, out var floatValue))
                     {
                         stateValue = new StateValue(floatValue);
                         return true;
                     }
-                    else return false;
+                    else
+                    {
+                        return false;
+                    }
                 default:
                     return false;
             }

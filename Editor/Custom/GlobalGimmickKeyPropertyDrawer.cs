@@ -13,9 +13,14 @@ namespace ClusterVR.CreatorKit.Editor.Custom
     [CustomPropertyDrawer(typeof(GlobalGimmickKey), true)]
     public class GlobalGimmickKeyPropertyDrawer : PropertyDrawer
     {
-        static readonly List<GimmickTarget> LocalizableSelectables = new List<GimmickTarget> {GimmickTarget.Global, GimmickTarget.Item, GimmickTarget.Player};
-        static readonly List<GimmickTarget> ConsistentlySyncSelectables = new List<GimmickTarget> {GimmickTarget.Global, GimmickTarget.Item};
-        
+        static readonly List<GimmickTarget> LocalizableSelectables = new List<GimmickTarget>
+        {
+            GimmickTarget.Global, GimmickTarget.Item, GimmickTarget.Player
+        };
+
+        static readonly List<GimmickTarget> ConsistentlySyncSelectables =
+            new List<GimmickTarget> { GimmickTarget.Global, GimmickTarget.Item };
+
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var container = new VisualElement();
@@ -24,12 +29,13 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var targetProperty = keyProperty.FindPropertyRelative("target");
 
             var itemContainer = new PropertyField(property.FindPropertyRelative("item"));
-            
+
             var component = (Component) property.serializedObject.targetObject;
             var scene = component.gameObject.scene;
             var isInScene = scene.name != null && !EditorSceneManager.IsPreviewScene(scene);
             var messageType = isInScene ? MessageType.Error : MessageType.Warning;
-            var localPlayerHelpBox = new IMGUIContainer(() => EditorGUILayout.HelpBox(LocalPlayerGimmickValidation.ErrorMessage, messageType));
+            var localPlayerHelpBox = new IMGUIContainer(() =>
+                EditorGUILayout.HelpBox(LocalPlayerGimmickValidation.ErrorMessage, messageType));
 
             void SwitchDisplayItem(GimmickTarget target)
             {
@@ -39,12 +45,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             SwitchDisplayItem((GimmickTarget) targetProperty.enumValueIndex);
 
-            var targetField = EnumField.Create(
-                targetProperty.displayName,
-                targetProperty,
-                LocalPlayerGimmickValidation.IsLocalizable(component) ? LocalizableSelectables : ConsistentlySyncSelectables,
-                (GimmickTarget) targetProperty.enumValueIndex,
-                FormatTarget, SwitchDisplayItem);
+            var targetField = EnumField.Create(targetProperty.displayName, targetProperty,
+                LocalPlayerGimmickValidation.IsLocalizable(component)
+                    ? LocalizableSelectables
+                    : ConsistentlySyncSelectables, (GimmickTarget) targetProperty.enumValueIndex, FormatTarget,
+                SwitchDisplayItem);
 
             var keyField = new PropertyField(keyProperty.FindPropertyRelative("key"));
 
@@ -55,7 +60,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             return container;
         }
-        
+
         public static string FormatTarget(GimmickTarget target)
         {
             switch (target)

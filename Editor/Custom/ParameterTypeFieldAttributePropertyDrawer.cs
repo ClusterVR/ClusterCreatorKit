@@ -15,7 +15,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 return new PropertyField(property);
             }
 
-            var field = new PopupField<ParameterType>(property.displayName, attr.Selectables.ToList(), (ParameterType) property.enumValueIndex);
+            var field = new PopupField<ParameterType>(property.displayName, attr.Selectables.ToList(),
+                (ParameterType) property.enumValueIndex);
             field.Bind(property.serializedObject);
             field.RegisterValueChangedCallback(e =>
             {

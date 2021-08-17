@@ -7,6 +7,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
     public class CommentScreenPresenter
     {
         readonly IList<ICommentScreenView> commentScreenViews;
+
         public CommentScreenPresenter(IEnumerable<ICommentScreenView> commentScreenViews)
         {
             this.commentScreenViews = commentScreenViews.ToList();
@@ -27,11 +28,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 
         public void SendCommentFromEditorUI(string displayName, string userName, string content)
         {
-            var user = new User(displayName,userName,x => {});
-            var comment = new Comment(user,content,false);
+            var user = new User(displayName, userName, x => { });
+            var comment = new Comment(user, content, false);
             SendComment(comment);
         }
     }
 }
-
-

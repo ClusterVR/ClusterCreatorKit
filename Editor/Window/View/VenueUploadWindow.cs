@@ -40,7 +40,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
         void CreateView()
         {
-            rootVisualElement.styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>("Packages/mu.cluster.cluster-creator-kit/Editor/Window/Uss/ClusterStyle.uss"));
+            rootVisualElement.styleSheets.Add(
+                AssetDatabase.LoadAssetAtPath<StyleSheet>(
+                    "Packages/mu.cluster.cluster-creator-kit/Editor/Window/Uss/ClusterStyle.uss"));
 
             var tokenAuth = new TokenAuthWidget();
             var tokenAuthView = tokenAuth.CreateView(); // .Bindで作り直すとなぜかYogaNodeがStackoverflowするので使い回す
@@ -67,7 +69,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 style =
                 {
                     flexDirection = FlexDirection.Row,
-                    flexGrow = 1,
+                    flexGrow = 1
                 }
             };
             var sidePane = new VisualElement
@@ -83,13 +85,13 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     borderColor = new StyleColor(Color.gray),
 #endif
                     borderRightWidth = 1,
-                    width = 250,
+                    width = 250
                 }
             };
             sidePane.EnableInClassList("pane", true);
             var mainPane = new VisualElement
             {
-                style = {flexGrow = 1}
+                style = { flexGrow = 1 }
             };
             mainPane.EnableInClassList("pane", true);
             container.Add(sidePane);
@@ -114,11 +116,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     mainPane.Clear();
                     if (currentVenue != null)
                     {
-                        var venueContent = new ScrollView(ScrollViewMode.Vertical) {style = {flexGrow = 1}};
-                        new EditAndUploadVenueView(userInfo.Value, currentVenue, () =>
-                        {
-                            sideMenu.RefetchVenueWithoutChangingSelection();
-                        }).AddView(venueContent);
+                        var venueContent = new ScrollView(ScrollViewMode.Vertical) { style = { flexGrow = 1 } };
+                        new EditAndUploadVenueView(userInfo.Value, currentVenue,
+                            () => { sideMenu.RefetchVenueWithoutChangingSelection(); }).AddView(venueContent);
                         mainPane.Add(venueContent);
                     }
                 });

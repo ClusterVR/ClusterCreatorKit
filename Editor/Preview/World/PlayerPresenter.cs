@@ -12,8 +12,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 {
     public class PlayerPresenter
     {
-        const string NonVRPrefabPath = "Packages/mu.cluster.cluster-creator-kit/Editor/Preview/Prefabs/PreviewOnly.prefab";
-        const string VRPrefabPath = "Packages/mu.cluster.cluster-creator-kit/Editor/Preview/Prefabs/VRPlayerController.prefab";
+        const string NonVRPrefabPath =
+            "Packages/mu.cluster.cluster-creator-kit/Editor/Preview/Prefabs/PreviewOnly.prefab";
+
+        const string VRPrefabPath =
+            "Packages/mu.cluster.cluster-creator-kit/Editor/Preview/Prefabs/VRPlayerController.prefab";
 
         readonly IPlayerController playerController;
         readonly EnterDeviceType enterDeviceType;
@@ -29,7 +32,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 
         public PermissionType PermissionType { get; private set; }
 
-        public PlayerPresenter(PermissionType permissionType, EnterDeviceType enterDeviceType, SpawnPointManager spawnPointManager)
+        public PlayerPresenter(PermissionType permissionType, EnterDeviceType enterDeviceType,
+            SpawnPointManager spawnPointManager)
         {
             PermissionType = permissionType;
             this.enterDeviceType = enterDeviceType;
@@ -42,7 +46,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             CameraTransform = playerController.CameraTransform;
 
 #if UNITY_POST_PROCESSING_STACK_V2
-            var postProcessLayer = CameraTransform.gameObject.GetComponent<PostProcessLayer>() ?? CameraTransform.gameObject.AddComponent<PostProcessLayer>();
+            var postProcessLayer = CameraTransform.gameObject.GetComponent<PostProcessLayer>() ??
+                CameraTransform.gameObject.AddComponent<PostProcessLayer>();
 
             postProcessLayer.volumeTrigger = CameraTransform;
             postProcessLayer.volumeLayer = 1 << LayerName.PostProcessing;
@@ -96,7 +101,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             {
                 recordedPosition = PlayerTransform.position;
                 recordedRotation = PlayerTransform.rotation;
-                var targetPosition = new Vector3(targetPoint.position.x, targetPoint.position.y - CameraTransform.localPosition.y, targetPoint.position.z);
+                var targetPosition = new Vector3(targetPoint.position.x,
+                    targetPoint.position.y - CameraTransform.localPosition.y, targetPoint.position.z);
                 PlayerTransform.SetPositionAndRotation(targetPosition, targetPoint.rotation);
             }
             else
@@ -148,7 +154,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
         {
             playerController.SetMoveSpeedRate(moveSpeedRate);
         }
-        
+
         public void SetJumpSpeedRate(float jumpSpeedRate)
         {
             playerController.SetJumpSpeedRate(jumpSpeedRate);

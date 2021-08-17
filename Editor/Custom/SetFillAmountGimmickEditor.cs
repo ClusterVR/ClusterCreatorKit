@@ -21,7 +21,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 }
                 else if (image.type != Image.Type.Filled)
                 {
-                    EditorGUILayout.HelpBox($"{nameof(Image)}のImage Typeを{nameof(Image.Type.Filled)}に指定する必要があります。", MessageType.Warning);
+                    EditorGUILayout.HelpBox($"{nameof(Image)}のImage Typeを{nameof(Image.Type.Filled)}に指定する必要があります。",
+                        MessageType.Warning);
                 }
             });
             container.Add(helpBox);

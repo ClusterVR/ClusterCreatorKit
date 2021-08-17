@@ -20,7 +20,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                     marginTop = new StyleLength(5),
                     marginBottom = new StyleLength(5),
                     marginLeft = new StyleLength(2),
-                    paddingLeft = new StyleLength(2),
+                    paddingLeft = new StyleLength(2)
                 }
             };
 

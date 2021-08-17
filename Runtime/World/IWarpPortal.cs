@@ -18,7 +18,8 @@ namespace ClusterVR.CreatorKit.World
         public bool KeepPosition { get; }
         public bool KeepRotation { get; }
 
-        public OnEnterWarpPortalEventArgs(GameObject target, Vector3 toPosition, Quaternion toRotation, bool keepPosition, bool keepRotation)
+        public OnEnterWarpPortalEventArgs(GameObject target, Vector3 toPosition, Quaternion toRotation,
+            bool keepPosition, bool keepRotation)
         {
             Target = target;
             ToPosition = toPosition;

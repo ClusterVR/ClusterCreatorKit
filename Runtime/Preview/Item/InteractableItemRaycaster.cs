@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿#if UNITY_EDITOR
+using System.Linq;
 using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Item;
 using UnityEngine;
@@ -23,11 +24,18 @@ namespace ClusterVR.CreatorKit.Preview.Item
             item = default;
             hitPoint = default;
             var ray = targetCamera.ScreenPointToRay(raycastPoint);
-            if (!Physics.Raycast(ray, out var hitInfo, RaycastMaxDistance, raycastLayerMask)) return false;
+            if (!Physics.Raycast(ray, out var hitInfo, RaycastMaxDistance, raycastLayerMask))
+            {
+                return false;
+            }
             item = hitInfo.collider.gameObject.GetComponentInParent<IInteractableItem>();
-            if (item == null || !interactableItemFinder.InteractableItems.Contains(item)) return false;
+            if (item == null || !interactableItemFinder.InteractableItems.Contains(item))
+            {
+                return false;
+            }
             hitPoint = hitInfo.point;
             return true;
         }
     }
 }
+#endif

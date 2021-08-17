@@ -23,7 +23,10 @@ namespace ClusterVR.CreatorKit.Operation
         [SerializeField] SingleStatement singleStatement;
         public SingleStatement SingleStatement => singleStatement;
 
-        public bool IsValid() => singleStatement != null && singleStatement.IsValid();
+        public bool IsValid()
+        {
+            return singleStatement != null && singleStatement.IsValid();
+        }
     }
 
     [Serializable]
@@ -37,9 +40,9 @@ namespace ClusterVR.CreatorKit.Operation
         public bool IsValid()
         {
             return targetState != null && targetState.IsValid() &&
-                   (targetState.ParameterType == ParameterType.Signal ?
-                       expression == null || expression.IsValid():
-                       expression != null && expression.IsValid());
+                (targetState.ParameterType == ParameterType.Signal
+                    ? expression == null || expression.IsValid()
+                    : expression != null && expression.IsValid());
         }
     }
 
@@ -86,7 +89,7 @@ namespace ClusterVR.CreatorKit.Operation
         {
             var requiredLength = @operator.GetRequiredLength();
             return operands != null && operands.Length >= requiredLength &&
-                   operands.Take(requiredLength).All(o => o != null && o.IsValid());
+                operands.Take(requiredLength).All(o => o != null && o.IsValid());
         }
     }
 
@@ -122,7 +125,25 @@ namespace ClusterVR.CreatorKit.Operation
 
     public enum Operator
     {
-        Not, Minus, Add, Multiply, Subtract, Divide, Modulo, Equals, NotEquals, GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual, And, Or, Condition, Min, Max, Clamp,
+        Not,
+        Minus,
+        Add,
+        Multiply,
+        Subtract,
+        Divide,
+        Modulo,
+        Equals,
+        NotEquals,
+        GreaterThan,
+        GreaterThanOrEqual,
+        LessThan,
+        LessThanOrEqual,
+        And,
+        Or,
+        Condition,
+        Min,
+        Max,
+        Clamp
     }
 
     public static class OperatorExtensions
@@ -131,13 +152,24 @@ namespace ClusterVR.CreatorKit.Operation
         {
             switch (@operator)
             {
-                case Operator.Not: case Operator.Minus:
+                case Operator.Not:
+                case Operator.Minus:
                     return 1;
-                case Operator.Add: case Operator.Multiply: case Operator.Subtract: case Operator.Divide: case Operator.Modulo:
-                case Operator.Equals: case Operator.NotEquals: case Operator.GreaterThan: case Operator.GreaterThanOrEqual:
-                case Operator.LessThan: case Operator.LessThanOrEqual:
-                case Operator.And: case Operator.Or:
-                case Operator.Min: case Operator.Max:
+                case Operator.Add:
+                case Operator.Multiply:
+                case Operator.Subtract:
+                case Operator.Divide:
+                case Operator.Modulo:
+                case Operator.Equals:
+                case Operator.NotEquals:
+                case Operator.GreaterThan:
+                case Operator.GreaterThanOrEqual:
+                case Operator.LessThan:
+                case Operator.LessThanOrEqual:
+                case Operator.And:
+                case Operator.Or:
+                case Operator.Min:
+                case Operator.Max:
                     return 2;
                 case Operator.Condition:
                 case Operator.Clamp:
@@ -157,7 +189,10 @@ namespace ClusterVR.CreatorKit.Operation
         public string Key => key;
         public ParameterType ParameterType => parameterType;
 
-        public bool IsValid() => !string.IsNullOrWhiteSpace(key);
+        public bool IsValid()
+        {
+            return !string.IsNullOrWhiteSpace(key);
+        }
     }
 
     public enum TargetStateTarget
@@ -193,7 +228,10 @@ namespace ClusterVR.CreatorKit.Operation
             }
         }
 
-        public bool IsValid() => type == ParameterType.Bool || type == ParameterType.Float || type == ParameterType.Integer;
+        public bool IsValid()
+        {
+            return type == ParameterType.Bool || type == ParameterType.Float || type == ParameterType.Integer;
+        }
     }
 
     [Serializable]
@@ -204,6 +242,9 @@ namespace ClusterVR.CreatorKit.Operation
         public GimmickTarget Target => target;
         public string Key => key;
 
-        public bool IsValid() => !string.IsNullOrWhiteSpace(key);
+        public bool IsValid()
+        {
+            return !string.IsNullOrWhiteSpace(key);
+        }
     }
 }

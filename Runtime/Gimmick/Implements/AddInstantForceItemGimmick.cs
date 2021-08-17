@@ -14,7 +14,9 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         [SerializeField] Vector3 force;
         [SerializeField] bool ignoreMass;
 
-        ItemId IGimmick.ItemId => (movableItem != null ? movableItem.Item : (movableItem = GetComponent<MovableItem>()).Item).Id;
+        ItemId IGimmick.ItemId =>
+            (movableItem != null ? movableItem.Item : (movableItem = GetComponent<MovableItem>()).Item).Id;
+
         GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
@@ -26,30 +28,51 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void Start()
         {
-            if (movableItem == null) movableItem = GetComponent<MovableItem>();
-            if (space == null) space = transform;
+            if (movableItem == null)
+            {
+                movableItem = GetComponent<MovableItem>();
+            }
+            if (space == null)
+            {
+                space = transform;
+            }
         }
 
         public void Run(GimmickValue value, DateTime current)
         {
-            if (value.TimeStamp <= lastTriggeredAt) return;
+            if (value.TimeStamp <= lastTriggeredAt)
+            {
+                return;
+            }
             lastTriggeredAt = value.TimeStamp;
-            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
+            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds)
+            {
+                return;
+            }
 
             shouldAddInstantForce = true;
         }
 
         void FixedUpdate()
         {
-            if (!shouldAddInstantForce || space == null) return;
+            if (!shouldAddInstantForce || space == null)
+            {
+                return;
+            }
             movableItem.AddForce(space.TransformDirection(force), ForceMode);
             shouldAddInstantForce = false;
         }
 
         void OnValidate()
         {
-            if (movableItem == null || movableItem.gameObject != gameObject) movableItem = GetComponent<MovableItem>();
-            if (space == null) space = transform;
+            if (movableItem == null || movableItem.gameObject != gameObject)
+            {
+                movableItem = GetComponent<MovableItem>();
+            }
+            if (space == null)
+            {
+                space = transform;
+            }
         }
 
         void Reset()

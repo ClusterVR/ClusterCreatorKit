@@ -23,7 +23,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
         public event RunItemLogicEventHandler OnRunItemLogic;
-        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => logic.GetTriggerParams();
+        IEnumerable<TriggerParam> ITrigger.TriggerParams => logic.GetTriggerParams();
 
         DateTime lastTriggeredAt;
         bool validated;
@@ -31,11 +31,23 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         public void Run(GimmickValue value, DateTime current)
         {
-            if (!validated) Validate();
-            if (!isValid) return;
-            if (value.TimeStamp <= lastTriggeredAt) return;
+            if (!validated)
+            {
+                Validate();
+            }
+            if (!isValid)
+            {
+                return;
+            }
+            if (value.TimeStamp <= lastTriggeredAt)
+            {
+                return;
+            }
             lastTriggeredAt = value.TimeStamp;
-            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
+            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds)
+            {
+                return;
+            }
             OnRunItemLogic?.Invoke(this, new RunItemLogicEventArgs(logic));
         }
 
@@ -46,7 +58,10 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         void OnValidate()
         {
-            if (item == null || item.gameObject != gameObject) item = GetComponent<Item.Implements.Item>();
+            if (item == null || item.gameObject != gameObject)
+            {
+                item = GetComponent<Item.Implements.Item>();
+            }
         }
 
         void Validate()

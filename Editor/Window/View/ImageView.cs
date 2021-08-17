@@ -22,7 +22,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     unityTextAlign = TextAnchor.MiddleCenter,
                     unityBackgroundScaleMode = ScaleMode.ScaleToFit,
                     width = 256,
-                    height = 144,
+                    height = 144
                 }
             };
             ReactiveBinder.Bind(reactiveImageTex, imageTex => img.style.backgroundImage = imageTex);
@@ -35,7 +35,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             IsEmpty = string.IsNullOrEmpty(url.Url);
             if (IsEmpty)
             {
-                reactiveImageTex.Val = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/mu.cluster.cluster-creator-kit/Editor/Window/Texture/require_image.png");
+                reactiveImageTex.Val =
+                    AssetDatabase.LoadAssetAtPath<Texture2D>(
+                        "Packages/mu.cluster.cluster-creator-kit/Editor/Window/Texture/require_image.png");
                 reactiveOverlay.Val = "";
                 return;
             }

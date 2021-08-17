@@ -1,11 +1,12 @@
-﻿using ClusterVR.CreatorKit.Item;
+﻿#if UNITY_EDITOR
+using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Preview.Item;
 using ClusterVR.CreatorKit.Trigger;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
-    public class DesktopItemController : MonoBehaviour, IItemController
+    public sealed class DesktopItemController : MonoBehaviour, IItemController
     {
         [SerializeField] DesktopPointerEventListener desktopPointerEventListener;
         [SerializeField] Transform grabPoint;
@@ -26,21 +27,42 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Q)) Release();
-            if (grabbingItem != null && !grabbingItem.Item.gameObject.activeInHierarchy) Release();
-            if (Input.GetKeyDown(KeyCode.Escape)) SetCursorLock(false);
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                Release();
+            }
+            if (grabbingItem != null && !grabbingItem.Item.gameObject.activeInHierarchy)
+            {
+                Release();
+            }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                SetCursorLock(false);
+            }
 
-            if (isCursorLocked && Input.GetMouseButtonDown(0)) InvokeUseTrigger(true);
-            else if (isUsingDown && Input.GetMouseButtonUp(0)) InvokeUseTrigger(false);
+            if (isCursorLocked && Input.GetMouseButtonDown(0))
+            {
+                InvokeUseTrigger(true);
+            }
+            else if (isUsingDown && Input.GetMouseButtonUp(0))
+            {
+                InvokeUseTrigger(false);
+            }
             MoveItem();
         }
 
         void OnClicked(Vector2 point)
         {
-            if (isCursorLocked) return;
+            if (isCursorLocked)
+            {
+                return;
+            }
             if (interactableItemRaycaster.RaycastItem(point, out var item, out var hitPoint))
             {
-                if (item == grabbingItem) return;
+                if (item == grabbingItem)
+                {
+                    return;
+                }
                 switch (item)
                 {
                     case IGrabbableItem grabbableItem:
@@ -87,7 +109,10 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
         void MoveItem()
         {
-            if (grabbingItem == null) return;
+            if (grabbingItem == null)
+            {
+                return;
+            }
             var grabPointRotation = grabPoint.rotation;
             grabbingItem.MovableItem.SetPositionAndRotation(
                 grabPoint.position + grabPointRotation * grabPointToTargetOffsetPosition,
@@ -96,7 +121,10 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
         void Release()
         {
-            if (grabbingItem == null) return;
+            if (grabbingItem == null)
+            {
+                return;
+            }
             grabbingItem.MovableItem.EnablePhysics();
             grabbingItem.OnRelease();
             grabbingItem = null;
@@ -106,9 +134,15 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
         void InvokeUseTrigger(bool isDown)
         {
-            if (grabbingItem == null) return;
+            if (grabbingItem == null)
+            {
+                return;
+            }
             var useItemTrigger = grabbingItem.Item.gameObject.GetComponent<IUseItemTrigger>();
-            if (useItemTrigger == null) return;
+            if (useItemTrigger == null)
+            {
+                return;
+            }
             useItemTrigger.Invoke(isDown);
             isUsingDown = isDown;
         }
@@ -130,3 +164,4 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         }
     }
 }
+#endif

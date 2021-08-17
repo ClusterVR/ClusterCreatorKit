@@ -4,6 +4,6 @@
     {
         Entrance,
         OnStage1,
-        WorldGateDestination,
+        WorldGateDestination
     }
 }

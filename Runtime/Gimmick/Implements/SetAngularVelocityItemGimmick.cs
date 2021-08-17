@@ -13,7 +13,9 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         [SerializeField] Transform space;
         [SerializeField] Vector3 angularVelocity;
 
-        ItemId IGimmick.ItemId => (movableItem != null ? movableItem.Item : (movableItem = GetComponent<MovableItem>()).Item).Id;
+        ItemId IGimmick.ItemId =>
+            (movableItem != null ? movableItem.Item : (movableItem = GetComponent<MovableItem>()).Item).Id;
+
         GimmickTarget IGimmick.Target => key.Target;
         string IGimmick.Key => key.Key;
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
@@ -23,30 +25,51 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void Start()
         {
-            if (movableItem == null) movableItem = GetComponent<MovableItem>();
-            if (space == null) space = transform;
+            if (movableItem == null)
+            {
+                movableItem = GetComponent<MovableItem>();
+            }
+            if (space == null)
+            {
+                space = transform;
+            }
         }
 
         public void Run(GimmickValue value, DateTime current)
         {
-            if (value.TimeStamp <= lastTriggeredAt) return;
+            if (value.TimeStamp <= lastTriggeredAt)
+            {
+                return;
+            }
             lastTriggeredAt = value.TimeStamp;
-            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
+            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds)
+            {
+                return;
+            }
 
             shouldSetAngularVelocity = true;
         }
 
         void FixedUpdate()
         {
-            if (!shouldSetAngularVelocity || space == null) return;
+            if (!shouldSetAngularVelocity || space == null)
+            {
+                return;
+            }
             movableItem.SetAngularVelocity(space.TransformDirection(angularVelocity));
             shouldSetAngularVelocity = false;
         }
 
         void OnValidate()
         {
-            if (movableItem == null || movableItem.gameObject != gameObject) movableItem = GetComponent<MovableItem>();
-            if (space == null) space = transform;
+            if (movableItem == null || movableItem.gameObject != gameObject)
+            {
+                movableItem = GetComponent<MovableItem>();
+            }
+            if (space == null)
+            {
+                space = transform;
+            }
         }
 
         void Reset()

@@ -19,12 +19,16 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void Start()
         {
-            if (item == null) item = GetComponent<Item.Implements.Item>();
+            if (item == null)
+            {
+                item = GetComponent<Item.Implements.Item>();
+            }
         }
 
         public void Run(GimmickValue value, DateTime current)
         {
-            OnDestroyItem?.Invoke(new DestroyItemEventArgs {Item = item, TimestampDiffSeconds = (current - value.TimeStamp).TotalSeconds});
+            OnDestroyItem?.Invoke(new DestroyItemEventArgs
+                { Item = item, TimestampDiffSeconds = (current - value.TimeStamp).TotalSeconds });
         }
 
         void Reset()
@@ -34,7 +38,10 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void OnValidate()
         {
-            if (item == null || item.gameObject != gameObject) item = GetComponent<Item.Implements.Item>();
+            if (item == null || item.gameObject != gameObject)
+            {
+                item = GetComponent<Item.Implements.Item>();
+            }
         }
     }
 }

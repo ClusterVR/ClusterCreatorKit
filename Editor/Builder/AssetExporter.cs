@@ -5,16 +5,17 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace ClusterVR.CreatorKit.Editor.Builder
 {
     public static class AssetExporter
     {
-        public static void ExportCurrentSceneResource(string sceneName, bool exportPackage)
+        public static void ExportCurrentSceneResource(string sceneName)
         {
             try
             {
-                EditorUtility.DisplayProgressBar("Pre-Process Export Resource", "", 1/3f);
+                EditorUtility.DisplayProgressBar("Pre-Process Export Resource", "", 1 / 3f);
 
                 var scene = SceneManager.GetActiveScene();
                 if (scene.isDirty)
@@ -22,42 +23,15 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                     EditorSceneManager.SaveScene(scene);
                 }
 
-                if (exportPackage)
-                {
-                    ExportUnityPackage($"{sceneName}.unitypackage", scene.path);
-                }
-
-                EditorUtility.DisplayProgressBar("Building Resources", "", 2/3f);
+                EditorUtility.DisplayProgressBar("Building Resources", "", 2 / 3f);
                 BuildAssetBundles(scene, sceneName);
 
-                EditorUtility.DisplayProgressBar("Post-Process Export Resource", "", 3/3f);
-
-                EditorPrefsUtils.LastBuildWin =
-                    $"{Application.temporaryCachePath}/{BuildTarget.StandaloneWindows}/{sceneName}";
-                EditorPrefsUtils.LastBuildMac =
-                    $"{Application.temporaryCachePath}/{BuildTarget.StandaloneOSX}/{sceneName}";
-                EditorPrefsUtils.LastBuildAndroid =
-                    $"{Application.temporaryCachePath}/{BuildTarget.Android}/{sceneName}";
-                EditorPrefsUtils.LastBuildIOS =
-                    $"{Application.temporaryCachePath}/{BuildTarget.iOS}/{sceneName}";
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"Export Exception : {ex.Message}");
-                throw;
+                EditorUtility.DisplayProgressBar("Post-Process Export Resource", "", 3 / 3f);
             }
             finally
             {
                 EditorUtility.ClearProgressBar();
             }
-        }
-
-        static void ExportUnityPackage(string packageName, string tempPath)
-        {
-            EditorUtility.DisplayProgressBar("Exporting unitypackage", "", 1f);
-            var exportPath = $"{Application.temporaryCachePath}/{packageName}";
-            ExportSceneAsUnityPackage(tempPath, exportPath);
-            EditorPrefsUtils.LastExportPackage = exportPath;
         }
 
         static void BuildAssetBundles(Scene scene, string sceneName)
@@ -70,32 +44,32 @@ namespace ClusterVR.CreatorKit.Editor.Builder
             BuildAssetBundle(scene, sceneName, BuildTarget.Android);
             BuildAssetBundle(scene, sceneName, BuildTarget.iOS);
 
-            EditorUserBuildSettings.SwitchActiveBuildTarget(
-                currentTargetGroup,
-                currentBuildTarget
-            );
+            EditorUserBuildSettings.SwitchActiveBuildTarget(currentTargetGroup, currentBuildTarget);
         }
 
         static void BuildAssetBundle(Scene scene, string sceneName, BuildTarget target)
         {
-            var tempPath = $"Assets/{sceneName}.unity";
-            var exportPath = $"{Application.temporaryCachePath}/{target}";
+            var tempScenePath = $"Assets/{sceneName}.unity";
+            var exportDirPath = $"{Application.temporaryCachePath}/{target}";
+            var exportFilePath = $"{exportDirPath}/{sceneName}";
+            BuiltAssetBundlePaths.instance.AddOrUpdate(target, exportFilePath);
 
-            PreProcessBuildAssetBundle(scene, tempPath, sceneName, target);
+            PreProcessBuildAssetBundle(scene, tempScenePath, sceneName, target);
 
-            if (!Directory.Exists(exportPath))
+            if (!Directory.Exists(exportDirPath))
             {
-                Directory.CreateDirectory(exportPath);
+                Directory.CreateDirectory(exportDirPath);
             }
 
-            Debug.Log($"Building to {exportPath}");
-            BuildPipeline.BuildAssetBundles(
-                exportPath,
-                BuildAssetBundleOptions.None,
-                target
-            );
+            if (File.Exists(exportFilePath))
+            {
+                File.Delete(exportFilePath);
+            }
 
-            PostProcessBuildAssetBundle(tempPath);
+            Debug.Log($"Building to {exportDirPath}");
+            BuildPipeline.BuildAssetBundles(exportDirPath, BuildAssetBundleOptions.None, target);
+
+            PostProcessBuildAssetBundle(tempScenePath);
         }
 
         static void PreProcessBuildAssetBundle(Scene scene, string tempPath, string assetBundleName, BuildTarget target)
@@ -125,11 +99,11 @@ namespace ClusterVR.CreatorKit.Editor.Builder
             bool ShouldRemove(GameObject gameObject)
             {
                 var loweredName = gameObject.name.ToLower();
-                return loweredName.StartsWith("[remove_if") &&
-                       loweredName.Contains(target.ToString().ToLower());
+                return loweredName.StartsWith("[remove_if") && loweredName.Contains(target.ToString().ToLower());
             }
 
             var removeTargets = new List<GameObject>();
+
             void GatherRemoveTarget(GameObject gameObject)
             {
                 if (ShouldRemove(gameObject))
@@ -143,6 +117,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                     GatherRemoveTarget(child.gameObject);
                 }
             }
+
             foreach (var rootGameObject in rootGameObjects)
             {
                 GatherRemoveTarget(rootGameObject);
@@ -150,7 +125,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
 
             foreach (var removeTarget in removeTargets)
             {
-                GameObject.DestroyImmediate(removeTarget);
+                Object.DestroyImmediate(removeTarget);
                 EditorSceneManager.MarkSceneDirty(scene);
             }
 
@@ -169,26 +144,6 @@ namespace ClusterVR.CreatorKit.Editor.Builder
             assetImporter.SaveAndReimport();
             AssetDatabase.DeleteAsset(tempPath);
             AssetDatabase.RemoveUnusedAssetBundleNames();
-        }
-
-        static void ExportSceneAsUnityPackage(string scenePath, string exportPath)
-        {
-            ExportCurrentAssetAsUnityPackage(new List<string>
-            {
-                scenePath,
-                "Assets/ClusterVR"
-            }, exportPath);
-        }
-
-        static void ExportCurrentAssetAsUnityPackage(List<string> assetPaths, string destinationPath)
-        {
-            Debug.Log($"Exporting to {destinationPath}");
-            AssetDatabase.ExportPackage(
-                assetPaths.ToArray(),
-                destinationPath,
-                ExportPackageOptions.Recurse | ExportPackageOptions.IncludeDependencies |
-                ExportPackageOptions.IncludeLibraryAssets
-            );
         }
     }
 }

@@ -38,6 +38,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview
         public static PersistedRoomStateManager PersistedRoomStateManager { get; private set; }
         public static bool IsInPlayMode { get; private set; }
         public static event OnInitializeEventHandler OnInitializedEvent;
+
         public delegate void OnInitializeEventHandler();
 
         static Bootstrap()
@@ -87,9 +88,12 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     PlayerPresenter = new PlayerPresenter(PermissionType.Audience, enterDeviceType, SpawnPointManager);
                     new AvatarRespawner(despawnHeight, PlayerPresenter);
 
-                    var itemCreator = new ItemCreator(GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));
-                    var itemDestroyer = new ItemDestroyer(PlayerPresenter.PlayerTransform.GetComponent<IItemController>());
-                    new ItemRespawner(despawnHeight, itemCreator, itemDestroyer, GetComponentsInGameObjectsChildren<IMovableItem>(rootGameObjects));
+                    var itemCreator =
+                        new ItemCreator(GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));
+                    var itemDestroyer =
+                        new ItemDestroyer(PlayerPresenter.PlayerTransform.GetComponent<IItemController>());
+                    new ItemRespawner(despawnHeight, itemCreator, itemDestroyer,
+                        GetComponentsInGameObjectsChildren<IMovableItem>(rootGameObjects));
 
                     var mainScreenViews = GetComponentsInGameObjectsChildren<IMainScreenView>(rootGameObjects);
                     MainScreenPresenter = new MainScreenPresenter(mainScreenViews);
@@ -115,6 +119,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview
             {
                 return;
             }
+
             await PackageListRepository.UpdatePackageList();
 
             XRSettings.enabled = SwitchUseVR.EnabledVR();
@@ -138,7 +143,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                 x.GetComponentsInChildren<T>(true));
         }
 
-        static void SetupTriggerGimmicks(IEnumerable<GameObject> rootGameObjects, ItemCreator itemCreator, ItemDestroyer itemDestroyer)
+        static void SetupTriggerGimmicks(IEnumerable<GameObject> rootGameObjects, ItemCreator itemCreator,
+            ItemDestroyer itemDestroyer)
         {
             RoomStateRepository = new RoomStateRepository();
             GimmickManager = new GimmickManager(RoomStateRepository, itemCreator, itemDestroyer);
@@ -149,16 +155,23 @@ namespace ClusterVR.CreatorKit.Editor.Preview
             triggerManager.Add(GetComponentsInGameObjectsChildren<IPlayerTrigger>(rootGameObjects));
             triggerManager.Add(GetComponentsInGameObjectsChildren<IGlobalTrigger>(rootGameObjects));
             GimmickManager.AddGimmicksInScene(GetComponentsInGameObjectsChildren<IGimmick>(rootGameObjects));
-            foreach (var item in items) GimmickManager.AddGimmicksInItem(item.gameObject.GetComponentsInChildren<IGimmick>(true), item.Id.Value);
+            foreach (var item in items)
+            {
+                GimmickManager.AddGimmicksInItem(item.gameObject.GetComponentsInChildren<IGimmick>(true),
+                    item.Id.Value);
+            }
 
             new LogicManager(itemCreator, RoomStateRepository, GimmickManager,
                 GetComponentsInGameObjectsChildren<IItemLogic>(rootGameObjects),
                 GetComponentsInGameObjectsChildren<IPlayerLogic>(rootGameObjects),
                 GetComponentsInGameObjectsChildren<IGlobalLogic>(rootGameObjects),
                 SignalGenerator);
-            new PlayerEffectManager(PlayerPresenter, itemCreator, GetComponentsInGameObjectsChildren<IPlayerEffectGimmick>(rootGameObjects));
-            new CreateItemGimmickManager(itemCreator, GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));
-            new DestroyItemGimmickManager(itemCreator, itemDestroyer, GetComponentsInGameObjectsChildren<IDestroyItemGimmick>(rootGameObjects));
+            new PlayerEffectManager(PlayerPresenter, itemCreator,
+                GetComponentsInGameObjectsChildren<IPlayerEffectGimmick>(rootGameObjects));
+            new CreateItemGimmickManager(itemCreator,
+                GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));
+            new DestroyItemGimmickManager(itemCreator, itemDestroyer,
+                GetComponentsInGameObjectsChildren<IDestroyItemGimmick>(rootGameObjects));
 
             var onReceiveOwnershipItemTriggerManager = new OnReceiveOwnershipItemTriggerManager(itemCreator);
             var onCreateItemTriggerManager = new OnCreateItemTriggerManager(itemCreator);
@@ -167,16 +180,21 @@ namespace ClusterVR.CreatorKit.Editor.Preview
             PersistedRoomStateManager = PersistedRoomStateManager.CreateFromActiveScene();
 
             LoadPersistedRoomState();
-            onCreateItemTriggerManager.Invoke(items.SelectMany(x => x.gameObject.GetComponents<IOnCreateItemTrigger>()));
+            onCreateItemTriggerManager.Invoke(items.SelectMany(x =>
+                x.gameObject.GetComponents<IOnCreateItemTrigger>()));
             initialPlayerTriggerManager.Invoke(
                 GetComponentsInGameObjectsChildren<IInitializePlayerTrigger>(rootGameObjects),
                 GetComponentsInGameObjectsChildren<IOnJoinPlayerTrigger>(rootGameObjects));
-            onReceiveOwnershipItemTriggerManager.InvokeOnStart(items.SelectMany(x => x.gameObject.GetComponents<IOnReceiveOwnershipItemTrigger>()));
+            onReceiveOwnershipItemTriggerManager.InvokeOnStart(items.SelectMany(x =>
+                x.gameObject.GetComponents<IOnReceiveOwnershipItemTrigger>()));
         }
 
         static void LoadPersistedRoomState()
         {
-            if (PersistedRoomStateManager == null) return;
+            if (PersistedRoomStateManager == null)
+            {
+                return;
+            }
             var updatedKeys = PersistedRoomStateManager.Load(RoomStateRepository);
             GimmickManager.OnStateUpdated(updatedKeys);
         }

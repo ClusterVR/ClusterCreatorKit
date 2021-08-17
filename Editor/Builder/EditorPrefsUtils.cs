@@ -9,11 +9,6 @@ namespace ClusterVR.CreatorKit.Editor.Builder
         const string AccessTokenSaveKey = "cluster_sdk_access_token";
         const string TmpUserIdKey = "ClusterTmpUserId";
         const string EnableSendingAnalyticsDataKey = "ClusterEnableSendingAnalyticsData";
-        const string LastBuildWinKey = "LastBuildWin";
-        const string LastBuildMacKey = "LastBuildMac";
-        const string LastBuildAndroidKey = "LastBuildAndroid";
-        const string LastBuildIOSKey = "LastBuildIOS";
-        const string LastExportPackageKey = "LastExportPackage";
         const string OpenWorldManagementPageAfterUploadKey = "OpenWorldManagementPageAfterUpload";
 
         public static bool HasAlreadyShownAboutWindow
@@ -38,35 +33,6 @@ namespace ClusterVR.CreatorKit.Editor.Builder
         {
             get => EditorPrefs.GetBool(EnableSendingAnalyticsDataKey, true);
             set => EditorPrefs.SetBool(EnableSendingAnalyticsDataKey, value);
-        }
-
-        public static string LastBuildWin
-        {
-            get => EditorPrefs.GetString(LastBuildWinKey, "");
-            set => EditorPrefs.SetString(LastBuildWinKey, value);
-        }
-
-        public static string LastBuildMac
-        {
-            get => EditorPrefs.GetString(LastBuildMacKey, "");
-            set => EditorPrefs.SetString(LastBuildMacKey, value);
-        }
-
-        public static string LastBuildAndroid
-        {
-            get => EditorPrefs.GetString(LastBuildAndroidKey, "");
-            set => EditorPrefs.SetString(LastBuildAndroidKey, value);
-        }
-
-        public static string LastBuildIOS
-        {
-            get => EditorPrefs.GetString(LastBuildIOSKey, "");
-            set => EditorPrefs.SetString(LastBuildIOSKey, value);
-        }
-
-        public static string LastExportPackage
-        {
-            set => EditorPrefs.SetString(LastExportPackageKey, value);
         }
 
         public static bool OpenWorldManagementPageAfterUpload

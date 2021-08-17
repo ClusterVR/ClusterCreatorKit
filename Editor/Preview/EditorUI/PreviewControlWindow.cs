@@ -37,9 +37,13 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
             }
 
             if (string.IsNullOrEmpty(displayName))
+            {
                 displayName = "DisplayName";
+            }
             if (string.IsNullOrEmpty(userName))
+            {
                 userName = "UserName";
+            }
             Bootstrap.CommentScreenPresenter.SendCommentFromEditorUI(displayName, userName, content);
         }
 
@@ -51,9 +55,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
                 return;
             }
 
-            Bootstrap.MainScreenPresenter.SetImage(
-                AssetDatabase.LoadAssetAtPath<Texture>(
-                    "Packages/mu.cluster.cluster-creator-kit/Editor/Preview/Textures/cluster_logo.png"));
+            Bootstrap.MainScreenPresenter.SetImage(AssetDatabase.LoadAssetAtPath<Texture>(
+                "Packages/mu.cluster.cluster-creator-kit/Editor/Preview/Textures/cluster_logo.png"));
         }
 
         static VisualElement GenerateCommentSection()
@@ -87,7 +90,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
                 displayNameField.value = "";
                 userNameField.value = "";
                 commentContentField.value = "";
-            }) {text = "コメントを送信"};
+            }) { text = "コメントを送信" };
             commentSection.Add(commentSendButton);
             return commentSection;
         }
@@ -96,7 +99,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
         {
             var mainScreenSection = EditorUIGenerator.GenerateSection();
             mainScreenSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h1, "メインスクリーン"));
-            var sampleImageSendButton = new Button(ShowMainScreenPicture) {text = "サンプル画像を投影"};
+            var sampleImageSendButton = new Button(ShowMainScreenPicture) { text = "サンプル画像を投影" };
             mainScreenSection.Add(sampleImageSendButton);
             return mainScreenSection;
         }
@@ -125,15 +128,12 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
                     Bootstrap.PlayerPresenter.ChangePermissionType(PermissionType.Audience);
                     currentPermission.text = "現在の権限:参加者";
                 }
-            }) {text = "権限変更"};
+            }) { text = "権限変更" };
             userDataSection.Add(currentPermission);
             userDataSection.Add(permissionChangeButton);
 
             userDataSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h2, "リスポーン"));
-            var respawnButton = new Button(() =>
-            {
-                Bootstrap.PlayerPresenter.Respawn();
-            }) {text = "リスポーンする"};
+            var respawnButton = new Button(() => { Bootstrap.PlayerPresenter.Respawn(); }) { text = "リスポーンする" };
             userDataSection.Add(respawnButton);
             return userDataSection;
         }

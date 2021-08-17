@@ -51,10 +51,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 bindingPath = arraySizeProperty.propertyPath,
                 style = { display = new StyleEnum<DisplayStyle>(DisplayStyle.None) }
             };
-            arraySizeField.RegisterValueChangedCallback(e =>
-            {
-                Refresh();
-            });
+            arraySizeField.RegisterValueChangedCallback(e => { Refresh(); });
             container.Add(arraySizeField);
 
             void AddArrayElement()
@@ -65,14 +62,20 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             void DeleteArrayElementAt(int i)
             {
-                if (property.GetArrayElementAtIndex(i) == null) return;
+                if (property.GetArrayElementAtIndex(i) == null)
+                {
+                    return;
+                }
                 property.DeleteArrayElementAtIndex(i);
                 property.serializedObject.ApplyModifiedProperties();
             }
 
             void MoveArrayElement(int srcIndex, int dstIndex)
             {
-                if (property.GetArrayElementAtIndex(srcIndex) == null) return;
+                if (property.GetArrayElementAtIndex(srcIndex) == null)
+                {
+                    return;
+                }
                 property.MoveArrayElement(srcIndex, dstIndex);
                 property.serializedObject.ApplyModifiedProperties();
             }
@@ -146,6 +149,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 {
                     list.Add(CreateCell(i));
                 }
+
                 var addButton = new Button(AddArrayElement)
                 {
                     text = "+",
@@ -153,6 +157,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 };
                 list.Add(addButton);
             }
+
             Refresh();
 
             return container;
@@ -167,17 +172,20 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             };
 
             var targetStateProperty = property.FindPropertyRelative("singleStatement.targetState");
-            var statementsField = CreateTargetStatePropertyGUI(targetStateProperty, attribute.TargetStateTargetSelectables, attribute.FormatTargetStateTarget);
+            var statementsField = CreateTargetStatePropertyGUI(targetStateProperty,
+                attribute.TargetStateTargetSelectables, attribute.FormatTargetStateTarget);
             container.Add(statementsField);
 
             var expressionProperty = property.FindPropertyRelative("singleStatement.expression");
-            var expressionField = CreateExpressionPropertyGUI(expressionProperty, attribute.SourceStateTargetSelectables, attribute.FormatSourceTarget);
+            var expressionField = CreateExpressionPropertyGUI(expressionProperty,
+                attribute.SourceStateTargetSelectables, attribute.FormatSourceTarget);
             container.Add(expressionField);
 
             return container;
         }
 
-        static VisualElement CreateTargetStatePropertyGUI(SerializedProperty property, List<TargetStateTarget> targetChoices, Func<TargetStateTarget, string> formatTarget)
+        static VisualElement CreateTargetStatePropertyGUI(SerializedProperty property,
+            List<TargetStateTarget> targetChoices, Func<TargetStateTarget, string> formatTarget)
         {
             Assert.AreEqual(property.type, nameof(TargetState));
             Assert.IsTrue(targetChoices.Count > 0);
@@ -238,13 +246,20 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             container.Add(operandsContainer);
 
             const int ExpressionTypeValue = -1;
-            var typeOperatorChoices = Enum.GetValues(typeof(Operator)).Cast<int>().Prepend(ExpressionTypeValue).ToList();
-            var typeOperatorDefaultIndex = typeOperatorChoices.IndexOf(currentType == ExpressionType.Value ? ExpressionTypeValue : (int) currentOperator);
-            var typeOperatorField = new PopupField<int>(typeOperatorChoices, typeOperatorDefaultIndex, TypeOperatorFormat, TypeOperatorFormat);
+            var typeOperatorChoices =
+                Enum.GetValues(typeof(Operator)).Cast<int>().Prepend(ExpressionTypeValue).ToList();
+            var typeOperatorDefaultIndex =
+                typeOperatorChoices.IndexOf(currentType == ExpressionType.Value
+                    ? ExpressionTypeValue
+                    : (int) currentOperator);
+            var typeOperatorField = new PopupField<int>(typeOperatorChoices, typeOperatorDefaultIndex,
+                TypeOperatorFormat, TypeOperatorFormat);
+
             string TypeOperatorFormat(int value)
             {
                 return value == ExpressionTypeValue ? "=" : $"= {(Operator) value}";
             }
+
             typeOperatorField.RegisterValueChangedCallback(e =>
             {
                 var type = e.newValue == ExpressionTypeValue ? ExpressionType.Value : ExpressionType.OperatorExpression;
@@ -262,12 +277,14 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                             {
                                 CopyValueProperty(operandsFirstProperty.FindPropertyRelative("value"), valueProperty);
                             }
+
                             break;
                         case ExpressionType.OperatorExpression:
                             if (operandsFirstProperty == null)
                             {
                                 operandsProperty.InsertArrayElementAtIndex(0);
                             }
+
                             CopyValueProperty(valueProperty, operandsFirstProperty.FindPropertyRelative("value"));
                             break;
                     }
@@ -281,7 +298,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                     operatorProperty.intValue = e.newValue;
                     operatorProperty.serializedObject.ApplyModifiedProperties();
 #if !UNITY_2019_3_OR_NEWER
-                    OnOperatorChanged((Operator)e.newValue);
+                    OnOperatorChanged((Operator) e.newValue);
 #endif
                 }
             });
@@ -289,7 +306,9 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var typeField = EnumField.CreateAsStringPopupField<ExpressionType>(typeProperty, newValue =>
             {
-                typeOperatorField.SetValueWithoutNotify(newValue == ExpressionType.Value ? ExpressionTypeValue : operatorProperty.intValue);
+                typeOperatorField.SetValueWithoutNotify(newValue == ExpressionType.Value
+                    ? ExpressionTypeValue
+                    : operatorProperty.intValue);
                 OnTypeChanged(newValue);
             });
             typeField.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
@@ -297,7 +316,9 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var operatorField = EnumField.CreateAsStringPopupField<Operator>(operatorProperty, newValue =>
             {
-                typeOperatorField.SetValueWithoutNotify(typeProperty.intValue == (int) ExpressionType.Value ? ExpressionTypeValue : (int) newValue);
+                typeOperatorField.SetValueWithoutNotify(typeProperty.intValue == (int) ExpressionType.Value
+                    ? ExpressionTypeValue
+                    : (int) newValue);
                 OnOperatorChanged(newValue);
             });
             operatorField.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
@@ -318,6 +339,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 var operandsField = CreateOperandsPropertyGUI(operandsProperty, targetChoices, formatTarget, depth);
                 operandsContainer.Add(operandsField);
             }
+
             OnOperatorChanged(currentOperator);
 
             void OnTypeChanged(ExpressionType type)
@@ -325,6 +347,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 valueField.SetVisibility(type == ExpressionType.Value);
                 operandsContainer.SetVisibility(type == ExpressionType.OperatorExpression);
             }
+
             OnTypeChanged(currentType);
 
             return container;
@@ -335,12 +358,18 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             Assert.AreEqual(source.type, nameof(Value));
             Assert.AreEqual(target.type, nameof(Value));
             target.FindPropertyRelative("type").intValue = source.FindPropertyRelative("type").intValue;
-            target.FindPropertyRelative("constant.type").intValue = source.FindPropertyRelative("constant.type").intValue;
-            target.FindPropertyRelative("constant.boolValue").boolValue = source.FindPropertyRelative("constant.boolValue").boolValue;
-            target.FindPropertyRelative("constant.floatValue").floatValue = source.FindPropertyRelative("constant.floatValue").floatValue;
-            target.FindPropertyRelative("constant.integerValue").intValue = source.FindPropertyRelative("constant.integerValue").intValue;
-            target.FindPropertyRelative("sourceState.target").intValue = source.FindPropertyRelative("sourceState.target").intValue;
-            target.FindPropertyRelative("sourceState.key").stringValue = source.FindPropertyRelative("sourceState.key").stringValue;
+            target.FindPropertyRelative("constant.type").intValue =
+                source.FindPropertyRelative("constant.type").intValue;
+            target.FindPropertyRelative("constant.boolValue").boolValue =
+                source.FindPropertyRelative("constant.boolValue").boolValue;
+            target.FindPropertyRelative("constant.floatValue").floatValue =
+                source.FindPropertyRelative("constant.floatValue").floatValue;
+            target.FindPropertyRelative("constant.integerValue").intValue =
+                source.FindPropertyRelative("constant.integerValue").intValue;
+            target.FindPropertyRelative("sourceState.target").intValue =
+                source.FindPropertyRelative("sourceState.target").intValue;
+            target.FindPropertyRelative("sourceState.key").stringValue =
+                source.FindPropertyRelative("sourceState.key").stringValue;
             target.serializedObject.ApplyModifiedProperties();
         }
 
@@ -371,6 +400,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 constantField.SetVisibility(type == ValueType.Constant);
                 sourceStateField.SetVisibility(type == ValueType.RoomState);
             }
+
             OnTypeChanged((ValueType) typeProperty.intValue);
 
             return container;
@@ -419,7 +449,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             container.Add(integerValueField);
 
             var typeProperty = property.FindPropertyRelative("type");
-            var typeChoices = new List<ParameterType> { ParameterType.Bool, ParameterType.Float, ParameterType.Integer };
+            var typeChoices = new List<ParameterType>
+                { ParameterType.Bool, ParameterType.Float, ParameterType.Integer };
             var currentType = (ParameterType) typeProperty.intValue;
             var selectingTarget = typeChoices.Contains(currentType) ? currentType : typeChoices[0];
             var typeField = EnumField.Create(typeProperty, typeChoices, selectingTarget, SwitchField);
@@ -431,6 +462,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 floatValueField.SetVisibility(type == ParameterType.Float);
                 integerValueField.SetVisibility(type == ParameterType.Integer);
             }
+
             SwitchField(selectingTarget);
 
             return container;
@@ -475,9 +507,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var container = new VisualElement();
             for (var i = 0; i < property.arraySize; i++)
             {
-                var field = CreateExpressionPropertyGUI(property.GetArrayElementAtIndex(i), targetChoices, formatTarget, depth + 1);
+                var field = CreateExpressionPropertyGUI(property.GetArrayElementAtIndex(i), targetChoices, formatTarget,
+                    depth + 1);
                 container.Add(field);
             }
+
             return container;
         }
     }

@@ -21,7 +21,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             void SwitchDisplayKeyField()
             {
-                worldGateKeyField.SetVisibility((SpawnType) spawnTypeProperty.enumValueIndex == SpawnType.WorldGateDestination);
+                worldGateKeyField.SetVisibility((SpawnType) spawnTypeProperty.enumValueIndex ==
+                    SpawnType.WorldGateDestination);
             }
 
             SwitchDisplayKeyField();

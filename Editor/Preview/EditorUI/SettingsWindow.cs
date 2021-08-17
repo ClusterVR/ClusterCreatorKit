@@ -45,7 +45,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
 
             var invertHorizontalToggle = EditorUIGenerator.GenerateToggle(LabelType.h2, "左右反転");
             invertHorizontalToggle.value = CameraControlSettings.InvertHorizontal;
-            invertHorizontalToggle.RegisterValueChangedCallback(ev => CameraControlSettings.InvertHorizontal = ev.newValue);
+            invertHorizontalToggle.RegisterValueChangedCallback(ev =>
+                CameraControlSettings.InvertHorizontal = ev.newValue);
             cameraControlSection.Add(invertHorizontalToggle);
 
             return cameraControlSection;
@@ -56,16 +57,19 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
             var section = EditorUIGenerator.GenerateSection();
             section.Add(EditorUIGenerator.GenerateLabel(LabelType.h1, "セーブ機能"));
 
-            var informationBox = new IMGUIContainer(() => EditorGUILayout.HelpBox($"プレビューでのセーブデータ及びその操作はプレビューのみに利用され、アップロードされたワールドに影響はありません。", MessageType.Info));
+            var informationBox = new IMGUIContainer(() =>
+                EditorGUILayout.HelpBox($"プレビューでのセーブデータ及びその操作はプレビューのみに利用され、アップロードされたワールドに影響はありません。", MessageType.Info));
             section.Add(informationBox);
 
-            var playingHelpBox = new IMGUIContainer(() => EditorGUILayout.HelpBox($"セーブデータの操作は再生中には使用できません", MessageType.Warning));
+            var playingHelpBox =
+                new IMGUIContainer(() => EditorGUILayout.HelpBox($"セーブデータの操作は再生中には使用できません", MessageType.Warning));
             section.Add(playingHelpBox);
 
             var staticContents = new VisualElement();
             section.Add(staticContents);
 
-            var clearThisButton = EditorUIGenerator.GenerateButton(LabelType.h2, "現在のシーンのセーブデータを削除する", AskAndClearActiveScene);
+            var clearThisButton =
+                EditorUIGenerator.GenerateButton(LabelType.h2, "現在のシーンのセーブデータを削除する", AskAndClearActiveScene);
             staticContents.Add(clearThisButton);
 
             var clearAllButton = EditorUIGenerator.GenerateButton(LabelType.h2, "全てのセーブデータを削除する", AskAndClearAllSave);
@@ -104,6 +108,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
                 EditorUtility.DisplayDialog(title, "現在のシーンのセーブデータはありません", "OK");
                 return;
             }
+
             if (EditorUtility.DisplayDialog(title, "現在のシーンのセーブデータを削除します。よろしいですか？", "削除する", "キャンセル"))
             {
                 PersistedRoomStateRepository.Clear(activeSceneGuid);

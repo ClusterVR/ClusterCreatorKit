@@ -26,10 +26,19 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         public void Run(GimmickValue value, DateTime current)
         {
-            if (targetTransform == null) return;
-            if (value.TimeStamp <= lastTriggeredAt) return;
+            if (targetTransform == null)
+            {
+                return;
+            }
+            if (value.TimeStamp <= lastTriggeredAt)
+            {
+                return;
+            }
             lastTriggeredAt = value.TimeStamp;
-            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
+            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds)
+            {
+                return;
+            }
             OnRun?.Invoke(this);
         }
     }

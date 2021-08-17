@@ -27,6 +27,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                         EditorSceneManager.MarkSceneDirty(scene);
                     }
                 }
+
                 hashSet.Add(item.Id);
             }
         }

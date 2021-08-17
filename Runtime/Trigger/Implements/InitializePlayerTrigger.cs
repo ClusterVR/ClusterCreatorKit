@@ -12,7 +12,8 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         public void Invoke()
         {
-            TriggerEvent?.Invoke(this, new TriggerEventArgs(triggers.Select(t => t.Convert()).ToArray(), dontOverride: true));
+            TriggerEvent?.Invoke(this,
+                new TriggerEventArgs(triggers.Select(t => t.Convert()).ToArray(), dontOverride: true));
         }
     }
 }

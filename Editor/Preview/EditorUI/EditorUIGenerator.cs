@@ -10,8 +10,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
     {
         static readonly Dictionary<LabelType, int> dictLabelAndFontSize = new Dictionary<LabelType, int>
         {
-            {LabelType.h1, 18},
-            {LabelType.h2, 14}
+            { LabelType.h1, 18 },
+            { LabelType.h2, 14 }
         };
 
         public static VisualElement GenerateSection()
@@ -52,7 +52,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
 
         public static Button GenerateButton(LabelType labelType, string content, Action clickEvent = null)
         {
-            var button = new Button(clickEvent) {text = content};
+            var button = new Button(clickEvent) { text = content };
             button.style.fontSize = dictLabelAndFontSize[labelType];
             return button;
         }

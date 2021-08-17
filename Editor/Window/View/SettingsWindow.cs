@@ -16,7 +16,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
         void OnEnable()
         {
-            rootVisualElement.styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>("Packages/mu.cluster.cluster-creator-kit/Editor/Window/Uss/ClusterStyle.uss"));
+            rootVisualElement.styleSheets.Add(
+                AssetDatabase.LoadAssetAtPath<StyleSheet>(
+                    "Packages/mu.cluster.cluster-creator-kit/Editor/Window/Uss/ClusterStyle.uss"));
             rootVisualElement.Add(CreateView());
         }
 
@@ -33,7 +35,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 value = EditorPrefsUtils.EnableSendingAnalyticsData
             };
             sendingAnalyticsDataToggle.EnableInClassList("h2", true);
-            sendingAnalyticsDataToggle.RegisterValueChangedCallback(ev => EditorPrefsUtils.EnableSendingAnalyticsData = ev.newValue);
+            sendingAnalyticsDataToggle.RegisterValueChangedCallback(ev =>
+                EditorPrefsUtils.EnableSendingAnalyticsData = ev.newValue);
             container.Add(sendingAnalyticsDataToggle);
 
             return container;

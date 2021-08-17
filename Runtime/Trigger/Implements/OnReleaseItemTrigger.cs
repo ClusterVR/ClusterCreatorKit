@@ -12,7 +12,10 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         [SerializeField, HideInInspector] GrabbableItem grabbableItem;
         [SerializeField, ItemTriggerParam] TriggerParam[] triggers;
 
-        IItem IItemTrigger.Item => grabbableItem != null ? grabbableItem.Item : (grabbableItem = GetComponent<GrabbableItem>()).Item;
+        IItem IItemTrigger.Item => grabbableItem != null
+            ? grabbableItem.Item
+            : (grabbableItem = GetComponent<GrabbableItem>()).Item;
+
         public event TriggerEventHandler TriggerEvent;
         IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
 
@@ -20,13 +23,17 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         void Start()
         {
-            if (grabbableItem == null) grabbableItem = GetComponent<GrabbableItem>();
+            if (grabbableItem == null)
+            {
+                grabbableItem = GetComponent<GrabbableItem>();
+            }
             grabbableItem.OnReleased += Invoke;
         }
 
         void Invoke()
         {
-            TriggerEvent?.Invoke(this, new TriggerEventArgs(triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
+            TriggerEvent?.Invoke(this,
+                new TriggerEventArgs(triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
         }
 
         void Reset()
@@ -36,7 +43,10 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         void OnValidate()
         {
-            if (grabbableItem == null || grabbableItem.gameObject != gameObject) grabbableItem = GetComponent<GrabbableItem>();
+            if (grabbableItem == null || grabbableItem.gameObject != gameObject)
+            {
+                grabbableItem = GetComponent<GrabbableItem>();
+            }
         }
     }
 }

@@ -7,10 +7,12 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
     {
         public enum Condition
         {
-            InPlayerLocal, Always
+            InPlayerLocal,
+            Always
         }
-        
+
         public Condition LocalizableCondition { get; }
+
         public LocalizableGlobalGimmickAttribute(Condition condition)
         {
             LocalizableCondition = condition;

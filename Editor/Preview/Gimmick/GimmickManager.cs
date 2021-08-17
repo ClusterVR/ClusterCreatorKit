@@ -13,9 +13,12 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
     {
         readonly RoomStateRepository roomStateRepository;
         readonly Dictionary<string, HashSet<IGimmick>> gimmicks = new Dictionary<string, HashSet<IGimmick>>();
-        readonly Dictionary<ulong, (IGimmick, string)[]> gimmicksInItems = new Dictionary<ulong, (IGimmick, string)[]>();
 
-        public GimmickManager(RoomStateRepository roomStateRepository, ItemCreator itemCreator, ItemDestroyer itemDestroyer)
+        readonly Dictionary<ulong, (IGimmick, string)[]>
+            gimmicksInItems = new Dictionary<ulong, (IGimmick, string)[]>();
+
+        public GimmickManager(RoomStateRepository roomStateRepository, ItemCreator itemCreator,
+            ItemDestroyer itemDestroyer)
         {
             this.roomStateRepository = roomStateRepository;
             itemCreator.OnCreate += OnCreateItem;
@@ -33,10 +36,19 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
 
         public void AddGimmicksInItem(IGimmick[] gimmicks, ulong itemId)
         {
-            if (gimmicks.Length == 0) return;
+            if (gimmicks.Length == 0)
+            {
+                return;
+            }
             var gimmickAndKeys = gimmicks.Select(gimmick => (gimmick, key: GetGimmickKey(gimmick))).ToArray();
-            if (itemId != 0L) gimmicksInItems[itemId] = gimmickAndKeys;
-            foreach (var gimmickAndKey in gimmickAndKeys) AddGimmick(gimmickAndKey.key, gimmickAndKey.gimmick);
+            if (itemId != 0L)
+            {
+                gimmicksInItems[itemId] = gimmickAndKeys;
+            }
+            foreach (var gimmickAndKey in gimmickAndKeys)
+            {
+                AddGimmick(gimmickAndKey.key, gimmickAndKey.gimmick);
+            }
         }
 
         void OnCreateItem(IItem item)
@@ -50,7 +62,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
             foreach (var gimmick in item.gameObject.GetComponentsInChildren<IGimmick>(true))
             {
                 var key = GetGimmickKey(gimmick);
-                if (!roomStateRepository.TryGetValue(key, out var value)) continue;
+                if (!roomStateRepository.TryGetValue(key, out var value))
+                {
+                    continue;
+                }
                 Run(gimmick, value, now);
             }
         }
@@ -63,7 +78,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
             }
             else
             {
-                gimmicks.Add(key, new HashSet<IGimmick> {gimmick});
+                gimmicks.Add(key, new HashSet<IGimmick> { gimmick });
             }
         }
 
@@ -72,7 +87,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
             var itemId = item.Id.Value;
             if (gimmicksInItems.TryGetValue(itemId, out var gimmickAndKeys))
             {
-                foreach (var gimmickAndKey in gimmickAndKeys) RemoveGimmick(gimmickAndKey.Item2, gimmickAndKey.Item1);
+                foreach (var gimmickAndKey in gimmickAndKeys)
+                {
+                    RemoveGimmick(gimmickAndKey.Item2, gimmickAndKey.Item1);
+                }
                 gimmicksInItems.Remove(itemId);
             }
         }
@@ -82,7 +100,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
             var hasGimmick = gimmicks.TryGetValue(key, out var gimmickSet);
             Assert.IsTrue(hasGimmick);
             gimmickSet.Remove(gimmick);
-            if (gimmickSet.Count == 0) gimmicks.Remove(key);
+            if (gimmickSet.Count == 0)
+            {
+                gimmicks.Remove(key);
+            }
         }
 
         public void OnStateUpdated(IEnumerable<string> keys)
@@ -90,7 +111,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
             var now = DateTime.UtcNow;
             foreach (var key in keys)
             {
-                if (this.gimmicks.TryGetValue(key, out var gimmicks) && roomStateRepository.TryGetValue(key, out var value))
+                if (this.gimmicks.TryGetValue(key, out var gimmicks) &&
+                    roomStateRepository.TryGetValue(key, out var value))
                 {
                     foreach (var gimmick in gimmicks.ToArray())
                     {
@@ -101,7 +123,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
         }
 
         void Run(IGimmick gimmick, StateValue value, DateTime now)
-            => gimmick.Run(new GimmickValue(gimmick.ParameterType, value), now);
+        {
+            gimmick.Run(new GimmickValue(gimmick.ParameterType, value), now);
+        }
 
         string GetGimmickKey(IGimmick gimmick)
         {

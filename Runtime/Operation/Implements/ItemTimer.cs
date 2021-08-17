@@ -36,16 +36,26 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         public void Run(GimmickValue value, DateTime current)
         {
-            if (lastTriggerReceivedAt == value.TimeStamp) return;
+            if (lastTriggerReceivedAt == value.TimeStamp)
+            {
+                return;
+            }
             lastTriggerReceivedAt = value.TimeStamp;
 
             var dueTime = value.TimeStamp.AddSeconds(delayTimeSeconds) - current;
-            if (dueTime.TotalSeconds < -Constants.TriggerGimmick.TriggerExpireSeconds) return;
-            var expireAt = Time.realtimeSinceStartup + dueTime.TotalSeconds + Constants.TriggerGimmick.OwnershipExpireExpectedSeconds;
+            if (dueTime.TotalSeconds < -Constants.TriggerGimmick.TriggerExpireSeconds)
+            {
+                return;
+            }
+            var expireAt = Time.realtimeSinceStartup + dueTime.TotalSeconds +
+                Constants.TriggerGimmick.OwnershipExpireExpectedSeconds;
 
             void Action()
             {
-                if (expireAt < Time.realtimeSinceStartup) return;
+                if (expireAt < Time.realtimeSinceStartup)
+                {
+                    return;
+                }
                 Invoke();
             }
 
@@ -57,7 +67,8 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         void IRerunnableGimmick.Rerun(GimmickValue value, DateTime current)
         {
             var executeAt = value.TimeStamp.AddSeconds(delayTimeSeconds);
-            if (current - TimeSpan.FromSeconds(Constants.TriggerGimmick.OwnershipExpireExpectedSeconds) < executeAt && executeAt < current)
+            if (current - TimeSpan.FromSeconds(Constants.TriggerGimmick.OwnershipExpireExpectedSeconds) < executeAt &&
+                executeAt < current)
             {
                 schedulerCancellation?.Dispose();
                 Invoke();
@@ -66,7 +77,8 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         void Invoke()
         {
-            TriggerEvent?.Invoke(this, new TriggerEventArgs(triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
+            TriggerEvent?.Invoke(this,
+                new TriggerEventArgs(triggersCache ?? (triggersCache = triggers.Select(t => t.Convert()).ToArray())));
         }
 
         void OnDestroy()
@@ -81,13 +93,17 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         void OnValidate()
         {
-            if (item == null || item.gameObject != gameObject) item = GetComponent<Item.Implements.Item>();
+            if (item == null || item.gameObject != gameObject)
+            {
+                item = GetComponent<Item.Implements.Item>();
+            }
             delayTimeSeconds = Mathf.Max(delayTimeSeconds, 0.01f);
             triggers = triggers?.Select(trigger =>
             {
-                return trigger.Target != TriggerTarget.Item ?
-                    new Trigger.Implements.TriggerParam(TriggerTarget.Item, null, trigger.Key, trigger.Type, trigger.RawValue) :
-                    trigger;
+                return trigger.Target != TriggerTarget.Item
+                    ? new Trigger.Implements.TriggerParam(TriggerTarget.Item, null, trigger.Key, trigger.Type,
+                        trigger.RawValue)
+                    : trigger;
             }).ToArray();
         }
     }

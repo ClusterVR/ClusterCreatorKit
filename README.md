@@ -4,4 +4,4 @@ Cluster Creator Kit でバーチャル空間を構築すると、 cluster を通
 
 ## ドキュメント
 
-https://clustervr.gitbook.io/creatorkit/
+https://docs.cluster.mu/creatorkit/

@@ -50,10 +50,12 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
         static void Add(ReactiveBase rv, Action action)
         {
-            if (!bindings.TryGetValue(rv, out var actionList)) {
+            if (!bindings.TryGetValue(rv, out var actionList))
+            {
                 actionList = new List<Action>();
                 bindings.Add(rv, actionList);
             }
+
             actionList.Add(action);
 
             action(); // 初期値送信

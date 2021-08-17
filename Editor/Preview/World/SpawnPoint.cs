@@ -11,9 +11,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 
         public SpawnPoint(SpawnType spawnType, Vector3 position, float yRotation)
         {
-            this.SpawnType = spawnType;
-            this.Position = position;
-            this.YRotation = yRotation;
+            SpawnType = spawnType;
+            Position = position;
+            YRotation = yRotation;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-namespace ClusterVR.CreatorKit.Trigger
+﻿namespace ClusterVR.CreatorKit.Trigger
 {
     public interface IOnReceiveOwnershipItemTrigger : IItemTrigger
     {

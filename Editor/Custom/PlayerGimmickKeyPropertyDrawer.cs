@@ -18,13 +18,16 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var itemProperty = property.FindPropertyRelative("item");
 
             var itemContainer = new PropertyField(itemProperty);
+
             void SwitchDisplayItem(GimmickTarget target)
             {
                 itemContainer.SetVisibility(target == GimmickTarget.Item);
             }
+
             SwitchDisplayItem((GimmickTarget) targetProperty.enumValueIndex);
 
-            var targetField = EnumField.Create<GimmickTarget>(targetProperty.displayName, targetProperty, SwitchDisplayItem);
+            var targetField =
+                EnumField.Create<GimmickTarget>(targetProperty.displayName, targetProperty, SwitchDisplayItem);
 
             var keyField = new PropertyField(keyProperty);
 

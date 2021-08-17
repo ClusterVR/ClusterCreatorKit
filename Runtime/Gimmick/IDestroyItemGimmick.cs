@@ -7,8 +7,9 @@ namespace ClusterVR.CreatorKit.Gimmick
     {
         event DestroyItemEventHandler OnDestroyItem;
     }
-    
+
     public delegate void DestroyItemEventHandler(DestroyItemEventArgs args);
+
     public class DestroyItemEventArgs : EventArgs
     {
         public IItem Item;

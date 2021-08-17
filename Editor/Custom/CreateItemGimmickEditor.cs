@@ -16,13 +16,19 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             container.Add(keyField);
 
             var itemTemplateProperty = serializedObject.FindProperty("itemTemplate");
-            var itemTemplateIsNoneHelpBox = new IMGUIContainer(() => EditorGUILayout.HelpBox($"{itemTemplateProperty.displayName} を指定する必要があります。", MessageType.Warning));
-            var itemTemplateIsNotPrefabHelpBox = new IMGUIContainer(() => EditorGUILayout.HelpBox($"{itemTemplateProperty.displayName} には Prefab の指定を推奨しています。", MessageType.Warning));
+            var itemTemplateIsNoneHelpBox = new IMGUIContainer(() =>
+                EditorGUILayout.HelpBox($"{itemTemplateProperty.displayName} を指定する必要があります。", MessageType.Warning));
+            var itemTemplateIsNotPrefabHelpBox = new IMGUIContainer(() =>
+                EditorGUILayout.HelpBox($"{itemTemplateProperty.displayName} には Prefab の指定を推奨しています。",
+                    MessageType.Warning));
+
             void SwitchDisplayHelp(UnityEngine.Object obj)
             {
                 itemTemplateIsNoneHelpBox.SetVisibility(obj == null);
-                itemTemplateIsNotPrefabHelpBox.SetVisibility(obj != null && ((Item.Implements.Item)obj).gameObject.scene.name != null);
+                itemTemplateIsNotPrefabHelpBox.SetVisibility(obj != null &&
+                    ((Item.Implements.Item) obj).gameObject.scene.name != null);
             }
+
             container.Add(itemTemplateIsNoneHelpBox);
             container.Add(itemTemplateIsNotPrefabHelpBox);
 
@@ -54,7 +60,10 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
         void OnSceneGUI()
         {
-            if (!(target is CreateItemGimmick targetGimmick)) return;
+            if (!(target is CreateItemGimmick targetGimmick))
+            {
+                return;
+            }
             MoveAndRotateHandle.Draw(targetGimmick.SpawnPoint, "SpawnPoint");
         }
     }

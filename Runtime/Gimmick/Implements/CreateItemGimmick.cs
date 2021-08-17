@@ -20,6 +20,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         public Transform SpawnPoint => spawnPoint;
 
         public IItem ItemTemplate => itemTemplate;
+
         public ItemTemplateId ItemTemplateId
         {
             get => itemTemplateId;
@@ -35,15 +36,27 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void Start()
         {
-            if (item == null) item = GetComponent<Item.Implements.Item>();
+            if (item == null)
+            {
+                item = GetComponent<Item.Implements.Item>();
+            }
         }
 
         public void Run(GimmickValue value, DateTime current)
         {
-            if (!this.IsValid()) return;
-            if (value.TimeStamp <= lastTriggeredAt) return;
+            if (!this.IsValid())
+            {
+                return;
+            }
+            if (value.TimeStamp <= lastTriggeredAt)
+            {
+                return;
+            }
             lastTriggeredAt = value.TimeStamp;
-            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds) return;
+            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds)
+            {
+                return;
+            }
 
             var useSpawnPoint = spawnPoint != null ? spawnPoint : transform;
             var args = new CreateItemEventArgs
@@ -63,8 +76,14 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void OnValidate()
         {
-            if (item == null || item.gameObject != gameObject) item = GetComponent<Item.Implements.Item>();
-            if (spawnPoint == null) spawnPoint = transform;
+            if (item == null || item.gameObject != gameObject)
+            {
+                item = GetComponent<Item.Implements.Item>();
+            }
+            if (spawnPoint == null)
+            {
+                spawnPoint = transform;
+            }
         }
     }
 }

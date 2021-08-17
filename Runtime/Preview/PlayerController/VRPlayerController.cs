@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
-    public class VRPlayerController : MonoBehaviour, IPlayerController
+    public sealed class VRPlayerController : MonoBehaviour, IPlayerController
     {
         [SerializeField] CharacterController characterController;
         [SerializeField] float baseMoveSpeed;
@@ -50,3 +51,4 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         }
     }
 }
+#endif

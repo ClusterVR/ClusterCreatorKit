@@ -44,10 +44,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 bindingPath = arraySizeProperty.propertyPath,
                 style = { display = new StyleEnum<DisplayStyle>(DisplayStyle.None) }
             };
-            arraySizeField.RegisterValueChangedCallback(e =>
-            {
-                Refresh();
-            });
+            arraySizeField.RegisterValueChangedCallback(e => { Refresh(); });
             container.Add(arraySizeField);
 
             void AddArrayElement()
@@ -58,14 +55,20 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             void DeleteArrayElementAt(int i)
             {
-                if (serializedProperty.GetArrayElementAtIndex(i) == null) return;
+                if (serializedProperty.GetArrayElementAtIndex(i) == null)
+                {
+                    return;
+                }
                 serializedProperty.DeleteArrayElementAtIndex(i);
                 serializedProperty.serializedObject.ApplyModifiedProperties();
             }
 
             void MoveArrayElement(int srcIndex, int dstIndex)
             {
-                if (serializedProperty.GetArrayElementAtIndex(srcIndex) == null) return;
+                if (serializedProperty.GetArrayElementAtIndex(srcIndex) == null)
+                {
+                    return;
+                }
                 serializedProperty.MoveArrayElement(srcIndex, dstIndex);
                 serializedProperty.serializedObject.ApplyModifiedProperties();
             }
@@ -95,7 +98,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                     style =
                     {
                         borderLeftWidth = new StyleFloat(1),
-                        borderLeftColor = new StyleColor(Color.gray),
+                        borderLeftColor = new StyleColor(Color.gray)
                     }
                 };
                 listItem.Add(listItemMenu);
@@ -133,6 +136,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 {
                     list.Add(CreateCell(i));
                 }
+
                 var addButton = new Button(AddArrayElement)
                 {
                     text = "+",
@@ -140,6 +144,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 };
                 list.Add(addButton);
             }
+
             Refresh();
 
             return container;

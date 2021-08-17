@@ -23,26 +23,48 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void Start()
         {
-            if (playableDirector == null) playableDirector = GetComponent<PlayableDirector>();
+            if (playableDirector == null)
+            {
+                playableDirector = GetComponent<PlayableDirector>();
+            }
             stopTimelineGimmick = GetComponent<IStopTimelineGimmick>();
         }
 
-        public void Run(GimmickValue value, DateTime current) => Run(value, current, false);
+        public void Run(GimmickValue value, DateTime current)
+        {
+            Run(value, current, false);
+        }
 
-        void IRerunnableGimmick.Rerun(GimmickValue value, DateTime current) => Run(value, current, true);
+        void IRerunnableGimmick.Rerun(GimmickValue value, DateTime current)
+        {
+            Run(value, current, true);
+        }
 
         void Run(GimmickValue value, DateTime current, bool useSameValue)
         {
-            if (playableDirector == null) return;
+            if (playableDirector == null)
+            {
+                return;
+            }
             if (useSameValue)
             {
-                if (value.TimeStamp < LastTriggeredAt) return;
+                if (value.TimeStamp < LastTriggeredAt)
+                {
+                    return;
+                }
             }
             else
             {
-                if (value.TimeStamp <= LastTriggeredAt) return;
+                if (value.TimeStamp <= LastTriggeredAt)
+                {
+                    return;
+                }
             }
-            if (stopTimelineGimmick != null && value.TimeStamp < stopTimelineGimmick.LastTriggeredAt) return;
+
+            if (stopTimelineGimmick != null && value.TimeStamp < stopTimelineGimmick.LastTriggeredAt)
+            {
+                return;
+            }
             LastTriggeredAt = value.TimeStamp;
 
             OnPlay?.Invoke();
@@ -53,7 +75,10 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void OnValidate()
         {
-            if (playableDirector == null || playableDirector.gameObject != gameObject) playableDirector = GetComponent<PlayableDirector>();
+            if (playableDirector == null || playableDirector.gameObject != gameObject)
+            {
+                playableDirector = GetComponent<PlayableDirector>();
+            }
         }
 
         void Reset()

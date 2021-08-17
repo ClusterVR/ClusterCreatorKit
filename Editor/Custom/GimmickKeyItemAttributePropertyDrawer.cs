@@ -12,7 +12,10 @@ namespace ClusterVR.CreatorKit.Editor.Custom
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var container = new VisualElement();
-            var helpBox = new IMGUIContainer(() => EditorGUILayout.HelpBox($"{nameof(GimmickTarget)} を {nameof(GimmickTarget.Item)} にするには {nameof(Item)} を指定する必要があります。", MessageType.Warning));
+            var helpBox = new IMGUIContainer(() =>
+                EditorGUILayout.HelpBox(
+                    $"{nameof(GimmickTarget)} を {nameof(GimmickTarget.Item)} にするには {nameof(Item)} を指定する必要があります。",
+                    MessageType.Warning));
             var itemField = new ObjectField(property.displayName)
             {
                 objectType = typeof(Item.Implements.Item),
@@ -31,6 +34,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             {
                 helpBox.SetVisibility(show);
             }
+
             SwitchDisplayHelp(property.objectReferenceValue == null);
 
             container.Add(helpBox);

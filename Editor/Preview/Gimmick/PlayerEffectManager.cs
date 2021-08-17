@@ -11,7 +11,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
     {
         readonly PlayerPresenter playerPresenter;
 
-        public PlayerEffectManager(PlayerPresenter playerPresenter, ItemCreator itemCreator, IEnumerable<IPlayerEffectGimmick> playerEffectGimmicks)
+        public PlayerEffectManager(PlayerPresenter playerPresenter, ItemCreator itemCreator,
+            IEnumerable<IPlayerEffectGimmick> playerEffectGimmicks)
         {
             this.playerPresenter = playerPresenter;
             itemCreator.OnCreate += OnCreateItem;
@@ -45,10 +46,12 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
                     {
                         playerPresenter.MoveTo(warpPlayerEffect.TargetPosition);
                     }
+
                     if (!warpPlayerEffect.KeepRotation)
                     {
                         playerPresenter.RotateTo(warpPlayerEffect.TargetRotation);
                     }
+
                     break;
                 case IRespawnPlayerEffect _:
                     playerPresenter.Respawn();

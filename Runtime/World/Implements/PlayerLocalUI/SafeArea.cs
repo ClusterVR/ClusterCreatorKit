@@ -6,7 +6,10 @@ namespace ClusterVR.CreatorKit.World.Implements.PlayerLocalUI
     public sealed class SafeArea : MonoBehaviour, ISafeArea
     {
         RectTransform rectTransform;
-        public RectTransform RectTransform => rectTransform == null ? rectTransform = GetComponent<RectTransform>() : rectTransform;
+
+        public RectTransform RectTransform =>
+            rectTransform == null ? rectTransform = GetComponent<RectTransform>() : rectTransform;
+
         DrivenRectTransformTracker tracker = new DrivenRectTransformTracker();
 
 #if !CLUSTER_CREATOR_KIT_DISABLE_PREVIEW

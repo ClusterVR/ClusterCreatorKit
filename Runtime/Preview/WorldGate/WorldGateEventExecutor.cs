@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using System.Collections.Generic;
 using ClusterVR.CreatorKit.World;
 using UnityEngine.SceneManagement;
@@ -27,7 +28,8 @@ namespace ClusterVR.CreatorKit.Preview.WarpPortal
         void ShowLog(OnEnterWorldGateEventArgs e)
         {
             var readableKey = string.IsNullOrEmpty(e.Key) ? "空" : e.Key;
-            var message = $"ワールドをアップロードすると以下のIdのワールドまたはイベントに移動します。\n{e.WorldOrEventId}\n移動先のSpawnPointにTypeが{SpawnType.WorldGateDestination}でWorldGateKeyが{readableKey}のものがあればそこに出現します。";
+            var message =
+                $"ワールドをアップロードすると以下のIdのワールドまたはイベントに移動します。\n{e.WorldOrEventId}\n移動先のSpawnPointにTypeが{SpawnType.WorldGateDestination}でWorldGateKeyが{readableKey}のものがあればそこに出現します。";
             Debug.Log(message);
         }
 
@@ -40,3 +42,4 @@ namespace ClusterVR.CreatorKit.Preview.WarpPortal
         }
     }
 }
+#endif

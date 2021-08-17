@@ -36,7 +36,10 @@ namespace ClusterVR.CreatorKit.World.Implements.CommentScreenViews
             cell.Show(comment);
             cells.Enqueue(cell);
 
-            if (cells.Count > itemCount) Destroy(cells.Dequeue().gameObject);
+            if (cells.Count > itemCount)
+            {
+                Destroy(cells.Dequeue().gameObject);
+            }
         }
 
         void OnDestroy()

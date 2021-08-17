@@ -5,10 +5,11 @@ using UnityEngine.UI;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
-    [DisallowMultipleComponent, RequireComponent(typeof(Text)), LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
+    [DisallowMultipleComponent, RequireComponent(typeof(Text)),
+        LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
     public class SetTextGimmick : MonoBehaviour, IGlobalGimmick
     {
-        [SerializeField, HideInInspector] Text  text;
+        [SerializeField, HideInInspector] Text text;
         [SerializeField] GlobalGimmickKey globalGimmickKey;
         [SerializeField] ParameterType parameterType;
         [SerializeField, Tooltip("Textに設定するフォーマット"), Multiline] string format = DefaultFormat;
@@ -40,8 +41,14 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void SetText<T>(T value)
         {
-            if (text == null) text = GetComponent<Text>();
-            if (string.IsNullOrWhiteSpace(format)) format = DefaultFormat;
+            if (text == null)
+            {
+                text = GetComponent<Text>();
+            }
+            if (string.IsNullOrWhiteSpace(format))
+            {
+                format = DefaultFormat;
+            }
 
             try
             {
@@ -57,7 +64,10 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void OnValidate()
         {
-            if (text == null || text.gameObject != gameObject) text = GetComponent<Text>();
+            if (text == null || text.gameObject != gameObject)
+            {
+                text = GetComponent<Text>();
+            }
         }
 
         void Reset()

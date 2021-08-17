@@ -27,6 +27,7 @@ namespace ClusterVR.CreatorKit.Editor.Analytics
                     {
                         sessionId = Guid.NewGuid().ToString();
                     }
+
                     return sessionId;
                 }
             }
@@ -45,7 +46,10 @@ namespace ClusterVR.CreatorKit.Editor.Analytics
 
         static void Update()
         {
-            if (!EditorPrefsUtils.EnableSendingAnalyticsData) return;
+            if (!EditorPrefsUtils.EnableSendingAnalyticsData)
+            {
+                return;
+            }
 
             var now = EditorApplication.timeSinceStartup;
             if (now - SessionInfo.instance.LastSentAt < IntervalSec)
@@ -69,7 +73,10 @@ namespace ClusterVR.CreatorKit.Editor.Analytics
         static string GetOrCreateTmpUserId()
         {
             var tmpUserId = EditorPrefsUtils.TmpUserId;
-            if (!string.IsNullOrEmpty(tmpUserId)) return tmpUserId;
+            if (!string.IsNullOrEmpty(tmpUserId))
+            {
+                return tmpUserId;
+            }
             tmpUserId = Guid.NewGuid().ToString();
             EditorPrefsUtils.TmpUserId = tmpUserId;
             return tmpUserId;

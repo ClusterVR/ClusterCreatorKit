@@ -26,6 +26,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
                     return spawnCandidates[rnd.Next(spawnCandidates.Length)];
                 }
             }
+
             spawnCandidates = spawnPoints.Where(x => x.SpawnType == SpawnType.Entrance).ToArray();
             return spawnCandidates[rnd.Next(spawnCandidates.Length)];
         }

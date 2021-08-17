@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using System.Collections.Generic;
 using ClusterVR.CreatorKit.Preview.PlayerController;
 using ClusterVR.CreatorKit.World;
@@ -28,7 +29,10 @@ namespace ClusterVR.CreatorKit.Preview.WarpPortal
 
         void WarpTo(OnEnterWarpPortalEventArgs e)
         {
-            if (playerController == null || !e.Target.CompareTag("Player")) return;
+            if (playerController == null || !e.Target.CompareTag("Player"))
+            {
+                return;
+            }
             if (!e.KeepPosition)
             {
                 playerController.PlayerTransform.position = e.ToPosition;
@@ -49,3 +53,4 @@ namespace ClusterVR.CreatorKit.Preview.WarpPortal
         }
     }
 }
+#endif

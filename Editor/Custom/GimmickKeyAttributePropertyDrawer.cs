@@ -22,7 +22,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var container = new VisualElement();
 
             var targetProperty = property.FindPropertyRelative("target");
-            var targetField = new PopupField<GimmickTarget>("Target", targetChoices, (GimmickTarget)targetProperty.enumValueIndex, FormatListItem, FormatListItem);
+            var targetField = new PopupField<GimmickTarget>("Target", targetChoices,
+                (GimmickTarget) targetProperty.enumValueIndex, FormatListItem, FormatListItem);
             targetField.SetEnabled(targetChoices.Count > 1);
             targetField.RegisterValueChangedCallback(e =>
             {

@@ -22,15 +22,27 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void Start()
         {
-            if (playableDirector == null) playableDirector = GetComponent<PlayableDirector>();
+            if (playableDirector == null)
+            {
+                playableDirector = GetComponent<PlayableDirector>();
+            }
             playTimelineGimmick = GetComponent<IPlayTimelineGimmick>();
         }
 
         public void Run(GimmickValue value, DateTime current)
         {
-            if (playableDirector == null) return;
-            if (value.TimeStamp <= LastTriggeredAt) return;
-            if (playTimelineGimmick != null && value.TimeStamp <= playTimelineGimmick.LastTriggeredAt) return;
+            if (playableDirector == null)
+            {
+                return;
+            }
+            if (value.TimeStamp <= LastTriggeredAt)
+            {
+                return;
+            }
+            if (playTimelineGimmick != null && value.TimeStamp <= playTimelineGimmick.LastTriggeredAt)
+            {
+                return;
+            }
             LastTriggeredAt = value.TimeStamp;
 
             playableDirector.time = playableDirector.initialTime;
@@ -42,7 +54,10 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void OnValidate()
         {
-            if (playableDirector == null || playableDirector.gameObject != gameObject) playableDirector = GetComponent<PlayableDirector>();
+            if (playableDirector == null || playableDirector.gameObject != gameObject)
+            {
+                playableDirector = GetComponent<PlayableDirector>();
+            }
         }
 
         void Reset()

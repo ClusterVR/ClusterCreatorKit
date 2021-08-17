@@ -12,6 +12,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             {
                 return TriggerParamArrayField.CreateTriggerParamArrayField(serializedProperty);
             }
+
             return base.CreateField(serializedProperty);
         }
     }

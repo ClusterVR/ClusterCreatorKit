@@ -27,6 +27,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(10));
             }
+
             if (!ShouldUpdate())
             {
                 return;
@@ -55,8 +56,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
         static bool ShouldUpdate()
         {
             return status == StatusCode.Failure || //取得失敗時
-                   EditorApplication.timeSinceStartup < PlayerPrefs.GetFloat(jsonLastUpdateTimeKey) || //Editor再起動時
-                   EditorApplication.timeSinceStartup - PlayerPrefs.GetFloat(jsonLastUpdateTimeKey) > 30; // 前回取得から30秒経過時
+                EditorApplication.timeSinceStartup < PlayerPrefs.GetFloat(jsonLastUpdateTimeKey) || //Editor再起動時
+                EditorApplication.timeSinceStartup - PlayerPrefs.GetFloat(jsonLastUpdateTimeKey) > 30; // 前回取得から30秒経過時
         }
 
         static void SavePackageList(PackageCollection packageCollection)

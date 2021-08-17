@@ -24,7 +24,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             var despawnHeights = sceneRootObjects.SelectMany(x => x.GetComponentsInChildren<DespawnHeight>(true));
             if (despawnHeights.Count() != 1)
             {
-                errorMessage = $"{nameof(DespawnHeight)}はワールドに1つ配置されている必要があります。現在配置されている{nameof(DespawnHeight)}の数は {despawnHeights.Count()} です";
+                errorMessage =
+                    $"{nameof(DespawnHeight)}はワールドに1つ配置されている必要があります。現在配置されている{nameof(DespawnHeight)}の数は {despawnHeights.Count()} です";
                 invalidObjects = despawnHeights.Select(x => x.gameObject).ToArray();
                 return false;
             }
@@ -33,7 +34,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             var entrances = spawnPoints.Where(x => x.SpawnType == SpawnType.Entrance);
             if (!entrances.Any())
             {
-                errorMessage = $"ワールドには{nameof(SpawnPoint)}が「{nameof(SpawnType.Entrance)}」の{nameof(SpawnPoint)}が1つ以上配置されている必要があります";
+                errorMessage =
+                    $"ワールドには{nameof(SpawnPoint)}が「{nameof(SpawnType.Entrance)}」の{nameof(SpawnPoint)}が1つ以上配置されている必要があります";
                 invalidObjects = spawnPoints.Select(x => x.gameObject).ToArray();
                 return false;
             }
@@ -58,30 +60,43 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 return false;
             }
 
-            var items = allRootObjects.SelectMany(x => x.GetComponentsInChildren<ClusterVR.CreatorKit.Item.Implements.Item>(true));
-            var nestedItems = items.Where(i => i.transform.parent != null && i.transform.parent.GetComponentsInParent<ClusterVR.CreatorKit.Item.Implements.Item>(true).FirstOrDefault() != null).ToArray();
+            var items = allRootObjects.SelectMany(x =>
+                x.GetComponentsInChildren<ClusterVR.CreatorKit.Item.Implements.Item>(true));
+            var nestedItems = items.Where(i =>
+                    i.transform.parent != null && i.transform.parent
+                        .GetComponentsInParent<ClusterVR.CreatorKit.Item.Implements.Item>(true).FirstOrDefault() !=
+                    null)
+                .ToArray();
             if (nestedItems.Any())
             {
-                errorMessage = $"{nameof(ClusterVR.CreatorKit.Item.Implements.Item)}の子に{nameof(ClusterVR.CreatorKit.Item.Implements.Item)}は配置できません";
+                errorMessage =
+                    $"{nameof(Item.Implements.Item)}の子に{nameof(Item.Implements.Item)}は配置できません";
                 invalidObjects = nestedItems.Select(x => x.gameObject)
-                    .Concat(nestedItems.Select(i => i.transform.parent.GetComponentsInParent<ClusterVR.CreatorKit.Item.Implements.Item>(true).First().gameObject))
+                    .Concat(nestedItems.Select(i =>
+                        i.transform.parent.GetComponentsInParent<ClusterVR.CreatorKit.Item.Implements.Item>(true)
+                            .First().gameObject))
                     .Distinct()
                     .ToArray();
                 return false;
             }
 
             var canvases = allRootObjects.SelectMany(x => x.GetComponentsInChildren<Canvas>(true));
-            var screenSpaceCanvases = canvases.Where(c => c.isRootCanvas && (c.renderMode == RenderMode.ScreenSpaceCamera || c.renderMode == RenderMode.ScreenSpaceOverlay));
-            var unmanagedPlayerLocalUIs = screenSpaceCanvases.Where(c => c.GetComponent<IPlayerLocalUI>() == null).ToArray();
+            var screenSpaceCanvases = canvases.Where(c =>
+                c.isRootCanvas && (c.renderMode == RenderMode.ScreenSpaceCamera ||
+                    c.renderMode == RenderMode.ScreenSpaceOverlay));
+            var unmanagedPlayerLocalUIs =
+                screenSpaceCanvases.Where(c => c.GetComponent<IPlayerLocalUI>() == null).ToArray();
             if (unmanagedPlayerLocalUIs.Any())
             {
-                errorMessage = $"{nameof(RenderMode)}が ScreenSpace である {nameof(Canvas)} には {nameof(PlayerLocalUI)} を追加する必要があります";
+                errorMessage =
+                    $"{nameof(RenderMode)}が ScreenSpace である {nameof(Canvas)} には {nameof(PlayerLocalUI)} を追加する必要があります";
                 invalidObjects = unmanagedPlayerLocalUIs.Select(x => x.gameObject).ToArray();
                 return false;
             }
 
             var globalGimmicks = allRootObjects.SelectMany(x => x.GetComponentsInChildren<IGlobalGimmick>(true));
-            var invalidPlayerLocalGlobalGimmick = globalGimmicks.Where(g => !LocalPlayerGimmickValidation.IsValid(g)).ToArray();
+            var invalidPlayerLocalGlobalGimmick =
+                globalGimmicks.Where(g => !LocalPlayerGimmickValidation.IsValid(g)).ToArray();
             if (invalidPlayerLocalGlobalGimmick.Any())
             {
                 errorMessage = LocalPlayerGimmickValidation.ErrorMessage;
@@ -90,7 +105,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             }
 
             var triggers = allRootObjects.SelectMany(x => x.GetComponentsInChildren<ITrigger>(true));
-            var invalidKeyLengthTriggers = triggers.Where(g => g.TriggerParams.Any(p => p.Key.Length > Constants.TriggerGimmick.MaxKeyLength)).ToArray();
+            var invalidKeyLengthTriggers = triggers
+                .Where(g => g.TriggerParams.Any(p => p.Key.Length > Constants.TriggerGimmick.MaxKeyLength)).ToArray();
             if (invalidKeyLengthTriggers.Any())
             {
                 errorMessage = $"Key は {Constants.TriggerGimmick.MaxKeyLength}文字以下である必要があります。";
@@ -99,7 +115,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             }
 
             var gimmicks = allRootObjects.SelectMany(x => x.GetComponentsInChildren<IGimmick>(true));
-            var invalidKeyLengthGimmicks = gimmicks.Where(g => g.Key.Length > Constants.TriggerGimmick.MaxKeyLength).ToArray();
+            var invalidKeyLengthGimmicks =
+                gimmicks.Where(g => g.Key.Length > Constants.TriggerGimmick.MaxKeyLength).ToArray();
             if (invalidKeyLengthGimmicks.Any())
             {
                 errorMessage = $"Key は {Constants.TriggerGimmick.MaxKeyLength}文字以下である必要があります。";
@@ -109,12 +126,12 @@ namespace ClusterVR.CreatorKit.Editor.Validator
 
             foreach (var itemTemplate in itemTemplates)
             {
-                var result = ItemTemplateValidator.Validate(itemTemplate, onlyErrors: true);
+                var result = ItemTemplateValidator.Validate(itemTemplate, true);
                 if (result.Errors.Any())
                 {
                     var firstError = result.Errors.First();
                     errorMessage = firstError.Message;
-                    invalidObjects = new[] {itemTemplate.gameObject}; // Validation結果ではprefab内部がSelectされないためrootを返している
+                    invalidObjects = new[] { itemTemplate.gameObject }; // Validation結果ではprefab内部がSelectされないためrootを返している
                     return false;
                 }
             }
@@ -122,14 +139,15 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             var persistedKeys = PersistedPlayerStateKeysGatherer.Gather(scene);
             if (persistedKeys.Count > Constants.TriggerGimmick.PersistedPlayerStateKeysCount)
             {
-                errorMessage = $"{nameof(InitializePlayerTrigger)} の Key は {Constants.TriggerGimmick.PersistedPlayerStateKeysCount}種類以下である必要があります。";
+                errorMessage =
+                    $"{nameof(InitializePlayerTrigger)} の Key は {Constants.TriggerGimmick.PersistedPlayerStateKeysCount}種類以下である必要があります。";
                 invalidObjects = new GameObject[] { };
                 return false;
             }
 
             Debug.Log("Venue Validation is Passed.");
             errorMessage = "";
-            invalidObjects = new GameObject[]{};
+            invalidObjects = new GameObject[] { };
             return true;
         }
     }

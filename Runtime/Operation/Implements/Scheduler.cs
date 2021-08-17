@@ -7,6 +7,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
     public class Scheduler : MonoBehaviour
     {
         static Scheduler instance;
+
         static Scheduler Instance
         {
             get
@@ -16,6 +17,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
                     instance = new GameObject("Scheduler").AddComponent<Scheduler>();
                     DontDestroyOnLoad(instance.gameObject);
                 }
+
                 return instance;
             }
         }
@@ -30,7 +32,11 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             {
                 yield return new WaitForSecondsRealtime((float) dueTime.TotalSeconds);
             }
-            if (cancellation.IsDisposed) yield break;
+
+            if (cancellation.IsDisposed)
+            {
+                yield break;
+            }
             action.Invoke();
         }
 
@@ -45,7 +51,10 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
             public void Dispose()
             {
-                if (!IsDisposed) IsDisposed = true;
+                if (!IsDisposed)
+                {
+                    IsDisposed = true;
+                }
             }
         }
     }

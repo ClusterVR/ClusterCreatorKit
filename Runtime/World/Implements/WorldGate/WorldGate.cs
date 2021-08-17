@@ -7,7 +7,7 @@ namespace ClusterVR.CreatorKit.World.Implements.WorldGate
     {
         [SerializeField, Tooltip("ワールドまたはイベントのId")] string worldOrEventId;
         [SerializeField, Tooltip("ワープ先のSpawnPointのKey(任意)")] string key;
-        
+
         public event OnEnterWorldGateEventHandler OnEnterWorldGateEvent;
 
         void OnTriggerEnter(Collider other)

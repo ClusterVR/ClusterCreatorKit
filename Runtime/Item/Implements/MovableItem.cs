@@ -14,7 +14,9 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         enum State
         {
-            Free, Controlled, Interpolated
+            Free,
+            Controlled,
+            Interpolated
         }
 
         bool isInitialized;
@@ -32,7 +34,10 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         void CacheInitialValue()
         {
-            if (isInitialized) return;
+            if (isInitialized)
+            {
+                return;
+            }
             initialPosition = transform.position;
             initialRotation = transform.rotation;
             initialIsKinematic = rb.isKinematic;
@@ -41,7 +46,10 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         void Start()
         {
-            if (rb == null) rb = GetComponent<Rigidbody>();
+            if (rb == null)
+            {
+                rb = GetComponent<Rigidbody>();
+            }
 
             CacheInitialValue();
         }
@@ -60,6 +68,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
                 currentPosition = transform.position;
                 currentRotation = transform.rotation;
             }
+
             targetPosition = position;
             targetRotation = rotation;
             setAt = Time.realtimeSinceStartup;
@@ -71,7 +80,10 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         void FixedUpdate()
         {
-            if (state == State.Free) return;
+            if (state == State.Free)
+            {
+                return;
+            }
 
             if (state == State.Controlled)
             {
@@ -87,7 +99,10 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         public void EnablePhysics()
         {
-            if (state == State.Free) return;
+            if (state == State.Free)
+            {
+                return;
+            }
             rb.isKinematic = initialIsKinematic;
             rb.velocity = (targetPosition - currentPosition) / interpolateDurationSeconds;
             rb.angularVelocity = GetAngularVelocity(currentRotation, targetRotation, interpolateDurationSeconds);
@@ -97,9 +112,18 @@ namespace ClusterVR.CreatorKit.Item.Implements
         static Vector3 GetAngularVelocity(Quaternion from, Quaternion to, float deltaTime)
         {
             (Quaternion.Inverse(from) * to).ToAngleAxis(out var deltaAngle, out var deltaAngleAxis);
-            if (deltaAngle > 180f) deltaAngle -= 360f;
-            if (deltaAngle == 0f) return Vector3.zero;
-            else return deltaAngle * Mathf.Deg2Rad / deltaTime * (from * deltaAngleAxis);
+            if (deltaAngle > 180f)
+            {
+                deltaAngle -= 360f;
+            }
+            if (deltaAngle == 0f)
+            {
+                return Vector3.zero;
+            }
+            else
+            {
+                return deltaAngle * Mathf.Deg2Rad / deltaTime * (@from * deltaAngleAxis);
+            }
         }
 
         public void Respawn()
@@ -109,7 +133,10 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         public void WarpTo(Vector3 position, Quaternion rotation)
         {
-            if (state != State.Free) return;
+            if (state != State.Free)
+            {
+                return;
+            }
             transform.position = position;
             transform.rotation = rotation;
             rb.velocity = Vector3.zero;
@@ -118,25 +145,37 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         public void AddForce(Vector3 force, ForceMode mode)
         {
-            if (state != State.Free) return;
+            if (state != State.Free)
+            {
+                return;
+            }
             rb.AddForce(force, mode);
         }
 
         public void AddTorque(Vector3 torque, ForceMode mode)
         {
-            if (state != State.Free) return;
+            if (state != State.Free)
+            {
+                return;
+            }
             rb.AddTorque(torque, mode);
         }
 
         public void SetVelocity(Vector3 velocity)
         {
-            if (state != State.Free) return;
+            if (state != State.Free)
+            {
+                return;
+            }
             rb.velocity = velocity;
         }
 
         public void SetAngularVelocity(Vector3 angularVelocity)
         {
-            if (state != State.Free) return;
+            if (state != State.Free)
+            {
+                return;
+            }
             rb.angularVelocity = angularVelocity;
         }
 
@@ -148,8 +187,14 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         void OnValidate()
         {
-            if (item == null || item.gameObject != gameObject) item = GetComponent<Item>();
-            if (rb == null || rb.gameObject != gameObject) rb = GetComponent<Rigidbody>();
+            if (item == null || item.gameObject != gameObject)
+            {
+                item = GetComponent<Item>();
+            }
+            if (rb == null || rb.gameObject != gameObject)
+            {
+                rb = GetComponent<Rigidbody>();
+            }
         }
     }
 }

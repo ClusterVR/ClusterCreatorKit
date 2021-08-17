@@ -44,8 +44,14 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Item
             {
                 if (movableItem.Item.Position.y < despawnHeight)
                 {
-                    if (movableItem.CanRespawn) movableItem.Item.Respawn();
-                    else itemsToDestroy.Add(movableItem.Item.Item);
+                    if (movableItem.CanRespawn)
+                    {
+                        movableItem.Item.Respawn();
+                    }
+                    else
+                    {
+                        itemsToDestroy.Add(movableItem.Item.Item);
+                    }
                 }
             }
 
@@ -58,7 +64,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Item
         void OnCreate(IItem item)
         {
             var movableItem = item.gameObject.GetComponent<IMovableItem>();
-            if (movableItem != null) movableItems.Add((movableItem, false));
+            if (movableItem != null)
+            {
+                movableItems.Add((movableItem, false));
+            }
         }
 
         void OnDestroy(IItem item)

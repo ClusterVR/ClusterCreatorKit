@@ -7,7 +7,7 @@ namespace ClusterVR.CreatorKit.World
     {
         event OnEnterWorldGateEventHandler OnEnterWorldGateEvent;
     }
-    
+
     public delegate void OnEnterWorldGateEventHandler(OnEnterWorldGateEventArgs e);
 
     public class OnEnterWorldGateEventArgs : EventArgs

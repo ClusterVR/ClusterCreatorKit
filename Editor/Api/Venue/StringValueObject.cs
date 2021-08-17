@@ -9,9 +9,18 @@ namespace ClusterVR.CreatorKit.Editor.Api.Venue
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
             return Equals((StringValueObject) obj);
         }
 
@@ -37,6 +46,9 @@ namespace ClusterVR.CreatorKit.Editor.Api.Venue
             Value = value;
         }
 
-        public override string ToString() => Value;
+        public override string ToString()
+        {
+            return Value;
+        }
     }
 }

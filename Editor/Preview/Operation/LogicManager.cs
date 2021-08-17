@@ -69,7 +69,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Operation
         void OnRunItemLogic(IItemLogic sender, RunItemLogicEventArgs args)
         {
             var itemId = sender.ItemId;
-            if (itemId.Value == 0) return;
+            if (itemId.Value == 0)
+            {
+                return;
+            }
             Execute(args.Logic, itemId);
         }
 
@@ -85,8 +88,14 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Operation
 
         void Execute(Logic logic, ItemId itemId = default)
         {
-            if (logic == null || !logic.IsValid()) return;
-            if (!signalGenerator.TryGet(out var signal)) return;
+            if (logic == null || !logic.IsValid())
+            {
+                return;
+            }
+            if (!signalGenerator.TryGet(out var signal))
+            {
+                return;
+            }
             var updatedKeys = RunLogic(logic, itemId, signal);
             gimmickManager.OnStateUpdated(updatedKeys);
         }
@@ -96,7 +105,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Operation
             var updatedKeys = new Queue<string>();
             foreach (var statement in logic.Statements)
             {
-                if (statement == null) continue;
+                if (statement == null)
+                {
+                    continue;
+                }
                 RunStatement(statement, itemId, updatedKeys, signal);
             }
 
@@ -105,18 +117,26 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Operation
 
         void RunStatement(Statement statement, ItemId itemId, Queue<string> updatedKeys, StateValue signal)
         {
-            if (RunSingleStatement(statement.SingleStatement, itemId, signal, out var updatedKey)) updatedKeys.Enqueue(updatedKey);
+            if (RunSingleStatement(statement.SingleStatement, itemId, signal, out var updatedKey))
+            {
+                updatedKeys.Enqueue(updatedKey);
+            }
         }
 
-        bool RunSingleStatement(SingleStatement singleStatement, ItemId itemId, StateValue signal, out string updatedKey)
+        bool RunSingleStatement(SingleStatement singleStatement, ItemId itemId, StateValue signal,
+            out string updatedKey)
         {
             var target = singleStatement.TargetState;
             var parameterType = target.ParameterType;
             updatedKey = GetStateKey(target.Target, target.Key, itemId);
             if (parameterType == ParameterType.Signal)
             {
-                var conditionSatisfied = singleStatement.Expression == null || EvaluateExpression(singleStatement.Expression, itemId).ToBool();
-                if (conditionSatisfied) roomStateRepository.Update(updatedKey, signal);
+                var conditionSatisfied = singleStatement.Expression == null ||
+                    EvaluateExpression(singleStatement.Expression, itemId).ToBool();
+                if (conditionSatisfied)
+                {
+                    roomStateRepository.Update(updatedKey, signal);
+                }
                 return conditionSatisfied;
             }
             else
@@ -167,7 +187,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Operation
 
         StateValue Operate(OperatorExpression operatorExpression, ItemId itemId)
         {
-            StateValue GetOperand(int index) => EvaluateExpression(operatorExpression.Operands[index], itemId);
+            StateValue GetOperand(int index)
+            {
+                return EvaluateExpression(operatorExpression.Operands[index], itemId);
+            }
 
             switch (operatorExpression.Operator)
             {
@@ -213,7 +236,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Operation
                 case Operator.Max:
                     return new StateValue(Math.Max(GetOperand(0).ToDouble(), GetOperand(1).ToDouble()));
                 case Operator.Clamp:
-                    return new StateValue(Math.Min(Math.Max(GetOperand(0).ToDouble(), GetOperand(1).ToDouble()), GetOperand(2).ToDouble()));
+                    return new StateValue(Math.Min(Math.Max(GetOperand(0).ToDouble(), GetOperand(1).ToDouble()),
+                        GetOperand(2).ToDouble()));
 
                 default: throw new NotImplementedException();
             }

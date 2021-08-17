@@ -20,7 +20,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
         }
 
         public void InvokeOnStart(IEnumerable<IOnReceiveOwnershipItemTrigger> onReceiveOwnershipItemTriggers)
-            => Invoke(onReceiveOwnershipItemTriggers, false);
+        {
+            Invoke(onReceiveOwnershipItemTriggers, false);
+        }
 
         void Invoke(IEnumerable<IOnReceiveOwnershipItemTrigger> onReceiveOwnershipItemTriggers, bool isVoluntary)
         {

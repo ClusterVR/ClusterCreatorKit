@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Item;
@@ -22,14 +23,22 @@ namespace ClusterVR.CreatorKit.Preview.Item
         {
             interactableItems.Clear();
 
-            var collidingsCount = Physics.OverlapSphereNonAlloc(center.position, itemInteractableRange, collidings, InteractableItemLayerMask);
-            if (collidingsCount == 0) return;
+            var collidingsCount = Physics.OverlapSphereNonAlloc(center.position, itemInteractableRange, collidings,
+                InteractableItemLayerMask);
+            if (collidingsCount == 0)
+            {
+                return;
+            }
 
             foreach (var colliding in collidings.Take(collidingsCount))
             {
                 var item = colliding.gameObject.GetComponentInParent<IInteractableItem>();
-                if (item != null) interactableItems.Add(item);
+                if (item != null)
+                {
+                    interactableItems.Add(item);
+                }
             }
         }
     }
 }
+#endif

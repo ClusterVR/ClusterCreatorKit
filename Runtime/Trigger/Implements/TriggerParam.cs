@@ -24,7 +24,8 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
             return new Trigger.TriggerParam(target, specifiedTargetItem, key, type, value.ToTriggerValue());
         }
 
-        public TriggerParam(TriggerTarget target, Item.Implements.Item specifiedTargetItem, string key, ParameterType type, Value value)
+        public TriggerParam(TriggerTarget target, Item.Implements.Item specifiedTargetItem, string key,
+            ParameterType type, Value value)
         {
             this.target = target;
             this.specifiedTargetItem = specifiedTargetItem;

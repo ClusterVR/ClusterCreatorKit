@@ -11,11 +11,12 @@ namespace ClusterVR.CreatorKit.Editor.Custom
         {
             var container = new VisualElement();
 
-            var helpBox = new IMGUIContainer(() => EditorGUILayout.HelpBox($"{property.displayName} を指定する必要があります。", MessageType.Warning));
+            var helpBox = new IMGUIContainer(() =>
+                EditorGUILayout.HelpBox($"{property.displayName} を指定する必要があります。", MessageType.Warning));
             var objectField = new ObjectField(property.displayName)
             {
                 objectType = ((RequiredObjectAttribute) attribute).PropertyType,
-                value = property.objectReferenceValue,
+                value = property.objectReferenceValue
             };
             objectField.Bind(property.serializedObject);
 
