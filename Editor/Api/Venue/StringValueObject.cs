@@ -1,6 +1,6 @@
 namespace ClusterVR.CreatorKit.Editor.Api.Venue
 {
-    public class StringValueObject
+    public abstract class StringValueObject
     {
         bool Equals(StringValueObject other)
         {

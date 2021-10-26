@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Editor.Api.Venue
 {
     [Serializable]
-    public class PostNotifyFinishedUploadPayload
+    public sealed class PostNotifyFinishedUploadPayload
     {
         [SerializeField] bool isPublish;
         [SerializeField] string worldDescriptor;

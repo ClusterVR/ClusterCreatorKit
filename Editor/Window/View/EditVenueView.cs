@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public class EditVenueView
+    public sealed class EditVenueView
     {
         readonly Reactive<bool> reactiveEdited = new Reactive<bool>();
 

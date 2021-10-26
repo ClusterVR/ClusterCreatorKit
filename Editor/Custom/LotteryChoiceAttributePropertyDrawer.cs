@@ -29,7 +29,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             container.Add(weightField);
 
             var triggersProperty = property.FindPropertyRelative("triggers");
-            var triggersField = TriggerParamArrayField.CreateTriggerParamArrayField(triggersProperty);
+            var triggersField = ReorderableArrayField.CreateReorderableArrayField(triggersProperty);
             container.Add(triggersField);
 
             return container;

@@ -2,7 +2,7 @@
 
 namespace ClusterVR.CreatorKit.Editor.Preview.World
 {
-    public class AvatarRespawner
+    public sealed class AvatarRespawner
     {
         readonly float despawnHeight;
         readonly PlayerPresenter playerPresenter;

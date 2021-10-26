@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
 {
-    public class WebTriggerWindow : EditorWindow
+    public sealed class WebTriggerWindow : EditorWindow
     {
         const string messageWhenNotPlayMode = "ウェブトリガーは実行中のみ使用可能です";
 

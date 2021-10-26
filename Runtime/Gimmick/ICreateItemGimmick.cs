@@ -13,7 +13,7 @@ namespace ClusterVR.CreatorKit.Gimmick
 
     public delegate void CreateItemEventHandler(CreateItemEventArgs args);
 
-    public class CreateItemEventArgs : EventArgs
+    public sealed class CreateItemEventArgs : EventArgs
     {
         public ItemId SenderId;
         public ItemTemplateId TemplateId;

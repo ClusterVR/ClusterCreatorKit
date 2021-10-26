@@ -15,7 +15,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public class UploadVenueView
+    public sealed class UploadVenueView
     {
         readonly ImageView thumbnail;
         readonly UserInfo userInfo;

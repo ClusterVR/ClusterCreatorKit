@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    public class VisualElementEditor : UnityEditor.Editor
+    public abstract class VisualElementEditor : UnityEditor.Editor
     {
         public override VisualElement CreateInspectorGUI()
         {

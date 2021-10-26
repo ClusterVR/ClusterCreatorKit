@@ -10,7 +10,7 @@ namespace ClusterVR.CreatorKit.World
 
     public delegate void OnEnterWarpPortalEventHandler(OnEnterWarpPortalEventArgs e);
 
-    public class OnEnterWarpPortalEventArgs : EventArgs
+    public sealed class OnEnterWarpPortalEventArgs : EventArgs
     {
         public GameObject Target { get; }
         public Vector3 ToPosition { get; }

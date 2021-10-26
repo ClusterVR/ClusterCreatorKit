@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public class EditAndUploadVenueView
+    public sealed class EditAndUploadVenueView
     {
         readonly EditVenueView editVenueView;
         readonly UploadVenueView uploadVenueView;

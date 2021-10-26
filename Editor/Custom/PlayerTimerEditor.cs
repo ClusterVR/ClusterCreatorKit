@@ -4,7 +4,7 @@ using UnityEditor;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomEditor(typeof(PlayerTimer)), CanEditMultipleObjects]
-    public class PlayerTimerEditor : VisualElementEditor
+    public sealed class PlayerTimerEditor : TriggerEditor
     {
     }
 }

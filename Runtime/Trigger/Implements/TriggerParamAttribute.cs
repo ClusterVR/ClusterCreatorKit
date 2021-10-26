@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
-    public class TriggerParamAttribute : PropertyAttribute
+    public abstract class TriggerParamAttribute : PropertyAttribute
     {
         public TriggerTarget[] TargetSelectables { get; }
         public virtual string ValueLabelText => "Value";
@@ -16,21 +16,8 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         {
             return target.ToString();
         }
-    }
 
-    public class ItemTriggerParamAttribute : TriggerParamAttribute
-    {
-        protected ItemTriggerParamAttribute(params TriggerTarget[] targetSelectables)
-            : base(targetSelectables)
-        {
-        }
-
-        public ItemTriggerParamAttribute()
-            : this(TriggerTarget.Item, TriggerTarget.SpecifiedItem, TriggerTarget.Player, TriggerTarget.Global)
-        {
-        }
-
-        public override string FormatTarget(TriggerTarget target)
+        protected static string FormatTargetForItemTrigger(TriggerTarget target)
         {
             switch (target)
             {
@@ -44,7 +31,33 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         }
     }
 
-    public class CollideItemTriggerParamAttribute : ItemTriggerParamAttribute
+    public class ConstantTriggerParamAttribute : TriggerParamAttribute
+    {
+        protected ConstantTriggerParamAttribute(params TriggerTarget[] targetSelectables)
+            : base(targetSelectables)
+        {
+        }
+    }
+
+    public class ItemConstantTriggerParamAttribute : ConstantTriggerParamAttribute
+    {
+        protected ItemConstantTriggerParamAttribute(params TriggerTarget[] targetSelectables)
+            : base(targetSelectables)
+        {
+        }
+
+        public ItemConstantTriggerParamAttribute()
+            : this(TriggerTarget.Item, TriggerTarget.SpecifiedItem, TriggerTarget.Player, TriggerTarget.Global)
+        {
+        }
+
+        public override string FormatTarget(TriggerTarget target)
+        {
+            return FormatTargetForItemTrigger(target);
+        }
+    }
+
+    public sealed class CollideItemTriggerParamAttribute : ItemConstantTriggerParamAttribute
     {
         public CollideItemTriggerParamAttribute()
             : base(TriggerTarget.Item, TriggerTarget.SpecifiedItem, TriggerTarget.Player,
@@ -53,7 +66,7 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         }
     }
 
-    public class ItemTimerTriggerParamAttribute : ItemTriggerParamAttribute
+    public sealed class ItemTimerTriggerParamAttribute : ItemConstantTriggerParamAttribute
     {
         public ItemTimerTriggerParamAttribute()
             : base(TriggerTarget.Item)
@@ -61,7 +74,7 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         }
     }
 
-    public class ItemTriggerLotteryTriggerParamAttribute : ItemTriggerParamAttribute
+    public sealed class ItemTriggerLotteryTriggerParamAttribute : ItemConstantTriggerParamAttribute
     {
         public ItemTriggerLotteryTriggerParamAttribute()
             : base(TriggerTarget.Item, TriggerTarget.Player)
@@ -69,20 +82,20 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         }
     }
 
-    public class PlayerTriggerParamAttribute : TriggerParamAttribute
+    public class PlayerConstantTriggerParamAttribute : ConstantTriggerParamAttribute
     {
-        protected PlayerTriggerParamAttribute(params TriggerTarget[] targetSelectables)
+        protected PlayerConstantTriggerParamAttribute(params TriggerTarget[] targetSelectables)
             : base(targetSelectables)
         {
         }
 
-        public PlayerTriggerParamAttribute()
+        public PlayerConstantTriggerParamAttribute()
             : base(TriggerTarget.Player, TriggerTarget.SpecifiedItem, TriggerTarget.Global)
         {
         }
     }
 
-    public class PlayerOperationTriggerParamAttribute : PlayerTriggerParamAttribute
+    public sealed class PlayerOperationTriggerParamAttribute : PlayerConstantTriggerParamAttribute
     {
         public PlayerOperationTriggerParamAttribute()
             : base(TriggerTarget.Player)
@@ -90,7 +103,7 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         }
     }
 
-    public class InitializePlayerTriggerParamAttribute : PlayerTriggerParamAttribute
+    public sealed class InitializePlayerTriggerParamAttribute : PlayerConstantTriggerParamAttribute
     {
         public override string ValueLabelText => "Initial Value";
 
@@ -100,11 +113,40 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         }
     }
 
-    public class GlobalOperationTriggerParamAttribute : TriggerParamAttribute
+    public sealed class GlobalOperationTriggerParamAttribute : ConstantTriggerParamAttribute
     {
         public GlobalOperationTriggerParamAttribute()
             : base(TriggerTarget.Global)
         {
+        }
+    }
+
+    public class VariableTriggerParamAttribute : TriggerParamAttribute
+    {
+        public ParameterType InputParameterType { get; }
+
+        protected VariableTriggerParamAttribute(ParameterType inputParameterType, params TriggerTarget[] targetSelectables)
+            : base(targetSelectables)
+        {
+            InputParameterType = inputParameterType;
+        }
+    }
+
+    public class ItemVariableTriggerParamAttribute : VariableTriggerParamAttribute
+    {
+        protected ItemVariableTriggerParamAttribute(ParameterType inputParameterType, params TriggerTarget[] targetSelectables)
+            : base(inputParameterType, targetSelectables)
+        {
+        }
+
+        public ItemVariableTriggerParamAttribute(ParameterType inputParameterType)
+            : this(inputParameterType, TriggerTarget.Item, TriggerTarget.SpecifiedItem, TriggerTarget.Player, TriggerTarget.Global)
+        {
+        }
+
+        public override string FormatTarget(TriggerTarget target)
+        {
+            return FormatTargetForItemTrigger(target);
         }
     }
 }

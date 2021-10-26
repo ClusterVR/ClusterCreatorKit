@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomPropertyDrawer(typeof(ParameterTypeFieldAttribute))]
-    public class ParameterTypeFieldAttributePropertyDrawer : PropertyDrawer
+    public sealed class ParameterTypeFieldAttributePropertyDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {

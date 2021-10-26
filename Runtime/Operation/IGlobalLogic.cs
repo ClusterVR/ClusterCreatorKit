@@ -10,7 +10,7 @@ namespace ClusterVR.CreatorKit.Operation
 
     public delegate void RunGlobalLogicEventHandler(RunGlobalLogicEventArgs args);
 
-    public class RunGlobalLogicEventArgs : EventArgs
+    public sealed class RunGlobalLogicEventArgs : EventArgs
     {
         public Logic Logic { get; }
 

@@ -7,19 +7,19 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
     [RequireComponent(typeof(GrabbableItem))]
-    public class OnReleaseItemTrigger : MonoBehaviour, IItemTrigger
+    public sealed class OnReleaseItemTrigger : MonoBehaviour, IItemTrigger
     {
         [SerializeField, HideInInspector] GrabbableItem grabbableItem;
-        [SerializeField, ItemTriggerParam] TriggerParam[] triggers;
+        [SerializeField, ItemConstantTriggerParam] ConstantTriggerParam[] triggers;
 
         IItem IItemTrigger.Item => grabbableItem != null
             ? grabbableItem.Item
             : (grabbableItem = GetComponent<GrabbableItem>()).Item;
 
         public event TriggerEventHandler TriggerEvent;
-        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
+        IEnumerable<TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
 
-        Trigger.TriggerParam[] triggersCache;
+        TriggerParam[] triggersCache;
 
         void Start()
         {

@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public class TokenAuthWidget
+    public sealed class TokenAuthWidget
     {
         public readonly Reactive<UserInfo?> reactiveUserInfo = new Reactive<UserInfo?>();
 

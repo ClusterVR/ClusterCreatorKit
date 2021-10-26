@@ -61,7 +61,11 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         {
             if (!hasFocus)
             {
-                EventSystem.current.currentInputModule.DeactivateModule();
+                var currentEventSystem = EventSystem.current;
+                if (currentEventSystem == null) return;
+                var currentInputModule = currentEventSystem.currentInputModule;
+                if (currentInputModule == null) return;
+                currentInputModule.DeactivateModule();
             }
         }
     }

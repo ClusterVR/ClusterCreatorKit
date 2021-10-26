@@ -10,7 +10,7 @@ namespace ClusterVR.CreatorKit.Operation
 
     public delegate void RunPlayerLogicEventHandler(RunPlayerLogicEventArgs args);
 
-    public class RunPlayerLogicEventArgs : EventArgs
+    public sealed class RunPlayerLogicEventArgs : EventArgs
     {
         public Logic Logic { get; }
 

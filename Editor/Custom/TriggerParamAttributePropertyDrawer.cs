@@ -12,17 +12,25 @@ using UnityEngine.UIElements;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomPropertyDrawer(typeof(TriggerParamAttribute), true)]
-    public class TriggerParamAttributePropertyDrawer : PropertyDrawer
+    public sealed class TriggerParamAttributePropertyDrawer : PropertyDrawer
     {
+        static readonly List<ParameterType> SelectableParameterTypes = new List<ParameterType>(6)
+        {
+            ParameterType.Signal,
+            ParameterType.Bool,
+            ParameterType.Float,
+            ParameterType.Integer,
+            ParameterType.Vector2,
+            ParameterType.Vector3
+        };
+
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var triggerAttr = (TriggerParamAttribute) attribute;
-            return CreatePropertyGUI(property, triggerAttr.TargetSelectables.ToList(), triggerAttr.FormatTarget,
-                triggerAttr.ValueLabelText);
+            return CreatePropertyGUI(triggerAttr, property);
         }
 
-        static VisualElement CreatePropertyGUI(SerializedProperty property, List<TriggerTarget> targetChoices,
-            Func<TriggerTarget, string> formatTarget, string valueLabelText)
+        static VisualElement CreatePropertyGUI(TriggerParamAttribute triggerParamAttribute, SerializedProperty property)
         {
             var container = new VisualElement
             {
@@ -34,8 +42,20 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 }
             };
 
+            var targetChoices = triggerParamAttribute.TargetSelectables.ToList();
+            Func<TriggerTarget, string> formatTarget = triggerParamAttribute.FormatTarget;
+            var valueLabelText = triggerParamAttribute.ValueLabelText;
+
             container.Add(CreateTargetPropertyGUI(property, targetChoices, formatTarget));
-            container.Add(CreateValuePropertyGUI(property, valueLabelText));
+            switch (triggerParamAttribute)
+            {
+                case ConstantTriggerParamAttribute _:
+                    container.Add(CreateConstantValuePropertyGUI(property, valueLabelText));
+                    break;
+                case VariableTriggerParamAttribute variableTriggerParamAttribute:
+                    container.Add(CreateVariableInputPropertyGUI(property, valueLabelText, variableTriggerParamAttribute.InputParameterType));
+                    break;
+            }
 
             return container;
         }
@@ -112,7 +132,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             return container;
         }
 
-        static VisualElement CreateValuePropertyGUI(SerializedProperty property, string valueLabelText)
+        static VisualElement CreateConstantValuePropertyGUI(SerializedProperty property, string valueLabelText)
         {
             var container = new VisualElement
             {
@@ -163,8 +183,31 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             integerValueField.Bind(integerValueProperty.serializedObject);
             container.Add(integerValueField);
 
+
+            var vector2ValueProperty = property.FindPropertyRelative("value.vector2Value");
+            Assert.AreEqual(vector2ValueProperty.propertyType, SerializedPropertyType.Vector2);
+            var vector2ValueField = new Vector2Field
+            {
+                bindingPath = vector2ValueProperty.propertyPath,
+                style = { flexGrow = new StyleFloat(9) }
+            };
+            vector2ValueField.Bind(vector2ValueProperty.serializedObject);
+            container.Add(vector2ValueField);
+
+            var vector3ValueProperty = property.FindPropertyRelative("value.vector3Value");
+            Assert.AreEqual(vector3ValueProperty.propertyType, SerializedPropertyType.Vector3);
+            var vector3ValueField = new Vector3Field
+            {
+                bindingPath = vector3ValueProperty.propertyPath,
+                style = { flexGrow = new StyleFloat(9) }
+            };
+            vector3ValueField.Bind(vector3ValueProperty.serializedObject);
+            container.Add(vector3ValueField);
+
             var typeProperty = property.FindPropertyRelative("type");
-            var typeField = EnumField.Create<ParameterType>(typeProperty, SwitchTriggerValueField);
+            var currentType = (ParameterType) typeProperty.intValue;
+            var selectingType = SelectableParameterTypes.Contains(currentType) ? currentType : SelectableParameterTypes[0];
+            var typeField = EnumField.Create(typeProperty, SelectableParameterTypes, selectingType, SwitchTriggerValueField);
             container.Insert(1, typeField);
 
             void SwitchTriggerValueField(ParameterType type)
@@ -172,9 +215,49 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 boolValueField.SetVisibility(type == ParameterType.Bool);
                 floatValueField.SetVisibility(type == ParameterType.Float);
                 integerValueField.SetVisibility(type == ParameterType.Integer);
+                vector2ValueField.SetVisibility(type == ParameterType.Vector2);
+                vector3ValueField.SetVisibility(type == ParameterType.Vector3);
             }
 
             SwitchTriggerValueField((ParameterType) typeProperty.enumValueIndex);
+
+            return container;
+        }
+
+        static VisualElement CreateVariableInputPropertyGUI(SerializedProperty property, string valueLabelText, ParameterType inputParameterType)
+        {
+            var container = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = new StyleEnum<FlexDirection>(FlexDirection.Row)
+                }
+            };
+
+            container.Add(new Label(string.IsNullOrEmpty(valueLabelText) ? "Value" : valueLabelText)
+            {
+                style =
+                {
+                    paddingTop = new StyleLength(2),
+                    paddingRight = new StyleLength(2),
+                    paddingLeft = new StyleLength(0f),
+                    unityTextAlign = new StyleEnum<TextAnchor>(TextAnchor.MiddleLeft)
+                }
+            });
+
+            var typeProperty = property.FindPropertyRelative("valueType");
+            string Format(VariableTriggerParam.ValueType type)
+            {
+                switch (type)
+                {
+                    case VariableTriggerParam.ValueType.Input:
+                        return $"{type}: {inputParameterType}";
+                    default:
+                        return type.ToString();
+                }
+            }
+            var valueTypeField = EnumField.Create<VariableTriggerParam.ValueType>(null, typeProperty, Format);
+            container.Add(valueTypeField);
 
             return container;
         }

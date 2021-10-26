@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.World.Implements.CommentScreenViews
 {
-    public class StandardCommentScreenView : MonoBehaviour, ICommentScreenView
+    public sealed class StandardCommentScreenView : MonoBehaviour, ICommentScreenView
     {
         [SerializeField] Transform content;
         [SerializeField] GameObject cellPrefab;

@@ -11,7 +11,7 @@ namespace ClusterVR.CreatorKit.Operation
 
     public delegate void RunItemLogicEventHandler(IItemLogic sender, RunItemLogicEventArgs args);
 
-    public class RunItemLogicEventArgs : EventArgs
+    public sealed class RunItemLogicEventArgs : EventArgs
     {
         public Logic Logic { get; }
 

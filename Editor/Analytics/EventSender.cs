@@ -14,7 +14,7 @@ namespace ClusterVR.CreatorKit.Editor.Analytics
     {
         const int IntervalSec = 60 * 5;
 
-        class SessionInfo : ScriptableSingleton<SessionInfo>
+        sealed class SessionInfo : ScriptableSingleton<SessionInfo>
         {
             [SerializeField] string sessionId;
             [SerializeField] double lastSentAt;

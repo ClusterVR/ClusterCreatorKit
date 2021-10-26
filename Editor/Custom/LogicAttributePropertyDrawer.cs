@@ -207,7 +207,9 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             container.Add(keyField);
 
             var parameterTypeProperty = property.FindPropertyRelative("parameterType");
-            var parameterTypeField = EnumField.Create<ParameterType>(parameterTypeProperty);
+            var currentType = (ParameterType) parameterTypeProperty.intValue;
+            var selectingType = TargetState.SelectableTypes.Contains(currentType) ? currentType : TargetState.SelectableTypes[0];
+            var parameterTypeField = EnumField.Create(parameterTypeProperty, TargetState.SelectableTypes, selectingType);
             container.Add(parameterTypeField);
 
             return container;
@@ -366,6 +368,10 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 source.FindPropertyRelative("constant.floatValue").floatValue;
             target.FindPropertyRelative("constant.integerValue").intValue =
                 source.FindPropertyRelative("constant.integerValue").intValue;
+            target.FindPropertyRelative("constant.vector2Value").vector2Value =
+                source.FindPropertyRelative("constant.vector2Value").vector2Value;
+            target.FindPropertyRelative("constant.vector3Value").vector3Value =
+                source.FindPropertyRelative("constant.vector3Value").vector3Value;
             target.FindPropertyRelative("sourceState.target").intValue =
                 source.FindPropertyRelative("sourceState.target").intValue;
             target.FindPropertyRelative("sourceState.key").stringValue =
@@ -418,6 +424,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 }
             };
 
+
             var boolValueProperty = property.FindPropertyRelative("boolValue");
             Assert.AreEqual(boolValueProperty.propertyType, SerializedPropertyType.Boolean);
             var boolValueField = new Toggle
@@ -448,12 +455,30 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             integerValueField.Bind(integerValueProperty.serializedObject);
             container.Add(integerValueField);
 
+            var vector2ValueProperty = property.FindPropertyRelative("vector2Value");
+            Assert.AreEqual(vector2ValueProperty.propertyType, SerializedPropertyType.Vector2);
+            var vector2ValueField = new Vector2Field
+            {
+                bindingPath = vector2ValueProperty.propertyPath,
+                style = { flexGrow = new StyleFloat(9) }
+            };
+            vector2ValueField.Bind(vector2ValueProperty.serializedObject);
+            container.Add(vector2ValueField);
+
+            var vector3ValueProperty = property.FindPropertyRelative("vector3Value");
+            Assert.AreEqual(vector3ValueProperty.propertyType, SerializedPropertyType.Vector3);
+            var vector3ValueField = new Vector3Field
+            {
+                bindingPath = vector3ValueProperty.propertyPath,
+                style = { flexGrow = new StyleFloat(9) }
+            };
+            vector3ValueField.Bind(vector3ValueProperty.serializedObject);
+            container.Add(vector3ValueField);
+
             var typeProperty = property.FindPropertyRelative("type");
-            var typeChoices = new List<ParameterType>
-                { ParameterType.Bool, ParameterType.Float, ParameterType.Integer };
             var currentType = (ParameterType) typeProperty.intValue;
-            var selectingTarget = typeChoices.Contains(currentType) ? currentType : typeChoices[0];
-            var typeField = EnumField.Create(typeProperty, typeChoices, selectingTarget, SwitchField);
+            var selectingType = ConstantValue.SelectableTypes.Contains(currentType) ? currentType : ConstantValue.SelectableTypes[0];
+            var typeField = EnumField.Create(typeProperty, ConstantValue.SelectableTypes, selectingType, SwitchField);
             container.Insert(0, typeField);
 
             void SwitchField(ParameterType type)
@@ -461,9 +486,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 boolValueField.SetVisibility(type == ParameterType.Bool);
                 floatValueField.SetVisibility(type == ParameterType.Float);
                 integerValueField.SetVisibility(type == ParameterType.Integer);
+                vector2ValueField.SetVisibility(type == ParameterType.Vector2);
+                vector3ValueField.SetVisibility(type == ParameterType.Vector3);
             }
 
-            SwitchField(selectingTarget);
+            SwitchField(selectingType);
 
             return container;
         }
@@ -481,6 +508,12 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                     flexGrow = new StyleFloat(9)
                 }
             };
+
+            var typeProperty = property.FindPropertyRelative("type");
+            var currentType = (ParameterType) typeProperty.intValue;
+            var selectingType = SourceState.SelectableTypes.Contains(currentType) ? currentType : SourceState.SelectableTypes[0];
+            var typeField = EnumField.Create(typeProperty, SourceState.SelectableTypes, selectingType);
+            container.Add(typeField);
 
             var targetProperty = property.FindPropertyRelative("target");
             var currentTarget = (GimmickTarget) targetProperty.intValue;

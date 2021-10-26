@@ -4,7 +4,7 @@ using UnityEditor;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomEditor(typeof(DestroyItemGimmick)), CanEditMultipleObjects]
-    public class DestroyItemGimmickEditor : VisualElementEditor
+    public sealed class DestroyItemGimmickEditor : VisualElementEditor
     {
     }
 }

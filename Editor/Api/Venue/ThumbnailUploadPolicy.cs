@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 namespace ClusterVR.CreatorKit.Editor.Api.Venue
 {
     [Serializable]
-    public class ThumbnailUploadPolicy
+    public sealed class ThumbnailUploadPolicy
     {
         public string contentType { get; set; }
         public string fileName { get; set; }

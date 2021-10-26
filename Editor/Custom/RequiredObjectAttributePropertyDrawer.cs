@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomPropertyDrawer(typeof(RequiredObjectAttribute), true)]
-    public class RequiredObjectAttributePropertyDrawer : PropertyDrawer
+    public sealed class RequiredObjectAttributePropertyDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {

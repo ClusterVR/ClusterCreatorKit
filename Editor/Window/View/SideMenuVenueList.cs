@@ -12,7 +12,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public class SideMenuVenueList
+    public sealed class SideMenuVenueList
     {
         public readonly Reactive<bool> reactiveForceLogout = new Reactive<bool>();
         public readonly Reactive<Venue> reactiveCurrentVenue = new Reactive<Venue>();

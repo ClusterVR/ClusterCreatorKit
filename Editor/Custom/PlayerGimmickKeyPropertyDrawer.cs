@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomPropertyDrawer(typeof(PlayerGimmickKey), true)]
-    public class PlayerGimmickKeyPropertyDrawer : PropertyDrawer
+    public sealed class PlayerGimmickKeyPropertyDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
@@ -27,7 +27,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             SwitchDisplayItem((GimmickTarget) targetProperty.enumValueIndex);
 
             var targetField =
-                EnumField.Create<GimmickTarget>(targetProperty.displayName, targetProperty, SwitchDisplayItem);
+                EnumField.Create<GimmickTarget>(targetProperty.displayName, targetProperty, onValueChanged: SwitchDisplayItem);
 
             var keyField = new PropertyField(keyProperty);
 

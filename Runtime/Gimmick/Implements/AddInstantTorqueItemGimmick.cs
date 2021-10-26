@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [RequireComponent(typeof(MovableItem))]
-    public class AddInstantTorqueItemGimmick : MonoBehaviour, IItemGimmick
+    public sealed class AddInstantTorqueItemGimmick : MonoBehaviour, IItemGimmick
     {
         [SerializeField, HideInInspector] MovableItem movableItem;
         [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);

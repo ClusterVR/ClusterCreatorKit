@@ -4,7 +4,7 @@ using ClusterVR.CreatorKit.World;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.World
 {
-    public class CommentScreenPresenter
+    public sealed class CommentScreenPresenter
     {
         readonly IList<ICommentScreenView> commentScreenViews;
 

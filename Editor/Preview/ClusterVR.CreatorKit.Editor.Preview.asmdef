@@ -10,6 +10,7 @@
         "ClusterVR.CreatorKit.Item",
         "ClusterVR.CreatorKit.Operation",
         "ClusterVR.CreatorKit.Trigger",
+        "ClusterVR.CreatorKit.Editor.Preview.Common",
         "ClusterVR.CreatorKit.Editor.Preview.Gimmick",
         "ClusterVR.CreatorKit.Editor.Preview.Operation",
         "ClusterVR.CreatorKit.Editor.Preview.RoomState",

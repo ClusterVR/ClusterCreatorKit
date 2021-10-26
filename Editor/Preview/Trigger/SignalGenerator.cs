@@ -1,9 +1,10 @@
 ﻿using System;
+using ClusterVR.CreatorKit.Trigger;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
 {
-    public sealed class SignalGenerator
+    public sealed class SignalGenerator : ISignalGenerator
     {
         const int MaxCountPerFrame = 500;
         int lastFrameCount;

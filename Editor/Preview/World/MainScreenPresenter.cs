@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.World
 {
-    public class MainScreenPresenter
+    public sealed class MainScreenPresenter
     {
         readonly IList<IMainScreenView> mainScreenViews;
 

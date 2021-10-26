@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
 using UnityEngine;
@@ -7,19 +7,20 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [RequireComponent(typeof(MovableItem))]
-    public class AddContinuousTorqueItemGimmick : MonoBehaviour, IItemGimmick
+    public sealed class AddContinuousTorqueItemGimmick : MonoBehaviour, IItemGimmick
     {
-        static readonly ParameterType[] selectableTypes =
-            { ParameterType.Bool, ParameterType.Float, ParameterType.Integer };
+        public static readonly List<ParameterType> SelectableTypes = new List<ParameterType>(4)
+            { ParameterType.Bool, ParameterType.Float, ParameterType.Integer, ParameterType.Vector3 };
 
         [SerializeField, HideInInspector] MovableItem movableItem;
         [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);
 
-        [SerializeField, ParameterTypeField(ParameterType.Bool, ParameterType.Float, ParameterType.Integer)]
-        ParameterType parameterType = selectableTypes[0];
+        [SerializeField, ParameterTypeField(ParameterType.Bool, ParameterType.Float, ParameterType.Integer, ParameterType.Vector3)]
+        ParameterType parameterType = SelectableTypes[0];
 
         [SerializeField] Transform space;
         [SerializeField] Vector3 torque;
+        [SerializeField] float scaleFactor = 1f;
         [SerializeField] bool ignoreMass;
 
         ItemId IGimmick.ItemId =>
@@ -32,6 +33,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         ForceMode ForceMode => ignoreMass ? ForceMode.Acceleration : ForceMode.Force;
 
         float currentPower;
+        Vector3 currentVector;
 
         void Start()
         {
@@ -47,7 +49,14 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         public void Run(GimmickValue value, DateTime _)
         {
-            currentPower = GetPower(value);
+            if (parameterType == ParameterType.Vector3)
+            {
+                currentVector = value.Vector3Value;
+            }
+            else
+            {
+                currentPower = GetPower(value);
+            }
         }
 
         void FixedUpdate()
@@ -56,7 +65,8 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
             {
                 return;
             }
-            movableItem.AddTorque(space.TransformDirection(torque) * currentPower, ForceMode);
+
+            movableItem.AddTorque(CalculateTorque(), ForceMode);
         }
 
         float GetPower(GimmickValue value)
@@ -74,15 +84,27 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
             }
         }
 
+        Vector3 CalculateTorque()
+        {
+            if (parameterType == ParameterType.Vector3)
+            {
+                return space.TransformDirection(currentVector) * scaleFactor;
+            }
+            else
+            {
+                return space.TransformDirection(torque) * currentPower;
+            }
+        }
+
         void OnValidate()
         {
             if (movableItem == null || movableItem.gameObject != gameObject)
             {
                 movableItem = GetComponent<MovableItem>();
             }
-            if (!selectableTypes.Contains(parameterType))
+            if (!SelectableTypes.Contains(parameterType))
             {
-                parameterType = selectableTypes[0];
+                parameterType = SelectableTypes[0];
             }
 
             if (space == null)

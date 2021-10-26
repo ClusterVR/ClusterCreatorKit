@@ -1,12 +1,12 @@
 ﻿using System;
-using UnityEngine;
 using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Extensions;
+using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Item.Implements
 {
     [RequireComponent(typeof(MovableItem)), DisallowMultipleComponent]
-    public sealed class GrabbableItem : InteractableItem, IGrabbableItem
+    public sealed class GrabbableItem : ContactableItem, IGrabbableItem
     {
         [SerializeField, HideInInspector] MovableItem movableItem;
         [SerializeField, Tooltip("持ち手（任意）")] Transform grip;

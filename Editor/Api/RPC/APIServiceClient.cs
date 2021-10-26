@@ -5,7 +5,7 @@ using ClusterVR.CreatorKit.Editor.Api.Venue;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
-    public class Empty
+    public sealed class Empty
     {
         public static readonly Empty Value = new Empty();
     }

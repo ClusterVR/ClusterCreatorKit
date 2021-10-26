@@ -4,7 +4,7 @@ using UnityEditor;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomEditor(typeof(StopTimelineGimmick)), CanEditMultipleObjects]
-    public class StopTimelineGimmickEditor : VisualElementEditor
+    public sealed class StopTimelineGimmickEditor : VisualElementEditor
     {
     }
 }

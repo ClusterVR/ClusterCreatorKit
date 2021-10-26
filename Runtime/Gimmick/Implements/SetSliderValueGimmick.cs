@@ -7,7 +7,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [RequireComponent(typeof(Slider)), DisallowMultipleComponent,
         LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
-    public class SetSliderValueGimmick : MonoBehaviour, IGlobalGimmick
+    public sealed class SetSliderValueGimmick : MonoBehaviour, IGlobalGimmick
     {
         [SerializeField, HideInInspector] Slider slider;
         [SerializeField] GlobalGimmickKey globalGimmickKey;

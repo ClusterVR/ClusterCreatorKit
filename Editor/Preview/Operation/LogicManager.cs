@@ -7,16 +7,12 @@ using ClusterVR.CreatorKit.Editor.Preview.Trigger;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Operation;
-using UnityEngine;
-using ValueType = ClusterVR.CreatorKit.Operation.ValueType;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.Operation
 {
     public sealed class LogicManager
     {
-        readonly RoomStateRepository roomStateRepository;
-        readonly GimmickManager gimmickManager;
-        readonly SignalGenerator signalGenerator;
+        readonly LogicExecutor logicExecutor;
 
         public LogicManager(ItemCreator itemCreator,
             RoomStateRepository roomStateRepository,
@@ -26,9 +22,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Operation
             IEnumerable<IGlobalLogic> globalLogics,
             SignalGenerator signalGenerator)
         {
-            this.roomStateRepository = roomStateRepository;
-            this.gimmickManager = gimmickManager;
-            this.signalGenerator = signalGenerator;
+            logicExecutor = new LogicExecutor(signalGenerator, new LogicStateRepository(roomStateRepository), gimmickManager);
             itemCreator.OnCreate += OnCreateItem;
             Register(itemLogics);
             Register(playerLogics);
@@ -86,194 +80,69 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Operation
             Execute(args.Logic);
         }
 
-        void Execute(Logic logic, ItemId itemId = default)
-        {
-            if (logic == null || !logic.IsValid())
-            {
-                return;
-            }
-            if (!signalGenerator.TryGet(out var signal))
-            {
-                return;
-            }
-            var updatedKeys = RunLogic(logic, itemId, signal);
-            gimmickManager.OnStateUpdated(updatedKeys);
-        }
+        void Execute(Logic logic, ItemId itemId = default) => logicExecutor.Execute(logic, itemId);
 
-        IEnumerable<string> RunLogic(Logic logic, ItemId itemId, StateValue signal)
+        class LogicStateRepository : ILogicStateRepository
         {
-            var updatedKeys = new Queue<string>();
-            foreach (var statement in logic.Statements)
+            readonly RoomStateRepository roomStateRepository;
+
+            internal LogicStateRepository(RoomStateRepository roomStateRepository)
             {
-                if (statement == null)
+                this.roomStateRepository = roomStateRepository;
+            }
+
+            IStateValueSet ILogicStateRepository.GetRoomStateValueSet(SourceState state, ItemId itemId)
+            {
+                TryGetRoomStateValueSet(state.Target, state.Key, state.Type, itemId, out var stateValueSet);
+                return stateValueSet;
+            }
+
+            bool TryGetRoomStateValueSet(GimmickTarget target, string key, ParameterType parameterType, ItemId itemId, out IStateValueSet stateValueSet)
+            {
+                stateValueSet = StateValueSet.Create(parameterType);
+                var hasValue = false;
+                foreach (var fieldName in stateValueSet.GetFieldNames())
                 {
-                    continue;
+                    var stateKey = GetStateKeyPrefix(target, itemId) + fieldName.BuildKey(key);
+                    if (roomStateRepository.TryGetValue(stateKey, out var stateValue))
+                    {
+                        stateValueSet.Update(fieldName, stateValue);
+                        hasValue = true;
+                    }
                 }
-                RunStatement(statement, itemId, updatedKeys, signal);
+                return hasValue;
             }
 
-            return updatedKeys;
-        }
-
-        void RunStatement(Statement statement, ItemId itemId, Queue<string> updatedKeys, StateValue signal)
-        {
-            if (RunSingleStatement(statement.SingleStatement, itemId, signal, out var updatedKey))
+            void ILogicStateRepository.UpdateState(TargetState targetState, ItemId itemId, IStateValueSet stateValueSet, Queue<string> updatedKeys)
             {
-                updatedKeys.Enqueue(updatedKey);
-            }
-        }
-
-        bool RunSingleStatement(SingleStatement singleStatement, ItemId itemId, StateValue signal,
-            out string updatedKey)
-        {
-            var target = singleStatement.TargetState;
-            var parameterType = target.ParameterType;
-            updatedKey = GetStateKey(target.Target, target.Key, itemId);
-            if (parameterType == ParameterType.Signal)
-            {
-                var conditionSatisfied = singleStatement.Expression == null ||
-                    EvaluateExpression(singleStatement.Expression, itemId).ToBool();
-                if (conditionSatisfied)
+                var keyPrefix = GetStateKeyPrefix(targetState.Target, itemId);
+                foreach (var triggerState in stateValueSet.ToTriggerStates(keyPrefix, targetState.Key))
                 {
-                    roomStateRepository.Update(updatedKey, signal);
+                    roomStateRepository.Update(triggerState.Key, triggerState.Value);
+                    updatedKeys.Enqueue(triggerState.Key);
                 }
-                return conditionSatisfied;
-            }
-            else
-            {
-                var value = Cast(parameterType, EvaluateExpression(singleStatement.Expression, itemId));
-                roomStateRepository.Update(updatedKey, value);
-                return true;
-            }
-        }
-
-        StateValue EvaluateExpression(Expression expression, ItemId itemId)
-        {
-            switch (expression.Type)
-            {
-                case ExpressionType.Value:
-                    return EvaluateValue(expression.Value, itemId);
-                case ExpressionType.OperatorExpression:
-                    return Operate(expression.OperatorExpression, itemId);
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        StateValue EvaluateValue(Value value, ItemId itemId)
-        {
-            switch (value.Type)
-            {
-                case ValueType.Constant:
-                    return value.Constant;
-                case ValueType.RoomState:
-                    return GetRoomStateValue(value.SourceState, itemId);
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        StateValue GetRoomStateValue(SourceState state, ItemId itemId)
-        {
-            if (roomStateRepository.TryGetValue(GetStateKey(state.Target, state.Key, itemId), out var value))
-            {
-                return value;
-            }
-            else
-            {
-                return StateValue.Default;
-            }
-        }
-
-        StateValue Operate(OperatorExpression operatorExpression, ItemId itemId)
-        {
-            StateValue GetOperand(int index)
-            {
-                return EvaluateExpression(operatorExpression.Operands[index], itemId);
             }
 
-            switch (operatorExpression.Operator)
+            string GetStateKeyPrefix(GimmickTarget target, ItemId itemId)
             {
-                case Operator.Not:
-                    return new StateValue(!GetOperand(0).ToBool());
-                case Operator.Minus:
-                    return new StateValue(-GetOperand(0).ToDouble());
-
-                case Operator.Equals:
-                    return new StateValue(Mathf.Approximately(GetOperand(0).ToFloat(), GetOperand(1).ToFloat()));
-                case Operator.NotEquals:
-                    return new StateValue(!Mathf.Approximately(GetOperand(0).ToFloat(), GetOperand(1).ToFloat()));
-                case Operator.GreaterThan:
-                    return new StateValue(GetOperand(0).ToDouble() > GetOperand(1).ToDouble());
-                case Operator.GreaterThanOrEqual:
-                    return new StateValue(GetOperand(0).ToDouble() >= GetOperand(1).ToDouble());
-                case Operator.LessThan:
-                    return new StateValue(GetOperand(0).ToDouble() < GetOperand(1).ToDouble());
-                case Operator.LessThanOrEqual:
-                    return new StateValue(GetOperand(0).ToDouble() <= GetOperand(1).ToDouble());
-
-                case Operator.Add:
-                    return new StateValue(GetOperand(0).ToDouble() + GetOperand(1).ToDouble());
-                case Operator.Multiply:
-                    return new StateValue(GetOperand(0).ToDouble() * GetOperand(1).ToDouble());
-                case Operator.Subtract:
-                    return new StateValue(GetOperand(0).ToDouble() - GetOperand(1).ToDouble());
-                case Operator.Divide:
-                    return new StateValue(GetOperand(0).ToDouble() / GetOperand(1).ToDouble());
-                case Operator.Modulo:
-                    return new StateValue(GetOperand(0).ToDouble() % GetOperand(1).ToDouble());
-
-                case Operator.And:
-                    return new StateValue(GetOperand(0).ToBool() && GetOperand(1).ToBool());
-                case Operator.Or:
-                    return new StateValue(GetOperand(0).ToBool() || GetOperand(1).ToBool());
-
-                case Operator.Condition:
-                    return GetOperand(0).ToBool() ? GetOperand(1) : GetOperand(2);
-
-                case Operator.Min:
-                    return new StateValue(Math.Min(GetOperand(0).ToDouble(), GetOperand(1).ToDouble()));
-                case Operator.Max:
-                    return new StateValue(Math.Max(GetOperand(0).ToDouble(), GetOperand(1).ToDouble()));
-                case Operator.Clamp:
-                    return new StateValue(Math.Min(Math.Max(GetOperand(0).ToDouble(), GetOperand(1).ToDouble()),
-                        GetOperand(2).ToDouble()));
-
-                default: throw new NotImplementedException();
+                switch (target)
+                {
+                    case GimmickTarget.Item: return RoomStateKey.GetItemKeyPrefix(itemId.Value);
+                    case GimmickTarget.Player: return RoomStateKey.GetPlayerKeyPrefix();
+                    case GimmickTarget.Global: return RoomStateKey.GetGlobalKeyPrefix();
+                    default: throw new NotImplementedException();
+                }
             }
-        }
 
-        static string GetStateKey(GimmickTarget target, string key, ItemId itemId)
-        {
-            switch (target)
+            string GetStateKeyPrefix(TargetStateTarget target, ItemId itemId)
             {
-                case GimmickTarget.Item: return RoomStateKey.GetItemKey(itemId.Value, key);
-                case GimmickTarget.Player: return RoomStateKey.GetPlayerKey(key);
-                case GimmickTarget.Global: return RoomStateKey.GetGlobalKey(key);
-                default: throw new NotImplementedException();
-            }
-        }
-
-        static string GetStateKey(TargetStateTarget target, string key, ItemId itemId)
-        {
-            switch (target)
-            {
-                case TargetStateTarget.Item: return RoomStateKey.GetItemKey(itemId.Value, key);
-                case TargetStateTarget.Player: return RoomStateKey.GetPlayerKey(key);
-                case TargetStateTarget.Global: return RoomStateKey.GetGlobalKey(key);
-                default: throw new NotImplementedException();
-            }
-        }
-
-        static StateValue Cast(ParameterType type, StateValue value)
-        {
-            switch (type)
-            {
-                case ParameterType.Signal: return new StateValue(value.ToDateTime());
-                case ParameterType.Bool: return new StateValue(value.ToBool());
-                case ParameterType.Integer: return new StateValue(value.ToInt());
-                case ParameterType.Float: return new StateValue(value.ToFloat());
-                default: throw new NotImplementedException();
+                switch (target)
+                {
+                    case TargetStateTarget.Item: return RoomStateKey.GetItemKeyPrefix(itemId.Value);
+                    case TargetStateTarget.Player: return RoomStateKey.GetPlayerKeyPrefix();
+                    case TargetStateTarget.Global: return RoomStateKey.GetGlobalKeyPrefix();
+                    default: throw new NotImplementedException();
+                }
             }
         }
     }

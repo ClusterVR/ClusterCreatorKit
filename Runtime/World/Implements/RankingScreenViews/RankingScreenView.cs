@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.World.Implements.RankingScreenViews
 {
-    public class RankingScreenView : MonoBehaviour, IRankingScreenView
+    public sealed class RankingScreenView : MonoBehaviour, IRankingScreenView
     {
         [SerializeField] List<RankingScreenCell> boardCells;
         [SerializeField] LowRankerCell lowRankerCell;

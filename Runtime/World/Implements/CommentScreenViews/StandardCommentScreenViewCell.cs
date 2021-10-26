@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ClusterVR.CreatorKit.World.Implements.CommentScreenViews
 {
-    public class StandardCommentScreenViewCell : MonoBehaviour
+    public sealed class StandardCommentScreenViewCell : MonoBehaviour
     {
         [SerializeField] Text displayNameText;
         [SerializeField] Text userNameText;

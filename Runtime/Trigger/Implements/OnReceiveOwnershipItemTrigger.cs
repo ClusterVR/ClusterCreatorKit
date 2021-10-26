@@ -7,11 +7,11 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
     [RequireComponent(typeof(Item.Implements.Item))]
-    public class OnReceiveOwnershipItemTrigger : MonoBehaviour, IOnReceiveOwnershipItemTrigger
+    public sealed class OnReceiveOwnershipItemTrigger : MonoBehaviour, IOnReceiveOwnershipItemTrigger
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
         [SerializeField] EventType eventType = EventType.Always;
-        [SerializeField, ItemTriggerParam] TriggerParam[] triggers;
+        [SerializeField, ItemConstantTriggerParam] ConstantTriggerParam[] triggers;
 
         [Flags]
         enum EventType
@@ -23,9 +23,9 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         IItem IItemTrigger.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         public event TriggerEventHandler TriggerEvent;
-        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
+        IEnumerable<TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
 
-        Trigger.TriggerParam[] triggersCache;
+        TriggerParam[] triggersCache;
 
         void IOnReceiveOwnershipItemTrigger.Invoke(bool voluntary)
         {

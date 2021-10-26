@@ -4,7 +4,7 @@ using UnityEditor;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomEditor(typeof(RespawnPlayerGimmick)), CanEditMultipleObjects]
-    public class RespawnPlayerGimmickEditor : VisualElementEditor
+    public sealed class RespawnPlayerGimmickEditor : VisualElementEditor
     {
     }
 }

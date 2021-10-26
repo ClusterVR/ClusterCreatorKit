@@ -36,7 +36,7 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
         RenderTexture leftRenderTexture;
         RenderTexture rightRenderTexture;
 
-        protected virtual LayerMask CullingMask { get; } = 704472087;
+        protected virtual LayerMask CullingMask { get; } = 704474135;
 
         void Start()
         {

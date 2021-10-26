@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.World.Implements.MainScreenViews
 {
     [RequireComponent(typeof(MeshRenderer))]
-    public class StandardMainScreenView : MonoBehaviour, IMainScreenView
+    public sealed class StandardMainScreenView : MonoBehaviour, IMainScreenView
     {
         MeshRenderer meshRenderer;
         MaterialPropertyBlock propertyBlock;

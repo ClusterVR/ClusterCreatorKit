@@ -106,21 +106,19 @@ namespace ClusterVR.CreatorKit.Editor.Validator
 
             var triggers = allRootObjects.SelectMany(x => x.GetComponentsInChildren<ITrigger>(true));
             var invalidKeyLengthTriggers = triggers
-                .Where(g => g.TriggerParams.Any(p => p.Key.Length > Constants.TriggerGimmick.MaxKeyLength)).ToArray();
-            if (invalidKeyLengthTriggers.Any())
-            {
-                errorMessage = $"Key は {Constants.TriggerGimmick.MaxKeyLength}文字以下である必要があります。";
-                invalidObjects = invalidKeyLengthTriggers.Select(x => ((Component) x).gameObject).ToArray();
-                return false;
-            }
-
+                .Where(g => g.TriggerParams.SelectMany(p => p.GetKeyWithFieldNames())
+                    .Any(key => key.Length > Constants.TriggerGimmick.MaxKeyLength)).ToArray();
             var gimmicks = allRootObjects.SelectMany(x => x.GetComponentsInChildren<IGimmick>(true));
             var invalidKeyLengthGimmicks =
                 gimmicks.Where(g => g.Key.Length > Constants.TriggerGimmick.MaxKeyLength).ToArray();
-            if (invalidKeyLengthGimmicks.Any())
+            var invalidKeyLengthComponents = invalidKeyLengthTriggers.OfType<Component>()
+                .Concat(invalidKeyLengthGimmicks.OfType<Component>())
+                .ToArray();
+            if (invalidKeyLengthComponents.Any())
             {
-                errorMessage = $"Key は {Constants.TriggerGimmick.MaxKeyLength}文字以下である必要があります。";
-                invalidObjects = invalidKeyLengthGimmicks.Select(x => ((Component) x).gameObject).ToArray();
+                const int vectorSuffixLength = 2;
+                errorMessage = $"Key は {Constants.TriggerGimmick.MaxKeyLength}文字以下({nameof(ParameterType)} が {nameof(ParameterType.Vector2)} もしくは {nameof(ParameterType.Vector3)} の場合は{Constants.TriggerGimmick.MaxKeyLength - vectorSuffixLength}文字)である必要があります。";
+                invalidObjects = invalidKeyLengthComponents.Select(x => x.gameObject).ToArray();
                 return false;
             }
 

@@ -5,7 +5,7 @@ using Random = System.Random;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.World
 {
-    public class SpawnPointManager
+    public sealed class SpawnPointManager
     {
         readonly SpawnPoint[] spawnPoints;
 

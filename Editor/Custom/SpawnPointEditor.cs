@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomEditor(typeof(SpawnPoint)), CanEditMultipleObjects]
-    public class SpawnPointEditor : UnityEditor.Editor
+    public sealed class SpawnPointEditor : UnityEditor.Editor
     {
         public override VisualElement CreateInspectorGUI()
         {

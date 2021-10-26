@@ -7,7 +7,7 @@ using Image = UnityEngine.UI.Image;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomEditor(typeof(SetFillAmountGimmick)), CanEditMultipleObjects]
-    public class SetFillAmountGimmickEditor : VisualElementEditor
+    public sealed class SetFillAmountGimmickEditor : VisualElementEditor
     {
         public override VisualElement CreateInspectorGUI()
         {

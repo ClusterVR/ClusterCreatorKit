@@ -78,6 +78,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     var spawnPoints = GetComponentsInGameObjectsChildren<ISpawnPoint>(rootGameObjects);
                     SpawnPointManager = new SpawnPointManager(spawnPoints);
 
+                    var urlTextures = GetComponentsInGameObjectsChildren<IUrlTexture>(rootGameObjects);
+                    UrlTextureDownloader.UrlTextureDownload(urlTextures);
+
                     var enterDeviceType = EnterDeviceType.Desktop;
                     if (XRSettings.enabled)
                     {
@@ -172,6 +175,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                 GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));
             new DestroyItemGimmickManager(itemCreator, itemDestroyer,
                 GetComponentsInGameObjectsChildren<IDestroyItemGimmick>(rootGameObjects));
+
+            var ridableItemManager = new RidableItemManager(itemCreator, itemDestroyer, PlayerPresenter,
+                GetComponentsInGameObjectsChildren<IRidableItem>(rootGameObjects));
+            new SteerItemTriggerEmitter(ridableItemManager, PlayerPresenter, PlayerPresenter.MoveInputController);
 
             var onReceiveOwnershipItemTriggerManager = new OnReceiveOwnershipItemTriggerManager(itemCreator);
             var onCreateItemTriggerManager = new OnCreateItemTriggerManager(itemCreator);

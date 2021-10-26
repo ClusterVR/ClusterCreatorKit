@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
-    public class EditorCoroutine
+    public sealed class EditorCoroutine
     {
         public static void Start(IEnumerator routine)
         {

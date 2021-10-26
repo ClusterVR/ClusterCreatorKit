@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Constants;
@@ -10,15 +9,16 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
     [RequireComponent(typeof(Item.Implements.Item))]
-    public class InteractItemTrigger : InteractableItem, IInteractItemTrigger
+    public sealed class InteractItemTrigger : ContactableItem, IInteractableItem, IItemTrigger
+
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
-        [SerializeField, ItemTriggerParam] TriggerParam[] triggers;
+        [SerializeField, ItemConstantTriggerParam] ConstantTriggerParam[] triggers;
 
         public override IItem Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         public event TriggerEventHandler TriggerEvent;
-        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
-        Trigger.TriggerParam[] triggersCache;
+        IEnumerable<TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
+        TriggerParam[] triggersCache;
 
         void Start()
         {

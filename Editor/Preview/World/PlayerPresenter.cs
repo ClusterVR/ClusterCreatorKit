@@ -1,5 +1,6 @@
 ﻿using System;
 using ClusterVR.CreatorKit.Constants;
+using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Preview.PlayerController;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +11,7 @@ using UnityEngine.Rendering.PostProcessing;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.World
 {
-    public class PlayerPresenter
+    public sealed class PlayerPresenter
     {
         const string NonVRPrefabPath =
             "Packages/mu.cluster.cluster-creator-kit/Editor/Preview/Prefabs/PreviewOnly.prefab";
@@ -28,7 +29,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
         bool isInPersonalCamera;
 
         public Transform PlayerTransform { get; }
+        public Transform RootTransform { get; }
         public Transform CameraTransform { get; }
+        public IMoveInputController MoveInputController { get; }
 
         public PermissionType PermissionType { get; private set; }
 
@@ -43,7 +46,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             var previewOnly = PrefabUtility.InstantiatePrefab(previewOnlyPrefab) as GameObject;
             playerController = previewOnly.GetComponentInChildren<IPlayerController>();
             PlayerTransform = playerController.PlayerTransform;
+            RootTransform = playerController.RootTransform;
             CameraTransform = playerController.CameraTransform;
+            MoveInputController = previewOnly.GetComponentInChildren<IMoveInputController>();
 
 #if UNITY_POST_PROCESSING_STACK_V2
             var postProcessLayer = CameraTransform.gameObject.GetComponent<PostProcessLayer>() ??
@@ -147,7 +152,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 
         public void RotateTo(Quaternion rotation)
         {
-            CameraTransform.rotation = rotation;
+            var yawOnlyRotation = Quaternion.Euler(0f, rotation.eulerAngles.y, 0f);
+            playerController.SetRotationKeepingHeadPitch(yawOnlyRotation);
+            playerController.ResetCameraRotation(rotation);
         }
 
         public void SetMoveSpeedRate(float moveSpeedRate)
@@ -158,6 +165,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
         public void SetJumpSpeedRate(float jumpSpeedRate)
         {
             playerController.SetJumpSpeedRate(jumpSpeedRate);
+        }
+
+        public void SetRidingItem(IRidableItem ridingItem)
+        {
+            playerController.SetRidingItem(ridingItem);
         }
     }
 

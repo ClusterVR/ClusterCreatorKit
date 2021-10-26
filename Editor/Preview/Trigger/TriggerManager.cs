@@ -99,28 +99,29 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
 
             foreach (var trigger in args.TriggerParams)
             {
-                if (!TryGetKey(trigger.Target, senderItemId, trigger.SpecifiedTargetItem, args.CollidedObject,
-                    trigger.Key, out var key))
+                if (!TryGetKeyPrefix(trigger.Target, senderItemId, trigger.SpecifiedTargetItem, args.CollidedObject, out var keyPrefix))
                 {
                     continue;
                 }
-                if (args.DontOverride && roomStateRepository.TryGetValue(key, out _))
+                foreach (var value in trigger.ToTriggerStates(keyPrefix, signal))
                 {
-                    continue;
+                    if (args.DontOverride && roomStateRepository.TryGetValue(value.Key, out _))
+                    {
+                        continue;
+                    }
+                    yield return value;
                 }
-                var value = GetStateValue(trigger.Type, trigger.Value, signal);
-                yield return new KeyValuePair<string, StateValue>(key, value);
             }
         }
 
-        static bool TryGetKey(TriggerTarget target, ItemId senderItemId, IItem specifiedTarget,
-            GameObject collidedObject, string triggerKey, out string key)
+        static bool TryGetKeyPrefix(TriggerTarget target, ItemId senderItemId, IItem specifiedTarget,
+            GameObject collidedObject, out string key)
         {
             key = default;
             switch (target)
             {
                 case TriggerTarget.Item:
-                    key = RoomStateKey.GetItemKey(senderItemId.Value, triggerKey);
+                    key = RoomStateKey.GetItemKeyPrefix(senderItemId.Value);
                     return true;
                 case TriggerTarget.SpecifiedItem:
                     if (specifiedTarget == null)
@@ -131,46 +132,29 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
                     {
                         return false;
                     }
-                    key = RoomStateKey.GetItemKey(specifiedTarget.Id.Value, triggerKey);
+                    key = RoomStateKey.GetItemKeyPrefix(specifiedTarget.Id.Value);
                     return true;
                 case TriggerTarget.Player:
-                    key = RoomStateKey.GetPlayerKey(triggerKey);
+                    key = RoomStateKey.GetPlayerKeyPrefix();
                     return true;
                 case TriggerTarget.CollidedItemOrPlayer:
                     if (collidedObject.CompareTag("Player"))
                     {
-                        key = RoomStateKey.GetPlayerKey(triggerKey);
+                        key = RoomStateKey.GetPlayerKeyPrefix();
                         return true;
                     }
 
                     var collidedItem = collidedObject.GetComponentInParent<IItem>();
                     if (collidedItem != null)
                     {
-                        key = RoomStateKey.GetItemKey(collidedItem.Id.Value, triggerKey);
+                        key = RoomStateKey.GetItemKeyPrefix(collidedItem.Id.Value);
                         return true;
                     }
 
                     return false;
                 case TriggerTarget.Global:
-                    key = RoomStateKey.GetGlobalKey(triggerKey);
+                    key = RoomStateKey.GetGlobalKeyPrefix();
                     return true;
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        static StateValue GetStateValue(ParameterType type, TriggerValue triggerValue, StateValue signal)
-        {
-            switch (type)
-            {
-                case ParameterType.Signal:
-                    return signal;
-                case ParameterType.Bool:
-                    return new StateValue(triggerValue.BoolValue);
-                case ParameterType.Integer:
-                    return new StateValue(triggerValue.IntegerValue);
-                case ParameterType.Float:
-                    return new StateValue(triggerValue.FloatValue);
                 default:
                     throw new NotImplementedException();
             }

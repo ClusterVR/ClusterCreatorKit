@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
-    public class PostNotifyFinishedUploadService
+    public sealed class PostNotifyFinishedUploadService
     {
         readonly string accessToken;
         readonly bool isPublish;

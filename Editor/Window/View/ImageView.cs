@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public class ImageView
+    public sealed class ImageView
     {
         readonly Reactive<Texture2D> reactiveImageTex = new Reactive<Texture2D>();
         readonly Reactive<string> reactiveOverlay = new Reactive<string>();

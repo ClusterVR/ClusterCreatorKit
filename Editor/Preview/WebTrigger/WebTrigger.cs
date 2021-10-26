@@ -3,13 +3,13 @@
 namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
 {
     [Serializable]
-    public class WebTrigger
+    public sealed class WebTrigger
     {
         public Trigger[] triggers;
     }
 
     [Serializable]
-    public class Trigger
+    public sealed class Trigger
     {
         public string category;
         public bool showConfirmDialog;
@@ -19,7 +19,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
     }
 
     [Serializable]
-    public class State
+    public sealed class State
     {
         public string key;
         public string type;

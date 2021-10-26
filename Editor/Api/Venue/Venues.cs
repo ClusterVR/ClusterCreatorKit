@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Editor.Api.Venue
 {
     [Serializable]
-    public class Venues
+    public sealed class Venues
     {
         [SerializeField] List<Venue> venues;
 

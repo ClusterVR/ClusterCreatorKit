@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
 {
-    public class SettingsWindow : EditorWindow
+    public sealed class SettingsWindow : EditorWindow
     {
         [MenuItem("Cluster/Preview/Settings", priority = 114)]
         public static void ShowWindow()

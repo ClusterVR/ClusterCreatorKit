@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using ClusterVR.CreatorKit.Item;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,11 +8,15 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [DisallowMultipleComponent, RequireComponent(typeof(Text)),
         LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
-    public class SetTextGimmick : MonoBehaviour, IGlobalGimmick
+    public sealed class SetTextGimmick : MonoBehaviour, IGlobalGimmick
     {
+        static readonly ParameterType[] SelectableTypes =
+            { ParameterType.Signal, ParameterType.Bool, ParameterType.Float, ParameterType.Integer, ParameterType.Vector2, ParameterType.Vector3 };
+
         [SerializeField, HideInInspector] Text text;
         [SerializeField] GlobalGimmickKey globalGimmickKey;
-        [SerializeField] ParameterType parameterType;
+        [SerializeField, ParameterTypeField(ParameterType.Signal, ParameterType.Bool, ParameterType.Float, ParameterType.Integer, ParameterType.Vector2, ParameterType.Vector3)]
+        ParameterType parameterType = SelectableTypes[0];
         [SerializeField, Tooltip("Textに設定するフォーマット"), Multiline] string format = DefaultFormat;
 
         const string DefaultFormat = "{0}";
@@ -36,6 +41,14 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
                 case ParameterType.Integer:
                     SetText(value.IntegerValue);
                     return;
+                case ParameterType.Vector2:
+                    SetText(value.Vector2Value);
+                    return;
+                case ParameterType.Vector3:
+                    SetText(value.Vector3Value);
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -67,6 +80,11 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
             if (text == null || text.gameObject != gameObject)
             {
                 text = GetComponent<Text>();
+            }
+
+            if (!SelectableTypes.Contains(parameterType))
+            {
+                parameterType = SelectableTypes[0];
             }
         }
 

@@ -1,7 +1,7 @@
 ﻿namespace ClusterVR.CreatorKit.Item
 {
-    public interface IInteractableItem
+    public interface IInteractableItem : IContactableItem
     {
-        IItem Item { get; }
+        void Invoke();
     }
 }

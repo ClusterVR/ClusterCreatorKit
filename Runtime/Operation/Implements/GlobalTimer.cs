@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.Item;
@@ -10,11 +11,11 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Operation.Implements
 {
-    public class GlobalTimer : MonoBehaviour, IGlobalTrigger, IGlobalGimmick, IRerunOnReceiveOwnershipInvoluntaryGimmick
+    public sealed class GlobalTimer : MonoBehaviour, IGlobalTrigger, IGlobalGimmick, IRerunOnReceiveOwnershipInvoluntaryGimmick
     {
         [SerializeField] GlobalGimmickKey globalGimmickKey;
         [SerializeField] float delayTimeSeconds = 1;
-        [SerializeField, GlobalOperationTriggerParam] Trigger.Implements.TriggerParam[] triggers;
+        [SerializeField, GlobalOperationTriggerParam] ConstantTriggerParam[] triggers;
 
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
         string IGimmick.Key => globalGimmickKey.Key.Key;
@@ -22,9 +23,9 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
         public event GlobalTriggerEventHandler TriggerEvent;
-        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
+        IEnumerable<TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
 
-        Trigger.TriggerParam[] triggersCache;
+        TriggerParam[] triggersCache;
 
         DateTime lastTriggerReceivedAt;
         Scheduler.Cancellation schedulerCancellation;
@@ -38,12 +39,12 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             lastTriggerReceivedAt = value.TimeStamp;
 
             var dueTime = value.TimeStamp.AddSeconds(delayTimeSeconds) - current;
-            if (dueTime.TotalSeconds < -Constants.TriggerGimmick.TriggerExpireSeconds)
+            if (dueTime.TotalSeconds < -TriggerGimmick.TriggerExpireSeconds)
             {
                 return;
             }
             var expireAt = Time.realtimeSinceStartup + dueTime.TotalSeconds +
-                Constants.TriggerGimmick.OwnershipExpireExpectedSeconds;
+                TriggerGimmick.OwnershipExpireExpectedSeconds;
 
             void Action()
             {
@@ -62,7 +63,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         void IRerunnableGimmick.Rerun(GimmickValue value, DateTime current)
         {
             var executeAt = value.TimeStamp.AddSeconds(delayTimeSeconds);
-            if (current - TimeSpan.FromSeconds(Constants.TriggerGimmick.OwnershipExpireExpectedSeconds) < executeAt &&
+            if (current - TimeSpan.FromSeconds(TriggerGimmick.OwnershipExpireExpectedSeconds) < executeAt &&
                 executeAt < current)
             {
                 schedulerCancellation?.Dispose();
@@ -87,7 +88,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             triggers = triggers?.Select(trigger =>
             {
                 return trigger.Target != TriggerTarget.Global
-                    ? new Trigger.Implements.TriggerParam(TriggerTarget.Global, null, trigger.Key, trigger.Type,
+                    ? new ConstantTriggerParam(TriggerTarget.Global, null, trigger.Key, trigger.Type,
                         trigger.RawValue)
                     : trigger;
             }).ToArray();

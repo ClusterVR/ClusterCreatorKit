@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomPropertyDrawer(typeof(GimmickKeyItemAttribute), true)]
-    public class GimmickKeyItemAttributePropertyDrawer : PropertyDrawer
+    public sealed class GimmickKeyItemAttributePropertyDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {

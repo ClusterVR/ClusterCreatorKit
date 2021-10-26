@@ -7,6 +7,7 @@
         public const int IgnoreRaycast = 2;
         public const int Water = 4;
         public const int UI = 5;
+        public const int RidingItem = 11;
         public const int InteractableItem = 14;
         public const int GrabbingItem = 18;
         public const int VenueLayer0 = 19;

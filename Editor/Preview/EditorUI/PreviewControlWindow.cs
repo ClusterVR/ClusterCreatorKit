@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
 {
-    public class PreviewControlWindow : EditorWindow
+    public sealed class PreviewControlWindow : EditorWindow
     {
         const string messageWhenNotPlayMode = "プレビューオプションは実行中のみ使用可能です";
 

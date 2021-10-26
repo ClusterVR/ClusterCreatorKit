@@ -6,13 +6,13 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
     [RequireComponent(typeof(Item.Implements.Item))]
-    public class OnCreateItemTrigger : MonoBehaviour, IOnCreateItemTrigger
+    public sealed class OnCreateItemTrigger : MonoBehaviour, IOnCreateItemTrigger
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
-        [SerializeField, ItemTriggerParam] TriggerParam[] triggers;
+        [SerializeField, ItemConstantTriggerParam] ConstantTriggerParam[] triggers;
         IItem IItemTrigger.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         public event TriggerEventHandler TriggerEvent;
-        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
+        IEnumerable<TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
 
         public void Invoke()
         {

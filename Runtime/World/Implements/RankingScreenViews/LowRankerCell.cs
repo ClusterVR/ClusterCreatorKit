@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ClusterVR.CreatorKit.World.Implements.RankingScreenViews
 {
-    public class LowRankerCell : RankingScreenCell
+    public sealed class LowRankerCell : RankingScreenCell
     {
         [SerializeField] GameObject rankinMessage;
         [SerializeField] Text rank;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.Item;
@@ -21,13 +22,13 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         sealed class Choice
         {
             [SerializeField] float weight;
-            [SerializeField, ItemTriggerLotteryTriggerParam] Trigger.Implements.TriggerParam[] triggers;
+            [SerializeField, ItemTriggerLotteryTriggerParam] ConstantTriggerParam[] triggers;
 
-            Trigger.TriggerParam[] triggersCache;
+            TriggerParam[] triggersCache;
 
             internal float Weight => weight;
-            internal IEnumerable<Trigger.TriggerParam> Triggers => triggers.Select(t => t.Convert());
-            internal Trigger.TriggerParam[] CachedTriggers => triggersCache ?? (triggersCache = Triggers.ToArray());
+            internal IEnumerable<TriggerParam> Triggers => triggers.Select(t => t.Convert());
+            internal TriggerParam[] CachedTriggers => triggersCache ?? (triggersCache = Triggers.ToArray());
 
             public void Correct()
             {
@@ -37,7 +38,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
                 }
                 triggers = triggers?.Select(trigger =>
                         trigger.Target != TriggerTarget.Item && trigger.Target != TriggerTarget.Player
-                            ? new Trigger.Implements.TriggerParam(TriggerTarget.Item, null, trigger.Key, trigger.Type,
+                            ? new ConstantTriggerParam(TriggerTarget.Item, null, trigger.Key, trigger.Type,
                                 trigger.RawValue)
                             : trigger)
                     .ToArray();
@@ -53,7 +54,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
         public event TriggerEventHandler TriggerEvent;
-        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => choices.SelectMany(c => c.Triggers);
+        IEnumerable<TriggerParam> ITrigger.TriggerParams => choices.SelectMany(c => c.Triggers);
 
         DateTime lastTriggeredAt;
 
@@ -68,7 +69,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
                 return;
             }
             lastTriggeredAt = value.TimeStamp;
-            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds)
+            if ((current - value.TimeStamp).TotalSeconds > TriggerGimmick.TriggerExpireSeconds)
             {
                 return;
             }

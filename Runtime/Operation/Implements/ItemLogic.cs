@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.Item;
@@ -9,7 +10,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Operation.Implements
 {
     [RequireComponent(typeof(Item.Implements.Item))]
-    public class ItemLogic : MonoBehaviour, IItemLogic
+    public sealed class ItemLogic : MonoBehaviour, IItemLogic
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
         [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);
@@ -24,6 +25,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         public event RunItemLogicEventHandler OnRunItemLogic;
         IEnumerable<TriggerParam> ITrigger.TriggerParams => logic.GetTriggerParams();
+        Logic ILogic.Logic => logic;
 
         DateTime lastTriggeredAt;
         bool validated;
@@ -44,7 +46,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
                 return;
             }
             lastTriggeredAt = value.TimeStamp;
-            if ((current - value.TimeStamp).TotalSeconds > Constants.TriggerGimmick.TriggerExpireSeconds)
+            if ((current - value.TimeStamp).TotalSeconds > TriggerGimmick.TriggerExpireSeconds)
             {
                 return;
             }

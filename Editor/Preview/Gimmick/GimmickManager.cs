@@ -9,13 +9,13 @@ using UnityEngine.Assertions;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
 {
-    public sealed class GimmickManager
+    public sealed class GimmickManager : IGimmickUpdater
     {
         readonly RoomStateRepository roomStateRepository;
-        readonly Dictionary<string, HashSet<IGimmick>> gimmicks = new Dictionary<string, HashSet<IGimmick>>();
+        readonly Dictionary<string, HashSet<GimmickStateValueSet>> gimmicks = new Dictionary<string, HashSet<GimmickStateValueSet>>();
 
-        readonly Dictionary<ulong, (IGimmick, string)[]>
-            gimmicksInItems = new Dictionary<ulong, (IGimmick, string)[]>();
+        readonly Dictionary<ulong, (GimmickStateValueSet, string)[]>
+            gimmicksInItems = new Dictionary<ulong, (GimmickStateValueSet, string)[]>();
 
         public GimmickManager(RoomStateRepository roomStateRepository, ItemCreator itemCreator,
             ItemDestroyer itemDestroyer)
@@ -28,9 +28,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
 
         public void AddGimmicksInScene(IEnumerable<IGimmick> gimmicks)
         {
-            foreach (var gimmick in gimmicks)
+            foreach (var (gimmick, key) in gimmicks.SelectMany(GimmickStateValueSets))
             {
-                AddGimmick(GetGimmickKey(gimmick), gimmick);
+                AddGimmick(key, gimmick);
             }
         }
 
@@ -40,14 +40,14 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
             {
                 return;
             }
-            var gimmickAndKeys = gimmicks.Select(gimmick => (gimmick, key: GetGimmickKey(gimmick))).ToArray();
+            var gimmickAndKeys = gimmicks.SelectMany(GimmickStateValueSets).ToArray();
             if (itemId != 0L)
             {
                 gimmicksInItems[itemId] = gimmickAndKeys;
             }
-            foreach (var gimmickAndKey in gimmickAndKeys)
+            foreach (var (gimmick, key) in gimmickAndKeys)
             {
-                AddGimmick(gimmickAndKey.key, gimmickAndKey.gimmick);
+                AddGimmick(key, gimmick);
             }
         }
 
@@ -59,18 +59,17 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
         void OnCreateItemCompleted(IItem item)
         {
             var now = DateTime.UtcNow;
-            foreach (var gimmick in item.gameObject.GetComponentsInChildren<IGimmick>(true))
+            foreach (var (gimmick, key) in item.gameObject.GetComponentsInChildren<IGimmick>(true).SelectMany(GimmickStateValueSets))
             {
-                var key = GetGimmickKey(gimmick);
                 if (!roomStateRepository.TryGetValue(key, out var value))
                 {
                     continue;
                 }
-                Run(gimmick, value, now);
+                gimmick.Run(key, value, now);
             }
         }
 
-        void AddGimmick(string key, IGimmick gimmick)
+        void AddGimmick(string key, GimmickStateValueSet gimmick)
         {
             if (gimmicks.TryGetValue(key, out var gimmickSet))
             {
@@ -78,7 +77,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
             }
             else
             {
-                gimmicks.Add(key, new HashSet<IGimmick> { gimmick });
+                gimmicks.Add(key, new HashSet<GimmickStateValueSet> { gimmick });
             }
         }
 
@@ -95,7 +94,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
             }
         }
 
-        void RemoveGimmick(string key, IGimmick gimmick)
+        void RemoveGimmick(string key, GimmickStateValueSet gimmick)
         {
             var hasGimmick = gimmicks.TryGetValue(key, out var gimmickSet);
             Assert.IsTrue(hasGimmick);
@@ -116,27 +115,29 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
                 {
                     foreach (var gimmick in gimmicks.ToArray())
                     {
-                        Run(gimmick, value, now);
+                        gimmick.Run(key, value, now);
                     }
                 }
             }
         }
 
-        void Run(IGimmick gimmick, StateValue value, DateTime now)
+        static IEnumerable<(GimmickStateValueSet gimmick, string key)> GimmickStateValueSets(IGimmick gimmick)
         {
-            gimmick.Run(new GimmickValue(gimmick.ParameterType, value), now);
+            var set = new GimmickStateValueSet(gimmick);
+            var keyPrefix = GetGimmickKeyPrefix(gimmick);
+            return set.Keys().Select(k => (set, keyPrefix + k));
         }
 
-        string GetGimmickKey(IGimmick gimmick)
+        static string GetGimmickKeyPrefix(IGimmick gimmick)
         {
             switch (gimmick.Target)
             {
                 case GimmickTarget.Global:
-                    return RoomStateKey.GetGlobalKey(gimmick.Key);
+                    return RoomStateKey.GetGlobalKeyPrefix();
                 case GimmickTarget.Player:
-                    return RoomStateKey.GetPlayerKey(gimmick.Key);
+                    return RoomStateKey.GetPlayerKeyPrefix();
                 case GimmickTarget.Item:
-                    return RoomStateKey.GetItemKey(gimmick.ItemId.Value, gimmick.Key);
+                    return RoomStateKey.GetItemKeyPrefix(gimmick.ItemId.Value);
                 default:
                     throw new NotImplementedException();
             }

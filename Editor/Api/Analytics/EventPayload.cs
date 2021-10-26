@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Editor.Api.Analytics
 {
     [Serializable]
-    public class EventPayload
+    public sealed class EventPayload
     {
         [SerializeField] string payload;
 

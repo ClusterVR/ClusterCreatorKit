@@ -10,6 +10,8 @@ namespace ClusterVR.CreatorKit.Item
         [SerializeField] ulong value;
         public ulong Value => value;
 
+        public static ItemId None => new ItemId(0L);
+
         static RNGCryptoServiceProvider rngCryptoServiceProvider = new RNGCryptoServiceProvider();
 
         public ItemId(ulong value)

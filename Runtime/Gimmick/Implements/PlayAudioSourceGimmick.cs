@@ -7,15 +7,15 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [RequireComponent(typeof(AudioSource)),
         LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.Always)]
-    public class PlayAudioSourceGimmick : MonoBehaviour, IGlobalGimmick
+    public sealed class PlayAudioSourceGimmick : MonoBehaviour, IGlobalGimmick
     {
-        static readonly ParameterType[] selectableTypes = { ParameterType.Signal, ParameterType.Bool };
+        static readonly ParameterType[] SelectableTypes = { ParameterType.Signal, ParameterType.Bool };
 
         [SerializeField] AudioSource audioSource;
         [SerializeField] GlobalGimmickKey globalGimmickKey;
 
         [SerializeField, ParameterTypeField(ParameterType.Signal, ParameterType.Bool)]
-        ParameterType parameterType = selectableTypes[0];
+        ParameterType parameterType = SelectableTypes[0];
 
         ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
@@ -80,9 +80,9 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
             {
                 audioSource = GetComponent<AudioSource>();
             }
-            if (!selectableTypes.Contains(parameterType))
+            if (!SelectableTypes.Contains(parameterType))
             {
-                parameterType = selectableTypes[0];
+                parameterType = SelectableTypes[0];
             }
 
             var canvas = GetComponentsInParent<Canvas>(true).FirstOrDefault();

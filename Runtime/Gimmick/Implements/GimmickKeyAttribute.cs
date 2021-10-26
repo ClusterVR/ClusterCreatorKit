@@ -12,7 +12,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         }
     }
 
-    public class ItemGimmickKeyAttribute : GimmickKeyAttribute
+    public sealed class ItemGimmickKeyAttribute : GimmickKeyAttribute
     {
         public ItemGimmickKeyAttribute()
             : base(GimmickTarget.Item, GimmickTarget.Global)

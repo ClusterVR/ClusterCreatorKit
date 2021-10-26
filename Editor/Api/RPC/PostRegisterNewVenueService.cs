@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
-    public class PostRegisterNewVenueService
+    public sealed class PostRegisterNewVenueService
     {
         readonly string accessToken;
         readonly Action<Exception> onError;

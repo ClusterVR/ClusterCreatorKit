@@ -4,13 +4,14 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    public class TriggerEditor : VisualElementEditor
+    public abstract class TriggerEditor : VisualElementEditor
     {
         protected override VisualElement CreateField(SerializedProperty serializedProperty)
         {
-            if (serializedProperty.isArray && serializedProperty.arrayElementType == nameof(TriggerParam))
+            if (serializedProperty.isArray &&
+                (serializedProperty.arrayElementType == nameof(ConstantTriggerParam) || serializedProperty.arrayElementType == nameof(VariableTriggerParam)))
             {
-                return TriggerParamArrayField.CreateTriggerParamArrayField(serializedProperty);
+                return ReorderableArrayField.CreateReorderableArrayField(serializedProperty);
             }
 
             return base.CreateField(serializedProperty);

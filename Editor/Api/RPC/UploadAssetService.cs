@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
-    public class UploadAssetService
+    public sealed class UploadAssetService
     {
         readonly string accessToken;
         readonly string filePath;

@@ -7,20 +7,20 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
     [RequireComponent(typeof(Item.Implements.Item), typeof(GrabbableItem)), DisallowMultipleComponent]
-    public class UseItemTrigger : MonoBehaviour, IUseItemTrigger
+    public sealed class UseItemTrigger : MonoBehaviour, IUseItemTrigger
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
-        [SerializeField, ItemTriggerParam] TriggerParam[] downTriggers;
-        [SerializeField, ItemTriggerParam] TriggerParam[] upTriggers;
+        [SerializeField, ItemConstantTriggerParam] ConstantTriggerParam[] downTriggers;
+        [SerializeField, ItemConstantTriggerParam] ConstantTriggerParam[] upTriggers;
 
         IItem IItemTrigger.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         public event TriggerEventHandler TriggerEvent;
 
-        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams =>
+        IEnumerable<TriggerParam> ITrigger.TriggerParams =>
             downTriggers.Concat(upTriggers).Select(t => t.Convert());
 
-        Trigger.TriggerParam[] downTriggersCache;
-        Trigger.TriggerParam[] upTriggersCache;
+        TriggerParam[] downTriggersCache;
+        TriggerParam[] upTriggersCache;
 
         public void Invoke(bool isDown)
         {

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Trigger
 {
-    public class TriggerEventArgs : EventArgs
+    public sealed class TriggerEventArgs : EventArgs
     {
         public TriggerParam[] TriggerParams { get; }
         public GameObject CollidedObject { get; }

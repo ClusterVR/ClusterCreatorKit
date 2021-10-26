@@ -6,7 +6,7 @@ using UnityEngine.Playables;
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [DisallowMultipleComponent, RequireComponent(typeof(PlayableDirector))]
-    public class StopTimelineGimmick : MonoBehaviour, IStopTimelineGimmick, IGlobalGimmick
+    public sealed class StopTimelineGimmick : MonoBehaviour, IStopTimelineGimmick, IGlobalGimmick
     {
         [SerializeField, HideInInspector] PlayableDirector playableDirector;
         [SerializeField] GlobalGimmickKey globalGimmickKey;

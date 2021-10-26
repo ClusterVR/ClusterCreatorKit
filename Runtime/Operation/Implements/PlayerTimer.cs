@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.Item;
@@ -10,11 +11,11 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Operation.Implements
 {
-    public class PlayerTimer : MonoBehaviour, IPlayerTrigger, IPlayerGimmick
+    public sealed class PlayerTimer : MonoBehaviour, IPlayerTrigger, IPlayerGimmick
     {
         [SerializeField] PlayerGimmickKey key;
         [SerializeField] float delayTimeSeconds = 1;
-        [SerializeField, PlayerOperationTriggerParam] Trigger.Implements.TriggerParam[] triggers;
+        [SerializeField, PlayerOperationTriggerParam] ConstantTriggerParam[] triggers;
 
         GimmickTarget IGimmick.Target => key.Key.Target;
         string IGimmick.Key => key.Key.Key;
@@ -22,9 +23,9 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         ParameterType IGimmick.ParameterType => ParameterType.Signal;
 
         public event PlayerTriggerEventHandler TriggerEvent;
-        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
+        IEnumerable<TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
 
-        Trigger.TriggerParam[] triggersCache;
+        TriggerParam[] triggersCache;
 
         DateTime lastTriggerReceivedAt;
         Scheduler.Cancellation schedulerCancellation;
@@ -38,7 +39,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             lastTriggerReceivedAt = value.TimeStamp;
 
             var dueTime = value.TimeStamp.AddSeconds(delayTimeSeconds) - current;
-            if (dueTime.TotalSeconds < -Constants.TriggerGimmick.TriggerExpireSeconds)
+            if (dueTime.TotalSeconds < -TriggerGimmick.TriggerExpireSeconds)
             {
                 return;
             }
@@ -65,7 +66,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             triggers = triggers?.Select(trigger =>
             {
                 return trigger.Target != TriggerTarget.Player
-                    ? new Trigger.Implements.TriggerParam(TriggerTarget.Player, null, trigger.Key, trigger.Type,
+                    ? new ConstantTriggerParam(TriggerTarget.Player, null, trigger.Key, trigger.Type,
                         trigger.RawValue)
                     : trigger;
             }).ToArray();

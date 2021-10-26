@@ -8,8 +8,8 @@ namespace ClusterVR.CreatorKit.Preview.Item
     public sealed class ItemHighlighter : MonoBehaviour
     {
         [SerializeField] Camera targetCamera;
-        [SerializeField] InteractableItemFinder interactableItemFinder;
-        [SerializeField] InteractableItemRaycaster interactableItemRaycaster;
+        [SerializeField] ContactableItemFinder contactableItemFinder;
+        [SerializeField] ContactableItemRaycaster contactableItemRaycaster;
         [SerializeField] Material outlineStencilMaterial;
         [SerializeField] Material candidateOutlineMaterial;
         [SerializeField] Material grabbableOutlineMaterial;
@@ -27,15 +27,15 @@ namespace ClusterVR.CreatorKit.Preview.Item
         {
             commandBuffer.Clear();
             if (Cursor.lockState != CursorLockMode.Locked &&
-                interactableItemRaycaster.RaycastItem(Input.mousePosition, out var interactableItem, out _))
+                contactableItemRaycaster.RaycastItem(Input.mousePosition, out var contactable, out _))
             {
-                var objectToHighlight = interactableItem.Item.gameObject;
+                var objectToHighlight = contactable.Item.gameObject;
                 Draw(objectToHighlight, outlineStencilMaterial);
                 Draw(objectToHighlight,
-                    interactableItem is IGrabbableItem ? grabbableOutlineMaterial : interactableOutlineMaterial);
+                    contactable is IGrabbableItem ? grabbableOutlineMaterial : interactableOutlineMaterial);
             }
 
-            foreach (var candidateItem in interactableItemFinder.InteractableItems)
+            foreach (var candidateItem in contactableItemFinder.ContactableItems)
             {
                 var objectToHighlight = candidateItem.Item.gameObject;
                 Draw(objectToHighlight, outlineStencilMaterial);

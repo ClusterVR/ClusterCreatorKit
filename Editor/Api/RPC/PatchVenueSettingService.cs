@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
-    public class PatchVenueSettingService
+    public sealed class PatchVenueSettingService
     {
         readonly string accessToken;
         readonly Venue.Venue venue;

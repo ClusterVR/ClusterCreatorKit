@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit
 {
     [Serializable]
-    public class StateValue
+    public sealed class StateValue
     {
         [SerializeField] double doubleValue;
 

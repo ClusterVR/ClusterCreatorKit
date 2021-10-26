@@ -1,6 +1,6 @@
 ﻿namespace ClusterVR.CreatorKit.World
 {
-    public class Ranking
+    public sealed class Ranking
     {
         public int Rank;
         public User User;

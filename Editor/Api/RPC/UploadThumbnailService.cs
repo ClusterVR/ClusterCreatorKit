@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
-    public class UploadThumbnailService
+    public sealed class UploadThumbnailService
     {
         const string ContentType = "image/jpeg";
 

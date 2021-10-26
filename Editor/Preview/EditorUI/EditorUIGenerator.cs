@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
 {
-    public class EditorUIGenerator : MonoBehaviour
+    public sealed class EditorUIGenerator : MonoBehaviour
     {
         static readonly Dictionary<LabelType, int> dictLabelAndFontSize = new Dictionary<LabelType, int>
         {

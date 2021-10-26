@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public class AboutWindow : EditorWindow
+    public sealed class AboutWindow : EditorWindow
     {
         [InitializeOnLoadMethod]
         static void ShowWindowOnlyOnce()

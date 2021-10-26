@@ -10,7 +10,7 @@ namespace ClusterVR.CreatorKit.Gimmick
 
     public delegate void DestroyItemEventHandler(DestroyItemEventArgs args);
 
-    public class DestroyItemEventArgs : EventArgs
+    public sealed class DestroyItemEventArgs : EventArgs
     {
         public IItem Item;
         public double TimestampDiffSeconds;

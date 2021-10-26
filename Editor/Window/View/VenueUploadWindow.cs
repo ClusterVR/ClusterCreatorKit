@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public class VenueUploadWindow : EditorWindow
+    public sealed class VenueUploadWindow : EditorWindow
     {
         [MenuItem("Cluster/ワールドアップロード", priority = 301)]
         public static void Open()

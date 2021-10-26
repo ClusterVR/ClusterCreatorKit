@@ -24,10 +24,10 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
             }
             var scene = SceneManager.GetActiveScene();
             var rootObjects = scene.GetRootGameObjects();
-            var interactableItems = rootObjects.SelectMany(o => o.GetComponentsInChildren<IInteractableItem>(true));
-            foreach (var interactableItem in interactableItems)
+            var contactableItems = rootObjects.SelectMany(o => o.GetComponentsInChildren<IContactableItem>(true));
+            foreach (var contactableItem in contactableItems)
             {
-                interactableItem.Item.gameObject.SetLayerRecursively(LayerName.InteractableItem);
+                contactableItem.Item.gameObject.SetLayerRecursively(LayerName.InteractableItem);
             }
         }
 

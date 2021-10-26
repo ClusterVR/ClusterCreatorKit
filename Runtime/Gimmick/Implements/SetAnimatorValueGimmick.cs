@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using ClusterVR.CreatorKit.Item;
 using UnityEngine;
 
@@ -6,11 +7,15 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [RequireComponent(typeof(Animator)),
         LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
-    public class SetAnimatorValueGimmick : MonoBehaviour, IGlobalGimmick
+    public sealed class SetAnimatorValueGimmick : MonoBehaviour, IGlobalGimmick
     {
+        static readonly ParameterType[] SelectableTypes =
+            { ParameterType.Signal, ParameterType.Bool, ParameterType.Float, ParameterType.Integer };
+
         [SerializeField, HideInInspector] Animator animator;
         [SerializeField] GlobalGimmickKey globalGimmickKey;
-        [SerializeField] ParameterType parameterType;
+        [SerializeField, ParameterTypeField(ParameterType.Signal, ParameterType.Bool, ParameterType.Float, ParameterType.Integer)]
+        ParameterType parameterType = SelectableTypes[0];
         [SerializeField, Tooltip("AnimatorのParameter名")] string animatorParameterName;
 
         ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
@@ -54,6 +59,8 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
                 case ParameterType.Integer:
                     animator.SetInteger(animatorParameterName, value.IntegerValue);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -62,6 +69,11 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
             if (animator == null || animator.gameObject != gameObject)
             {
                 animator = GetComponent<Animator>();
+            }
+
+            if (!SelectableTypes.Contains(parameterType))
+            {
+                parameterType = SelectableTypes[0];
             }
         }
 

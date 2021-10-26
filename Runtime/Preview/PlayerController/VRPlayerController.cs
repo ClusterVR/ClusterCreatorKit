@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using ClusterVR.CreatorKit.Item;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
@@ -6,12 +7,14 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
     public sealed class VRPlayerController : MonoBehaviour, IPlayerController
     {
         [SerializeField] CharacterController characterController;
+        [SerializeField] VRMoveInputController moveInputController;
         [SerializeField] float baseMoveSpeed;
         [SerializeField] Transform cameraTransform;
         float moveSpeedRate = 1f;
         float fallingSpeed;
 
         public Transform PlayerTransform => characterController.transform;
+        public Transform RootTransform => PlayerTransform;
         public Transform CameraTransform => cameraTransform;
 
         public void ActivateCharacterController(bool isActive)
@@ -28,11 +31,22 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         {
         }
 
+        void IPlayerController.SetRidingItem(IRidableItem ridingItem)
+        {
+        }
+
+        void IPlayerController.SetRotationKeepingHeadPitch(Quaternion rotation)
+        {
+        }
+
+        void IPlayerController.ResetCameraRotation(Quaternion rotation)
+        {
+        }
+
         void Update()
         {
-            var x = Input.GetAxisRaw("Horizontal");
-            var z = Input.GetAxisRaw("Vertical");
-            var direction = new Vector3(x, 0, z);
+            var moveDirection = moveInputController.MoveDirection;
+            var direction = new Vector3(moveDirection.x, 0, moveDirection.y);
             direction.Normalize();
             direction = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * direction;
             var velocity = baseMoveSpeed * moveSpeedRate * direction;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
-    public class RespawnPlayerGimmick : MonoBehaviour, IPlayerEffectGimmick, IRespawnPlayerEffect
+    public sealed class RespawnPlayerGimmick : MonoBehaviour, IPlayerEffectGimmick, IRespawnPlayerEffect
     {
         [SerializeField] PlayerGimmickKey key = new PlayerGimmickKey("respawn");
 

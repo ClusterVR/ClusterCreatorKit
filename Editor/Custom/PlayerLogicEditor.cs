@@ -4,7 +4,7 @@ using UnityEditor;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomEditor(typeof(PlayerLogic)), CanEditMultipleObjects]
-    public sealed class PlayerLogicEditor : VisualElementEditor
+    public sealed class PlayerLogicEditor : LogicEditor
     {
     }
 }

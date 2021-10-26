@@ -13,17 +13,17 @@ namespace ClusterVR.CreatorKit.Editor.Custom
         public static VisualElement Create<TEnum>(SerializedProperty property, Action<TEnum> onValueChanged = null)
             where TEnum : struct, Enum
         {
-            return Create(null, property, onValueChanged);
+            return Create(null, property, onValueChanged: onValueChanged);
         }
 
-        public static VisualElement Create<TEnum>(string label, SerializedProperty property,
+        public static VisualElement Create<TEnum>(string label, SerializedProperty property, Func<TEnum, string> format = null,
             Action<TEnum> onValueChanged = null)
             where TEnum : struct, Enum
         {
             var defaultValue = (TEnum) (object) property.intValue;
             var choices = Enum.GetValues(typeof(TEnum)).Cast<TEnum>().ToList();
 
-            return Create(label, property, choices, defaultValue, null, onValueChanged);
+            return Create(label, property, choices, defaultValue, format, onValueChanged);
         }
 
         public static VisualElement Create<TEnum>(SerializedProperty property, List<TEnum> choices, TEnum defaultValue,

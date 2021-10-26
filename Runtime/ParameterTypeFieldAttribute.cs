@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit
 {
-    public class ParameterTypeFieldAttribute : PropertyAttribute
+    public sealed class ParameterTypeFieldAttribute : PropertyAttribute
     {
         public ParameterType[] Selectables { get; }
 

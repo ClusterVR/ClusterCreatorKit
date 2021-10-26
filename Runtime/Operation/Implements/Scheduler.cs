@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Operation.Implements
 {
-    public class Scheduler : MonoBehaviour
+    public sealed class Scheduler : MonoBehaviour
     {
         static Scheduler instance;
 
@@ -45,7 +45,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             Instance.StartCoroutine(DelayAction(dueTime, action, cancellation));
         }
 
-        public class Cancellation : IDisposable
+        public sealed class Cancellation : IDisposable
         {
             public bool IsDisposed { get; private set; }
 

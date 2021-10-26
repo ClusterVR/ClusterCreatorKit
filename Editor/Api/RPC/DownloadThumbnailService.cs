@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
-    public class DownloadThumbnailService
+    public sealed class DownloadThumbnailService
     {
         static readonly Dictionary<ThumbnailUrl, Texture2D> cacheMap = new Dictionary<ThumbnailUrl, Texture2D>();
         readonly Action<Exception> onError;

@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
 {
-    public class PackageInstallerWindow : EditorWindow
+    public sealed class PackageInstallerWindow : EditorWindow
     {
         static PackageStates packageStates;
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
-    public class PostUploadRequestService
+    public sealed class PostUploadRequestService
     {
         readonly string accessToken;
         readonly VenueID venueId;

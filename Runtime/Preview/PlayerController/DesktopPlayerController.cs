@@ -1,20 +1,33 @@
 ﻿#if UNITY_EDITOR
+using ClusterVR.CreatorKit.Item;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
     public sealed class DesktopPlayerController : MonoBehaviour, IPlayerController
     {
+        const float MaxHeadPitch = 80f;
+        const float MinHeadPitch = -80f;
+        const float MaxHeadYaw = 90f;
+
+        [SerializeField] Transform rootTransform;
         [SerializeField] Transform cameraTransform;
         [SerializeField] CharacterController characterController;
         [SerializeField] DesktopPointerEventListener desktopPointerEventListener;
+        [SerializeField] DesktopMoveInputController desktopMoveInputController;
         [SerializeField] float baseMoveSpeed;
         [SerializeField] float baseJumpSpeed;
+        [SerializeField] float defaultEyeHeight;
+        [SerializeField] float sittingEyeHeight;
         float velocityY;
         float moveSpeedRate = 1f;
         float jumpSpeedRate = 1f;
 
+        IRidableItem ridingItem;
+        bool prevIsRiding;
+
         public Transform PlayerTransform => characterController.transform;
+        public Transform RootTransform => rootTransform;
         public Transform CameraTransform => cameraTransform;
 
         public void ActivateCharacterController(bool isActive)
@@ -32,6 +45,34 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             this.jumpSpeedRate = jumpSpeedRate;
         }
 
+        void IPlayerController.SetRidingItem(IRidableItem ridingItem)
+        {
+            this.ridingItem = ridingItem;
+        }
+
+        void IPlayerController.SetRotationKeepingHeadPitch(Quaternion rotation)
+        {
+            var rootRotation = rootTransform.rotation;
+            var cameraRotation = cameraTransform.rotation;
+            var cameraLocalPitch = (Quaternion.Inverse(rootRotation) * cameraRotation).eulerAngles.x;
+            rootTransform.rotation = rotation;
+            cameraTransform.rotation = rotation * ClampPitch(new Vector3(cameraLocalPitch, 0f, 0f));
+        }
+
+        void IPlayerController.ResetCameraRotation(Quaternion rotation)
+        {
+            SetCameraRotation(rotation);
+        }
+
+        void SetCameraRotation(Quaternion rotation)
+        {
+            var rootRotation = rootTransform.rotation;
+            var cameraLocalRotation = Quaternion.Inverse(rootRotation) * rotation;
+            cameraLocalRotation = ClampAsHeadAngle(cameraLocalRotation.eulerAngles);
+            var res = rootRotation * cameraLocalRotation;
+            cameraTransform.rotation = res;
+        }
+
         void Start()
         {
             desktopPointerEventListener.OnMoved += Rotate;
@@ -39,9 +80,42 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
         void Update()
         {
-            var x = Input.GetAxisRaw("Horizontal");
-            var z = Input.GetAxisRaw("Vertical");
-            var direction = new Vector3(x, 0, z);
+            var isRiding = IsRiding;
+            if (isRiding)
+            {
+                SetEyeHeight(sittingEyeHeight);
+            }
+            else
+            {
+                SetEyeHeight(defaultEyeHeight);
+                if (prevIsRiding)
+                {
+                    RestoreRotation();
+                }
+                Move();
+            }
+
+            prevIsRiding = isRiding;
+        }
+
+        void LateUpdate()
+        {
+            if (TryGetRidingSeat(out var seat))
+            {
+                PlayerTransform.position = seat.position;
+                rootTransform.rotation = seat.rotation;
+            }
+        }
+
+        void SetEyeHeight(float eyeHeight)
+        {
+            cameraTransform.localPosition = new Vector3(0f, eyeHeight, 0f);
+        }
+
+        void Move()
+        {
+            var moveDirection = desktopMoveInputController.MoveDirection;
+            var direction = new Vector3(moveDirection.x, 0, moveDirection.y);
             direction.Normalize();
             direction = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * direction;
 
@@ -51,7 +125,7 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
             if (characterController.isGrounded)
             {
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (desktopMoveInputController.IsJumpButtonDown)
                 {
                     velocityY = baseJumpSpeed * jumpSpeedRate;
                 }
@@ -66,10 +140,63 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
         void Rotate(Vector2 delta)
         {
-            var euler = cameraTransform.eulerAngles;
+            var rootRotation = rootTransform.rotation;
+            var cameraLocalRotation = Quaternion.Inverse(rootRotation) * cameraTransform.rotation;
+            var euler = cameraLocalRotation.eulerAngles;
             delta *= 120;
-            euler = new Vector3(ClampAngle(euler.x - delta.y, -80, 80), euler.y + delta.x, 0);
-            cameraTransform.rotation = Quaternion.Euler(euler);
+            cameraLocalRotation = ClampPitch(new Vector3(euler.x - delta.y, euler.y + delta.x, 0f));
+            SetRotation(rootRotation * cameraLocalRotation);
+        }
+
+        Quaternion ClampPitch(Vector3 eulerAngles)
+        {
+            return Quaternion.Euler(ClampAngle(eulerAngles.x, MinHeadPitch, MaxHeadPitch), eulerAngles.y, 0f);
+        }
+
+        Quaternion ClampAsHeadAngle(Vector3 eulerAngles)
+        {
+            return Quaternion.Euler(ClampAngle(eulerAngles.x, MinHeadPitch, MaxHeadPitch), ClampAngle(eulerAngles.y, -MaxHeadYaw, MaxHeadYaw), 0f);
+        }
+
+        void SetRotation(Quaternion rotation)
+        {
+            if (IsRiding)
+            {
+                SetCameraRotation(rotation);
+            }
+            else
+            {
+                var onlyYawRotation = Quaternion.Euler(0f, rotation.eulerAngles.y, 0f);
+                rootTransform.rotation = onlyYawRotation;
+                cameraTransform.rotation = rotation;
+            }
+        }
+
+        void RestoreRotation()
+        {
+            var rootRotation = rootTransform.rotation;
+            var cameraRotation = cameraTransform.rotation;
+            var cameraLocalPitch = (Quaternion.Inverse(rootRotation) * cameraRotation).eulerAngles.x;
+            var cameraGlobalYaw = cameraRotation.eulerAngles.y;
+            rootRotation = Quaternion.Euler(0f, cameraGlobalYaw, 0f);
+            rootTransform.rotation = rootRotation;
+            cameraTransform.rotation = rootRotation * ClampPitch(new Vector3(cameraLocalPitch, 0f, 0f));
+        }
+
+        bool IsRiding => TryGetRidingSeat(out _);
+
+        bool TryGetRidingSeat(out Transform seat)
+        {
+            if (ridingItem == null)
+            {
+                seat = default;
+                return false;
+            }
+            else
+            {
+                seat = ridingItem.Seat;
+                return seat != null;
+            }
         }
 
         static float ClampAngle(float angle, float min, float max)

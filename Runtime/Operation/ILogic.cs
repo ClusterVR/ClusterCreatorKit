@@ -5,5 +5,6 @@ namespace ClusterVR.CreatorKit.Operation
 {
     public interface ILogic : IGimmick, ITrigger
     {
+        Logic Logic { get; }
     }
 }

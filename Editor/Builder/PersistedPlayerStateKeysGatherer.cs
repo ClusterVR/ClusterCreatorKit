@@ -13,10 +13,12 @@ namespace ClusterVR.CreatorKit.Editor.Builder
             foreach (var initializePlayerTrigger in scene.GetRootGameObjects()
                 .SelectMany(o => o.GetComponentsInChildren<IInitializePlayerTrigger>(true)))
             {
-                foreach (var param in
-                initializePlayerTrigger.TriggerParams.Where(p => p.Target == TriggerTarget.Player))
+                foreach (var key in
+                initializePlayerTrigger.TriggerParams
+                    .Where(p => p.Target == TriggerTarget.Player)
+                    .SelectMany(p => p.GetKeyWithFieldNames()))
                 {
-                    persistedPlayerStateKeys.Add(param.Key);
+                    persistedPlayerStateKeys.Add(key);
                 }
             }
 

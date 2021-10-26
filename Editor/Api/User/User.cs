@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Editor.Api.User
 {
     [Serializable]
-    public class User
+    public sealed class User
     {
         [SerializeField] string username;
 

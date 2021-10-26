@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [DisallowMultipleComponent, LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
-    public class SetGameObjectActiveGimmick : MonoBehaviour, IGlobalGimmick
+    public sealed class SetGameObjectActiveGimmick : MonoBehaviour, IGlobalGimmick
     {
         [SerializeField] GlobalGimmickKey globalGimmickKey;
 

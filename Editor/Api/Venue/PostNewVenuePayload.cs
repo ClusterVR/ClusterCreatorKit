@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Editor.Api.Venue
 {
     [Serializable]
-    public class PostNewVenuePayload
+    public sealed class PostNewVenuePayload
     {
         [SerializeField] string name;
         [SerializeField] string description;

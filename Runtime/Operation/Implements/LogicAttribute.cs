@@ -20,7 +20,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         }
     }
 
-    public class ItemLogicAttribute : LogicAttribute
+    public sealed class ItemLogicAttribute : LogicAttribute
     {
         public override List<TargetStateTarget> TargetStateTargetSelectables => new List<TargetStateTarget>
             { TargetStateTarget.Item, TargetStateTarget.Player };
@@ -55,7 +55,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         }
     }
 
-    public class PlayerLogicAttribute : LogicAttribute
+    public sealed class PlayerLogicAttribute : LogicAttribute
     {
         public override List<TargetStateTarget> TargetStateTargetSelectables =>
             new List<TargetStateTarget> { TargetStateTarget.Player };
@@ -64,7 +64,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             { GimmickTarget.Player, GimmickTarget.Global };
     }
 
-    public class GlobalLogicAttribute : LogicAttribute
+    public sealed class GlobalLogicAttribute : LogicAttribute
     {
         public override List<TargetStateTarget> TargetStateTargetSelectables =>
             new List<TargetStateTarget> { TargetStateTarget.Global };

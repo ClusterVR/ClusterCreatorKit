@@ -7,7 +7,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [RequireComponent(typeof(Image)), DisallowMultipleComponent,
         LocalizableGlobalGimmick(LocalizableGlobalGimmickAttribute.Condition.InPlayerLocal)]
-    public class SetFillAmountGimmick : MonoBehaviour, IGlobalGimmick
+    public sealed class SetFillAmountGimmick : MonoBehaviour, IGlobalGimmick
     {
         [SerializeField, HideInInspector] Image image;
         [SerializeField] GlobalGimmickKey globalGimmickKey;

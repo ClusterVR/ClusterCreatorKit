@@ -4,7 +4,7 @@ using UnityEditor;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomEditor(typeof(PlayAudioSourceGimmick)), CanEditMultipleObjects]
-    public class PlayAudioSourceGimmickEditor : VisualElementEditor
+    public sealed class PlayAudioSourceGimmickEditor : VisualElementEditor
     {
     }
 }

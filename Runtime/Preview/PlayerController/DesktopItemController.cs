@@ -11,7 +11,7 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         [SerializeField] DesktopPointerEventListener desktopPointerEventListener;
         [SerializeField] Transform grabPoint;
         [SerializeField] DesktopItemView itemView;
-        [SerializeField] InteractableItemRaycaster interactableItemRaycaster;
+        [SerializeField] ContactableItemRaycaster contactableItemRaycaster;
 
         IGrabbableItem grabbingItem;
         Quaternion grabPointToTargetOffsetRotation;
@@ -57,7 +57,7 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             {
                 return;
             }
-            if (interactableItemRaycaster.RaycastItem(point, out var item, out var hitPoint))
+            if (contactableItemRaycaster.RaycastItem(point, out var item, out var hitPoint))
             {
                 if (item == grabbingItem)
                 {
@@ -69,8 +69,8 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
                         Release();
                         Grab(grabbableItem, hitPoint);
                         break;
-                    case IInteractItemTrigger interactTrigger:
-                        interactTrigger.Invoke();
+                    case IInteractableItem interactableItem:
+                        interactableItem.Invoke();
                         break;
                 }
             }

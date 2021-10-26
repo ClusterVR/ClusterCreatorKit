@@ -20,7 +20,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         PostProcess
     }
 
-    public class UploadVenueService
+    public sealed class UploadVenueService
     {
         readonly string accessToken;
         readonly Action<Exception> onError;

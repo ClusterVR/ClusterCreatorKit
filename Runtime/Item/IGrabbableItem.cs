@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Item
 {
-    public interface IGrabbableItem : IInteractableItem
+    public interface IGrabbableItem : IContactableItem
     {
         IMovableItem MovableItem { get; }
         Transform Grip { get; }

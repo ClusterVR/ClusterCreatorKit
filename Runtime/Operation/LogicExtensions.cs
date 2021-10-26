@@ -13,7 +13,7 @@ namespace ClusterVR.CreatorKit.Operation
                 .Select(s => s.SingleStatement)
                 .Where(s => s != null)
                 .Select(s => s.TargetState)
-                .Select(s => new TriggerParam(s.Target.Convert(), null, s.Key, s.ParameterType, null));
+                .Select(s => new TriggerParam(s.Target.Convert(), null, s.Key, s.ParameterType, new TriggerValue()));
         }
 
         static TriggerTarget Convert(this TargetStateTarget target)

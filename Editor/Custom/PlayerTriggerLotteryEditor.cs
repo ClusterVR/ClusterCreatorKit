@@ -4,7 +4,7 @@ using UnityEditor;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomEditor(typeof(PlayerTriggerLottery)), CanEditMultipleObjects]
-    public class PlayerTriggerLotteryEditor : VisualElementEditor
+    public sealed class PlayerTriggerLotteryEditor : TriggerLotteryEditor
     {
     }
 }

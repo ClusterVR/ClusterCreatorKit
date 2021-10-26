@@ -4,7 +4,7 @@ using UnityEditor;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomEditor(typeof(SetSliderValueGimmick)), CanEditMultipleObjects]
-    public class SetSliderValueGimmickEditor : VisualElementEditor
+    public sealed class SetSliderValueGimmickEditor : VisualElementEditor
     {
     }
 }

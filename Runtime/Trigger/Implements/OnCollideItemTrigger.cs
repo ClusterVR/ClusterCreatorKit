@@ -6,18 +6,18 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
     [RequireComponent(typeof(Item.Implements.Item))]
-    public class OnCollideItemTrigger : MonoBehaviour, IItemTrigger
+    public sealed class OnCollideItemTrigger : MonoBehaviour, IItemTrigger
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
         [SerializeField] CollisionEventType collisionEventType;
         [SerializeField] CollisionType collisionType = CollisionType.Everything;
-        [SerializeField, CollideItemTriggerParam] TriggerParam[] triggers;
+        [SerializeField, CollideItemTriggerParam] ConstantTriggerParam[] triggers;
 
         IItem IItemTrigger.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         public event TriggerEventHandler TriggerEvent;
-        IEnumerable<Trigger.TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
+        IEnumerable<TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
 
-        Trigger.TriggerParam[] triggersCache;
+        TriggerParam[] triggersCache;
 
         void OnCollisionEnter(Collision other)
         {

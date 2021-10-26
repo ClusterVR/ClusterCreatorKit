@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Editor.Api.Venue
 {
     [Serializable]
-    public class VenueUploadRequestCompletionResponse
+    public sealed class VenueUploadRequestCompletionResponse
     {
         [SerializeField] string uploadRequestId;
         [SerializeField] string url;

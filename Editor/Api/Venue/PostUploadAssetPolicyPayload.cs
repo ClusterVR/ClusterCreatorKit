@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Editor.Api.Venue
 {
     [Serializable]
-    public class PostUploadAssetPolicyPayload
+    public sealed class PostUploadAssetPolicyPayload
     {
         [SerializeField] string fileType;
         [SerializeField] string fileName;

@@ -3,14 +3,18 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Item.Implements
 {
     [RequireComponent(typeof(Item), typeof(Rigidbody)), DisallowMultipleComponent]
-    public sealed class MovableItem : MonoBehaviour, IMovableItem
+    public sealed class MovableItem : MovableItemBase, IMovableItem
     {
         [SerializeField, HideInInspector] Item item;
         [SerializeField, HideInInspector] Rigidbody rb;
 
-        public IItem Item => item != null ? item : item = GetComponent<Item>();
-        public Vector3 Position => rb.position;
-        public Quaternion Rotation => rb.rotation;
+        public Rigidbody Rigidbody => rb;
+
+        public override IItem Item => item != null ? item : item = GetComponent<Item>();
+        Vector3 IMovableItem.Position => rb.position;
+        Quaternion IMovableItem.Rotation => rb.rotation;
+        public override Vector3 Velocity => rb.velocity;
+        public override Vector3 AngularVelocity => rb.angularVelocity;
 
         enum State
         {
@@ -131,7 +135,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
             WarpTo(initialPosition, initialRotation);
         }
 
-        public void WarpTo(Vector3 position, Quaternion rotation)
+        public override void WarpTo(Vector3 position, Quaternion rotation)
         {
             if (state != State.Free)
             {

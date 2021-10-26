@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public class ReactiveBase
+    public abstract class ReactiveBase
     {
     }
 
-    public class Reactive<T> : ReactiveBase
+    public sealed class Reactive<T> : ReactiveBase
     {
         T val;
 
@@ -22,7 +22,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         }
     }
 
-    public class ReactiveBinder
+    public sealed class ReactiveBinder
     {
         static Dictionary<ReactiveBase, List<Action>> bindings = new Dictionary<ReactiveBase, List<Action>>();
 

@@ -20,8 +20,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var propertyDisplayName = property.displayName;
             var keyLengthErrorBox = new IMGUIContainer(() =>
-                EditorGUILayout.HelpBox(
-                    $"{propertyDisplayName} は {Constants.TriggerGimmick.MaxKeyLength}文字以下である必要があります。",
+                EditorGUILayout.HelpBox($"{propertyDisplayName} が長すぎます。",
                     MessageType.Error));
 
             void SetKeyLengthErrorBoxVisibility(string key)

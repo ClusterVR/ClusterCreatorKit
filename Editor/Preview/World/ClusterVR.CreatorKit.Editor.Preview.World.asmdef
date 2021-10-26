@@ -1,6 +1,7 @@
 {
     "name": "ClusterVR.CreatorKit.Editor.Preview.World",
     "references": [
+        "ClusterVR.CreatorKit.Item",
         "ClusterVR.CreatorKit.World",
         "ClusterVR.CreatorKit.Constants",
         "ClusterVR.CreatorKit.Preview",

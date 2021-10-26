@@ -4,7 +4,7 @@ using ClusterVR.CreatorKit.World;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.World
 {
-    public class RankingScreenPresenter
+    public sealed class RankingScreenPresenter
     {
         readonly IList<IRankingScreenView> rankingScreenViews;
 
