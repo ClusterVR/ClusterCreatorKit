@@ -201,8 +201,6 @@ GameObject:
   - component: {fileID: 1568381616447587692}
   - component: {fileID: 8694671374715215634}
   - component: {fileID: 4417950867447935944}
-  - component: {fileID: 9175425103441531354}
-  - component: {fileID: 669350196327984167}
   - component: {fileID: 1071705376444083031}
   m_Layer: 24
   m_Name: DesktopPlayerController
@@ -263,8 +261,6 @@ MonoBehaviour:
   desktopMoveInputController: {fileID: 1071705376444083031}
   baseMoveSpeed: 2.5
   baseJumpSpeed: 4
-  defaultEyeHeight: 1.6
-  sittingEyeHeight: 0.8
 --- !u!114 &8081063683009738272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,31 +327,6 @@ MonoBehaviour:
     type: 2}
   interactableOutlineMaterial: {fileID: 2100000, guid: 31a31b0b6b71b4649b030d07543f34f3,
     type: 2}
---- !u!114 &9175425103441531354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4566206746035942596}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d84e0398943c14ed4a5331766cd30226, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerController: {fileID: -4804867365819599185}
---- !u!114 &669350196327984167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4566206746035942596}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2edcfcc80cbe4adfbccc206593f8a31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1071705376444083031
 MonoBehaviour:
   m_ObjectHideFlags: 0

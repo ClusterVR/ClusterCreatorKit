@@ -29,9 +29,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
         static VisualElement GenerateCameraControlSection()
         {
             var cameraControlSection = EditorUIGenerator.GenerateSection();
-            cameraControlSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h1, "視点操作オプション"));
+            cameraControlSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h1, "視点オプション"));
 
-            var sensitivitySlider = EditorUIGenerator.GenerateSlider(LabelType.h2, "感度");
+            var sensitivitySlider = EditorUIGenerator.GenerateSlider(LabelType.h2, "操作感度");
             sensitivitySlider.lowValue = 0f;
             sensitivitySlider.highValue = 1f;
             sensitivitySlider.value = CameraControlSettings.Sensitivity;
@@ -48,6 +48,25 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
             invertHorizontalToggle.RegisterValueChangedCallback(ev =>
                 CameraControlSettings.InvertHorizontal = ev.newValue);
             cameraControlSection.Add(invertHorizontalToggle);
+
+            var standingEyeHeightField = EditorUIGenerator.GenerateFloatField(LabelType.h2, "視点の高さ(立ち)");
+            var sittingEyeHeightField = EditorUIGenerator.GenerateFloatField(LabelType.h2, "視点の高さ(座り)");
+            standingEyeHeightField.value = CameraControlSettings.StandingEyeHeight;
+            standingEyeHeightField.RegisterValueChangedCallback(ev =>
+            {
+                CameraControlSettings.StandingEyeHeight = ev.newValue;
+                standingEyeHeightField.SetValueWithoutNotify(CameraControlSettings.StandingEyeHeight);
+                sittingEyeHeightField.SetValueWithoutNotify(CameraControlSettings.SittingEyeHeight);
+            });
+            cameraControlSection.Add(standingEyeHeightField);
+
+            sittingEyeHeightField.value = CameraControlSettings.SittingEyeHeight;
+            sittingEyeHeightField.RegisterValueChangedCallback(ev =>
+            {
+                CameraControlSettings.SittingEyeHeight = ev.newValue;
+                sittingEyeHeightField.SetValueWithoutNotify(CameraControlSettings.SittingEyeHeight);
+            });
+            cameraControlSection.Add(sittingEyeHeightField);
 
             return cameraControlSection;
         }

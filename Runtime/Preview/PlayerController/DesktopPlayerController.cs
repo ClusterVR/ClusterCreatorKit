@@ -17,8 +17,6 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         [SerializeField] DesktopMoveInputController desktopMoveInputController;
         [SerializeField] float baseMoveSpeed;
         [SerializeField] float baseJumpSpeed;
-        [SerializeField] float defaultEyeHeight;
-        [SerializeField] float sittingEyeHeight;
         float velocityY;
         float moveSpeedRate = 1f;
         float jumpSpeedRate = 1f;
@@ -27,12 +25,14 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         bool prevIsRiding;
 
         public Transform PlayerTransform => characterController.transform;
-        public Transform RootTransform => rootTransform;
+        public Quaternion RootRotation => rootTransform.rotation;
         public Transform CameraTransform => cameraTransform;
 
-        public void ActivateCharacterController(bool isActive)
+        public void WarpTo(Vector3 position)
         {
-            characterController.enabled = isActive;
+            characterController.enabled = false;
+            characterController.transform.position = position;
+            characterController.enabled = true;
         }
 
         void IPlayerController.SetMoveSpeedRate(float moveSpeedRate)
@@ -83,11 +83,11 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             var isRiding = IsRiding;
             if (isRiding)
             {
-                SetEyeHeight(sittingEyeHeight);
+                SetEyeHeight(CameraControlSettings.SittingEyeHeight);
             }
             else
             {
-                SetEyeHeight(defaultEyeHeight);
+                SetEyeHeight(CameraControlSettings.StandingEyeHeight);
                 if (prevIsRiding)
                 {
                     RestoreRotation();

@@ -85,7 +85,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Item
         {
             var exitTransform = ridableItem.ExitTransform;
             if (exitTransform == null) return false;
-            playerPresenter.MoveTo(exitTransform.position);
+            playerPresenter.WarpTo(exitTransform.position);
             playerPresenter.RotateTo(exitTransform.rotation);
             return true;
         }

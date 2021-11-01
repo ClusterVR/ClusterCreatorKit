@@ -6,9 +6,9 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
     public interface IPlayerController
     {
         Transform PlayerTransform { get; }
-        Transform RootTransform { get; }
+        Quaternion RootRotation { get; }
         Transform CameraTransform { get; }
-        void ActivateCharacterController(bool isActive);
+        void WarpTo(Vector3 position);
         void SetMoveSpeedRate(float moveSpeedRate);
         void SetJumpSpeedRate(float jumpSpeedRate);
         void SetRidingItem(IRidableItem ridingItem);

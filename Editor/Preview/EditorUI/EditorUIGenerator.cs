@@ -56,6 +56,13 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
             button.style.fontSize = dictLabelAndFontSize[labelType];
             return button;
         }
+
+        public static FloatField GenerateFloatField(LabelType labelType, string content)
+        {
+            var field = new FloatField(content);
+            field.style.fontSize = dictLabelAndFontSize[labelType];
+            return field;
+        }
     }
 
     public enum LabelType

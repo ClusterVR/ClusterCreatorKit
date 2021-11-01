@@ -103,7 +103,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Trigger
 
         Quaternion CameraRotation()
         {
-            var rootRotation = playerPresenter.RootTransform.rotation;
+            var rootRotation = playerPresenter.RootRotation;
             var rootToCamera = Quaternion.Inverse(rootRotation) * playerPresenter.CameraTransform.rotation;
             return rootRotation * Quaternion.Euler(0, rootToCamera.eulerAngles.y, 0);
         }

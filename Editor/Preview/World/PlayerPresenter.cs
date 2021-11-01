@@ -29,7 +29,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
         bool isInPersonalCamera;
 
         public Transform PlayerTransform { get; }
-        public Transform RootTransform { get; }
+        public Quaternion RootRotation => playerController.RootRotation;
         public Transform CameraTransform { get; }
         public IMoveInputController MoveInputController { get; }
 
@@ -46,7 +46,6 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             var previewOnly = PrefabUtility.InstantiatePrefab(previewOnlyPrefab) as GameObject;
             playerController = previewOnly.GetComponentInChildren<IPlayerController>();
             PlayerTransform = playerController.PlayerTransform;
-            RootTransform = playerController.RootTransform;
             CameraTransform = playerController.CameraTransform;
             MoveInputController = previewOnly.GetComponentInChildren<IMoveInputController>();
 
@@ -63,7 +62,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
         public void Respawn()
         {
             var spawnPoint = spawnPointManager.GetRespawnPoint(PermissionType);
-            MoveTo(spawnPoint.Position);
+            WarpTo(spawnPoint.Position);
             RotateTo(Quaternion.Euler(0f, spawnPoint.YRotation, 0f));
         }
 
@@ -99,55 +98,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             }
         }
 
-        public void SetPointOfView(Transform targetPoint)
+        public void WarpTo(Vector3 position)
         {
-            isInPersonalCamera = true;
-            if (enterDeviceType == EnterDeviceType.VR)
-            {
-                recordedPosition = PlayerTransform.position;
-                recordedRotation = PlayerTransform.rotation;
-                var targetPosition = new Vector3(targetPoint.position.x,
-                    targetPoint.position.y - CameraTransform.localPosition.y, targetPoint.position.z);
-                PlayerTransform.SetPositionAndRotation(targetPosition, targetPoint.rotation);
-            }
-            else
-            {
-                recordedPosition = CameraTransform.position;
-                recordedRotation = CameraTransform.rotation;
-                CameraTransform.SetPositionAndRotation(targetPoint.position, targetPoint.rotation);
-            }
-
-            playerController.ActivateCharacterController(false);
-        }
-
-        public void ResetPointOfView()
-        {
-            if (!isInPersonalCamera)
-            {
-                return;
-            }
-
-            if (!recordedPosition.HasValue || !recordedRotation.HasValue)
-            {
-                return;
-            }
-
-            if (enterDeviceType == EnterDeviceType.VR)
-            {
-                PlayerTransform.SetPositionAndRotation(recordedPosition.Value, recordedRotation.Value);
-            }
-            else
-            {
-                CameraTransform.SetPositionAndRotation(recordedPosition.Value, recordedRotation.Value);
-            }
-
-            playerController.ActivateCharacterController(true);
-            isInPersonalCamera = false;
-        }
-
-        public void MoveTo(Vector3 position)
-        {
-            PlayerTransform.position = position;
+            playerController.WarpTo(position);
         }
 
         public void RotateTo(Quaternion rotation)

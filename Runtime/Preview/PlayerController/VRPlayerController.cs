@@ -14,12 +14,14 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         float fallingSpeed;
 
         public Transform PlayerTransform => characterController.transform;
-        public Transform RootTransform => PlayerTransform;
+        public Quaternion RootRotation => PlayerTransform.rotation;
         public Transform CameraTransform => cameraTransform;
 
-        public void ActivateCharacterController(bool isActive)
+        public void WarpTo(Vector3 position)
         {
-            characterController.enabled = isActive;
+            characterController.enabled = false;
+            characterController.transform.position = position;
+            characterController.enabled = true;
         }
 
         void IPlayerController.SetMoveSpeedRate(float moveSpeedRate)

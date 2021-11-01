@@ -44,7 +44,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
                 case IWarpPlayerEffect warpPlayerEffect:
                     if (!warpPlayerEffect.KeepPosition)
                     {
-                        playerPresenter.MoveTo(warpPlayerEffect.TargetPosition);
+                        playerPresenter.WarpTo(warpPlayerEffect.TargetPosition);
                     }
 
                     if (!warpPlayerEffect.KeepRotation)

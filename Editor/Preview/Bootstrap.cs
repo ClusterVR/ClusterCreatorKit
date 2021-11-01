@@ -91,6 +91,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     PlayerPresenter = new PlayerPresenter(PermissionType.Audience, enterDeviceType, SpawnPointManager);
                     new AvatarRespawner(despawnHeight, PlayerPresenter);
 
+                    var warpPortals = GetComponentsInGameObjectsChildren<IWarpPortal>(rootGameObjects);
+                    new WarpPortalExecutor(PlayerPresenter, warpPortals);
+
                     var itemCreator =
                         new ItemCreator(GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));
                     var itemDestroyer =
@@ -108,6 +111,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     var commentScreenViews =
                         GetComponentsInGameObjectsChildren<ICommentScreenView>(rootGameObjects);
                     CommentScreenPresenter = new CommentScreenPresenter(commentScreenViews);
+
+                    var worldGates = GetComponentsInGameObjectsChildren<IWorldGate>(rootGameObjects);
+                    new WorldGateExecutor(worldGates);
 
                     SetupTriggerGimmicks(rootGameObjects, itemCreator, itemDestroyer);
 
