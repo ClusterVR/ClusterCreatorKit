@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using ClusterVR.CreatorKit.Editor.Api.Analytics;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Builder;
@@ -108,9 +110,16 @@ namespace ClusterVR.CreatorKit.Editor.Analytics
                 Platform = Application.platform.ToString(),
                 SystemLanguage = Application.systemLanguage.ToString(),
                 UnityVersion = Application.unityVersion,
-                XrDeviceIsPresent = XRDevice.isPresent,
+                XrDeviceIsPresent = IsXRDevicePresent(),
                 XrDeviceModel = InputDevices.GetDeviceAtXRNode(XRNode.Head).name ?? ""
             };
+        }
+
+        static bool IsXRDevicePresent()
+        {
+            var xrDisplaySubsystems = new List<XRDisplaySubsystem>();
+            SubsystemManager.GetInstances(xrDisplaySubsystems);
+            return xrDisplaySubsystems.Any(xrDisplay => xrDisplay.running);
         }
     }
 }

@@ -1,5 +1,4 @@
 using UnityEditor;
-using UnityEditor.Experimental.SceneManagement;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.MenuItems
@@ -13,7 +12,7 @@ namespace ClusterVR.CreatorKit.Editor.MenuItems
             {
                 return activeGameObject.transform;
             }
-            var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+            var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage != null)
             {
                 return prefabStage.prefabContentsRoot.transform;
