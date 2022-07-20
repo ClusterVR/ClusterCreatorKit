@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
@@ -73,7 +74,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 yield break;
             }
 
-            var form = BuildForm(fileBytes, policy);
+            var form = BuildFormSections(fileBytes, policy);
             var uploadFileWebRequest = UnityWebRequest.Post(policy.uploadUrl, form);
 
             uploadFileWebRequest.SendWebRequest();
@@ -115,16 +116,16 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             }
         }
 
-        static WWWForm BuildForm(byte[] file, ThumbnailUploadPolicy policy)
+        static List<IMultipartFormSection> BuildFormSections(byte[] file, ThumbnailUploadPolicy policy)
         {
-            var form = new WWWForm();
+            var form = new List<IMultipartFormSection>();
 
-            foreach (var field in policy.form)
+            foreach (var (key, value) in policy.form)
             {
-                form.AddField(field.Key, field.Value.ToString());
+                form.Add(new MultipartFormDataSection(key, value.ToString()));
             }
 
-            form.AddBinaryData("file", file, policy.fileName, policy.contentType);
+            form.Add(new MultipartFormFileSection("file", file, policy.fileName, policy.contentType));
             return form;
         }
 
