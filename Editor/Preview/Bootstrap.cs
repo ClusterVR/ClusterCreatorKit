@@ -81,6 +81,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     var urlTextures = GetComponentsInGameObjectsChildren<IUrlTexture>(rootGameObjects);
                     UrlTextureDownloader.UrlTextureDownload(urlTextures);
 
+                    var localizedAssets = GetComponentsInGameObjectsChildren<ILocalizedAsset>(rootGameObjects);
+                    ServerLangCodeManager.InitializeLocalizedAssets(localizedAssets);
+
                     var enterDeviceType = EnterDeviceType.Desktop;
                     if (XRSettings.enabled)
                     {

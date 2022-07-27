@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ClusterVR.CreatorKit.Constants;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -61,6 +62,13 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
         {
             var field = new FloatField(content);
             field.style.fontSize = dictLabelAndFontSize[labelType];
+            return field;
+        }
+
+        public static TextField GenerateTextField(LabelType layerType, string content)
+        {
+            var field = new TextField(content);
+            field.style.fontSize = dictLabelAndFontSize[layerType];
             return field;
         }
     }

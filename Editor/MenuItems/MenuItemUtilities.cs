@@ -1,4 +1,5 @@
 using UnityEditor;
+
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.MenuItems

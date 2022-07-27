@@ -1,8 +1,12 @@
+using System.Linq;
 using ClusterVR.CreatorKit.Editor.Custom;
 using ClusterVR.CreatorKit.Editor.Preview.RoomState;
+using ClusterVR.CreatorKit.Editor.Preview.World;
 using ClusterVR.CreatorKit.Editor.Window.View;
 using ClusterVR.CreatorKit.Preview.PlayerController;
+using ClusterVR.CreatorKit.World;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -24,6 +28,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
             root.Add(GenerateCameraControlSection());
             root.Add(UiUtils.Separator());
             root.Add(GenerateSavedStateSection());
+            root.Add(GenerateLangCodeSection());
         }
 
         static VisualElement GenerateCameraControlSection()
@@ -143,6 +148,16 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
                 PersistedRoomStateRepository.ClearAll();
                 EditorUtility.DisplayDialog(title, "全てのセーブデータを削除しました。", "OK");
             }
+        }
+
+        static VisualElement GenerateLangCodeSection()
+        {
+            var langSection = EditorUIGenerator.GenerateSection();
+            langSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h1, "サーバー言語設定"));
+            var popup = new PopupField<string>(ServerLang.LangCodes.ToList(), ServerLangCodeManager.GetLangCode());
+            popup.RegisterValueChangedCallback(ev => ServerLangCodeManager.SetLangCode(ev.newValue));
+            langSection.Add(popup);
+            return langSection;
         }
     }
 }

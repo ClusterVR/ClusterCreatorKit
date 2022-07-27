@@ -24,6 +24,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
 
         [SerializeField] WebTrigger trigger;
         VisualElement triggersRoot;
+        ScrollView triggerList;
 
         public void OnEnable()
         {
@@ -43,7 +44,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
 
         void OnPlayModeStateChanged(PlayModeStateChange state)
         {
-            triggersRoot.SetEnabled(state == PlayModeStateChange.EnteredPlayMode);
+            foreach (var button in triggerList.Children())
+            {
+                button.SetEnabled(state == PlayModeStateChange.EnteredPlayMode);
+            }
         }
 
         VisualElement GenerateControlSection()
@@ -87,14 +91,16 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
         void UpdateTriggerButtons(WebTrigger webTrigger)
         {
             triggersRoot.Clear();
+            triggerList = new ScrollView(ScrollViewMode.Vertical);
             if (trigger == null)
             {
                 return;
             }
             foreach (var trigger in webTrigger.triggers)
             {
-                triggersRoot.Add(GenerateTriggerButton(trigger));
+                triggerList.Add(GenerateTriggerButton(trigger));
             }
+            triggersRoot.Add(triggerList);
         }
 
         static bool Validate(WebTrigger webTrigger)
@@ -118,8 +124,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
         VisualElement GenerateTriggersSection()
         {
             triggersRoot = EditorUIGenerator.GenerateSection();
+            triggersRoot.style.flexShrink = 1;
             UpdateTriggerButtons(trigger);
-            triggersRoot.SetEnabled(Application.isPlaying);
             return triggersRoot;
         }
 
@@ -134,6 +140,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
                 var color = new Color(trigger.color[0], trigger.color[1], trigger.color[2]);
                 button.style.backgroundColor = color;
             }
+            button.SetEnabled(Application.isPlaying);
 
             return button;
         }

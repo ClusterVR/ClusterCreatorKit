@@ -49,35 +49,44 @@ namespace ClusterVR.CreatorKit.Proto {
             "Z2UYFSABKAlSDnN5c3RlbUxhbmd1YWdlEiMKDXVuaXR5X3ZlcnNpb24YFiAB",
             "KAlSDHVuaXR5VmVyc2lvbhIvChR4cl9kZXZpY2VfaXNfcHJlc2VudBgXIAEo",
             "CFIReHJEZXZpY2VJc1ByZXNlbnQSJgoPeHJfZGV2aWNlX21vZGVsGBggASgJ",
-            "Ug14ckRldmljZU1vZGVsQipaC2NsdXN0ZXIvcnBjqgIaQ2x1c3RlclZSLkNy",
-            "ZWF0b3JLaXQuUHJvdG9iBnByb3RvMw=="));
+            "Ug14ckRldmljZU1vZGVsQi1aDmNsdXN0ZXIubXUvcnBjqgIaQ2x1c3RlclZS",
+            "LkNyZWF0b3JLaXQuUHJvdG9iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload), global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Parser, new[]{ "TmpUserId", "SessionId", "Environment", "EventType" }, null, new[]{ typeof(global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.CreatorKitEnvironment), global::ClusterVR.CreatorKit.Proto.CreatorKitEnvironment.Parser, new[]{ "BatteryStatus", "DeviceModel", "DeviceType", "DeviceUniqueIdentifier", "GraphicsDeviceName", "GraphicsDeviceType", "GraphicsDeviceVendor", "GraphicsDeviceVersion", "GraphicsMemorySize", "GraphicsMultiThreaded", "GraphicsShaderLevel", "OperatingSystem", "OperatingSystemFamily", "ProcessorCount", "ProcessorFrequency", "ProcessorType", "SystemMemorySize", "IsFocused", "IsPlaying", "Platform", "SystemLanguage", "UnityVersion", "XrDeviceIsPresent", "XrDeviceModel" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload), global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Parser, new[]{ "TmpUserId", "SessionId", "Environment", "EventType" }, null, new[]{ typeof(global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType) }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.CreatorKitEnvironment), global::ClusterVR.CreatorKit.Proto.CreatorKitEnvironment.Parser, new[]{ "BatteryStatus", "DeviceModel", "DeviceType", "DeviceUniqueIdentifier", "GraphicsDeviceName", "GraphicsDeviceType", "GraphicsDeviceVendor", "GraphicsDeviceVersion", "GraphicsMemorySize", "GraphicsMultiThreaded", "GraphicsShaderLevel", "OperatingSystem", "OperatingSystemFamily", "ProcessorCount", "ProcessorFrequency", "ProcessorType", "SystemMemorySize", "IsFocused", "IsPlaying", "Platform", "SystemLanguage", "UnityVersion", "XrDeviceIsPresent", "XrDeviceModel" }, null, null, null, null)
           }));
     }
     #endregion
 
   }
   #region Messages
-  public sealed partial class CreatorKitEventPayload : pb::IMessage<CreatorKitEventPayload> {
+  public sealed partial class CreatorKitEventPayload : pb::IMessage<CreatorKitEventPayload>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
     private static readonly pb::MessageParser<CreatorKitEventPayload> _parser = new pb::MessageParser<CreatorKitEventPayload>(() => new CreatorKitEventPayload());
+    private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<CreatorKitEventPayload> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::ClusterVR.CreatorKit.Proto.CreatorKitEventReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public CreatorKitEventPayload() {
       OnConstruction();
     }
@@ -85,14 +94,17 @@ namespace ClusterVR.CreatorKit.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public CreatorKitEventPayload(CreatorKitEventPayload other) : this() {
       tmpUserId_ = other.tmpUserId_;
       sessionId_ = other.sessionId_;
-      Environment = other.environment_ != null ? other.Environment.Clone() : null;
+      environment_ = other.environment_ != null ? other.environment_.Clone() : null;
       eventType_ = other.eventType_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public CreatorKitEventPayload Clone() {
       return new CreatorKitEventPayload(this);
     }
@@ -100,6 +112,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int TmpUserIdFieldNumber = 1;
     private string tmpUserId_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string TmpUserId {
       get { return tmpUserId_; }
       set {
@@ -110,6 +123,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int SessionIdFieldNumber = 2;
     private string sessionId_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string SessionId {
       get { return sessionId_; }
       set {
@@ -120,6 +134,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int EnvironmentFieldNumber = 3;
     private global::ClusterVR.CreatorKit.Proto.CreatorKitEnvironment environment_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::ClusterVR.CreatorKit.Proto.CreatorKitEnvironment Environment {
       get { return environment_; }
       set {
@@ -128,8 +143,9 @@ namespace ClusterVR.CreatorKit.Proto {
     }
 
     public const int EventTypeFieldNumber = 4;
-    private global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType eventType_ = 0;
+    private global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType eventType_ = global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType.Ping;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType EventType {
       get { return eventType_; }
       set {
@@ -138,11 +154,13 @@ namespace ClusterVR.CreatorKit.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as CreatorKitEventPayload);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(CreatorKitEventPayload other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -154,26 +172,35 @@ namespace ClusterVR.CreatorKit.Proto {
       if (SessionId != other.SessionId) return false;
       if (!object.Equals(Environment, other.Environment)) return false;
       if (EventType != other.EventType) return false;
-      return true;
+      return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       if (TmpUserId.Length != 0) hash ^= TmpUserId.GetHashCode();
       if (SessionId.Length != 0) hash ^= SessionId.GetHashCode();
       if (environment_ != null) hash ^= Environment.GetHashCode();
-      if (EventType != 0) hash ^= EventType.GetHashCode();
+      if (EventType != global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType.Ping) hash ^= EventType.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
       return hash;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
       if (TmpUserId.Length != 0) {
         output.WriteRawTag(10);
         output.WriteString(TmpUserId);
@@ -186,13 +213,44 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteRawTag(26);
         output.WriteMessage(Environment);
       }
-      if (EventType != 0) {
+      if (EventType != global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType.Ping) {
         output.WriteRawTag(32);
         output.WriteEnum((int) EventType);
       }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
     }
 
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (TmpUserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(TmpUserId);
+      }
+      if (SessionId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(SessionId);
+      }
+      if (environment_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Environment);
+      }
+      if (EventType != global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType.Ping) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) EventType);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       if (TmpUserId.Length != 0) {
@@ -204,13 +262,17 @@ namespace ClusterVR.CreatorKit.Proto {
       if (environment_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Environment);
       }
-      if (EventType != 0) {
+      if (EventType != global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType.Ping) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) EventType);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
       }
       return size;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(CreatorKitEventPayload other) {
       if (other == null) {
         return;
@@ -223,22 +285,27 @@ namespace ClusterVR.CreatorKit.Proto {
       }
       if (other.environment_ != null) {
         if (environment_ == null) {
-          environment_ = new global::ClusterVR.CreatorKit.Proto.CreatorKitEnvironment();
+          Environment = new global::ClusterVR.CreatorKit.Proto.CreatorKitEnvironment();
         }
         Environment.MergeFrom(other.Environment);
       }
-      if (other.EventType != 0) {
+      if (other.EventType != global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType.Ping) {
         EventType = other.EventType;
       }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
         switch(tag) {
           default:
-            input.SkipLastField();
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
             TmpUserId = input.ReadString();
@@ -250,21 +317,57 @@ namespace ClusterVR.CreatorKit.Proto {
           }
           case 26: {
             if (environment_ == null) {
-              environment_ = new global::ClusterVR.CreatorKit.Proto.CreatorKitEnvironment();
+              Environment = new global::ClusterVR.CreatorKit.Proto.CreatorKitEnvironment();
             }
-            input.ReadMessage(environment_);
+            input.ReadMessage(Environment);
             break;
           }
           case 32: {
-            eventType_ = (global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType) input.ReadEnum();
+            EventType = (global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType) input.ReadEnum();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            TmpUserId = input.ReadString();
+            break;
+          }
+          case 18: {
+            SessionId = input.ReadString();
+            break;
+          }
+          case 26: {
+            if (environment_ == null) {
+              Environment = new global::ClusterVR.CreatorKit.Proto.CreatorKitEnvironment();
+            }
+            input.ReadMessage(Environment);
+            break;
+          }
+          case 32: {
+            EventType = (global::ClusterVR.CreatorKit.Proto.CreatorKitEventPayload.Types.EventType) input.ReadEnum();
             break;
           }
         }
       }
     }
+    #endif
 
     #region Nested types
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static partial class Types {
       public enum EventType {
         [pbr::OriginalName("PING")] Ping = 0,
@@ -275,22 +378,31 @@ namespace ClusterVR.CreatorKit.Proto {
 
   }
 
-  public sealed partial class CreatorKitEnvironment : pb::IMessage<CreatorKitEnvironment> {
+  public sealed partial class CreatorKitEnvironment : pb::IMessage<CreatorKitEnvironment>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
     private static readonly pb::MessageParser<CreatorKitEnvironment> _parser = new pb::MessageParser<CreatorKitEnvironment>(() => new CreatorKitEnvironment());
+    private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<CreatorKitEnvironment> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::ClusterVR.CreatorKit.Proto.CreatorKitEventReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public CreatorKitEnvironment() {
       OnConstruction();
     }
@@ -298,6 +410,7 @@ namespace ClusterVR.CreatorKit.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public CreatorKitEnvironment(CreatorKitEnvironment other) : this() {
       batteryStatus_ = other.batteryStatus_;
       deviceModel_ = other.deviceModel_;
@@ -323,9 +436,11 @@ namespace ClusterVR.CreatorKit.Proto {
       unityVersion_ = other.unityVersion_;
       xrDeviceIsPresent_ = other.xrDeviceIsPresent_;
       xrDeviceModel_ = other.xrDeviceModel_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public CreatorKitEnvironment Clone() {
       return new CreatorKitEnvironment(this);
     }
@@ -333,6 +448,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int BatteryStatusFieldNumber = 1;
     private string batteryStatus_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string BatteryStatus {
       get { return batteryStatus_; }
       set {
@@ -343,6 +459,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int DeviceModelFieldNumber = 2;
     private string deviceModel_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string DeviceModel {
       get { return deviceModel_; }
       set {
@@ -353,6 +470,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int DeviceTypeFieldNumber = 3;
     private string deviceType_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string DeviceType {
       get { return deviceType_; }
       set {
@@ -363,6 +481,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int DeviceUniqueIdentifierFieldNumber = 4;
     private string deviceUniqueIdentifier_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string DeviceUniqueIdentifier {
       get { return deviceUniqueIdentifier_; }
       set {
@@ -373,6 +492,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int GraphicsDeviceNameFieldNumber = 5;
     private string graphicsDeviceName_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string GraphicsDeviceName {
       get { return graphicsDeviceName_; }
       set {
@@ -383,6 +503,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int GraphicsDeviceTypeFieldNumber = 6;
     private string graphicsDeviceType_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string GraphicsDeviceType {
       get { return graphicsDeviceType_; }
       set {
@@ -393,6 +514,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int GraphicsDeviceVendorFieldNumber = 7;
     private string graphicsDeviceVendor_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string GraphicsDeviceVendor {
       get { return graphicsDeviceVendor_; }
       set {
@@ -403,6 +525,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int GraphicsDeviceVersionFieldNumber = 8;
     private string graphicsDeviceVersion_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string GraphicsDeviceVersion {
       get { return graphicsDeviceVersion_; }
       set {
@@ -413,6 +536,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int GraphicsMemorySizeFieldNumber = 9;
     private int graphicsMemorySize_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int GraphicsMemorySize {
       get { return graphicsMemorySize_; }
       set {
@@ -423,6 +547,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int GraphicsMultiThreadedFieldNumber = 10;
     private bool graphicsMultiThreaded_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool GraphicsMultiThreaded {
       get { return graphicsMultiThreaded_; }
       set {
@@ -433,6 +558,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int GraphicsShaderLevelFieldNumber = 11;
     private int graphicsShaderLevel_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int GraphicsShaderLevel {
       get { return graphicsShaderLevel_; }
       set {
@@ -443,6 +569,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int OperatingSystemFieldNumber = 12;
     private string operatingSystem_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string OperatingSystem {
       get { return operatingSystem_; }
       set {
@@ -453,6 +580,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int OperatingSystemFamilyFieldNumber = 13;
     private string operatingSystemFamily_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string OperatingSystemFamily {
       get { return operatingSystemFamily_; }
       set {
@@ -463,6 +591,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int ProcessorCountFieldNumber = 14;
     private int processorCount_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int ProcessorCount {
       get { return processorCount_; }
       set {
@@ -473,6 +602,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int ProcessorFrequencyFieldNumber = 15;
     private int processorFrequency_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int ProcessorFrequency {
       get { return processorFrequency_; }
       set {
@@ -483,6 +613,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int ProcessorTypeFieldNumber = 16;
     private string processorType_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string ProcessorType {
       get { return processorType_; }
       set {
@@ -493,6 +624,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int SystemMemorySizeFieldNumber = 17;
     private int systemMemorySize_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int SystemMemorySize {
       get { return systemMemorySize_; }
       set {
@@ -503,6 +635,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int IsFocusedFieldNumber = 18;
     private bool isFocused_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool IsFocused {
       get { return isFocused_; }
       set {
@@ -513,6 +646,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int IsPlayingFieldNumber = 19;
     private bool isPlaying_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool IsPlaying {
       get { return isPlaying_; }
       set {
@@ -523,6 +657,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int PlatformFieldNumber = 20;
     private string platform_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Platform {
       get { return platform_; }
       set {
@@ -533,6 +668,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int SystemLanguageFieldNumber = 21;
     private string systemLanguage_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string SystemLanguage {
       get { return systemLanguage_; }
       set {
@@ -543,6 +679,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int UnityVersionFieldNumber = 22;
     private string unityVersion_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string UnityVersion {
       get { return unityVersion_; }
       set {
@@ -553,6 +690,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int XrDeviceIsPresentFieldNumber = 23;
     private bool xrDeviceIsPresent_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool XrDeviceIsPresent {
       get { return xrDeviceIsPresent_; }
       set {
@@ -563,6 +701,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public const int XrDeviceModelFieldNumber = 24;
     private string xrDeviceModel_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string XrDeviceModel {
       get { return xrDeviceModel_; }
       set {
@@ -571,11 +710,13 @@ namespace ClusterVR.CreatorKit.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as CreatorKitEnvironment);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(CreatorKitEnvironment other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -607,10 +748,11 @@ namespace ClusterVR.CreatorKit.Proto {
       if (UnityVersion != other.UnityVersion) return false;
       if (XrDeviceIsPresent != other.XrDeviceIsPresent) return false;
       if (XrDeviceModel != other.XrDeviceModel) return false;
-      return true;
+      return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       if (BatteryStatus.Length != 0) hash ^= BatteryStatus.GetHashCode();
@@ -637,16 +779,24 @@ namespace ClusterVR.CreatorKit.Proto {
       if (UnityVersion.Length != 0) hash ^= UnityVersion.GetHashCode();
       if (XrDeviceIsPresent != false) hash ^= XrDeviceIsPresent.GetHashCode();
       if (XrDeviceModel.Length != 0) hash ^= XrDeviceModel.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
       return hash;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
       if (BatteryStatus.Length != 0) {
         output.WriteRawTag(10);
         output.WriteString(BatteryStatus);
@@ -743,9 +893,120 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteRawTag(194, 1);
         output.WriteString(XrDeviceModel);
       }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
     }
 
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (BatteryStatus.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(BatteryStatus);
+      }
+      if (DeviceModel.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(DeviceModel);
+      }
+      if (DeviceType.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(DeviceType);
+      }
+      if (DeviceUniqueIdentifier.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(DeviceUniqueIdentifier);
+      }
+      if (GraphicsDeviceName.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(GraphicsDeviceName);
+      }
+      if (GraphicsDeviceType.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(GraphicsDeviceType);
+      }
+      if (GraphicsDeviceVendor.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(GraphicsDeviceVendor);
+      }
+      if (GraphicsDeviceVersion.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(GraphicsDeviceVersion);
+      }
+      if (GraphicsMemorySize != 0) {
+        output.WriteRawTag(72);
+        output.WriteInt32(GraphicsMemorySize);
+      }
+      if (GraphicsMultiThreaded != false) {
+        output.WriteRawTag(80);
+        output.WriteBool(GraphicsMultiThreaded);
+      }
+      if (GraphicsShaderLevel != 0) {
+        output.WriteRawTag(88);
+        output.WriteInt32(GraphicsShaderLevel);
+      }
+      if (OperatingSystem.Length != 0) {
+        output.WriteRawTag(98);
+        output.WriteString(OperatingSystem);
+      }
+      if (OperatingSystemFamily.Length != 0) {
+        output.WriteRawTag(106);
+        output.WriteString(OperatingSystemFamily);
+      }
+      if (ProcessorCount != 0) {
+        output.WriteRawTag(112);
+        output.WriteInt32(ProcessorCount);
+      }
+      if (ProcessorFrequency != 0) {
+        output.WriteRawTag(120);
+        output.WriteInt32(ProcessorFrequency);
+      }
+      if (ProcessorType.Length != 0) {
+        output.WriteRawTag(130, 1);
+        output.WriteString(ProcessorType);
+      }
+      if (SystemMemorySize != 0) {
+        output.WriteRawTag(136, 1);
+        output.WriteInt32(SystemMemorySize);
+      }
+      if (IsFocused != false) {
+        output.WriteRawTag(144, 1);
+        output.WriteBool(IsFocused);
+      }
+      if (IsPlaying != false) {
+        output.WriteRawTag(152, 1);
+        output.WriteBool(IsPlaying);
+      }
+      if (Platform.Length != 0) {
+        output.WriteRawTag(162, 1);
+        output.WriteString(Platform);
+      }
+      if (SystemLanguage.Length != 0) {
+        output.WriteRawTag(170, 1);
+        output.WriteString(SystemLanguage);
+      }
+      if (UnityVersion.Length != 0) {
+        output.WriteRawTag(178, 1);
+        output.WriteString(UnityVersion);
+      }
+      if (XrDeviceIsPresent != false) {
+        output.WriteRawTag(184, 1);
+        output.WriteBool(XrDeviceIsPresent);
+      }
+      if (XrDeviceModel.Length != 0) {
+        output.WriteRawTag(194, 1);
+        output.WriteString(XrDeviceModel);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       if (BatteryStatus.Length != 0) {
@@ -820,10 +1081,14 @@ namespace ClusterVR.CreatorKit.Proto {
       if (XrDeviceModel.Length != 0) {
         size += 2 + pb::CodedOutputStream.ComputeStringSize(XrDeviceModel);
       }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
       return size;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(CreatorKitEnvironment other) {
       if (other == null) {
         return;
@@ -900,15 +1165,131 @@ namespace ClusterVR.CreatorKit.Proto {
       if (other.XrDeviceModel.Length != 0) {
         XrDeviceModel = other.XrDeviceModel;
       }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
         switch(tag) {
           default:
-            input.SkipLastField();
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            BatteryStatus = input.ReadString();
+            break;
+          }
+          case 18: {
+            DeviceModel = input.ReadString();
+            break;
+          }
+          case 26: {
+            DeviceType = input.ReadString();
+            break;
+          }
+          case 34: {
+            DeviceUniqueIdentifier = input.ReadString();
+            break;
+          }
+          case 42: {
+            GraphicsDeviceName = input.ReadString();
+            break;
+          }
+          case 50: {
+            GraphicsDeviceType = input.ReadString();
+            break;
+          }
+          case 58: {
+            GraphicsDeviceVendor = input.ReadString();
+            break;
+          }
+          case 66: {
+            GraphicsDeviceVersion = input.ReadString();
+            break;
+          }
+          case 72: {
+            GraphicsMemorySize = input.ReadInt32();
+            break;
+          }
+          case 80: {
+            GraphicsMultiThreaded = input.ReadBool();
+            break;
+          }
+          case 88: {
+            GraphicsShaderLevel = input.ReadInt32();
+            break;
+          }
+          case 98: {
+            OperatingSystem = input.ReadString();
+            break;
+          }
+          case 106: {
+            OperatingSystemFamily = input.ReadString();
+            break;
+          }
+          case 112: {
+            ProcessorCount = input.ReadInt32();
+            break;
+          }
+          case 120: {
+            ProcessorFrequency = input.ReadInt32();
+            break;
+          }
+          case 130: {
+            ProcessorType = input.ReadString();
+            break;
+          }
+          case 136: {
+            SystemMemorySize = input.ReadInt32();
+            break;
+          }
+          case 144: {
+            IsFocused = input.ReadBool();
+            break;
+          }
+          case 152: {
+            IsPlaying = input.ReadBool();
+            break;
+          }
+          case 162: {
+            Platform = input.ReadString();
+            break;
+          }
+          case 170: {
+            SystemLanguage = input.ReadString();
+            break;
+          }
+          case 178: {
+            UnityVersion = input.ReadString();
+            break;
+          }
+          case 184: {
+            XrDeviceIsPresent = input.ReadBool();
+            break;
+          }
+          case 194: {
+            XrDeviceModel = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
             BatteryStatus = input.ReadString();
@@ -1009,6 +1390,7 @@ namespace ClusterVR.CreatorKit.Proto {
         }
       }
     }
+    #endif
 
   }
 

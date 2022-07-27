@@ -16,7 +16,6 @@ namespace ClusterVR.CreatorKit.World.Implements.MainScreenViews
         void Awake()
         {
             meshRenderer = GetComponent<MeshRenderer>();
-            propertyBlock = new MaterialPropertyBlock();
         }
 
         void Start()
@@ -27,10 +26,7 @@ namespace ClusterVR.CreatorKit.World.Implements.MainScreenViews
 
         public void UpdateContent(Texture texture, bool requiresYFlip)
         {
-            if (meshRenderer == null || propertyBlock == null)
-            {
-                return;
-            }
+            if (propertyBlock == null) propertyBlock = new MaterialPropertyBlock();
 
             var localScale = transform.localScale;
             var screenScale = useCustomAspectRatio ? screenAspectRatio : new Vector2(localScale.x, localScale.y);
@@ -42,12 +38,19 @@ namespace ClusterVR.CreatorKit.World.Implements.MainScreenViews
             propertyBlock.SetTexture("_MainTex", texture);
             propertyBlock.SetVector("_MainTex_ST", textureSt);
 
+            if (meshRenderer == null) return;
+
             meshRenderer.SetPropertyBlock(propertyBlock);
         }
 
         void OnDestroy()
         {
             OnDestroyed?.Invoke();
+        }
+
+        void OnEnable()
+        {
+            meshRenderer.SetPropertyBlock(propertyBlock);
         }
     }
 }
