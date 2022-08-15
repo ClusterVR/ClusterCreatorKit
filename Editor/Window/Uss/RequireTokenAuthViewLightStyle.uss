@@ -1,0 +1,6 @@
+#login-user-icon {
+    width: 24px;
+    height: 24px;
+    background-image: resource("Packages/mu.cluster.cluster-creator-kit/Editor/Window/Texture/icons_person_filled_light@4x.png");
+    -unity-background-scale-mode: scale-to-fit;
+}

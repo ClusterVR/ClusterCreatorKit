@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using UnityEngine;
@@ -41,12 +42,12 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             this.onError = onError;
         }
 
-        public void Run()
+        public void Run(CancellationToken cancellationToken)
         {
-            EditorCoroutine.Start(PatchVenue());
+            EditorCoroutine.Start(PatchVenue(cancellationToken));
         }
 
-        IEnumerator PatchVenue()
+        IEnumerator PatchVenue(CancellationToken cancellationToken)
         {
             isProcessing = true;
             var isUploading = false;
@@ -71,7 +72,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                     }
                 );
                 isUploading = true;
-                uploadThumbnail.Run();
+                uploadThumbnail.Run(cancellationToken);
 
                 while (isUploading)
                 {
@@ -88,14 +89,15 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 string.IsNullOrEmpty(thumbnailUrl)
                     ? thumbnailUrls
                     : new List<ThumbnailUrl> { new ThumbnailUrl(thumbnailUrl) });
-            _ = PatchVenueAsync(payload);
+            _ = PatchVenueAsync(payload, cancellationToken);
         }
 
-        async Task PatchVenueAsync(PatchVenuePayload payload)
+        async Task PatchVenueAsync(PatchVenuePayload payload, CancellationToken cancellationToken)
         {
             try
             {
-                var response = await APIServiceClient.PatchVenue(venue.VenueId, payload, accessToken);
+                var response =
+                    await APIServiceClient.PatchVenue(venue.VenueId, payload, accessToken, cancellationToken);
                 onSuccess?.Invoke(response);
             }
             catch (Exception e)

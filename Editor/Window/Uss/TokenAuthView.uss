@@ -1,0 +1,24 @@
+.token-auth-view {
+    flex-direction: row;
+    /*!*子要素をwindowいっぱいにするために大きな値入れておく(height: 100vhは使えない...)*!*/
+    height: 100000000px;
+}
+
+.side-pane {
+    width: 250px;
+    border-right-width: 1px;
+    border-color: gray;
+    padding: 10px;
+}
+
+.separator{
+    margin: 10px 0;
+}
+
+.main-pane{
+    flex-grow: 1;
+}
+
+Button{
+    height: 24px;
+}

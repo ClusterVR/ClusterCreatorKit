@@ -5,7 +5,7 @@ namespace ClusterVR.CreatorKit.Item
 {
     public interface IRidableItem : IInteractableItem
     {
-        IItem Item { get; }
+        bool IsDestroyed { get; }
         Transform Seat { get; }
         Transform ExitTransform { get; }
 

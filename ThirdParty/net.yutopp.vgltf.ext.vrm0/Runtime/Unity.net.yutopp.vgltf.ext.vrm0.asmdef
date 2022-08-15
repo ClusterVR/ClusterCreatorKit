@@ -1,0 +1,16 @@
+{
+    "name": "Unity.net.yutopp.vgltf.ext.vrm0",
+    "references": [
+        "Unity.net.yutopp.vgltf",
+        "Unity.net.yutopp.vjson"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

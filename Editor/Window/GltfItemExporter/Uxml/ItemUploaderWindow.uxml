@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:engine="UnityEngine.UIElements"
+        xmlns:editor="UnityEditor.UIElements"
+        xsi:noNamespaceSchemaLocation="/UIElementsSchema/UIElements.xsd"
+>
+    <engine:VisualElement name="main-container" class="main-container">
+        <engine:VisualElement class="menu-container">
+            <engine:VisualElement name="HorizontalLayout" class="horizontal">
+                <engine:Button name="add-item-button" text="アイテムの追加" class="default-button"/>
+                <engine:Label text="アップロードするprefabを選択してください"/>
+                <engine:VisualElement class="buffer"/>
+                <engine:Button name="clear-item-list-button" text="すべて削除" class="default-button"/>
+            </engine:VisualElement>
+        </engine:VisualElement>
+
+        <engine:VisualElement class="border"/>
+
+        <engine:VisualElement name="item-list-panel" class="item-list-panel">
+            <engine:ScrollView>
+                <engine:VisualElement name="item-list-view-container" class="item-list-container">
+                    <engine:ListView name="item-list-view" class="list-view"/>
+                </engine:VisualElement>
+            </engine:ScrollView>
+            <engine:VisualElement name="help-view-container" class="help-view-container">
+                <engine:Image class="drag-area-icon"/>
+                <engine:Label text="prefabをここにドラッグして追加"/>
+            </engine:VisualElement>
+            <engine:VisualElement name="drag-area-panel" class="drag-area-panel"/>
+        </engine:VisualElement>
+
+
+        <engine:VisualElement class="border"/>
+
+        <engine:VisualElement class="footer-container">
+            <engine:VisualElement name="HorizontalLayout" class="reverse-horizontal">
+                <engine:Button name="upload-button" text="アップロード" class="default-button"/>
+                <engine:Label name="item-count-label"/>
+            </engine:VisualElement>
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

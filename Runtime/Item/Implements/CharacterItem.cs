@@ -11,6 +11,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
         [SerializeField, HideInInspector] CharacterController characterController;
 
         public override IItem Item => item != null ? item : item = GetComponent<Item>();
+        bool IMovableItem.IsDestroyed => this == null;
         Vector3 IMovableItem.Position => transform.position;
         Quaternion IMovableItem.Rotation => transform.rotation;
         public override Vector3 Velocity => characterController.velocity;
@@ -66,7 +67,6 @@ namespace ClusterVR.CreatorKit.Item.Implements
         void IMovableItem.SetPositionAndRotation(Vector3 position, Quaternion rotation, bool isWarp)
         {
             CacheInitialValue();
-            characterController.enableOverlapRecovery = false;
             transform.SetPositionAndRotation(position, rotation);
             controlling = false;
         }
@@ -78,7 +78,6 @@ namespace ClusterVR.CreatorKit.Item.Implements
                 return;
             }
 
-            characterController.enableOverlapRecovery = true;
             controlling = true;
         }
 
@@ -95,6 +94,8 @@ namespace ClusterVR.CreatorKit.Item.Implements
             }
 
             transform.SetPositionAndRotation(position, rotation);
+            velocity = Vector3.zero;
+            angularVelocity = Vector3.zero;
         }
 
 

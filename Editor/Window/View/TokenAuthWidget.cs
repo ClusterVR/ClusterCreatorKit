@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
@@ -8,9 +10,10 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public sealed class TokenAuthWidget
+    public sealed class TokenAuthWidget : IDisposable
     {
         public readonly Reactive<UserInfo?> reactiveUserInfo = new Reactive<UserInfo?>();
+        readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         bool isLoggingIn;
 
@@ -77,7 +80,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             isLoggingIn = true;
             try
             {
-                var user = await APIServiceClient.GetMyUser(authInfo.Token);
+                var user = await APIServiceClient.GetMyUser(authInfo.Token, cancellationTokenSource.Token);
 
                 if (string.IsNullOrEmpty(user.Username))
                 {
@@ -91,12 +94,22 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
                 EditorPrefsUtils.SavedAccessToken = authInfo;
             }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
             finally
             {
                 errorLabel.text = "認証に失敗しました";
                 errorLabel.SetVisibility(true);
                 isLoggingIn = false;
             }
+        }
+
+        public void Dispose()
+        {
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
         [SerializeField, ItemTimerTriggerParam] ConstantTriggerParam[] triggers;
 
         IItem Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
-        IItem IItemTrigger.Item => Item;
+        IItem IItemTrigger.Item => this == null ? null : Item;
         ItemId IGimmick.ItemId => Item.Id;
 
         GimmickTarget IGimmick.Target => key.Target;

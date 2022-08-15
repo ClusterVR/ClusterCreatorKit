@@ -67,7 +67,8 @@ namespace ClusterVR.CreatorKit.Editor.Analytics
                 EventType = CreatorKitEventPayload.Types.EventType.Ping
             };
 
-            _ = APIServiceClient.PostAnalyticsEvent(new EventPayload(payload), EditorPrefsUtils.SavedAccessToken.Token);
+            _ = APIServiceClient.PostAnalyticsEvent(new EventPayload(payload), EditorPrefsUtils.SavedAccessToken.Token,
+                default);
 
             SessionInfo.instance.LastSentAt = now;
         }

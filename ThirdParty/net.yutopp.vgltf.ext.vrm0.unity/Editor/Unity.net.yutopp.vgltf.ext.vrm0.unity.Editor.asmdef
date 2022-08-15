@@ -1,0 +1,21 @@
+{
+    "name": "Unity.net.yutopp.vgltf.ext.vrm0.unity.Editor",
+    "references": [
+        "Unity.net.yutopp.vgltf",
+        "Unity.net.yutopp.vgltf.unity",
+        "Unity.net.yutopp.vgltf.ext.vrm0",
+        "Unity.net.yutopp.vgltf.ext.vrm0.unity",
+        "Unity.net.yutopp.vjson"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

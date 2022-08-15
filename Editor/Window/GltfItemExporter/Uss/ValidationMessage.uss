@@ -1,0 +1,8 @@
+.message-container{
+    min-height: 18px;
+    margin: 1px 12px 1px 0;
+}
+
+Label{
+    white-space: normal;
+}

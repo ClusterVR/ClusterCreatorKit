@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
@@ -15,12 +16,13 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public sealed class UploadVenueView
+    public sealed class UploadVenueView : IDisposable
     {
         readonly ImageView thumbnail;
         readonly UserInfo userInfo;
         readonly Venue venue;
         readonly string worldManagementUrl;
+        readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         UploadVenueService currentUploadService;
         string errorMessage;
 
@@ -114,7 +116,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                             errorMessage = $"ワールドのアップロードに失敗しました。時間をあけてリトライしてみてください。";
                         }
                     });
-                currentUploadService.Run();
+                currentUploadService.Run(cancellationTokenSource.Token);
                 errorMessage = null;
             }
         }
@@ -181,7 +183,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             {
                 if (GUILayout.Button("アップロードリトライ"))
                 {
-                    currentUploadService.Run();
+                    currentUploadService.Run(cancellationTokenSource.Token);
                     errorMessage = null;
                 }
             }
@@ -237,6 +239,12 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             uploadSettingErrorMessage = default;
             return true;
+        }
+
+        public void Dispose()
+        {
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
         }
     }
 }

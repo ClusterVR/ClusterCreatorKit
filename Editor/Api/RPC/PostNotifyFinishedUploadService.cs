@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Proto;
@@ -35,18 +36,19 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             this.onError = onError;
         }
 
-        public void Run()
+        public void Run(CancellationToken cancellationToken)
         {
-            _ = PostNotifyFinishedUploadAsync();
+            _ = PostNotifyFinishedUploadAsync(cancellationToken);
         }
 
-        async Task PostNotifyFinishedUploadAsync()
+        async Task PostNotifyFinishedUploadAsync(CancellationToken cancellationToken)
         {
             var payload = new PostNotifyFinishedUploadPayload(isPublish, worldDescriptor);
             try
             {
                 var response =
-                    await APIServiceClient.PostNotifyFinishedUpload(venueId, uploadRequestId, payload, accessToken);
+                    await APIServiceClient.PostNotifyFinishedUpload(venueId, uploadRequestId, payload, accessToken,
+                        cancellationToken);
                 onSuccess?.Invoke(response);
             }
             catch (Exception e)

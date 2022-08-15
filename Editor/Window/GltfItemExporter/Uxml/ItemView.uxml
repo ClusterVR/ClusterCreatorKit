@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:engine="UnityEngine.UIElements"
+        xmlns:editor="UnityEditor.UIElements"
+        xsi:noNamespaceSchemaLocation="/UIElementsSchema/UIElements.xsd"
+>
+    <engine:VisualElement class="item-container">
+        <engine:VisualElement name="HorizontalLayout" class="horizontal">
+            <engine:Image name="valid-icon" class="valid-icon"/>
+            <engine:Image name="invalid-icon" class="invalid-icon"/>
+            <engine:Image name="thumbnail" class="thumbnail"/>
+            <engine:VisualElement class="item-description-container">
+                <engine:Label name="item-name-label"/>
+                <engine:Label name="item-size-label"/>
+            </engine:VisualElement>
+            <engine:Box class="validation-message-container">
+                <engine:ScrollView name="validation-message-list" class="list-view"/>
+            </engine:Box>
+
+            <engine:Button name="remove-button" class="icon-button">
+                <engine:Image class="remove-icon"/>
+            </engine:Button>
+        </engine:VisualElement>
+    </engine:VisualElement>
+
+    <engine:VisualElement class="separater"/>
+
+</engine:UXML>

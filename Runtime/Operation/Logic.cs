@@ -6,11 +6,21 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Operation
 {
+
     [Serializable]
     public sealed class Logic
     {
         [SerializeField] Statement[] statements;
         public Statement[] Statements => statements;
+
+        public Logic()
+        {
+        }
+
+        public Logic(Statement[] statements)
+        {
+            this.statements = statements;
+        }
 
         public bool IsValid()
         {
@@ -23,6 +33,15 @@ namespace ClusterVR.CreatorKit.Operation
     {
         [SerializeField] SingleStatement singleStatement;
         public SingleStatement SingleStatement => singleStatement;
+
+        public Statement()
+        {
+        }
+
+        public Statement(SingleStatement singleStatement)
+        {
+            this.singleStatement = singleStatement;
+        }
 
         public bool IsValid()
         {
@@ -37,6 +56,16 @@ namespace ClusterVR.CreatorKit.Operation
         [SerializeField] Expression expression;
         public TargetState TargetState => targetState;
         public Expression Expression => expression;
+
+        public SingleStatement()
+        {
+        }
+
+        public SingleStatement(TargetState targetState, Expression expression)
+        {
+            this.targetState = targetState;
+            this.expression = expression;
+        }
 
         public bool IsValid()
         {
@@ -65,6 +94,22 @@ namespace ClusterVR.CreatorKit.Operation
         public ExpressionType Type => type;
         public Value Value => value;
         public OperatorExpression OperatorExpression => operatorExpression;
+
+        public Expression()
+        {
+        }
+
+        public Expression(Value value)
+        {
+            type = ExpressionType.Value;
+            this.value = value;
+        }
+
+        public Expression(OperatorExpression operatorExpression)
+        {
+            type = ExpressionType.OperatorExpression;
+            this.operatorExpression = operatorExpression;
+        }
 
         public bool IsValid(out ParameterType parameterType)
         {
@@ -110,6 +155,16 @@ namespace ClusterVR.CreatorKit.Operation
         [SerializeField] Expression[] operands;
         public Operator Operator => @operator;
         public Expression[] Operands => operands;
+
+        public OperatorExpression()
+        {
+        }
+
+        public OperatorExpression(Operator @operator, Expression[] operands)
+        {
+            this.@operator = @operator;
+            this.operands = operands;
+        }
 
         public bool IsValid(out ParameterType parameterType)
         {
@@ -296,6 +351,21 @@ namespace ClusterVR.CreatorKit.Operation
         public IStateValueSet Constant => constant.StateValueSet;
         public SourceState SourceState => sourceState;
 
+        public Value()
+        {
+        }
+
+        public Value(ConstantValue constant)
+        {
+            type = ValueType.Constant;
+            this.constant = constant;
+        }
+        public Value(SourceState sourceState)
+        {
+            type = ValueType.RoomState;
+            this.sourceState = sourceState;
+        }
+
         public bool IsValid(out ParameterType parameterType)
         {
             switch (type)
@@ -413,6 +483,17 @@ namespace ClusterVR.CreatorKit.Operation
         public string Key => key;
         public ParameterType ParameterType => parameterType;
 
+        public TargetState()
+        {
+        }
+
+        public TargetState(TargetStateTarget target, string key, ParameterType parameterType)
+        {
+            this.target = target;
+            this.key = key;
+            this.parameterType = parameterType;
+        }
+
         public bool IsValid()
         {
             return !string.IsNullOrWhiteSpace(key) && SelectableTypes.Contains(parameterType);
@@ -463,6 +544,40 @@ namespace ClusterVR.CreatorKit.Operation
             }
         }
 
+        public ConstantValue()
+        {
+        }
+
+        public ConstantValue(bool boolValue)
+        {
+            type = ParameterType.Bool;
+            this.boolValue = boolValue;
+        }
+
+        public ConstantValue(float floatValue)
+        {
+            type = ParameterType.Float;
+            this.floatValue = floatValue;
+        }
+
+        public ConstantValue(int integerValue)
+        {
+            type = ParameterType.Integer;
+            this.integerValue = integerValue;
+        }
+
+        public ConstantValue(Vector2 vector2Value)
+        {
+            type = ParameterType.Vector2;
+            this.vector2Value = vector2Value;
+        }
+
+        public ConstantValue(Vector3 vector3Value)
+        {
+            type = ParameterType.Vector3;
+            this.vector3Value = vector3Value;
+        }
+
         public bool IsValid()
         {
             return SelectableTypes.Contains(type);
@@ -482,6 +597,17 @@ namespace ClusterVR.CreatorKit.Operation
         public GimmickTarget Target => target;
         public string Key => key;
         public ParameterType Type => type;
+
+        public SourceState()
+        {
+        }
+
+        public SourceState(GimmickTarget target, string key, ParameterType type)
+        {
+            this.target = target;
+            this.key = key;
+            this.type = type;
+        }
 
         public bool IsValid()
         {

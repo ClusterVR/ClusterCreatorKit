@@ -5,6 +5,7 @@ namespace ClusterVR.CreatorKit.Item
     public interface IGrabbableItem : IContactableItem
     {
         IMovableItem MovableItem { get; }
+        bool IsDestroyed { get; }
         Transform Grip { get; }
         void OnGrab();
         void OnRelease();

@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public sealed class EditAndUploadVenueView
+    public sealed class EditAndUploadVenueView : IDisposable
     {
         readonly EditVenueView editVenueView;
         readonly UploadVenueView uploadVenueView;
@@ -26,6 +26,12 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             var uploadVenueTab = uploadVenueView.CreateView();
             parent.Add(editVenueTab);
             parent.Add(uploadVenueTab);
+        }
+
+        public void Dispose()
+        {
+            editVenueView?.Dispose();
+            uploadVenueView?.Dispose();
         }
     }
 }

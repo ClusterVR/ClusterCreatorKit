@@ -7,7 +7,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 {
     public sealed class SettingsWindow : EditorWindow
     {
-        [MenuItem("Cluster/Settings", priority = 302)]
+        [MenuItem("Cluster/Settings", priority = 305)]
         public static void ShowWindow()
         {
             var window = GetWindow<SettingsWindow>();

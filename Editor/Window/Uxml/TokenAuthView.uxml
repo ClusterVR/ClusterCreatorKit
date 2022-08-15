@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:engine="UnityEngine.UIElements"
+        xmlns:editor="UnityEditor.UIElements"
+        xsi:noNamespaceSchemaLocation="/UIElementsSchema/UIElements.xsd"
+>
+    <engine:VisualElement class="token-auth-view">
+        
+        <!--とりあえずワールドアップロードのTokenAuthの見た目を維持するためにPaneを左右に分けている-->
+        <engine:VisualElement class="side-pane">
+            <engine:Button name="open-token-page-button" text="Webでトークンを発行"/>
+            <engine:VisualElement class="horizontal-border separator"/>
+            <engine:Label text="アクセストークンを貼り付けてください"/>
+            <engine:TextField name="token-input-field"/>
+            <engine:Label name="validation-error-label"/>
+            <engine:Label name="login-error-label"/>
+            <engine:Button name="use-token-button" text="このトークンを使用"/>
+        </engine:VisualElement>
+        
+        <engine:VisualElement class="main-pane"/>
+    </engine:VisualElement>
+</engine:UXML>

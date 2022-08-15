@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
@@ -10,7 +11,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public sealed class EditVenueView
+    public sealed class EditVenueView : IDisposable
     {
         readonly Reactive<bool> reactiveEdited = new Reactive<bool>();
 
@@ -23,6 +24,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         string newVenueDesc;
         string newVenueName;
         bool updatingVenue;
+
+        IDisposable disposable;
+        readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         public EditVenueView(UserInfo userInfo, Venue venue, ImageView thumbnailView, Action venueChangeCallback)
         {
@@ -64,7 +68,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                         thumbnailView.SetImagePath(newThumbnailPath);
                         UpdateVenue();
                     }
-                }) { text = "画像の選択", style = { marginTop = 4 } };
+                })
+                {
+                    text = "画像の選択",
+                    style =
+                    {
+                        marginTop = 4
+                    }
+                };
                 thumbnailSection.Add(changeImageButton);
                 thumbnailSection.Add(new Label() { text = "※推奨サイズ：1920×1080px" });
 
@@ -76,13 +87,21 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
                 var venueIdSection = new VisualElement() { style = { flexDirection = FlexDirection.Row } };
                 venueIdSection.Add(new Label($"ワールドID {venue.VenueId.Value}")
-                    { style = { color = new StyleColor(Color.gray) } });
+                {
+                    style = { color = new StyleColor(Color.gray) }
+                });
                 venueIdSection.Add(new Button(() => EditorGUIUtility.systemCopyBuffer = venue.VenueId.Value)
-                    { text = "copy", style = { height = 16 } });
+                {
+                    text = "copy",
+                    style = { height = 16 }
+                });
 
                 editSection.Add(venueIdSection);
 
-                editSection.Add(new Label("ワールド名") { style = { marginTop = 4 } });
+                editSection.Add(new Label("ワールド名")
+                {
+                    style = { marginTop = 4 }
+                });
                 var venueName = new TextField();
                 venueName.value = venue.Name;
                 venueName.RegisterValueChangedCallback(ev =>
@@ -93,10 +112,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 editSection.Add(venueName);
 
                 editSection.Add(new Label("ワールドの説明") { style = { marginTop = 4 } });
-                var venueDesc = new TextField()
+                var venueDesc = new TextField
                 {
                     multiline = true,
-                    style = { height = 40, unityTextAlign = TextAnchor.UpperLeft }
+                    style =
+                    {
+                        height = 40,
+                        unityTextAlign = TextAnchor.UpperLeft
+                    }
                 };
                 foreach (var child in venueDesc.Children())
                 {
@@ -110,25 +133,40 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     reactiveEdited.Val = true;
                 });
                 editSection.Add(venueDesc);
-                editSection.Add(new Label() { text = "※255文字以内で入力してください" });
+                editSection.Add(new Label
+                {
+                    text = "※255文字以内で入力してください"
+                });
 
-                var buttons = new VisualElement() { style = { flexDirection = FlexDirection.Row } };
+                var buttons = new VisualElement
+                {
+                    style =
+                    {
+                        flexDirection = FlexDirection.Row
+                    }
+                };
                 var applyEdit = new Button(() =>
                 {
                     if (!updatingVenue)
                     {
                         UpdateVenue();
                     }
-                }) { text = "変更を保存" };
+                })
+                {
+                    text = "変更を保存"
+                };
                 var cancelEdit = new Button(() =>
                 {
                     venueName.SetValueWithoutNotify(venue.Name);
                     venueDesc.SetValueWithoutNotify(venue.Description);
                     reactiveEdited.Val = false;
-                }) { text = "キャンセル" };
+                })
+                {
+                    text = "キャンセル"
+                };
                 buttons.Add(applyEdit);
                 buttons.Add(cancelEdit);
-                ReactiveBinder.Bind(reactiveEdited,
+                disposable = ReactiveBinder.Bind(reactiveEdited,
                     edited => { buttons.style.display = edited ? DisplayStyle.Flex : DisplayStyle.None; });
 
                 editSection.Add(buttons);
@@ -168,8 +206,16 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     updatingVenue = false;
                     errorMessage = $"ワールド情報の保存に失敗しました。{exception.Message}";
                 });
-            patchVenueService.Run();
+            patchVenueService.Run(cancellationTokenSource.Token);
             errorMessage = null;
+        }
+
+        public void Dispose()
+        {
+            thumbnailView?.Dispose();
+            disposable?.Dispose();
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
         }
     }
 }

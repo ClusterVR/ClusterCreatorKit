@@ -6,7 +6,7 @@ namespace ClusterVR.CreatorKit.World.Implements.UrlTexture
     public sealed class UrlTexture : MonoBehaviour, IUrlTexture
     {
         [SerializeField] string url;
-        [SerializeField] Renderer renderer;
+        [SerializeField] new Renderer renderer;
         [SerializeField] string targetMaterialPropertyName = "_MainTex";
 
         string IUrlTexture.Url => url;

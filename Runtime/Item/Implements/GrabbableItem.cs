@@ -13,13 +13,33 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         public override IItem Item => MovableItem.Item;
 
-        public IMovableItem MovableItem =>
-            movableItem != null ? movableItem : movableItem = GetComponent<MovableItem>();
+        public IMovableItem MovableItem
+        {
+            get
+            {
+                if (movableItem != null)
+                {
+                    return movableItem;
+                }
+                if (this == null)
+                {
+                    return null;
+                }
+                return movableItem = GetComponent<MovableItem>();
+            }
+        }
+
+        bool IGrabbableItem.IsDestroyed => this == null;
 
         public Transform Grip => grip;
 
         public event Action OnGrabbed;
         public event Action OnReleased;
+
+        public void Construct(Transform grip)
+        {
+            this.grip = grip;
+        }
 
         void Start()
         {

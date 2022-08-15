@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:engine="UnityEngine.UIElements"
+        xmlns:editor="UnityEditor.UIElements"
+        xsi:noNamespaceSchemaLocation="/UIElementsSchema/UIElements.xsd"
+>
+    <engine:VisualElement name="base-container">
+        <engine:VisualElement name="main-view-header">
+            <engine:Button name="logout-button" text="アカウント切り替え"/>
+            <engine:Label name="user-name-label"/>
+            <engine:Image name="login-user-icon"/>
+        </engine:VisualElement>
+        <engine:VisualElement class="horizontal-border"/>
+        <engine:VisualElement name="main-view-container"/>
+    </engine:VisualElement>
+</engine:UXML>

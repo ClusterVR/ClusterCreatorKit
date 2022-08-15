@@ -31,6 +31,11 @@ namespace ClusterVR.CreatorKit.World.Implements.CommentScreenViews
 
         public void AddComment(Comment comment)
         {
+            if (cellPrefab == null || content == null)
+            {
+                return;
+            }
+
             var cell = Instantiate(cellPrefab, content).GetComponent<StandardCommentScreenViewCell>();
             cell.transform.SetAsFirstSibling();
             cell.Show(comment);

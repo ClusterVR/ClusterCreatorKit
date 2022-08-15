@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using UnityEngine;
@@ -25,16 +26,16 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             this.onError = onError;
         }
 
-        public void Run()
+        public void Run(CancellationToken cancellationToken)
         {
-            _ = PostRegisterNewVenueAsync();
+            _ = PostRegisterNewVenueAsync(cancellationToken);
         }
 
-        async Task PostRegisterNewVenueAsync()
+        async Task PostRegisterNewVenueAsync(CancellationToken cancellationToken)
         {
             try
             {
-                var response = await APIServiceClient.PostRegisterNewVenue(payload, accessToken);
+                var response = await APIServiceClient.PostRegisterNewVenue(payload, accessToken, cancellationToken);
                 onSuccess?.Invoke(response);
             }
             catch (Exception e)

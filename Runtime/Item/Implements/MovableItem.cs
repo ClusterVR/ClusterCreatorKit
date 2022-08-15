@@ -8,13 +8,44 @@ namespace ClusterVR.CreatorKit.Item.Implements
         [SerializeField, HideInInspector] Item item;
         [SerializeField, HideInInspector] Rigidbody rb;
 
-        public Rigidbody Rigidbody => rb;
+        public Rigidbody Rigidbody
+        {
+            get
+            {
+                if (rb != null)
+                {
+                    return rb;
+                }
+                if (this == null)
+                {
+                    return null;
+                }
+                return rb = GetComponent<Rigidbody>();
+            }
+        }
 
-        public override IItem Item => item != null ? item : item = GetComponent<Item>();
-        Vector3 IMovableItem.Position => rb.position;
-        Quaternion IMovableItem.Rotation => rb.rotation;
-        public override Vector3 Velocity => rb.velocity;
-        public override Vector3 AngularVelocity => rb.angularVelocity;
+        public override IItem Item
+        {
+            get
+            {
+                if (item != null)
+                {
+                    return item;
+                }
+                if (this == null)
+                {
+                    return null;
+                }
+                return item = GetComponent<Item>();
+            }
+        }
+
+        bool IMovableItem.IsDestroyed => this == null;
+
+        Vector3 IMovableItem.Position => Rigidbody.position;
+        Quaternion IMovableItem.Rotation => Rigidbody.rotation;
+        public override Vector3 Velocity => Rigidbody.velocity;
+        public override Vector3 AngularVelocity => Rigidbody.angularVelocity;
 
         enum State
         {
@@ -27,6 +58,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
         Vector3 initialPosition;
         Quaternion initialRotation;
         bool initialIsKinematic;
+        CollisionDetectionMode initialCollisionDetectionMode;
 
         State state = State.Free;
         Vector3 targetPosition;
@@ -45,6 +77,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
             initialPosition = transform.position;
             initialRotation = transform.rotation;
             initialIsKinematic = rb.isKinematic;
+            initialCollisionDetectionMode = rb.collisionDetectionMode;
             isInitialized = true;
         }
 
@@ -108,6 +141,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
                 return;
             }
             rb.isKinematic = initialIsKinematic;
+            rb.collisionDetectionMode = initialCollisionDetectionMode;
             rb.velocity = (targetPosition - currentPosition) / interpolateDurationSeconds;
             rb.angularVelocity = GetAngularVelocity(currentRotation, targetRotation, interpolateDurationSeconds);
             state = State.Free;

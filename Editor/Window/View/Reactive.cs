@@ -22,6 +22,23 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         }
     }
 
+    public sealed class ReactiveBinderDisposer : IDisposable
+    {
+        readonly ReactiveBase reactiveBinder;
+        readonly Action action;
+
+        public ReactiveBinderDisposer(ReactiveBase reactiveBinder, Action action)
+        {
+            this.reactiveBinder = reactiveBinder;
+            this.action = action;
+        }
+
+        public void Dispose()
+        {
+            ReactiveBinder.Remove(reactiveBinder, action);
+        }
+    }
+
     public sealed class ReactiveBinder
     {
         static Dictionary<ReactiveBase, List<Action>> bindings = new Dictionary<ReactiveBase, List<Action>>();
@@ -37,18 +54,24 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             }
         }
 
-        public static void Bind<S>(Reactive<S> rv, Action<S> action)
+        public static IDisposable Bind<S>(Reactive<S> rv, Action<S> action)
         {
-            Add(rv, () => action(rv.Val));
+            return Add(rv, () => action(rv.Val));
         }
 
-        public static void Bind<S1, S2>(Reactive<S1> rv1, Reactive<S2> rv2, Action<S1, S2> action)
+        public static void Remove(ReactiveBase rv, Action action)
         {
-            Add(rv1, () => action(rv1.Val, rv2.Val));
-            Add(rv2, () => action(rv1.Val, rv2.Val));
+            if (bindings.TryGetValue(rv, out var actions))
+            {
+                actions.Remove(action);
+                if (actions.Count == 0)
+                {
+                    bindings.Remove(rv);
+                }
+            }
         }
 
-        static void Add(ReactiveBase rv, Action action)
+        static IDisposable Add(ReactiveBase rv, Action action)
         {
             if (!bindings.TryGetValue(rv, out var actionList))
             {
@@ -59,6 +82,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             actionList.Add(action);
 
             action(); // 初期値送信
+
+            return new ReactiveBinderDisposer(rv, action);
         }
     }
 }

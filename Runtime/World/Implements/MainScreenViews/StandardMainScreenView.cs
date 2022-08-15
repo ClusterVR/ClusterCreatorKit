@@ -13,6 +13,27 @@ namespace ClusterVR.CreatorKit.World.Implements.MainScreenViews
 
         public event Action OnDestroyed;
 
+        public float AspectRatio
+        {
+            get
+            {
+                if (useCustomAspectRatio)
+                {
+                    return Mathf.Abs(screenAspectRatio.x / screenAspectRatio.y);
+                }
+                else
+                {
+                    var localScale = transform.localScale;
+                    return Mathf.Abs(localScale.x / localScale.y);
+                }
+            }
+            set
+            {
+                useCustomAspectRatio = true;
+                screenAspectRatio = new Vector2(value, 1f);
+            }
+        }
+
         void Awake()
         {
             meshRenderer = GetComponent<MeshRenderer>();
@@ -28,12 +49,7 @@ namespace ClusterVR.CreatorKit.World.Implements.MainScreenViews
         {
             if (propertyBlock == null) propertyBlock = new MaterialPropertyBlock();
 
-            var localScale = transform.localScale;
-            var screenScale = useCustomAspectRatio ? screenAspectRatio : new Vector2(localScale.x, localScale.y);
-
-            var scaleY = requiresYFlip ? -Mathf.Abs(screenScale.y) : Mathf.Abs(screenScale.y);
-            var scale = new Vector2(Mathf.Abs(screenScale.x), scaleY);
-            var textureSt = TextureSTCalculator.CalcOverlapTextureST(texture, scale);
+            var textureSt = TextureSTCalculator.CalcOverlapTextureST(texture, AspectRatio, requiresYFlip);
 
             propertyBlock.SetTexture("_MainTex", texture);
             propertyBlock.SetVector("_MainTex_ST", textureSt);

@@ -16,8 +16,38 @@ namespace ClusterVR.CreatorKit.Item.Implements
         [SerializeField, Tooltip("座っているアバターの右手の位置（任意）")] Transform rightGrip;
         [SerializeField, Tooltip("座っているアバターのアニメーション（任意）")] AnimationClip avatarOverrideAnimation;
 
-        public override IItem Item => item;
-        public Transform Seat => seat;
+        public override IItem Item
+        {
+            get
+            {
+                if (item != null)
+                {
+                    return item;
+                }
+                if (this == null)
+                {
+                    return null;
+                }
+                return item = GetComponent<Item>();
+            }
+        }
+        bool IRidableItem.IsDestroyed => this == null;
+
+        public Transform Seat
+        {
+            get
+            {
+                if (seat != null)
+                {
+                    return seat;
+                }
+                if (this == null)
+                {
+                    return null;
+                }
+                return seat = transform;
+            }
+        }
         Transform IRidableItem.ExitTransform => exitTransform;
 
         Transform IRidableItem.LeftGrip => leftGrip;
@@ -28,6 +58,14 @@ namespace ClusterVR.CreatorKit.Item.Implements
         public event Action OnInvoked;
         public event Action OnGetOn;
         public event Action OnGetOff;
+
+        public void Construct(Transform seat, Transform exitTransform, Transform leftGrip, Transform rightGrip)
+        {
+            this.seat = seat;
+            this.exitTransform = exitTransform;
+            this.leftGrip = leftGrip;
+            this.rightGrip = rightGrip;
+        }
 
         void Start()
         {

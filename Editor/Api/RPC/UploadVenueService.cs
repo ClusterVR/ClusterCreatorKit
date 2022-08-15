@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Proto;
@@ -65,7 +66,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             };
         }
 
-        public void Run()
+        public void Run(CancellationToken cancellationToken)
         {
             if (!File.Exists(BuiltAssetBundlePaths.instance.Find(BuildTarget.StandaloneWindows)))
             {
@@ -91,10 +92,10 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 return;
             }
 
-            EditorCoroutine.Start(UploadVenue());
+            EditorCoroutine.Start(UploadVenue(cancellationToken));
         }
 
-        IEnumerator UploadVenue()
+        IEnumerator UploadVenue(CancellationToken cancellationToken)
         {
             isProcessing = true;
 
@@ -117,7 +118,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                         postUploadRequestProcess = true;
                     }
                 );
-                uploadRequest.Run();
+                uploadRequest.Run(cancellationToken);
 
                 while (!postUploadRequestProcess)
                 {
@@ -225,10 +226,9 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 uploadAssetServiceList.Add(iosAssetUploadService);
             }
 
-            uploadAssetServiceList.ForEach(x => x.Run());
+            uploadAssetServiceList.ForEach(x => x.Run(cancellationToken));
 
-            while (!winAssetUploadProcess || !macAssetUploadProcess || !androidAssetUploadProcess ||
-                !iosAssetUploadProcess)
+            while (!winAssetUploadProcess || !macAssetUploadProcess || !androidAssetUploadProcess || !iosAssetUploadProcess)
             {
                 yield return null;
             }
@@ -264,7 +264,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                         postNotifyFinishProcess = true;
                     }
                 );
-                notifyFinishedRequest.Run();
+                notifyFinishedRequest.Run(cancellationToken);
 
                 while (!postNotifyFinishProcess)
                 {

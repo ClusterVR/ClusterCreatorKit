@@ -1,0 +1,96 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    height: 1000000px;
+}
+
+Label {
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.default-button {
+    width: 152px;
+    height: 24px;
+}
+
+.drag-area-icon {
+    width: 40px;
+    height: 40px;
+    background-image: url("../Texture/icons_file_add_outlined@4x.png");
+    -unity-background-scale-mode: scale-to-fit;
+    margin-bottom: 10px;
+}
+
+.help-view-container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.drag-area-panel {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(1, 1, 1, 0.25);
+}
+
+.item-list-panel {
+    flex: 1;
+    display: flex;
+    position: relative;
+}
+
+.right-aligned-item {
+    margin-left: auto;
+}
+
+.horizontal {
+    flex-direction: row;
+    align-items: center;
+}
+
+.reverse-horizontal {
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+ScrollView {
+    flex: 1;
+}
+
+.menu-container {
+    margin: 9px;
+    height: 24px;
+    display: flex;
+}
+
+.buffer {
+    flex: 1;
+}
+
+.item-list-container {
+    margin: 0 13px 70px 13px;
+}
+
+.footer-container {
+    margin: 12px 9px 12px 9px;
+    height: 24px;
+}
+
+.list-view {
+    flex-grow: 1;
+    width: 100%;
+}
+
+.border {
+    border-top-width: 1px;
+    border-color: gray;
+}
+
+.unity-list-view__empty-label {
+    display: none;
+}

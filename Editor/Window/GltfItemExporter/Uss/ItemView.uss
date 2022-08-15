@@ -1,0 +1,62 @@
+.thumbnail {
+    width: 64px;
+    height: 64px;
+    margin-left: 32px;
+    margin-right: 20px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.valid-icon{
+    width: 24px;
+    height: 24px;
+    background-image: url("../Texture/icons_check_outlined@4x.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.invalid-icon{
+    width: 24px;
+    height: 24px;
+    background-image: url("../Texture/icons_clear_outlined@4x.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.item-container {
+    margin: 15px 6px;
+    display: flex;
+}
+
+.icon-button {
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.icon-button:hover {
+    border-color: gray;
+}
+
+.remove-icon {
+    width: 24px;
+    height: 24px;
+    background-image: url("../Texture/icons_delete_filled@4x.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.validation-message-container {
+    min-height: 64px;
+    min-width: 64px;
+    margin: 0 32px;
+    border-width: 1px;
+    border-radius: 1px;
+    padding: 3px;
+    flex: 1;
+}
+
+.item-description-container {
+    min-height: 64px;
+    width: 128px;
+}
+
+.separater {
+    border-top-width: 1px;
+    border-color: lightgray;
+}

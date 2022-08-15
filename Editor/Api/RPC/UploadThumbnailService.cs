@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using Newtonsoft.Json;
@@ -36,17 +37,17 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             payload = new PostUploadThumbnailPolicyPayload(ContentType, fileInfo.Name, fileInfo.Length);
         }
 
-        public void Run()
+        public void Run(CancellationToken cancellationToken)
         {
-            _ = UploadAsync();
+            _ = UploadAsync(cancellationToken);
         }
 
-        async Task UploadAsync()
+        async Task UploadAsync(CancellationToken cancellationToken)
         {
             try
             {
                 var policy = await APIServiceClient.PostUploadThumbnailPolicy(payload, accessToken,
-                    JsonConvert.DeserializeObject<ThumbnailUploadPolicy>);
+                    JsonConvert.DeserializeObject<ThumbnailUploadPolicy>, cancellationToken);
                 EditorCoroutine.Start(Upload(policy));
             }
             catch (Exception e)

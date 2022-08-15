@@ -1,0 +1,21 @@
+{
+    "name": "ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter",
+    "references": [
+        "Unity.net.yutopp.vgltf",
+        "Unity.net.yutopp.vgltf.unity",
+        "ClusterVR.CreatorKit.Item.Implements",
+        "ClusterVR.CreatorKit.World.Implements",
+        "ClusterVR.CreatorKit.Item"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

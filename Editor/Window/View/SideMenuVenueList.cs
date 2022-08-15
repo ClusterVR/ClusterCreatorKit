@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
@@ -14,7 +15,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 {
     public sealed class SideMenuVenueList
     {
-        public readonly Reactive<bool> reactiveForceLogout = new Reactive<bool>();
         public readonly Reactive<Venue> reactiveCurrentVenue = new Reactive<Venue>();
 
         readonly UserInfo userInfo;
@@ -28,45 +28,54 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             this.userInfo = userInfo;
         }
 
-        public void AddView(VisualElement parent)
+        public void AddView(VisualElement parent, CancellationToken cancellationToken)
         {
-            selector = new VisualElement() { style = { flexGrow = 1 } };
+            selector = new VisualElement()
+            {
+                style = { flexGrow = 1 }
+            };
             parent.Add(selector);
-            _ = RefreshVenueSelector();
+            _ = RefreshVenueSelector(cancellationToken);
         }
 
-        public void RefetchVenueWithoutChangingSelection()
+        public void RefetchVenueWithoutChangingSelection(CancellationToken cancellationToken)
         {
             var currentVenue = reactiveCurrentVenue.Val;
             if (currentVenue != null)
             {
-                _ = RefreshVenueSelector(currentVenue.Group.Id, currentVenue.VenueId);
+                _ = RefreshVenueSelector(cancellationToken, currentVenue.Group.Id, currentVenue.VenueId);
             }
             else
             {
-                _ = RefreshVenueSelector();
+                _ = RefreshVenueSelector(cancellationToken);
             }
         }
 
-        async Task RefreshVenueSelector(GroupID groupIdToSelect = null, VenueID venueIdToSelect = null)
+        async Task RefreshVenueSelector(CancellationToken cancellationToken, GroupID groupIdToSelect = null,
+            VenueID venueIdToSelect = null)
         {
             selector.Clear();
             selector.Add(new Label() { text = "loading..." });
 
-            var venuePickerHolder = new VisualElement() { style = { flexGrow = 1 } };
+            var venuePickerHolder = new VisualElement()
+            {
+                style = { flexGrow = 1 }
+            };
 
             void RecreateVenuePicker(GroupID groupId)
             {
                 venuePickerHolder.Clear();
-                venuePickerHolder.Add(CreateVenuePicker(groupId, allVenues[groupId], venueIdToSelect));
+                venuePickerHolder.Add(
+                    CreateVenuePicker(groupId, allVenues[groupId], cancellationToken, venueIdToSelect));
             }
 
             try
             {
-                var groups = await APIServiceClient.GetGroups(userInfo.VerifiedToken);
+                var groups = await APIServiceClient.GetGroups(userInfo.VerifiedToken, cancellationToken);
                 foreach (var group in groups.List)
                 {
-                    allVenues[@group.Id] = await APIServiceClient.GetGroupVenues(@group.Id, userInfo.VerifiedToken);
+                    allVenues[@group.Id] =
+                        await APIServiceClient.GetGroupVenues(@group.Id, userInfo.VerifiedToken, cancellationToken);
                 }
 
                 selector.Clear();
@@ -92,13 +101,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 selector.Add(new Label() { text = "ワールド" });
                 selector.Add(venuePickerHolder);
 
-                selector.Add(UiUtils.Separator());
-
-                selector.Add(new Label("ユーザーID"));
-                var userSelector = new VisualElement() { style = { flexShrink = 0 } };
-                userSelector.Add(new Label(userInfo.Username));
-                userSelector.Add(new Button(() => reactiveForceLogout.Val = true) { text = "アカウント切替" });
-                selector.Add(userSelector);
             }
             catch (Exception e)
             {
@@ -108,13 +110,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             }
         }
 
-        VisualElement CreateVenuePicker(GroupID groupId, Venues venues, VenueID venueIdToSelect = null)
+        VisualElement CreateVenuePicker(GroupID groupId, Venues venues, CancellationToken cancellationToken,
+            VenueID venueIdToSelect = null)
         {
             var venueList = new ScrollView(ScrollViewMode.Vertical)
             {
                 style = { marginTop = 8, flexGrow = 1 }
             };
-            venueList.Add(new Button(() => CreateNewVenue(groupId)) { text = "新規作成" });
+            venueList.Add(new Button(() => CreateNewVenue(groupId, cancellationToken)) { text = "新規作成" });
 
             venueList.Add(new Label() { text = "作成済みワールドから選ぶ", style = { marginTop = 12 } });
             foreach (var venue in venues.List.OrderBy(venue => venue.Name))
@@ -132,7 +135,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             return venueList;
         }
 
-        void CreateNewVenue(GroupID groupId)
+        void CreateNewVenue(GroupID groupId, CancellationToken cancellationToken)
         {
             var postVenueService =
                 new PostRegisterNewVenueService(
@@ -140,7 +143,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     new PostNewVenuePayload("New World", "説明未設定", groupId.Value),
                     venue =>
                     {
-                        _ = RefreshVenueSelector(groupId, venue.VenueId);
+                        _ = RefreshVenueSelector(cancellationToken, groupId, venue.VenueId);
                         reactiveCurrentVenue.Val = venue;
                     },
                     exception =>
@@ -149,7 +152,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                         selector.Add(new IMGUIContainer(() =>
                             EditorGUILayout.HelpBox($"新規会場の登録ができませんでした。{exception.Message}", MessageType.Error)));
                     });
-            postVenueService.Run();
+            postVenueService.Run(cancellationToken);
         }
     }
 }

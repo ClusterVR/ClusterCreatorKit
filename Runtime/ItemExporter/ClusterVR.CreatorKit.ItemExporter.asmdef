@@ -1,0 +1,23 @@
+{
+    "name": "ClusterVR.CreatorKit.ItemExporter",
+    "rootNamespace": "",
+    "references": [
+        "Unity.net.yutopp.vgltf",
+        "Unity.net.yutopp.vgltf.unity",
+        "Unity.net.yutopp.vjson",
+        "ClusterVR.CreatorKit",
+        "ClusterVR.CreatorKit.Item",
+        "ClusterVR.CreatorKit.Item.Implements",
+        "ClusterVR.CreatorKit.GltfExtensions",
+        "ClusterVR.CreatorKit.World"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

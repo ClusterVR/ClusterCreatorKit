@@ -1,0 +1,34 @@
+.container {
+    align-items: center;
+    height: 160px;
+    width: 480px;
+    display: flex;
+    justify-content: space-between;
+    border-width: 1px;
+    border-color: gray;
+}
+
+#progress-container{
+    padding: 30px 20px;
+}
+
+#complete-container{
+    padding: 50px 20px;
+}
+
+Label {
+    font-size: 12px;
+}
+
+ProgressBar {
+    width: 100%;
+}
+
+Button {
+    height: 24px;
+    width: 160px;
+}
+
+.sub-text {
+    color: gray;
+}

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
@@ -7,10 +9,12 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public sealed class ImageView
+    public sealed class ImageView : IDisposable
     {
         readonly Reactive<Texture2D> reactiveImageTex = new Reactive<Texture2D>();
         readonly Reactive<string> reactiveOverlay = new Reactive<string>();
+
+        readonly List<IDisposable> disposables = new List<IDisposable>();
         public bool IsEmpty { get; private set; }
 
         public VisualElement CreateView()
@@ -25,8 +29,10 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     height = 144
                 }
             };
-            ReactiveBinder.Bind(reactiveImageTex, imageTex => img.style.backgroundImage = imageTex);
-            ReactiveBinder.Bind(reactiveOverlay, overlay => img.text = overlay);
+            var imageTexDisposable = ReactiveBinder.Bind(reactiveImageTex, imageTex => img.style.backgroundImage = imageTex);
+            var overlayDisposable = ReactiveBinder.Bind(reactiveOverlay, overlay => img.text = overlay);
+            disposables.Add(imageTexDisposable);
+            disposables.Add(overlayDisposable);
             return img;
         }
 
@@ -74,6 +80,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         {
             reactiveImageTex.Val = Texture2D.blackTexture;
             reactiveOverlay.Val = "error";
+        }
+
+        public void Dispose()
+        {
+            foreach (var disposable in disposables)
+            {
+                disposable.Dispose();
+            }
         }
     }
 }
