@@ -71,7 +71,7 @@ namespace ClusterVR.CreatorKit.Editor.ItemExporter
             camera.transform.SetPositionAndRotation(pos, rot);
             camera.cameraType = CameraType.Preview;
             camera.orthographic = true;
-            camera.orthographicSize = Mathf.Max(0.08f, bounds.size.magnitude) * 0.6f;
+            camera.orthographicSize = Mathf.Max(bounds.size.magnitude, Constants.Constants.ItemPreviewMagnificationLimitDiagonalSize) * 0.6f;
             camera.backgroundColor = Color.clear;
             camera.clearFlags = CameraClearFlags.SolidColor;
             return camera;

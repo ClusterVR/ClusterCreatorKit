@@ -8,6 +8,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using VGltf.Ext.KhrMaterialsEmissiveStrength.Types;
 using VGltf.Types.Extensions;
 
 namespace VGltf.Unity
@@ -134,17 +135,15 @@ namespace VGltf.Unity
             var occlusionTexIndex = ExportOcclusionTextureIfExist(mat, "_OcclusionMap");
             mat.TryGetFloatOrDefault("_OcclusionStrength", 1.0f, out var occlutionStrength);
 
-            Color emissionColor;
-            int? emissionTexIndex;
+            var emissionColorLinear = Vector3.zero; // black
+            var emissionTexIndex = default(int?);
             if ((mat.globalIlluminationFlags & MaterialGlobalIlluminationFlags.EmissiveIsBlack) == 0)
             {
-                mat.TryGetColorOrDefault("_EmissionColor", Color.black, out emissionColor);
+                if (mat.TryGetColorOrDefault("_EmissionColor", Color.black, out var emissionColor))
+                {
+                    emissionColorLinear = ValueConv.ColorToLinearRGB(emissionColor);
+                }
                 emissionTexIndex = ExportTextureIfExist(mat, "_EmissionMap");
-            }
-            else
-            {
-                emissionColor = Color.black;
-                emissionTexIndex = null;
             }
 
             var alphaMode = GetAlphaMode(mat);
@@ -188,8 +187,8 @@ namespace VGltf.Unity
                     Strength = occlutionStrength,
                 } : null,
 
-                EmissiveFactor = emissionColor != Color.black
-                   ? PrimitiveExporter.AsArray(ValueConv.ColorToLinearRGB(emissionColor))
+                EmissiveFactor = emissionColorLinear != Vector3.zero
+                   ? PrimitiveExporter.AsArray(emissionColorLinear)
                    : null,
                 EmissiveTexture = emissionTexIndex != null ? new Types.Material.EmissiveTextureInfoType
                 {
@@ -202,6 +201,21 @@ namespace VGltf.Unity
 
                 // DoubleSided = // Not supported
             };
+
+            // emission HDR
+            if (Mathf.Max(Mathf.Max(emissionColorLinear.x, emissionColorLinear.y), emissionColorLinear.z) > 1.0f)
+            {
+                var strength = emissionColorLinear.magnitude;
+
+                var emissiveStrengthExtName = KhrMaterialsEmissiveStrength.ExtensionName;
+                gltfMaterial.AddExtension<KhrMaterialsEmissiveStrength>(emissiveStrengthExtName, new KhrMaterialsEmissiveStrength
+                {
+                    EmissiveStrength = strength,
+                });
+                Context.Gltf.AddExtensionUsed(emissiveStrengthExtName);
+
+                gltfMaterial.EmissiveFactor = PrimitiveExporter.AsArray(emissionColorLinear.normalized);
+            }
 
             var matIndex = Context.Gltf.AddMaterial(gltfMaterial);
             var resource = Context.Resources.Materials.Add(mat, matIndex, mat.name, mat);

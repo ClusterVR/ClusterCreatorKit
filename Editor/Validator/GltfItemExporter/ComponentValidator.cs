@@ -105,12 +105,13 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             }
 
             var bounds = CalcLocalBounds(item.gameObject);
-            var boundSize = bounds.max - bounds.min;
-            var defaultSize = new Vector3Int(
-                Mathf.RoundToInt(boundSize.x), Mathf.RoundToInt(boundSize.y), Mathf.RoundToInt(boundSize.z));
+            var boundSize = bounds.size;
+            var sizeDiff = size - boundSize;
+            const float sizeTolerance = 1f;
 
-            if (defaultSize.x != size.x || defaultSize.y != size.y || defaultSize.z != size.z)
+            if (Mathf.Abs(sizeDiff.x) >= sizeTolerance || Mathf.Abs(sizeDiff.y) >= sizeTolerance || Mathf.Abs(sizeDiff.z) >= sizeTolerance)
             {
+                var defaultSize = new Vector3Int(Mathf.RoundToInt(boundSize.x), Mathf.RoundToInt(boundSize.y), Mathf.RoundToInt(boundSize.z));
                 validationMessages.Add(new ValidationMessage(
                     $"{gameObject.name}のItemSizeが見た目の大きさと大きく異なります。現在：{size}, 自動計算値：{defaultSize}",
                     ValidationMessage.MessageType.Warning));

@@ -26,6 +26,9 @@ namespace VGltf.Unity
         {
             public bool FlipZAxisInsteadOfXAsix = false;
 
+            public bool TextureUpdateMipmaps = true;
+            public bool TextureMakeNoLongerReadable = true;
+
             public bool SkipConvertingNormalTex = false;
             public string ConvertingNormalTexShaderName = "Hidden/VGltfUnity/GltfNormalTexToUnityDXT5nm";
             public bool? CompressNormalTexHighQual;
@@ -47,6 +50,7 @@ namespace VGltf.Unity
             public ImporterRuntimeResources Resources { get; }
             public ITimeSlicer TimeSlicer { get; }
             public CoordUtils CoordUtils { get; }
+            public ImportingSetting ImportingSetting { get; }
 
             public ResourceImporters Importers { get; }
 
@@ -58,8 +62,14 @@ namespace VGltf.Unity
                 Resources = new ImporterRuntimeResources();
                 TimeSlicer = timeSlicer;
                 CoordUtils = config.FlipZAxisInsteadOfXAsix ? new CoordUtils(new Vector3(1, 1, -1)) : new CoordUtils();
+                ImportingSetting = new ImportingSetting
+                {
+                    TextureUpdateMipmaps = config.TextureUpdateMipmaps,
+                    TextureMakeNoLongerReadable = config.TextureMakeNoLongerReadable,
+                };
 
-                var materialImporterConfig = new MaterialImporter.Config
+                // TODO: pass config directly
+                var standardMatImporter = new BuiltinStandardMaterialImporterHook(new BuiltinStandardMaterialImporterHook.Config
                 {
                     SkipConvertingNormalTex = config.SkipConvertingNormalTex,
                     ConvertingNormalTexShaderName = config.ConvertingNormalTexShaderName,
@@ -72,6 +82,10 @@ namespace VGltf.Unity
                     SkipConvertingMetallicRoughness = config.SkipConvertingMetallicRoughness,
                     ConvertingMetallicRoughnessTexShaderName = config.ConvertingMetallicRoughnessTexShaderName,
                     CompressMetallicRoughnessTexHighQual = config.CompressMetallicRoughnessTexHighQual,
+                });
+                var materialImporterConfig = new MaterialImporter.Config
+                {
+                    StandardMaterialImporter = standardMatImporter,
                 };
 
                 Importers = new ResourceImporters
@@ -136,7 +150,8 @@ namespace VGltf.Unity
 
             foreach (var nodeIndex in gltfScene.Nodes)
             {
-                Context.Importers.Nodes.ImportGameObjects(nodeIndex);
+                await Context.Importers.Nodes.ImportGameObjects(nodeIndex, null, ct);
+                await _context.TimeSlicer.Slice(ct);
             }
             foreach (var nodeIndex in gltfScene.Nodes)
             {

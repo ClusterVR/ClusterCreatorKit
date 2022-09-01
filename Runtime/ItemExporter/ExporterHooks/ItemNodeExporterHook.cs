@@ -79,12 +79,14 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                     };
                 case MeshCollider meshCollider:
                     var mesh = meshCollider.sharedMesh;
+                    var triangles = mesh.triangles;
+                    coordUtils.FlipIndices(triangles);
                     return new Shape
                     {
                         Mesh = new Proto.Mesh
                         {
                             VertexPositions = { mesh.vertices.Select(coordUtils.ConvertSpace).Flatten() },
-                            Triangles = { coordUtils.FlipIndices(mesh.triangles) }
+                            Triangles = { triangles }
                         }
                     };
                 default:

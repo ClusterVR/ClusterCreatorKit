@@ -4,5 +4,6 @@ namespace ClusterVR.CreatorKit.Constants
     {
         public const float ItemContactableRange = 3f;
         public const float GridSize = 1f;
+        public const float ItemPreviewMagnificationLimitDiagonalSize = 0.08f;
     }
 }

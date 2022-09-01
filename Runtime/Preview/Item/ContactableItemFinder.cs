@@ -32,7 +32,7 @@ namespace ClusterVR.CreatorKit.Preview.Item
             foreach (var colliding in collidings.Take(collidingsCount))
             {
                 var item = colliding.gameObject.GetComponentInParent<IContactableItem>();
-                if (item != null)
+                if (item != null && item.IsContactable)
                 {
                     contactableItems.Add(item);
                 }

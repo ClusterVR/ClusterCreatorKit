@@ -188,6 +188,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview
             var ridableItemManager = new RidableItemManager(itemCreator, itemDestroyer, PlayerPresenter,
                 GetComponentsInGameObjectsChildren<IRidableItem>(rootGameObjects));
             new SteerItemTriggerEmitter(ridableItemManager, PlayerPresenter, PlayerPresenter.MoveInputController);
+            new ProductDisplayItemManager(itemCreator,
+                GetComponentsInGameObjectsChildren<IProductDisplayItem>(rootGameObjects));
 
             var onReceiveOwnershipItemTriggerManager = new OnReceiveOwnershipItemTriggerManager(itemCreator);
             var onCreateItemTriggerManager = new OnCreateItemTriggerManager(itemCreator);

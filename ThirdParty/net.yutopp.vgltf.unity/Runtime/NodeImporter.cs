@@ -30,15 +30,15 @@ namespace VGltf.Unity
             Context = context;
         }
 
-        public void ImportGameObjects(int nodeIndex, GameObject parentGo = null)
+        public async Task<IndexedResource<GameObject>> ImportGameObjects(int nodeIndex, GameObject parentGo, CancellationToken ct)
         {
-            Context.Resources.Nodes.GetOrCall(nodeIndex, () =>
+            return await Context.Resources.Nodes.GetOrCallAsync(nodeIndex, async () =>
             {
-                return ForceImportGameObjects(nodeIndex, parentGo);
+                return await ForceImportGameObjects(nodeIndex, parentGo, ct);
             });
         }
 
-        public IndexedResource<GameObject> ForceImportGameObjects(int nodeIndex, GameObject parentGo)
+        public async Task<IndexedResource<GameObject>> ForceImportGameObjects(int nodeIndex, GameObject parentGo, CancellationToken ct)
         {
             var gltf = Context.Container.Gltf;
             var gltfNode = gltf.Nodes[nodeIndex];
@@ -80,7 +80,8 @@ namespace VGltf.Unity
                     {
                         throw new NotImplementedException("Node duplication"); // TODO:
                     }
-                    ImportGameObjects(childIndex, go);
+                    await ImportGameObjects(childIndex, go, ct);
+                    await Context.TimeSlicer.Slice(ct);
                 }
             }
 
@@ -96,7 +97,7 @@ namespace VGltf.Unity
 
             if (gltfNode.Mesh != null)
             {
-                var meshResource = await Context.Importers.Meshes.Import(gltfNode.Mesh.Value, go, ct);
+                await Context.Importers.Meshes.Import(gltfNode.Mesh.Value, go, ct);
 
                 if (gltfNode.Skin != null)
                 {
@@ -141,7 +142,7 @@ namespace VGltf.Unity
             if (gltfSkin.InverseBindMatrices != null)
             {
                 var buf = Context.GltfResources.GetOrLoadTypedBufferByAccessorIndex(gltfSkin.InverseBindMatrices.Value);
-                var matrices = buf.GetEntity<float, Matrix4x4>(PrimitiveImporter.AsMatrix4x4).GetEnumerable().Select(Context.CoordUtils.ConvertSpace).ToArray();
+                var matrices = buf.GetEntity<float, Matrix4x4>((xs, i) => Context.CoordUtils.ConvertSpace(PrimitiveImporter.AsMatrix4x4(xs, i))).AsArray();
 
                 var mesh = smr.sharedMesh;
                 mesh.bindposes = matrices;

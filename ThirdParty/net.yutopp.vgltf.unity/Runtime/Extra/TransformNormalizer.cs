@@ -143,6 +143,12 @@ namespace VGltf.Unity.Ext
                 smr.sharedMesh = mesh;
             }
 
+            var mf = go.GetComponent<MeshFilter>();
+            if (mf != null)
+            {
+                mf.sharedMesh = BakeMeshAndMemoize(mf.sharedMesh, go.transform);
+            }
+
             for (var i = 0; i < go.transform.childCount; ++i)
             {
                 var ct = go.transform.GetChild(i);
@@ -223,6 +229,20 @@ namespace VGltf.Unity.Ext
                 var ct = go.transform.GetChild(i);
                 UpdateBonePoses(ct.gameObject);
             }
+        }
+
+        Mesh BakeMeshAndMemoize(Mesh m, Transform t)
+        {
+            var mesh = UnityEngine.Object.Instantiate(m);
+            bakedMeshes.Add(mesh);
+
+            mesh.name = m.name;
+
+            mesh.vertices = mesh.vertices.Select(t.TransformVector).ToArray();
+            mesh.normals = mesh.normals.Select(t.TransformDirection).ToArray();
+            // mesh.tangents = mesh.tangents.Select(go.transform.TransformVector).ToArray();
+
+            return mesh;
         }
     }
 }

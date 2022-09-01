@@ -253,7 +253,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             {
                 return 0;
             }
-            return buf.GetPrimitivesAsCasted<int>().ToArray().Length / 3;
+            return buf.GetPrimitivesAsInt().ToArray().Length / 3;
         }
 
         static Vector2Int LoadTextureSize(ResourcesStore resourcesStore, int imageIndex)

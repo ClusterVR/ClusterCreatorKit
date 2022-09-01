@@ -55,16 +55,6 @@ namespace VGltf.Ext.Vrm0.Unity.Hooks
                 throw new Exception("There is no Animation component");
             }
 
-            // NOTE: It may break if there are duplicate names
-            var nodeTransMap =
-                anim.GetComponentsInChildren<Transform>().Where(n =>
-                {
-                    return !(
-                        (n.GetComponent<MeshRenderer>() != null) ||
-                        (n.GetComponent<SkinnedMeshRenderer>() != null)
-                    );
-                }).ToDictionary(t => t.name);
-
             var avatar = anim.avatar;
             if (!avatar.isValid || !avatar.isHuman)
             {
@@ -98,10 +88,10 @@ namespace VGltf.Ext.Vrm0.Unity.Hooks
                 // HumanBone
                 vrmHumBone.Bone = h.humanName.AsHumanBoneNameToVrm();
 
-                var boneTrans = nodeTransMap[h.boneName];
-                if (!exporter.Context.Resources.Nodes.TryGetValueByName(boneTrans.name, out var boneNode))
+                //var boneTrans = nodeTransMap[h.boneName];
+                if (!exporter.Context.Resources.Nodes.TryGetValueByName(h.boneName, out var boneNode))
                 {
-                    throw new Exception($"bone transform is not found: name={boneTrans.name}");
+                    throw new Exception($"bone transform is not found or not unique: name={h.boneName}");
                 }
                 vrmHumBone.Node = boneNode.Index;
 

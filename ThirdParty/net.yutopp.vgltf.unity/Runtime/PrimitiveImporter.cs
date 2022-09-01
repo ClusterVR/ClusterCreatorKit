@@ -15,32 +15,32 @@ namespace VGltf.Unity
 {
     public class PrimitiveImporter
     {
-        public static Vector2 AsVector2(float[] fx)
+        public static Vector2 AsVector2(float[] fx, int i = 0)
         {
-            return new Vector2(fx[0], fx[1]);
+            return new Vector2(fx[i+0], fx[i+1]);
         }
 
-        public static Vector3 AsVector3(float[] fx)
+        public static Vector3 AsVector3(float[] fx, int i = 0)
         {
-            return new Vector3(fx[0], fx[1], fx[2]);
+            return new Vector3(fx[i+0], fx[i+1], fx[i+2]);
         }
 
-        public static Vector4 AsVector4(float[] fx)
+        public static Vector4 AsVector4(float[] fx, int i = 0)
         {
-            return new Vector4(fx[0], fx[1], fx[2], fx[3]);
+            return new Vector4(fx[i+0], fx[i+1], fx[i+2], fx[i+3]);
         }
 
-        public static Quaternion AsQuaternion(float[] fx)
+        public static Quaternion AsQuaternion(float[] fx, int i = 0)
         {
-            return new Quaternion(fx[0], fx[1], fx[2], fx[3]);
+            return new Quaternion(fx[i+0], fx[i+1], fx[i+2], fx[i+3]);
         }
 
-        public static Matrix4x4 AsMatrix4x4(float[] fx)
+        public static Matrix4x4 AsMatrix4x4(float[] fx, int i = 0)
         {
-            var c0 = AsVector4(fx.Skip(4 * 0).Take(4).ToArray());
-            var c1 = AsVector4(fx.Skip(4 * 1).Take(4).ToArray());
-            var c2 = AsVector4(fx.Skip(4 * 2).Take(4).ToArray());
-            var c3 = AsVector4(fx.Skip(4 * 3).Take(4).ToArray());
+            var c0 = new Vector4(fx[i+0], fx[i+1], fx[i+2], fx[i+3]);
+            var c1 = new Vector4(fx[i+4], fx[i+5], fx[i+6], fx[i+7]);
+            var c2 = new Vector4(fx[i+8], fx[i+9], fx[i+10], fx[i+11]);
+            var c3 = new Vector4(fx[i+12], fx[i+13], fx[i+14], fx[i+15]);
             return new Matrix4x4(c0, c1, c2, c3);
         }
     }

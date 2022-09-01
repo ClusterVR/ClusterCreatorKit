@@ -6,5 +6,6 @@ namespace ClusterVR.CreatorKit.Item.Implements
     public abstract class ContactableItem : MonoBehaviour, IContactableItem
     {
         public abstract IItem Item { get; }
+        public abstract bool IsContactable { get; }
     }
 }

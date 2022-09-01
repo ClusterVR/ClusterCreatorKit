@@ -17,6 +17,7 @@ namespace VGltf.Unity
         ImporterRuntimeResources Resources { get; }
         ITimeSlicer TimeSlicer { get; }
         CoordUtils CoordUtils { get; }
+        ImportingSetting ImportingSetting { get; }
 
         ResourceImporters Importers { get; }
     }
@@ -28,5 +29,11 @@ namespace VGltf.Unity
         public MaterialImporter Materials;
         public TextureImporter Textures;
         public ImageImporter Images;
+    }
+
+    public sealed class ImportingSetting
+    {
+        public bool TextureUpdateMipmaps = true;
+        public bool TextureMakeNoLongerReadable = true;
     }
 }

@@ -8,7 +8,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
     {
         void OnSceneGUI()
         {
-            if (!(target is RidableItem ridableItem))
+            if (target is not RidableItem ridableItem)
             {
                 return;
             }

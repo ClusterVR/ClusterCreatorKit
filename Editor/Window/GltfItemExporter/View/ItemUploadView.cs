@@ -344,9 +344,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             {
                 Debug.LogWarning("アップロード処理が中断されました");
             }
-            catch
+            catch (Exception e)
             {
-                Debug.LogError("アイテムのアップロードに失敗しました");
+                Debug.LogError($"アイテムのアップロードに失敗しました: {e.Message}");
                 reactiveItemUploadStatus.Val = ItemUploadProgressWindow.ItemUploadStatus.Standby;
                 throw;
             }

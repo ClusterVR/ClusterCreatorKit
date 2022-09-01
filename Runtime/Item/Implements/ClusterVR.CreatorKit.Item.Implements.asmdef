@@ -3,7 +3,8 @@
     "references": [
         "ClusterVR.CreatorKit.Item",
         "ClusterVR.CreatorKit.Constants",
-        "ClusterVR.CreatorKit.Extensions"
+        "ClusterVR.CreatorKit.Extensions",
+        "ClusterVR.CreatorKit.ProductUgc"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

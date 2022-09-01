@@ -1,6 +1,8 @@
 {
     "name": "ClusterVR.CreatorKit.Item",
-    "references": [],
+    "references": [
+        "ClusterVR.CreatorKit.ProductUgc"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

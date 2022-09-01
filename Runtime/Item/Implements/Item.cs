@@ -218,11 +218,6 @@ namespace ClusterVR.CreatorKit.Item.Implements
             isInitialized = true;
         }
 
-        void Reset()
-        {
-            itemName = "アイテム";
-        }
-
         void OnDestroy()
         {
             ReleaseMaterials();

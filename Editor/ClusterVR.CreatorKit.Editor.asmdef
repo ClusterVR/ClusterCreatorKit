@@ -14,7 +14,7 @@
         "ClusterVR.CreatorKit.Trigger.Implements",
         "ClusterVR.CreatorKit.Operation",
         "ClusterVR.CreatorKit.Operation.Implements",
-        "ClusterVR.CreatorKit.Editor.Api",
+        "ClusterVR.CreatorKit.ProductUgc",
         "Unity.net.yutopp.vjson"
     ],
     "includePlatforms": [

@@ -52,7 +52,7 @@ namespace VGltf.Unity
 
                 // TODO: check encodings...
                 // TODO: offload texture decoding...
-                tex.LoadImage(imageBuffer);
+                tex.LoadImage(imageBuffer, Context.ImportingSetting.TextureMakeNoLongerReadable);
 
                 return tex;
             }
