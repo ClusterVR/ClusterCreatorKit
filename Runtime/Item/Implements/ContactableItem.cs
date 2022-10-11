@@ -7,5 +7,6 @@ namespace ClusterVR.CreatorKit.Item.Implements
     {
         public abstract IItem Item { get; }
         public abstract bool IsContactable { get; }
+        public abstract bool RequireOwnership { get; }
     }
 }

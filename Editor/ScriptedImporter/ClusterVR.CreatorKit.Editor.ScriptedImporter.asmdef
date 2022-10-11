@@ -1,0 +1,18 @@
+{
+    "name": "ClusterVR.CreatorKit.Editor.ScriptedImporter",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9ac94f3c53ca74d2a89c0fc5b68a9d7e"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

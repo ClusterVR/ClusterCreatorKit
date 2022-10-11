@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
     [RequireComponent(typeof(Item.Implements.Item), typeof(GrabbableItem)), DisallowMultipleComponent]
-    public sealed class UseItemTrigger : MonoBehaviour, IUseItemTrigger
+    public sealed class UseItemTrigger : MonoBehaviour, IUseItemTrigger, IItemTrigger
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
         [SerializeField, ItemConstantTriggerParam] ConstantTriggerParam[] downTriggers;

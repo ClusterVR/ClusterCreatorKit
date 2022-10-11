@@ -119,6 +119,8 @@ namespace VGltf.Unity
 
             var prims = primsRaw.Select((p, i) => ImportPrimitive(gltfMesh, p, i == 0));
 
+            // TODO: share mesh if all properties are same (can occur when same mesh is used with different materials)
+
             var mesh = new Mesh();
             mesh.name = gltfMesh.Name;
 

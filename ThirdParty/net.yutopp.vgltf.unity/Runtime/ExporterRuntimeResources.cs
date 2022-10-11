@@ -6,6 +6,8 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace VGltf.Unity
@@ -16,12 +18,30 @@ namespace VGltf.Unity
         public IndexedResourceDict<GameObject, GameObject> Nodes = new IndexedResourceDict<GameObject, GameObject>();
         public IndexedResourceDict<Texture, Texture> Textures = new IndexedResourceDict<Texture, Texture>();
         public IndexedResourceDict<Material, Material> Materials = new IndexedResourceDict<Material, Material>();
-        public IndexedResourceDict<Mesh, Mesh> Meshes = new IndexedResourceDict<Mesh, Mesh>();
+        public IndexedResourceDict<(Mesh, Material[]), Mesh> Meshes = new IndexedResourceDict<(Mesh, Material[]), Mesh>(new MeshEqualityComparer());
         public IndexedResourceDict<Mesh, Skin> Skins = new IndexedResourceDict<Mesh, Skin>();
 
         public void Dispose()
         {
             // DO NOT Dispose any resources because these containers have no ownerships.
+        }
+
+        sealed class MeshEqualityComparer : IEqualityComparer<(Mesh, Material[])>
+        {
+            public bool Equals((Mesh, Material[]) x, (Mesh, Material[]) y)
+            {
+                return x.Item1.Equals(y.Item1) && x.Item2.SequenceEqual(y.Item2);
+            }
+
+            public int GetHashCode((Mesh, Material[]) obj)
+            {
+                var hashCode = obj.Item1.GetHashCode();
+                foreach (var m in obj.Item2)
+                {
+                    hashCode = unchecked(hashCode * 31 + m.GetHashCode());
+                }
+                return hashCode;
+            }
         }
     }
 }

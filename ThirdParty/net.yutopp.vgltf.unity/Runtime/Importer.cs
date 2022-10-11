@@ -53,6 +53,7 @@ namespace VGltf.Unity
             public ImportingSetting ImportingSetting { get; }
 
             public ResourceImporters Importers { get; }
+            public SamplerApplier SamplerApplier { get; }
 
             public InnerContext(GltfContainer container, IResourceLoader loader, ITimeSlicer timeSlicer, Config config)
             {
@@ -96,6 +97,8 @@ namespace VGltf.Unity
                     Textures = new TextureImporter(this),
                     Images = new ImageImporter(this),
                 };
+
+                SamplerApplier = new SamplerApplier(this);
             }
 
             public void Dispose()

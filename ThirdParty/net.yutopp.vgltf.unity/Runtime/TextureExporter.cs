@@ -37,12 +37,13 @@ namespace VGltf.Unity
             )
         {
             var imageIndex = Context.Exporters.Images.RawExport(tex, isLinear, mat);
+            var samplerIndex = Context.SamplerExporter.RawExport(tex);
 
             var gltfImage = new Types.Texture
             {
                 Name = tex.name,
 
-                //Sampler = primitives,
+                Sampler = samplerIndex,
                 Source = imageIndex,
             };
             var texIndex = Context.Gltf.AddTexture(gltfImage);

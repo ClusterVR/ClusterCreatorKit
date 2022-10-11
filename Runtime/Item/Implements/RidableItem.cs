@@ -54,7 +54,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
         Transform IRidableItem.RightGrip => rightGrip;
         AnimationClip IRidableItem.AvatarOverrideAnimation => avatarOverrideAnimation;
         public override bool IsContactable => true;
-
+        public override bool RequireOwnership => true;
 
         public event Action OnInvoked;
         public event Action OnGetOn;

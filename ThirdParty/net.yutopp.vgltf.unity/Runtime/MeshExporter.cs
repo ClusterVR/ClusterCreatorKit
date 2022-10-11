@@ -27,9 +27,10 @@ namespace VGltf.Unity
 
         public IndexedResource<Mesh> Export(Renderer r, Mesh mesh)
         {
-            return Context.Resources.Meshes.GetOrCall(mesh, () =>
+            var materials = r.sharedMaterials;
+            return Context.Resources.Meshes.GetOrCall((mesh, materials), () =>
             {
-                return ForceExport(r, mesh);
+                return ForceExport(mesh, materials);
             });
         }
 
@@ -44,14 +45,17 @@ namespace VGltf.Unity
             public float Weight;
         }
 
-        public IndexedResource<Mesh> ForceExport(Renderer r, Mesh mesh)
+        public IndexedResource<Mesh> ForceExport(Mesh mesh, Material[] materials)
         {
             var materialIndices = new List<int>();
-            foreach (var m in r.sharedMaterials)
+            foreach (var m in materials)
             {
                 var materialResource = Context.Exporters.Materials.Export(m);
                 materialIndices.Add(materialResource.Index);
             }
+
+            // TODO: share things other than materials if only materials differ.
+            // (cache mesh and AccIndices, then use the AccIndices when export same mesh)
 
             // Convert to right-handed coordinate system
             var positionAccIndex = ExportPositions(mesh.vertices);
@@ -239,7 +243,7 @@ namespace VGltf.Unity
             }
 
             var meshIndex = Context.Gltf.AddMesh(gltfMesh);
-            var resource = Context.Resources.Meshes.Add(mesh, meshIndex, mesh.name, mesh);
+            var resource = Context.Resources.Meshes.Add((mesh, materials), meshIndex, mesh.name, mesh);
 
             return resource;
         }

@@ -78,7 +78,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             }
 
             var form = BuildFormSections(fileBytes, policy);
-            var uploadFileWebRequest = UnityWebRequest.Post(policy.uploadUrl, form);
+            using var uploadFileWebRequest = UnityWebRequest.Post(policy.uploadUrl, form);
 
             uploadFileWebRequest.SendWebRequest();
             while (!uploadFileWebRequest.isDone)

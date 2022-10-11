@@ -1,6 +1,6 @@
 ﻿namespace ClusterVR.CreatorKit.Trigger
 {
-    public interface IUseItemTrigger : IItemTrigger
+    public interface IUseItemTrigger
     {
         void Invoke(bool isDown);
     }

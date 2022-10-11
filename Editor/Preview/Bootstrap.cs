@@ -27,6 +27,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview
     [InitializeOnLoad]
     public static class Bootstrap
     {
+        public static ItemCreator ItemCreator { get; private set; }
+        public static ItemDestroyer ItemDestroyer { get; private set; }
         public static PlayerPresenter PlayerPresenter { get; private set; }
         public static SpawnPointManager SpawnPointManager { get; private set; }
         public static MainScreenPresenter MainScreenPresenter { get; private set; }
@@ -97,11 +99,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     var warpPortals = GetComponentsInGameObjectsChildren<IWarpPortal>(rootGameObjects);
                     new WarpPortalExecutor(PlayerPresenter, warpPortals);
 
-                    var itemCreator =
+                    ItemCreator =
                         new ItemCreator(GetComponentsInGameObjectsChildren<ICreateItemGimmick>(rootGameObjects));
-                    var itemDestroyer =
+                    ItemDestroyer =
                         new ItemDestroyer(PlayerPresenter.PlayerTransform.GetComponent<IItemController>());
-                    new ItemRespawner(despawnHeight, itemCreator, itemDestroyer,
+                    new ItemRespawner(despawnHeight, ItemCreator, ItemDestroyer,
                         GetComponentsInGameObjectsChildren<IMovableItem>(rootGameObjects));
 
                     var mainScreenViews = GetComponentsInGameObjectsChildren<IMainScreenView>(rootGameObjects);
@@ -118,7 +120,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     var worldGates = GetComponentsInGameObjectsChildren<IWorldGate>(rootGameObjects);
                     new WorldGateExecutor(worldGates);
 
-                    SetupTriggerGimmicks(rootGameObjects, itemCreator, itemDestroyer);
+                    SetupTriggerGimmicks(rootGameObjects, ItemCreator, ItemDestroyer);
 
                     OnInitializedEvent?.Invoke();
                     break;

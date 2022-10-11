@@ -9,11 +9,48 @@ namespace ClusterVR.CreatorKit.World.Implements.PlayerLocalUI
     [RequireComponent(typeof(Canvas), typeof(CanvasScaler)), DisallowMultipleComponent, ExecuteAlways]
     public sealed class PlayerLocalUI : MonoBehaviour, IPlayerLocalUI
     {
-        RectTransform IPlayerLocalUI.RectTransform => GetComponent<RectTransform>();
+        [SerializeField, HideInInspector] RectTransform rectTransform;
+        [SerializeField, HideInInspector] Canvas canvas;
+
+        RectTransform IPlayerLocalUI.RectTransform
+        {
+            get
+            {
+                if (rectTransform != null)
+                {
+                    return rectTransform;
+                }
+                if (this == null)
+                {
+                    return null;
+                }
+                return rectTransform = GetComponent<RectTransform>();
+            }
+        }
+
+        Canvas Canvas
+        {
+            get
+            {
+                if (canvas != null)
+                {
+                    return canvas;
+                }
+                if (this == null)
+                {
+                    return null;
+                }
+                return canvas = GetComponent<Canvas>();
+            }
+        }
 
         public void SetEnabled(bool enabled)
         {
-            GetComponent<Canvas>().enabled = enabled;
+            var canvas = Canvas;
+            if (canvas != null)
+            {
+                canvas.enabled = enabled;
+            }
         }
 
         void Start()
@@ -33,7 +70,24 @@ namespace ClusterVR.CreatorKit.World.Implements.PlayerLocalUI
 
         void OnValidate()
         {
-            var canvas = GetComponent<Canvas>();
+            if (rectTransform == null || rectTransform.gameObject != gameObject)
+            {
+                rectTransform = GetComponent<RectTransform>();
+            }
+            if (canvas == null || canvas.gameObject != gameObject)
+            {
+                canvas = GetComponent<Canvas>();
+            }
+
+            LimitSortingOrders();
+        }
+
+        void LimitSortingOrders()
+        {
+            if (canvas == null)
+            {
+                return;
+            }
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             LimitSortingOrder(canvas);
             foreach (var childCanvas in gameObject.GetComponentsInChildren<Canvas>(true))
@@ -59,6 +113,9 @@ namespace ClusterVR.CreatorKit.World.Implements.PlayerLocalUI
 
         void Reset()
         {
+            rectTransform = GetComponent<RectTransform>();
+            canvas = GetComponent<Canvas>();
+
 #if UNITY_EDITOR
             void CreateSafeAreaIfNot()
             {

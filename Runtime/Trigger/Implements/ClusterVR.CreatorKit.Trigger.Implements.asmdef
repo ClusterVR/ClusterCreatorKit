@@ -6,7 +6,8 @@
         "ClusterVR.CreatorKit.Item.Implements",
         "ClusterVR.CreatorKit",
         "ClusterVR.CreatorKit.Constants",
-        "ClusterVR.CreatorKit.Extensions"
+        "ClusterVR.CreatorKit.Extensions",
+        "ClusterVR.CreatorKit.ProductUgc"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

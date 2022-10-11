@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Item
@@ -9,5 +10,8 @@ namespace ClusterVR.CreatorKit.Item
         Transform Grip { get; }
         void OnGrab();
         void OnRelease();
+
+        event Action OnGrabbed;
+        event Action OnReleased;
     }
 }

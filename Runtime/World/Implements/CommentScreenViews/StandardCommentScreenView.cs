@@ -17,6 +17,10 @@ namespace ClusterVR.CreatorKit.World.Implements.CommentScreenViews
 
         void Awake()
         {
+            if (content == null)
+            {
+                return;
+            }
             for (var i = 0; i < content.transform.childCount; ++i)
             {
                 Destroy(content.transform.GetChild(i).gameObject);

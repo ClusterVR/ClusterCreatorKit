@@ -14,8 +14,13 @@ namespace VGltf.Unity
 {
     public sealed class IndexedResourceDict<K, V> : IDisposable where V : UnityEngine.Object
     {
-        readonly Dictionary<K, IndexedResource<V>> _dict = new Dictionary<K, IndexedResource<V>>();
+        readonly Dictionary<K, IndexedResource<V>> _dict;
         readonly MultiMap<string, IndexedResource<V>> _nameDict = new MultiMap<string, IndexedResource<V>>();
+
+        public IndexedResourceDict(IEqualityComparer<K> equalityComparer = default)
+        {
+            _dict = new Dictionary<K, IndexedResource<V>>(equalityComparer);
+        }
 
         public IndexedResource<V> Add(K k, int index, string name, V v)
         {

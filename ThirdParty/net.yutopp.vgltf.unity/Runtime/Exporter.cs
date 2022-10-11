@@ -44,6 +44,7 @@ namespace VGltf.Unity
             public CoordUtils CoordUtils { get; }
 
             public ResourceExporters Exporters { get; }
+            public SamplerExporter SamplerExporter { get; }
 
             public InnerContext(Config config)
             {
@@ -70,6 +71,8 @@ namespace VGltf.Unity
                     Textures = new TextureExporter(this),
                     Images = new ImageExporter(this),
                 };
+
+                SamplerExporter = new SamplerExporter(this);
             }
 
             void IDisposable.Dispose()

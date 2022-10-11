@@ -19,6 +19,8 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
             Physics.IgnoreLayerCollision(LayerName.Default, LayerName.IgnoreRaycast, true);
             Physics.IgnoreLayerCollision(LayerName.Default, LayerName.Water, true);
             Physics.IgnoreLayerCollision(LayerName.Default, LayerName.UI, true);
+            Physics.IgnoreLayerCollision(LayerName.Default, LayerName.Accessory, true);
+            Physics.IgnoreLayerCollision(LayerName.Default, LayerName.AccessoryPreview, true);
             Physics.IgnoreLayerCollision(LayerName.Default, LayerName.RidingItem, false);
             Physics.IgnoreLayerCollision(LayerName.Default, LayerName.InteractableItem, false);
             Physics.IgnoreLayerCollision(LayerName.Default, LayerName.GrabbingItem, false);
@@ -34,6 +36,8 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
             Physics.IgnoreLayerCollision(LayerName.TransparentFX, LayerName.IgnoreRaycast, true);
             Physics.IgnoreLayerCollision(LayerName.TransparentFX, LayerName.Water, true);
             Physics.IgnoreLayerCollision(LayerName.TransparentFX, LayerName.UI, true);
+            Physics.IgnoreLayerCollision(LayerName.TransparentFX, LayerName.Accessory, true);
+            Physics.IgnoreLayerCollision(LayerName.TransparentFX, LayerName.AccessoryPreview, true);
             Physics.IgnoreLayerCollision(LayerName.TransparentFX, LayerName.RidingItem, true);
             Physics.IgnoreLayerCollision(LayerName.TransparentFX, LayerName.InteractableItem, true);
             Physics.IgnoreLayerCollision(LayerName.TransparentFX, LayerName.GrabbingItem, true);
@@ -48,6 +52,8 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
             Physics.IgnoreLayerCollision(LayerName.IgnoreRaycast, LayerName.IgnoreRaycast, true);
             Physics.IgnoreLayerCollision(LayerName.IgnoreRaycast, LayerName.Water, true);
             Physics.IgnoreLayerCollision(LayerName.IgnoreRaycast, LayerName.UI, false);
+            Physics.IgnoreLayerCollision(LayerName.IgnoreRaycast, LayerName.Accessory, true);
+            Physics.IgnoreLayerCollision(LayerName.IgnoreRaycast, LayerName.AccessoryPreview, true);
             Physics.IgnoreLayerCollision(LayerName.IgnoreRaycast, LayerName.RidingItem, true);
             Physics.IgnoreLayerCollision(LayerName.IgnoreRaycast, LayerName.InteractableItem, true);
             Physics.IgnoreLayerCollision(LayerName.IgnoreRaycast, LayerName.GrabbingItem, true);
@@ -61,6 +67,8 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
 
             Physics.IgnoreLayerCollision(LayerName.Water, LayerName.Water, true);
             Physics.IgnoreLayerCollision(LayerName.Water, LayerName.UI, true);
+            Physics.IgnoreLayerCollision(LayerName.Water, LayerName.Accessory, true);
+            Physics.IgnoreLayerCollision(LayerName.Water, LayerName.AccessoryPreview, true);
             Physics.IgnoreLayerCollision(LayerName.Water, LayerName.RidingItem, true);
             Physics.IgnoreLayerCollision(LayerName.Water, LayerName.InteractableItem, true);
             Physics.IgnoreLayerCollision(LayerName.Water, LayerName.GrabbingItem, true);
@@ -73,6 +81,8 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
             Physics.IgnoreLayerCollision(LayerName.Water, LayerName.VenueLayer2, true);
 
             Physics.IgnoreLayerCollision(LayerName.UI, LayerName.UI, true);
+            Physics.IgnoreLayerCollision(LayerName.UI, LayerName.Accessory, true);
+            Physics.IgnoreLayerCollision(LayerName.UI, LayerName.AccessoryPreview, true);
             Physics.IgnoreLayerCollision(LayerName.UI, LayerName.RidingItem, true);
             Physics.IgnoreLayerCollision(LayerName.UI, LayerName.InteractableItem, true);
             Physics.IgnoreLayerCollision(LayerName.UI, LayerName.GrabbingItem, true);
@@ -83,6 +93,31 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
             Physics.IgnoreLayerCollision(LayerName.UI, LayerName.Performer, true);
             Physics.IgnoreLayerCollision(LayerName.UI, LayerName.Audience, true);
             Physics.IgnoreLayerCollision(LayerName.UI, LayerName.VenueLayer2, true);
+
+            Physics.IgnoreLayerCollision(LayerName.Accessory, LayerName.Accessory, true);
+            Physics.IgnoreLayerCollision(LayerName.Accessory, LayerName.AccessoryPreview, true);
+            Physics.IgnoreLayerCollision(LayerName.Accessory, LayerName.RidingItem, true);
+            Physics.IgnoreLayerCollision(LayerName.Accessory, LayerName.InteractableItem, true);
+            Physics.IgnoreLayerCollision(LayerName.Accessory, LayerName.GrabbingItem, true);
+            Physics.IgnoreLayerCollision(LayerName.Accessory, LayerName.VenueLayer0, true);
+            Physics.IgnoreLayerCollision(LayerName.Accessory, LayerName.VenueLayer1, true);
+            Physics.IgnoreLayerCollision(LayerName.Accessory, LayerName.PostProcessing, true);
+            Physics.IgnoreLayerCollision(LayerName.Accessory, LayerName.PerformerOnly, true);
+            Physics.IgnoreLayerCollision(LayerName.Accessory, LayerName.Performer, true);
+            Physics.IgnoreLayerCollision(LayerName.Accessory, LayerName.Audience, true);
+            Physics.IgnoreLayerCollision(LayerName.Accessory, LayerName.VenueLayer2, true);
+
+            Physics.IgnoreLayerCollision(LayerName.AccessoryPreview, LayerName.AccessoryPreview, true);
+            Physics.IgnoreLayerCollision(LayerName.AccessoryPreview, LayerName.RidingItem, true);
+            Physics.IgnoreLayerCollision(LayerName.AccessoryPreview, LayerName.InteractableItem, true);
+            Physics.IgnoreLayerCollision(LayerName.AccessoryPreview, LayerName.GrabbingItem, true);
+            Physics.IgnoreLayerCollision(LayerName.AccessoryPreview, LayerName.VenueLayer0, true);
+            Physics.IgnoreLayerCollision(LayerName.AccessoryPreview, LayerName.VenueLayer1, true);
+            Physics.IgnoreLayerCollision(LayerName.AccessoryPreview, LayerName.PostProcessing, true);
+            Physics.IgnoreLayerCollision(LayerName.AccessoryPreview, LayerName.PerformerOnly, true);
+            Physics.IgnoreLayerCollision(LayerName.AccessoryPreview, LayerName.Performer, true);
+            Physics.IgnoreLayerCollision(LayerName.AccessoryPreview, LayerName.Audience, true);
+            Physics.IgnoreLayerCollision(LayerName.AccessoryPreview, LayerName.VenueLayer2, true);
 
             Physics.IgnoreLayerCollision(LayerName.RidingItem, LayerName.RidingItem, true);
             Physics.IgnoreLayerCollision(LayerName.RidingItem, LayerName.InteractableItem, false);

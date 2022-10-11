@@ -20,6 +20,7 @@ namespace VGltf.Unity
         ImportingSetting ImportingSetting { get; }
 
         ResourceImporters Importers { get; }
+        SamplerApplier SamplerApplier { get; }
     }
 
     public sealed class ResourceImporters

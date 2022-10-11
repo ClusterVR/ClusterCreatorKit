@@ -5,7 +5,8 @@
         "Unity.net.yutopp.vgltf.unity",
         "ClusterVR.CreatorKit.Item.Implements",
         "ClusterVR.CreatorKit.World.Implements",
-        "ClusterVR.CreatorKit.Item"
+        "ClusterVR.CreatorKit.Item",
+        "ClusterVR.CreatorKit.Constants"
     ],
     "includePlatforms": [
         "Editor"

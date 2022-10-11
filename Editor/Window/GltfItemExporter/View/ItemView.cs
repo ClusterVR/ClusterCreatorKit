@@ -6,6 +6,7 @@ using ClusterVR.CreatorKit.Editor.Custom;
 using ClusterVR.CreatorKit.Editor.ItemExporter;
 using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
 using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.ItemExporter;
 using ClusterVR.CreatorKit.ItemExporter.ExporterHooks;
 using UnityEditor;
 using UnityEngine;
@@ -144,8 +145,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 
         public async Task<byte[]> BuildZippedItemBinary()
         {
-            var exporter = new CreatorKit.ItemExporter.ItemExporter();
-            var glbBinary = await exporter.Export(gltfContainer);
+            var glbBinary = await gltfContainer.ExportAsync();
             var thumbnailBinary = thumbnail.EncodeToPNG();
 
             var builder = new ItemTemplateBuilder();
@@ -172,15 +172,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             validationMessages.AddRange(buildGlbContainerValidationMessages);
             if (buildGlbContainerValidationMessages.All(message => message.Type != ValidationMessage.MessageType.Error))
             {
-                using (var exporter = new VGltf.Unity.Exporter())
-                {
-                    exporter.AddHook(new ItemExporterHook());
-                    exporter.Context.Exporters.Nodes.AddHook(new ItemNodeExporterHook());
-
-                    exporter.ExportGameObjectAsScene(Item);
-
-                    container = exporter.IntoGlbContainer();
-                }
+                container = CreatorKit.ItemExporter.ItemExporter.ExportAsGltfContainer(Item);
                 validationMessages.AddRange(GltfValidator.Validate(container));
             }
 

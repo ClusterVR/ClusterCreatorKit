@@ -43,9 +43,9 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
         RenderTexture rightRenderTexture;
         bool isRenderPrepared;
 
-        protected virtual LayerMask CullingMask { get; } = 704478231;
+        protected virtual LayerMask CullingMask { get; } = 704478423;
 
-        static readonly LayerMask AvatarOnlyCullingMask = 25232384;
+        static readonly LayerMask AvatarOnlyCullingMask = 25232576;
 
         protected virtual bool UseLightweightStereo =>
 #if CLUSTER_QUEST

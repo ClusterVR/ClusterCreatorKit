@@ -17,6 +17,7 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
 
         public override IItem Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
         public override bool IsContactable => true;
+        public override bool RequireOwnership => true;
         public event TriggerEventHandler TriggerEvent;
         IEnumerable<TriggerParam> ITrigger.TriggerParams => triggers.Select(t => t.Convert());
         TriggerParam[] triggersCache;

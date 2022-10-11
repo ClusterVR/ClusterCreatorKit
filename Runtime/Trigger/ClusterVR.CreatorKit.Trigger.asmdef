@@ -2,7 +2,8 @@
     "name": "ClusterVR.CreatorKit.Trigger",
     "references": [
         "ClusterVR.CreatorKit.Item",
-        "ClusterVR.CreatorKit"
+        "ClusterVR.CreatorKit",
+        "ClusterVR.CreatorKit.ProductUgc"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

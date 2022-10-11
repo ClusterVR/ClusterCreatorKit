@@ -147,7 +147,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                     uploadRequestId,
                     request =>
                     {
-                        Debug.Log($"success win asset upload, uploaded url : {request.url}");
+                        Debug.Log($"success win asset upload, uploaded url : {request.uploadUrl}");
                         winAssetUploadProcess = true;
                         uploadStatus[UploadState.Windows] = true;
                     },
@@ -169,7 +169,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                     uploadRequestId,
                     request =>
                     {
-                        Debug.Log($"success mac asset upload, uploaded url : {request.url}");
+                        Debug.Log($"success mac asset upload, uploaded url : {request.uploadUrl}");
                         macAssetUploadProcess = true;
                         uploadStatus[UploadState.Mac] = true;
                     },
@@ -191,7 +191,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                     uploadRequestId,
                     request =>
                     {
-                        Debug.Log($"success android asset upload, uploaded url : {request.url}");
+                        Debug.Log($"success android asset upload, uploaded url : {request.uploadUrl}");
                         androidAssetUploadProcess = true;
                         uploadStatus[UploadState.Android] = true;
                     },
@@ -213,7 +213,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                     uploadRequestId,
                     request =>
                     {
-                        Debug.Log($"success ios asset upload, uploaded url : {request.url}");
+                        Debug.Log($"success ios asset upload, uploaded url : {request.uploadUrl}");
                         iosAssetUploadProcess = true;
                         uploadStatus[UploadState.IOS] = true;
                     },

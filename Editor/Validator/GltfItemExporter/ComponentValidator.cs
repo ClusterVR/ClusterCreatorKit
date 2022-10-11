@@ -34,7 +34,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             typeof(Item.Implements.Item),
             typeof(GrabbableItem),
             typeof(MovableItem),
-            typeof(RidableItem)
+            typeof(RidableItem),
+            typeof(ScriptableItem)
         };
 
         static readonly Type[] BehaviourWhiteList =
@@ -46,6 +47,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
         {
             var validationMessages = new List<ValidationMessage>();
             validationMessages.AddRange(ValidateItem(gameObject));
+            validationMessages.AddRange(ValidateScriptableItem(gameObject));
 
             foreach (var behaviour in gameObject.GetComponentsInChildren<Behaviour>(true))
             {
@@ -118,6 +120,19 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             }
 
             return validationMessages;
+        }
+
+        static IEnumerable<ValidationMessage> ValidateScriptableItem(GameObject gameObject)
+        {
+            var scriptableItem = gameObject.GetComponent<ScriptableItem>();
+            if (scriptableItem == null)
+            {
+                return Enumerable.Empty<ValidationMessage>();
+            }
+
+            return scriptableItem.IsValid()
+                ? Enumerable.Empty<ValidationMessage>()
+                : new[] { new ValidationMessage($"{gameObject.name}のScriptableItemのsource codeが長すぎます｡現在：{scriptableItem.GetByteCount()}bytes, 最大値：{Constants.Constants.ScriptableItemMaxSourceCodeByteCount}bytes", ValidationMessage.MessageType.Error) };
         }
 
         static IEnumerable<ValidationMessage> ValidateBehaviour(Behaviour behaviour, bool isRoot)

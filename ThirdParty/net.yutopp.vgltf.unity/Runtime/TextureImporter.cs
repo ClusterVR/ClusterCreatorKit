@@ -62,8 +62,7 @@ namespace VGltf.Unity
                 tex.name = gltfTex.Name;
             }
 
-            // When texture.sampler is undefined, a sampler with repeat wrapping (in both directions) and auto filtering MUST be used.
-            // NOTE: Not implemented currently
+            Context.SamplerApplier.ApplySampler(gltfTex.Sampler, tex);
 
             return tex;
         }

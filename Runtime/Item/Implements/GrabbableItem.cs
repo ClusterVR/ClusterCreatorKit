@@ -31,6 +31,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         bool IGrabbableItem.IsDestroyed => this == null;
         public override bool IsContactable => true;
+        public override bool RequireOwnership => true;
 
         public Transform Grip => grip;
 

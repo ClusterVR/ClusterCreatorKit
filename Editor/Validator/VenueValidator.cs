@@ -1,6 +1,7 @@
 using System.Linq;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Gimmick;
+using ClusterVR.CreatorKit.Item.Implements;
 using ClusterVR.CreatorKit.Trigger;
 using ClusterVR.CreatorKit.Trigger.Implements;
 using ClusterVR.CreatorKit.World;
@@ -77,6 +78,16 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                             .First().gameObject))
                     .Distinct()
                     .ToArray();
+                return false;
+            }
+
+            var scriptableItems = allRootObjects.SelectMany(x =>
+                x.GetComponentsInChildren<ClusterVR.CreatorKit.Item.Implements.ScriptableItem>(true));
+            var invalidScriptableItems = scriptableItems.Where(s => !s.IsValid()).ToArray();
+            if (invalidScriptableItems.Any())
+            {
+                errorMessage = $"{nameof(ScriptableItem)}のsource codeが長すぎます｡最大値: {Constants.Constants.ScriptableItemMaxSourceCodeByteCount}bytes";
+                invalidObjects = invalidScriptableItems.Select(x => x.gameObject).ToArray();
                 return false;
             }
 

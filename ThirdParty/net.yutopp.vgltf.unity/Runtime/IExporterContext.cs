@@ -18,6 +18,7 @@ namespace VGltf.Unity
         CoordUtils CoordUtils { get; }
 
         ResourceExporters Exporters { get; }
+        SamplerExporter SamplerExporter { get; }
     }
 
     public sealed class ResourceExporters

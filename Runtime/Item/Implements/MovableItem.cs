@@ -42,8 +42,8 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         bool IMovableItem.IsDestroyed => this == null;
 
-        Vector3 IMovableItem.Position => Rigidbody.position;
-        Quaternion IMovableItem.Rotation => Rigidbody.rotation;
+        Vector3 IMovableItem.Position => gameObject.activeInHierarchy ? Rigidbody.position : transform.position;
+        Quaternion IMovableItem.Rotation => gameObject.activeInHierarchy ? Rigidbody.rotation : transform.rotation;
         public override Vector3 Velocity => Rigidbody.velocity;
         public override Vector3 AngularVelocity => Rigidbody.angularVelocity;
 
@@ -74,6 +74,10 @@ namespace ClusterVR.CreatorKit.Item.Implements
             {
                 return;
             }
+            if (rb == null)
+            {
+                rb = GetComponent<Rigidbody>();
+            }
             initialPosition = transform.position;
             initialRotation = transform.rotation;
             initialIsKinematic = rb.isKinematic;
@@ -83,11 +87,6 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         void Start()
         {
-            if (rb == null)
-            {
-                rb = GetComponent<Rigidbody>();
-            }
-
             CacheInitialValue();
         }
 
@@ -140,6 +139,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
             {
                 return;
             }
+            CacheInitialValue();
             rb.isKinematic = initialIsKinematic;
             rb.collisionDetectionMode = initialCollisionDetectionMode;
             rb.velocity = (targetPosition - currentPosition) / interpolateDurationSeconds;
@@ -166,6 +166,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         public void Respawn()
         {
+            CacheInitialValue();
             WarpTo(initialPosition, initialRotation);
         }
 
@@ -175,6 +176,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
             {
                 return;
             }
+            CacheInitialValue();
             transform.position = position;
             transform.rotation = rotation;
             rb.velocity = Vector3.zero;

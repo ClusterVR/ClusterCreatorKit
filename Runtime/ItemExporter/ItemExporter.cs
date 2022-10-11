@@ -1,4 +1,3 @@
-using System.IO;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.ItemExporter.ExporterHooks;
 using UnityEngine;
@@ -8,18 +7,21 @@ namespace ClusterVR.CreatorKit.ItemExporter
 {
     public sealed class ItemExporter
     {
-        public Task<byte[]> Export(GltfContainer gltfContainer)
+        public static GltfContainer ExportAsGltfContainer(GameObject go)
         {
-            return Task.Run(() =>
-            {
-                using (var s = new MemoryStream())
-                {
-                    VGltf.Glb.Writer.WriteFromContainer(s, gltfContainer);
-                    s.Flush();
+            using var exporter = new VGltf.Unity.Exporter();
+            exporter.AddHook(new ItemExporterHook());
+            exporter.Context.Exporters.Nodes.AddHook(new ItemNodeExporterHook());
 
-                    return s.ToArray();
-                }
-            });
+            exporter.ExportGameObjectAsScene(go);
+
+            return exporter.IntoGlbContainer();
+        }
+
+        public static Task<byte[]> ExportAsync(GameObject go)
+        {
+            var gltfContainer = ExportAsGltfContainer(go);
+            return gltfContainer.ExportAsync();
         }
     }
 }

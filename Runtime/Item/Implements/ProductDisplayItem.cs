@@ -31,6 +31,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         bool isInteractable;
         public override bool IsContactable => isInteractable;
+        public override bool RequireOwnership => false;
         ProductId IProductDisplayItem.ProductId => productId;
         bool IProductDisplayItem.NeedsProductSample => productDisplayRoot != null;
         public event Action OnInvoked;

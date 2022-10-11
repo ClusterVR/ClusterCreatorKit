@@ -32,6 +32,10 @@ namespace ClusterVR.CreatorKit.Item.Implements
             {
                 return;
             }
+            if (characterController == null)
+            {
+                characterController = GetComponent<CharacterController>();
+            }
             initialPosition = transform.position;
             initialRotation = transform.rotation;
             isInitialized = true;
@@ -39,10 +43,6 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         void Start()
         {
-            if (characterController == null)
-            {
-                characterController = GetComponent<CharacterController>();
-            }
             CacheInitialValue();
         }
 
@@ -93,6 +93,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
                 return;
             }
 
+            CacheInitialValue();
             transform.SetPositionAndRotation(position, rotation);
             velocity = Vector3.zero;
             angularVelocity = Vector3.zero;

@@ -51,7 +51,8 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 },
                 MovableItem = ExtractMovableItemProto(go),
                 RidableItem = ExtractRidableItemProto(exporter, go),
-                GrabbableItem = ExtractGrabbableItemProto(exporter, go)
+                GrabbableItem = ExtractGrabbableItemProto(exporter, go),
+                ScriptableItem = ExtractScriptableItemProto(go)
             };
 
             var extension = new GltfExtensions.ClusterItem
@@ -143,6 +144,19 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 grabbableItemProto.HasGrip = true;
             }
             return grabbableItemProto;
+        }
+
+        Proto.ScriptableItem ExtractScriptableItemProto(GameObject go)
+        {
+            var scriptableItemComponent = go.GetComponent<IScriptableItem>();
+            if (scriptableItemComponent == null)
+            {
+                return null;
+            }
+            return new ScriptableItem
+            {
+                SourceCode = scriptableItemComponent.GetSourceCode()
+            };
         }
 
         bool TryGetNodeIndex(Exporter exporter, Transform targetTransform, out uint targetIndex)

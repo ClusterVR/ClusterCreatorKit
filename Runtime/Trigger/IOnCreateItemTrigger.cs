@@ -2,7 +2,7 @@
 
 namespace ClusterVR.CreatorKit.Trigger
 {
-    public interface IOnCreateItemTrigger : IItemTrigger
+    public interface IOnCreateItemTrigger
     {
         void Invoke();
     }

@@ -1,7 +1,7 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace ClusterVR.CreatorKit.Editor.ItemExporter
+namespace ClusterVR.CreatorKit.ItemExporter
 {
     public sealed class ItemTemplateBuilder
     {
