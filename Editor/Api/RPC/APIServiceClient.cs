@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ClusterVR.CreatorKit.Editor.Api.AccessoryTemplate;
 using ClusterVR.CreatorKit.Editor.Api.Analytics;
 using ClusterVR.CreatorKit.Editor.Api.ItemTemplate;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
@@ -87,7 +88,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             return ApiClient.PostAnalyticsEvent(payload, accessToken, $"{Constants.ApiBaseUrl}/v1/analytics/event",
                 cancellationToken);
         }
-        
+
         public static Task<UploadItemTemplatePoliciesResponse> PostItemTemplatePolicies(
             UploadItemTemplatePoliciesPayload payload,
             string accessToken, Func<string, UploadItemTemplatePoliciesResponse> jsonDeserializer,
@@ -95,6 +96,16 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         {
             return ApiClient.Post(payload, accessToken,
                 $"{Constants.ApiBaseUrl}/v1/upload/item_template/policies", jsonDeserializer,
+                cancellationToken);
+        }
+
+        public static Task<UploadAccessoryTemplatePoliciesResponse> PostAccessoryTemplatePolicies(
+            UploadAccessoryTemplatePoliciesPayload payload,
+            string accessToken, Func<string, UploadAccessoryTemplatePoliciesResponse> jsonDeserializer,
+            CancellationToken cancellationToken)
+        {
+            return ApiClient.Post(payload, accessToken,
+                $"{Constants.ApiBaseUrl}/v1/upload/accessory_template/policies", jsonDeserializer,
                 cancellationToken);
         }
     }

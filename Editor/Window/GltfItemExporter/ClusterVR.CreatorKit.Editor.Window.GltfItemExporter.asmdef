@@ -8,7 +8,9 @@
         "ClusterVR.CreatorKit.Editor.Api",
         "ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter",
         "ClusterVR.CreatorKit.Editor.ItemExporter",
-        "ClusterVR.CreatorKit.ItemExporter"
+        "ClusterVR.CreatorKit.ItemExporter",
+        "ClusterVR.CreatorKit.AccessoryExporter",
+        "ClusterVR.CreatorKit.Editor.AccessoryExporter"
     ],
     "includePlatforms": [
         "Editor"

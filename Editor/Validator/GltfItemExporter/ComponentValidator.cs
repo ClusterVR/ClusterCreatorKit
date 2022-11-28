@@ -1,33 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClusterVR.CreatorKit.Editor.Utils;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
 using ClusterVR.CreatorKit.World.Implements.MainScreenViews;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
 
 namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 {
     public static class ComponentValidator
     {
         const int ItemNameLengthLimit = 64;
-
-        static readonly Vector3 BoundsSizeLimit = new Vector3(5, 5, 5);
-        static readonly Vector3 BoundsCenterLimit = new Vector3(0, 2, 0);
-        static readonly Bounds MaxBounds = new Bounds(BoundsCenterLimit, BoundsSizeLimit);
-
-        static readonly Vector3Int ItemSizeLimit = new Vector3Int(4, 4, 4);
-
-        static readonly string[] ShaderNameWhiteList =
-        {
-            "Standard",
-            "Unlit/Texture",
-            "ClusterVR/InternalSDK/MainScreen",
-            "ClusterVR/UnlitNonTiledWithBackgroundColor"
-        };
 
         static readonly Type[] ItemComponentWhiteList =
         {
@@ -38,30 +22,37 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             typeof(ScriptableItem)
         };
 
+        static readonly Type[] AccessoryRootComponentWhiteList =
+        {
+            typeof(Item.Implements.Item),
+            typeof(AccessoryItem)
+        };
+        static readonly Type[] AccessoryComponentWhiteList =
+        {
+            typeof(Transform),
+            typeof(MeshFilter),
+            typeof(MeshRenderer),
+        };
+
         static readonly Type[] BehaviourWhiteList =
         {
             typeof(StandardMainScreenView),
         };
 
-        public static IEnumerable<ValidationMessage> Validate(GameObject gameObject)
+        internal static IEnumerable<ValidationMessage> ValidateTransform(GameObject gameObject)
         {
-            var validationMessages = new List<ValidationMessage>();
-            validationMessages.AddRange(ValidateItem(gameObject));
-            validationMessages.AddRange(ValidateScriptableItem(gameObject));
-
-            foreach (var behaviour in gameObject.GetComponentsInChildren<Behaviour>(true))
+            var transformScale = gameObject.transform.localScale;
+            if (transformScale.x <= 0 || transformScale.y <= 0 || transformScale.z <= 0)
             {
-                var isRoot = behaviour.gameObject == gameObject;
-                validationMessages.AddRange(ValidateBehaviour(behaviour, isRoot));
+                return new[] { new ValidationMessage(
+                    $"{gameObject.name}のScaleは0より大きい値を入力してください。現在：{transformScale}",
+                    ValidationMessage.MessageType.Error) };
             }
 
-            validationMessages.AddRange(ValidateBounds(gameObject));
-            validationMessages.AddRange(ValidateShader(gameObject));
-
-            return validationMessages;
+            return Enumerable.Empty<ValidationMessage>();
         }
 
-        static IEnumerable<ValidationMessage> ValidateItem(GameObject gameObject)
+        internal static IEnumerable<ValidationMessage> ValidateItem(GameObject gameObject, Vector3 itemSizeLimit, bool allowZeroSize, bool checkBoundSizeGap)
         {
             var validationMessages = new List<ValidationMessage>();
 
@@ -87,42 +78,50 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 
 
             var size = item.Size;
-            if (size.x > ItemSizeLimit.x || size.y > ItemSizeLimit.y || size.z > ItemSizeLimit.z)
+            if (size.x > itemSizeLimit.x || size.y > itemSizeLimit.y || size.z > itemSizeLimit.z)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{gameObject.name}のItemSizeが規定値以上です。現在：{size}, 規定値：{ItemSizeLimit}",
+                    $"{gameObject.name}のItemSizeが規定値以上です。現在：{size}, 規定値：{itemSizeLimit}",
                     ValidationMessage.MessageType.Error));
             }
+
             if (size.x < 0 || size.y < 0 || size.z < 0)
             {
                 validationMessages.Add(new ValidationMessage(
                     $"{gameObject.name}のItemSizeは0以上の値を入力してください。現在：{size}",
                     ValidationMessage.MessageType.Error));
             }
-            if (size == Vector3Int.zero)
+
+            if (!allowZeroSize && size == Vector3Int.zero)
             {
                 validationMessages.Add(new ValidationMessage(
                     $"{gameObject.name}のItemSizeの少なくとも1つの値は1以上にしてください。現在：{size}",
                     ValidationMessage.MessageType.Error));
             }
 
-            var bounds = CalcLocalBounds(item.gameObject);
-            var boundSize = bounds.size;
-            var sizeDiff = size - boundSize;
-            const float sizeTolerance = 1f;
-
-            if (Mathf.Abs(sizeDiff.x) >= sizeTolerance || Mathf.Abs(sizeDiff.y) >= sizeTolerance || Mathf.Abs(sizeDiff.z) >= sizeTolerance)
+            if (checkBoundSizeGap)
             {
-                var defaultSize = new Vector3Int(Mathf.RoundToInt(boundSize.x), Mathf.RoundToInt(boundSize.y), Mathf.RoundToInt(boundSize.z));
-                validationMessages.Add(new ValidationMessage(
-                    $"{gameObject.name}のItemSizeが見た目の大きさと大きく異なります。現在：{size}, 自動計算値：{defaultSize}",
-                    ValidationMessage.MessageType.Warning));
+                BoundsCalculator.CalcLocalBounds(item.gameObject, out var bounds, out _);
+                if (bounds.HasValue)
+                {
+                    var boundSize = bounds.Value.size;
+                    var sizeDiff = size - boundSize;
+                    const float sizeTolerance = 1f;
+
+                    if (Mathf.Abs(sizeDiff.x) >= sizeTolerance || Mathf.Abs(sizeDiff.y) >= sizeTolerance || Mathf.Abs(sizeDiff.z) >= sizeTolerance)
+                    {
+                        var defaultSize = new Vector3Int(Mathf.RoundToInt(boundSize.x), Mathf.RoundToInt(boundSize.y), Mathf.RoundToInt(boundSize.z));
+                        validationMessages.Add(new ValidationMessage(
+                            $"{gameObject.name}のItemSizeが見た目の大きさと大きく異なります。現在：{size}, 自動計算値：{defaultSize}",
+                            ValidationMessage.MessageType.Warning));
+                    }
+                }
             }
 
             return validationMessages;
         }
 
-        static IEnumerable<ValidationMessage> ValidateScriptableItem(GameObject gameObject)
+        internal static IEnumerable<ValidationMessage> ValidateScriptableItem(GameObject gameObject)
         {
             var scriptableItem = gameObject.GetComponent<ScriptableItem>();
             if (scriptableItem == null)
@@ -135,7 +134,32 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 : new[] { new ValidationMessage($"{gameObject.name}のScriptableItemのsource codeが長すぎます｡現在：{scriptableItem.GetByteCount()}bytes, 最大値：{Constants.Constants.ScriptableItemMaxSourceCodeByteCount}bytes", ValidationMessage.MessageType.Error) };
         }
 
-        static IEnumerable<ValidationMessage> ValidateBehaviour(Behaviour behaviour, bool isRoot)
+        internal static IEnumerable<ValidationMessage> ValidateAttachableItem(GameObject gameObject, Vector3 offsetPositionLimit)
+        {
+            var validationMessages = new List<ValidationMessage>();
+
+            if (!gameObject.TryGetComponent<IAccessoryItem>(out var accessoryItem))
+            {
+                validationMessages.Add(new ValidationMessage($"{gameObject.name}に{nameof(AccessoryItem)}コンポーネントが設定されていません。",
+                    ValidationMessage.MessageType.Error));
+                return validationMessages;
+            }
+
+            var offsetPos = accessoryItem.DefaultAttachOffsetPosition;
+            if (offsetPos.x < -(offsetPositionLimit.x) || offsetPos.x > (offsetPositionLimit.x) ||
+                offsetPos.y < -(offsetPositionLimit.y) || offsetPos.y > (offsetPositionLimit.y) ||
+                offsetPos.z < -(offsetPositionLimit.z) || offsetPos.z > (offsetPositionLimit.z))
+            {
+                validationMessages.Add(new ValidationMessage(
+                    $"Offset Positionが規定範囲外です。{offsetPos.ToString("0.0")}、" +
+                    $"規定範囲: max: {(offsetPositionLimit.ToString("0.0"))},min: {(-offsetPositionLimit).ToString("0.0")}",
+                    ValidationMessage.MessageType.Error));
+            }
+
+            return validationMessages;
+        }
+
+        internal static IEnumerable<ValidationMessage> ValidateBehaviour(Behaviour behaviour, bool isRoot)
         {
             var validationMessages = new List<ValidationMessage>();
 
@@ -162,37 +186,39 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 return validationMessages;
             }
 
-            var attributes = Attribute.GetCustomAttributes(behaviour.GetType(), typeof(RequireComponent))
-                .Cast<RequireComponent>();
-            foreach (var requireComponent in attributes)
-            {
-                validationMessages.AddRange(ValidateRequireComponent(behaviour, requireComponent.m_Type0));
-                validationMessages.AddRange(ValidateRequireComponent(behaviour, requireComponent.m_Type1));
-                validationMessages.AddRange(ValidateRequireComponent(behaviour, requireComponent.m_Type2));
-            }
             return validationMessages;
         }
 
-        static IEnumerable<ValidationMessage> ValidateRequireComponent(Component component, Type requireType)
+        internal static IEnumerable<ValidationMessage> ValidateAccessoryComponent(Component behaviour, bool isRoot)
         {
             var validationMessages = new List<ValidationMessage>();
-            if (requireType == null)
+
+            var validComponentList = AccessoryRootComponentWhiteList.Concat(AccessoryComponentWhiteList);
+            var isInvalidComponent = !validComponentList.Contains(behaviour.GetType());
+
+            if (isInvalidComponent)
             {
+                validationMessages.Add(new ValidationMessage(
+                    $"{behaviour.gameObject.name}の{behaviour.GetType()}は対応していません。",
+                    ValidationMessage.MessageType.Error));
                 return validationMessages;
             }
 
-            var gameObject = component.gameObject;
-            if (!gameObject.TryGetComponent(requireType, out _))
+            var isChildAccessoryComponent =
+                !isRoot && AccessoryRootComponentWhiteList.Contains(behaviour.GetType());
+
+            if (isChildAccessoryComponent)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{gameObject.name}の{component.GetType()}に必要なコンポーネント{requireType}が設定されていません。",
-                    ValidationMessage.MessageType.Error));
+                    $"{behaviour.gameObject.name}の{behaviour.GetType()}は無効化されます。RootのGameObjectに設定してください。",
+                    ValidationMessage.MessageType.Warning));
+                return validationMessages;
             }
 
             return validationMessages;
         }
 
-        static IEnumerable<ValidationMessage> ValidateShader(GameObject gameObject)
+        internal static IEnumerable<ValidationMessage> ValidateShader(GameObject gameObject, string[] shaderNameWhiteList, bool fallbackToStandard)
         {
             var validationMessages = new List<ValidationMessage>();
 
@@ -201,59 +227,65 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 foreach (var material in renderer.sharedMaterials)
                 {
                     var shader = material.shader;
-                    if (ShaderNameWhiteList.Contains(shader.name))
+                    if (shaderNameWhiteList.Contains(shader.name))
                     {
                         continue;
                     }
-                    validationMessages.Add(new ValidationMessage(
-                        $"マテリアル\"{material.name}\"のShader \"{shader.name}\" は未対応です。Standard Shaderに変換されます。",
-                        ValidationMessage.MessageType.Warning));
+                    if (fallbackToStandard)
+                    {
+                        validationMessages.Add(new ValidationMessage(
+                            $"マテリアル\"{material.name}\"のShader \"{shader.name}\" は未対応です。Standard Shaderに変換されます。",
+                            ValidationMessage.MessageType.Warning));
+                    }
+                    else
+                    {
+                        var supportShaderListStr = string.Join(", ", shaderNameWhiteList);
+                        validationMessages.Add(new ValidationMessage(
+                            $"マテリアル\"{material.name}\"のShader \"{shader.name}\" は未対応です。対応Shader: {supportShaderListStr}",
+                            ValidationMessage.MessageType.Error));
+                    }
                 }
             }
             return validationMessages;
         }
 
-        static IEnumerable<ValidationMessage> ValidateBounds(GameObject gameObject)
+        internal static IEnumerable<ValidationMessage> ValidateBounds(GameObject gameObject, Vector3 boundsCenterLimit, Vector3 boundsSizeLimit)
         {
-            var validationMessages = new List<ValidationMessage>();
+            var maxBounds = new Bounds(boundsCenterLimit, boundsSizeLimit);
 
-            var bounds = CalcLocalBounds(gameObject);
-            if (!MaxBounds.Contains(bounds.max) || !MaxBounds.Contains(bounds.min))
+            var validationMessages = new List<ValidationMessage>();
+            BoundsCalculator.CalcLocalBounds(gameObject, out var rendererBounds, out var colliderBounds);
+            if (rendererBounds.HasValue)
             {
-                validationMessages.Add(new ValidationMessage(
-                    $"RendererのBoundsが推奨範囲外です。現在: max: {bounds.max},min: {bounds.min}, 推奨: max: {MaxBounds.max},min {MaxBounds.min}",
-                    ValidationMessage.MessageType.Warning));
+                CheckBoundsRecommendation("Renderer", maxBounds, rendererBounds.Value, validationMessages);
+                ValidateBoundsSize("Renderer", boundsSizeLimit, rendererBounds.Value, validationMessages);
             }
-            var size = bounds.max - bounds.min;
-            if (size.x > BoundsSizeLimit.x || size.y > BoundsSizeLimit.y || size.z > BoundsSizeLimit.z)
+            if (colliderBounds.HasValue)
             {
-                validationMessages.Add(new ValidationMessage(
-                    $"RendererのBoundsSizeが規定値以上です。現在：{size}, 規定値：{BoundsSizeLimit}",
-                    ValidationMessage.MessageType.Error));
+                CheckBoundsRecommendation("Collider", maxBounds, colliderBounds.Value, validationMessages);
+                ValidateBoundsSize("Collider", boundsSizeLimit, colliderBounds.Value, validationMessages);
             }
             return validationMessages;
         }
 
-        static Bounds CalcLocalBounds(GameObject gameObject)
+        static void CheckBoundsRecommendation(string name, Bounds maxBounds, Bounds bounds, List<ValidationMessage> validationMessages)
         {
-            var previewScene = EditorSceneManager.NewPreviewScene();
-            try
+            if (!maxBounds.Contains(bounds.max) || !maxBounds.Contains(bounds.min))
             {
-                var go = Object.Instantiate(gameObject);
-                SceneManager.MoveGameObjectToScene(go, previewScene);
-                go.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-                var bounds = go.GetComponentsInChildren<Renderer>(true)
-                    .Select(r => r.bounds)
-                    .Aggregate((result, b) =>
-                    {
-                        result.Encapsulate(b);
-                        return result;
-                    });
-                return bounds;
+                validationMessages.Add(new ValidationMessage(
+                    $"{name}のBoundsが推奨範囲外です。現在: max: {bounds.max},min: {bounds.min}, 推奨: max: {maxBounds.max},min {maxBounds.min}",
+                    ValidationMessage.MessageType.Warning));
             }
-            finally
+        }
+
+        static void ValidateBoundsSize(string name, Vector3 boundsSizeLimit, Bounds bounds, List<ValidationMessage> validationMessages)
+        {
+            var size = bounds.max - bounds.min;
+            if (size.x > boundsSizeLimit.x || size.y > boundsSizeLimit.y || size.z > boundsSizeLimit.z)
             {
-                EditorSceneManager.ClosePreviewScene(previewScene);
+                validationMessages.Add(new ValidationMessage(
+                    $"{name}のBoundsSizeが規定値以上です。現在：{size}, 規定値：{boundsSizeLimit}",
+                    ValidationMessage.MessageType.Error));
             }
         }
     }

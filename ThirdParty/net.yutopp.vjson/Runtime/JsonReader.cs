@@ -6,6 +6,7 @@
 //
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -340,10 +341,10 @@ namespace VJson
             var span = CommitBuffer();
             if (isFloat)
             {
-                var v = double.Parse(span); // TODO: Fix for large numbers
+                var v = double.Parse(span, CultureInfo.InvariantCulture); // TODO: Fix for large numbers
                 return new FloatNode(v);
             } else {
-                var v = long.Parse(span);   // TODO: Fix for large numbers
+                var v = long.Parse(span, CultureInfo.InvariantCulture);   // TODO: Fix for large numbers
                 return new IntegerNode(v);
             }
         }

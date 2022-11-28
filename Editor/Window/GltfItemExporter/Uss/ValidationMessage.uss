@@ -6,3 +6,13 @@
 Label{
     white-space: normal;
 }
+
+#warning-icon{
+    min-width: 16px;
+    min-height: 16px;
+    width: 16px;
+    height: 16px;
+    margin-right: 3px;
+    align-self: flex-start;
+    -unity-background-scale-mode: scale-to-fit;
+}

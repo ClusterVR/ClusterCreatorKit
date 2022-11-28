@@ -6,7 +6,7 @@
         xsi:noNamespaceSchemaLocation="/UIElementsSchema/UIElements.xsd"
 >
     <engine:VisualElement class="horizontal message-container">
-        <engine:Image name="warning-icon"/>
+        <engine:Image name="warning-icon" class="warning-icon-image"/>
         <engine:Label name="validation-message"/>
     </engine:VisualElement>
 </engine:UXML>

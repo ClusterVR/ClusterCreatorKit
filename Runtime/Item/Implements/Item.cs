@@ -31,6 +31,11 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         ManipulationState manipulationState;
 
+        Transform cachedTransform;
+        Transform CachedTransform => cachedTransform ??= transform;
+        Vector3? defaultScale;
+        Vector3 DefaultScale => defaultScale ??= CachedTransform.localScale;
+
         GameObject IItem.gameObject => this == null ? null : gameObject;
 
         IMovableItem movableItem;
@@ -69,7 +74,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
                 }
                 else
                 {
-                    return transform.position;
+                    return CachedTransform.position;
                 }
             }
         }
@@ -85,7 +90,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
                 }
                 else
                 {
-                    return transform.rotation;
+                    return CachedTransform.rotation;
                 }
             }
         }
@@ -101,8 +106,18 @@ namespace ClusterVR.CreatorKit.Item.Implements
             }
             else
             {
-                transform.SetPositionAndRotation(position, rotation);
+                CachedTransform.SetPositionAndRotation(position, rotation);
             }
+        }
+
+        void IItem.SetRawScale(Vector3 scale)
+        {
+            CachedTransform.localScale = scale;
+        }
+
+        void IItem.SetNormalizedScale(Vector3 scale)
+        {
+            CachedTransform.localScale = Vector3.Scale(scale, DefaultScale);
         }
 
         void IItem.EnablePhysics()

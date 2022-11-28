@@ -1,9 +1,7 @@
-using System.Linq;
+using ClusterVR.CreatorKit.Editor.Utils;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
@@ -37,9 +35,16 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 }
 
                 serializedObject.Update();
-                var size = serializedObject.FindProperty("size");
-                size.vector3IntValue = CalcDefaultSize(item);
-                serializedObject.ApplyModifiedProperties();
+                if (CalcDefaultSize(item, out var defaultSize))
+                {
+                    var size = serializedObject.FindProperty("size");
+                    size.vector3IntValue = defaultSize;
+                    serializedObject.ApplyModifiedProperties();
+                }
+                else
+                {
+                    EditorUtility.DisplayDialog(SetDefaultSizeText, "ItemのSizeを自動設定するにはRendererが必要です", "OK");
+                }
             };
 
             container.Add(setDefaultSizeButton);
@@ -47,28 +52,19 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             return container;
         }
 
-        Vector3Int CalcDefaultSize(Item.Implements.Item item)
+        bool CalcDefaultSize(Item.Implements.Item item, out Vector3Int defaultSize)
         {
-            var gameObject = item.gameObject;
-            var previewScene = EditorSceneManager.NewPreviewScene();
-            try
+            BoundsCalculator.CalcLocalBounds(item.gameObject, out var bounds, out _);
+            if (bounds.HasValue)
             {
-                var go = Instantiate(gameObject);
-                SceneManager.MoveGameObjectToScene(go, previewScene);
-                go.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-                var bounds = go.GetComponentsInChildren<Renderer>(true)
-                    .Select(r => r.bounds)
-                    .Aggregate((result, b) =>
-                    {
-                        result.Encapsulate(b);
-                        return result;
-                    });
-                var size = bounds.max - bounds.min;
-                return new Vector3Int(Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y), Mathf.RoundToInt(size.z));
+                var size = bounds.Value.size;
+                defaultSize = new Vector3Int(Mathf.RoundToInt(size.x), Mathf.RoundToInt(size.y), Mathf.RoundToInt(size.z));
+                return true;
             }
-            finally
+            else
             {
-                EditorSceneManager.ClosePreviewScene(previewScene);
+                defaultSize = default;
+                return false;
             }
         }
     }

@@ -189,7 +189,7 @@ namespace VJson.Schema
 
                 case NodeKind.Float:
                 case NodeKind.Integer:
-                    ex = ValidateNumber(Convert.ToDouble(o), state, reg);
+                    ex = ValidateNumber(Convert.ToDouble(o, CultureInfo.InvariantCulture), state, reg);
 
                     if (ex != null)
                     {

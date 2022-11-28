@@ -17,6 +17,8 @@ namespace ClusterVR.CreatorKit.Item
         bool IsDestroyed { get; }
 
         void SetPositionAndRotation(Vector3 position, Quaternion rotation, bool isWarp = false);
+        void SetNormalizedScale(Vector3 scale);
+        void SetRawScale(Vector3 scale);
         void EnablePhysics();
 
         void Embody();

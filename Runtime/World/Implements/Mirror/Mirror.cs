@@ -463,6 +463,8 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
 
             var preferredWidth = XRSettings.enabled ? XRSettings.eyeTextureWidth : Screen.width;
             var preferredHeight = XRSettings.enabled ? XRSettings.eyeTextureHeight : Screen.height;
+            preferredWidth = preferredWidth == 0 ? Screen.width : preferredWidth;
+            preferredHeight = preferredHeight == 0 ? Screen.height : preferredHeight;
             width = Math.Min(preferredWidth, MaxResolution);
             height = Math.Min(preferredHeight, MaxResolution);
             if (width != renderTextureWidth || height != renderTextureHeight)

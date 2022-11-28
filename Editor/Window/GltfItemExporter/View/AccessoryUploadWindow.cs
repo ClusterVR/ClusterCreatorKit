@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using ClusterVR.CreatorKit.Editor.AccessoryExporter;
+using ClusterVR.CreatorKit.Editor.Api.RPC;
+using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
 using ClusterVR.CreatorKit.Editor.Window.View;
 using UnityEditor;
 using UnityEngine;
@@ -7,17 +10,23 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 {
-    public sealed class ItemUploadWindow : EditorWindow
+    public sealed class AccessoryUploadWindow : EditorWindow
     {
-        readonly ItemUploadView itemUploadView = new ItemUploadView();
+        readonly ItemUploadView itemUploadView = new ItemUploadView(
+            new CreatorKit.AccessoryExporter.AccessoryExporter(),
+            new AccessoryComponentValidator(),
+            new AccessoryValidator(),
+            new AccessoryTemplateBuilder(),
+            new UploadAccessoryTemplateService(),
+            "アクセサリー");
         readonly List<IDisposable> disposables = new List<IDisposable>();
 
-        [MenuItem("Cluster/アイテムアップロード", priority = 302)]
+        [MenuItem("Cluster/アクセサリーアップロード", priority = 303)]
         public static void Open()
         {
-            var window = GetWindow<ItemUploadWindow>();
+            var window = GetWindow<AccessoryUploadWindow>();
             window.minSize = new Vector2(640, 480);
-            window.titleContent = new GUIContent("アイテムアップロード");
+            window.titleContent = new GUIContent("アクセサリーアップロード");
         }
 
         void OnEnable()

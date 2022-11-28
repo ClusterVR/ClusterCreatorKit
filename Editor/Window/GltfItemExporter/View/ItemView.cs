@@ -7,7 +7,6 @@ using ClusterVR.CreatorKit.Editor.ItemExporter;
 using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.ItemExporter;
-using ClusterVR.CreatorKit.ItemExporter.ExporterHooks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -27,6 +26,10 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 
         Texture2D thumbnail;
         GltfContainer gltfContainer;
+        readonly IItemExporter itemExporter;
+        readonly IComponentValidator componentValidator;
+        readonly IGltfValidator gltfValidator;
+        readonly IItemTemplateBuilder builder;
 
         public event Action<ItemView> OnRemoveButtonClicked;
 
@@ -38,6 +41,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
         Vector3Int Size { get; set; }
 
         readonly List<ValidationMessage> validationMessages = new List<ValidationMessage>();
+
+        public ItemView(IItemExporter itemExporter, IComponentValidator componentValidator, IGltfValidator gltfValidator, IItemTemplateBuilder itemTemplateBuilder)
+        {
+            this.itemExporter = itemExporter;
+            this.componentValidator = componentValidator;
+            this.gltfValidator = gltfValidator;
+            this.builder = itemTemplateBuilder;
+        }
 
         public void SetItem(GameObject item)
         {
@@ -148,7 +159,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             var glbBinary = await gltfContainer.ExportAsync();
             var thumbnailBinary = thumbnail.EncodeToPNG();
 
-            var builder = new ItemTemplateBuilder();
             return builder.Build(glbBinary, thumbnailBinary);
         }
 
@@ -166,14 +176,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             GltfContainer container = null;
             validationMessages.Clear();
 
-            validationMessages.AddRange(ComponentValidator.Validate(Item));
+            validationMessages.AddRange(componentValidator.Validate(Item));
 
-            var buildGlbContainerValidationMessages = GltfValidator.Validate(Item).ToList();
+            var buildGlbContainerValidationMessages = gltfValidator.Validate(Item).ToList();
             validationMessages.AddRange(buildGlbContainerValidationMessages);
             if (buildGlbContainerValidationMessages.All(message => message.Type != ValidationMessage.MessageType.Error))
             {
-                container = CreatorKit.ItemExporter.ItemExporter.ExportAsGltfContainer(Item);
-                validationMessages.AddRange(GltfValidator.Validate(container));
+                container = itemExporter.ExportAsGltfContainer(Item);
+                validationMessages.AddRange(gltfValidator.Validate(container));
             }
 
             if (validationMessages.Count == 0)

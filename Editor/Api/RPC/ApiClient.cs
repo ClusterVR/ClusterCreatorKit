@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -122,7 +123,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
             if (webRequest.isHttpError)
             {
-                throw new Exception(webRequest.downloadHandler.text);
+                throw new HttpException((int)webRequest.responseCode, webRequest.downloadHandler.text);
             }
 
             return webRequest.downloadHandler.text;

@@ -13,5 +13,7 @@ namespace ClusterVR.CreatorKit.Item
 
         void SetPositionAndRotation(Vector3 position, Quaternion rotation, bool isWarp = false);
         void EnablePhysics();
+
+        void WarpTo(Vector3 position, Quaternion rotation);
     }
 }

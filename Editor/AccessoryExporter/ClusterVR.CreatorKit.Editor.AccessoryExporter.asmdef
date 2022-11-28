@@ -1,0 +1,20 @@
+{
+  "name": "ClusterVR.CreatorKit.Editor.AccessoryExporter",
+  "references": [
+      "ClusterVR.CreatorKit.AccessoryExporter",
+      "ClusterVR.CreatorKit.Editor",
+      "ClusterVR.CreatorKit.Editor.ItemExporter",
+      "ClusterVR.CreatorKit.ItemExporter"
+  ],
+  "includePlatforms": [
+      "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
+using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
 using ClusterVR.CreatorKit.Editor.Window.View;
+using ClusterVR.CreatorKit.ItemExporter;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -28,7 +30,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             new Reactive<ItemUploadProgressWindow.ItemUploadStatus>();
 
         UserInfo? loginUserInfo;
-        string uploadedItemsManagementUrl;
 
         Label itemCountLabel;
         ListView itemList;
@@ -43,16 +44,36 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
         ItemUploadProgressWindow progressWindow;
 
         CancellationTokenSource cancellationTokenSource;
+        readonly IItemExporter itemExporter;
+        readonly IComponentValidator componentValidator;
+        readonly IGltfValidator gltfValidator;
+        readonly IItemTemplateBuilder itemTemplateBuilder;
+        readonly IItemUploadService uploadService;
+        readonly string editorTypeName;
 
         public Reactive<ItemUploadProgressWindow.ItemUploadStatus> ReactiveItemUploadStatus() =>
             reactiveItemUploadStatus;
 
         public static event Action<IReadOnlyList<(GameObject item, string itemTemplateId)>> OnItemUploaded;
 
+        public ItemUploadView(IItemExporter itemExporter,
+            IComponentValidator componentValidator,
+            IGltfValidator gltfValidator,
+            IItemTemplateBuilder itemTemplateBuilder,
+            IItemUploadService uploadService,
+            string editorTypeName)
+        {
+            this.itemExporter = itemExporter;
+            this.componentValidator = componentValidator;
+            this.gltfValidator = gltfValidator;
+            this.itemTemplateBuilder = itemTemplateBuilder;
+            this.uploadService = uploadService;
+            this.editorTypeName = editorTypeName;
+        }
+
         public VisualElement LoginAndCreateView(UserInfo userInfo)
         {
             loginUserInfo = userInfo;
-            uploadedItemsManagementUrl = Api.RPC.Constants.WebBaseUrl + "/account/contents/items";
 
             var mainTemplate = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(MainTemplatePath);
             VisualElement view = mainTemplate.CloneTree();
@@ -66,6 +87,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             itemCountLabel = view.Q<Label>("item-count-label");
 
             var addItemButton = view.Q<Button>("add-item-button");
+            addItemButton.text = $"{editorTypeName}の追加";
             addItemButton.clicked += () =>
             {
                 EditorGUIUtility.ShowObjectPicker<GameObject>(null, false, "", 0);
@@ -129,7 +151,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
                     case ItemUploadProgressWindow.ItemUploadStatus.Uploading:
                         var viewRect = GUIUtility.GUIToScreenRect(view.worldBound);
 
-                        progressWindow = ItemUploadProgressWindow.CreateWindow(viewRect);
+                        progressWindow = ItemUploadProgressWindow.CreateWindow(viewRect, editorTypeName);
                         progressWindow.OnClose += OnProgressWindowClosed;
                         progressWindow.SetStatus(ItemUploadProgressWindow.ItemUploadStatus.Uploading);
                         break;
@@ -255,7 +277,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 
         void AddNewItem(GameObject gameObject)
         {
-            var itemView = new ItemView();
+            var itemView = new ItemView(itemExporter, componentValidator, gltfValidator, itemTemplateBuilder);
             itemView.SetItem(gameObject);
             itemView.OnRemoveButtonClicked += RemoveItem;
 
@@ -338,7 +360,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
                 await UploadItemAsync(loginUserInfo.Value.VerifiedToken, cancellationTokenSource.Token);
 
                 reactiveItemUploadStatus.Val = ItemUploadProgressWindow.ItemUploadStatus.Finish;
-                Application.OpenURL(uploadedItemsManagementUrl);
+                Application.OpenURL(uploadService.UploadedItemsManagementUrl);
             }
             catch (OperationCanceledException)
             {
@@ -354,6 +376,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 
         async Task UploadItemAsync(string verifiedToken, CancellationToken cancellationToken)
         {
+            uploadService.SetAccessToken(verifiedToken);
+
             var validItemViews = itemViews.Where(item => item.IsValid).ToArray();
             var length = validItemViews.Length;
             var itemList = new List<(GameObject item, string itemTemplateId)>(validItemViews.Length);
@@ -363,8 +387,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 
                 progressWindow?.SetProgressRate(i * 100f / length);
                 var zipBinary = await itemView.BuildZippedItemBinary();
-                var uploadService = new UploadItemTemplateService(verifiedToken);
-                var itemTemplateId = await uploadService.UploadAsync(zipBinary, cancellationToken);
+                var itemTemplateId = await uploadService.UploadItemAsync(zipBinary, cancellationToken);
                 itemList.Add((itemView.Item, itemTemplateId));
             }
             OnItemUploaded?.Invoke(itemList);

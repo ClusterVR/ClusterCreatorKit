@@ -42,6 +42,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
             {
                 sourceCode = sourceCodeAsset.text;
             }
+            sourceCode ??= "";
             isSourceCodeInitialized = true;
             return sourceCode;
         }
@@ -60,6 +61,8 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         public void Construct(string sourceCode)
         {
+            Assert.IsFalse(isSourceCodeInitialized);
+
             this.sourceCode = sourceCode;
             isSourceCodeInitialized = true;
         }

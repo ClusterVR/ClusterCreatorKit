@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using ClusterVR.CreatorKit.ItemExporter.ExporterHooks;
 using UnityEngine;
 using VGltf;
 
@@ -7,20 +6,16 @@ namespace ClusterVR.CreatorKit.ItemExporter
 {
     public sealed class ItemExporter
     {
-        public static GltfContainer ExportAsGltfContainer(GameObject go)
+        public static GltfContainer ExportAsGltfContainer(GameObject go, VGltf.Unity.Exporter exporter)
         {
-            using var exporter = new VGltf.Unity.Exporter();
-            exporter.AddHook(new ItemExporterHook());
-            exporter.Context.Exporters.Nodes.AddHook(new ItemNodeExporterHook());
-
             exporter.ExportGameObjectAsScene(go);
 
             return exporter.IntoGlbContainer();
         }
 
-        public static Task<byte[]> ExportAsync(GameObject go)
+        public static Task<byte[]> ExportAsync(GameObject go, VGltf.Unity.Exporter exporter)
         {
-            var gltfContainer = ExportAsGltfContainer(go);
+            var gltfContainer = ExportAsGltfContainer(go, exporter);
             return gltfContainer.ExportAsync();
         }
     }

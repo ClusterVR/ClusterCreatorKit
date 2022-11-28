@@ -8,20 +8,21 @@ using UnityEngine.Networking;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
-    public sealed class UploadItemTemplateService
+    public sealed class UploadCraftItemTemplateService : IItemUploadService
     {
         const string FileName = "item.zip";
         const string ContentType = "application/zip";
 
-        readonly string accessToken;
+        string accessToken;
 
-        public UploadItemTemplateService(
-            string accessToken)
+        public string UploadedItemsManagementUrl => Constants.WebBaseUrl + "/account/contents/items";
+
+        public void SetAccessToken(string accessToken)
         {
             this.accessToken = accessToken;
         }
 
-        public async Task<string> UploadAsync(byte[] binary, CancellationToken cancellationToken)
+        public async Task<string> UploadItemAsync(byte[] binary, CancellationToken cancellationToken)
         {
             var payload = new UploadItemTemplatePoliciesPayload(ContentType, FileName, binary.Length);
             var policy = await APIServiceClient.PostItemTemplatePolicies(payload, accessToken,
@@ -37,41 +38,20 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                     await Task.Delay(TimeSpan.FromMilliseconds(50), cancellationToken);
                 }
 
-                if (uploadFileWebRequest.isNetworkError)
+                if (uploadFileWebRequest.result == UnityWebRequest.Result.ConnectionError)
                 {
                     throw new Exception(uploadFileWebRequest.error);
                 }
-                if (uploadFileWebRequest.isHttpError)
+                if (uploadFileWebRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
                     throw new Exception(uploadFileWebRequest.downloadHandler.text);
                 }
             }
 
-            await CheckUploadStatusAsync(policy.statusApiUrl, cancellationToken);
+            var uploadStatusChecker = new UploadStatusChecker(accessToken, policy.statusApiUrl);
+            await uploadStatusChecker.CheckUploadStatusAsync(cancellationToken);
 
             return policy.itemTemplateID;
-        }
-
-        async Task CheckUploadStatusAsync(string statusApiUrl, CancellationToken cancellationToken)
-        {
-            while (true)
-            {
-                var result = await ApiClient.GetStatus(accessToken, statusApiUrl, cancellationToken);
-                var serializer = new VJson.JsonSerializer(typeof(UploadStatus));
-                var uploadStatus = (UploadStatus) serializer.Deserialize(result);
-                switch (uploadStatus.Status)
-                {
-                    case UploadStatus.StatusEnum.Validating:
-                        await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
-                        continue;
-                    case UploadStatus.StatusEnum.Completed:
-                        return;
-                    case UploadStatus.StatusEnum.Error:
-                        throw new Exception(uploadStatus.Reason);
-                    default:
-                        throw new NotImplementedException();
-                }
-            }
         }
 
         static List<IMultipartFormSection> BuildFormSections(byte[] file, string fileName, string contentType, UploadItemTemplatePoliciesResponse policy)

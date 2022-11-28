@@ -13,34 +13,14 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
         const int MaxScenesCount = 1;
         const int MaxNodesCount = 128;
         const int MaxMeshesCount = 8;
+        const int MaxMeshRenderersCount = 32;
         const int MaxSubMeshesCount = 2;
-        const int MaxTrianglesCount = 5000;
         const int MaxMaterialsCount = 2;
         const int MaxTexturesCount = 3;
 
         const int MaxTextureSize = 8192;
 
-        public static IEnumerable<ValidationMessage> Validate(GameObject gameObject)
-        {
-            var validationMessages = new List<ValidationMessage>();
-            validationMessages.AddRange(ValidateName(gameObject));
-            return validationMessages;
-        }
-
-        public static IEnumerable<ValidationMessage> Validate(GltfContainer gltfContainer)
-        {
-            var validationMessages = new List<ValidationMessage>();
-
-            validationMessages.AddRange(ValidateScene(gltfContainer));
-            validationMessages.AddRange(ValidateNode(gltfContainer));
-            validationMessages.AddRange(ValidateMesh(gltfContainer));
-            validationMessages.AddRange(ValidateMaterial(gltfContainer));
-            validationMessages.AddRange(ValidateTexture(gltfContainer));
-
-            return validationMessages;
-        }
-
-        static IEnumerable<ValidationMessage> ValidateName(GameObject gameObject)
+        internal static IEnumerable<ValidationMessage> ValidateName(GameObject gameObject)
         {
             var nodeNameCountDict = new Dictionary<string, int>();
             var validationMessages = new List<ValidationMessage>();
@@ -70,7 +50,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             return validationMessages;
         }
 
-        static IEnumerable<ValidationMessage> ValidateScene(GltfContainer gltfContainer)
+        internal static IEnumerable<ValidationMessage> ValidateScene(GltfContainer gltfContainer)
         {
             var validationMessages = new List<ValidationMessage>();
             var gltf = gltfContainer.Gltf;
@@ -86,7 +66,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             return validationMessages;
         }
 
-        static IEnumerable<ValidationMessage> ValidateNode(GltfContainer gltfContainer)
+        internal static IEnumerable<ValidationMessage> ValidateNode(GltfContainer gltfContainer)
         {
             var validationMessages = new List<ValidationMessage>();
             var gltf = gltfContainer.Gltf;
@@ -98,7 +78,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             return validationMessages;
         }
 
-        static IEnumerable<ValidationMessage> ValidateMesh(GltfContainer gltfContainer)
+        internal static IEnumerable<ValidationMessage> ValidateMesh(GltfContainer gltfContainer,
+            int maxTrianglesCount)
         {
             var validationMessages = new List<ValidationMessage>();
 
@@ -115,6 +96,12 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             if (gltf.Meshes.Count > MaxMeshesCount)
             {
                 validationMessages.Add(CreateCountValidationMessage("Mesh", gltf.Meshes.Count, MaxMeshesCount));
+            }
+
+            int meshRenderersCount = gltf.Nodes.Count(node => node.Mesh != null);
+            if (meshRenderersCount > MaxMeshRenderersCount)
+            {
+                validationMessages.Add(CreateCountValidationMessage("MeshRenderer", meshRenderersCount, MaxMeshRenderersCount));
             }
 
             var triangleCount = 0;
@@ -155,15 +142,32 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 validationMessages.Add(new ValidationMessage("少なくとも1つのTriangleが必要です。",
                     ValidationMessage.MessageType.Error));
             }
-            else if (triangleCount > MaxTrianglesCount)
+            else if (triangleCount > maxTrianglesCount)
             {
-                validationMessages.Add(CreateCountValidationMessage("Triangle", triangleCount, MaxTrianglesCount));
+                validationMessages.Add(CreateCountValidationMessage("Triangle", triangleCount, maxTrianglesCount));
             }
 
             return validationMessages;
         }
 
-        static IEnumerable<ValidationMessage> ValidateMaterial(GltfContainer gltfContainer)
+        internal static IEnumerable<ValidationMessage> ValidateTotalMeshNode(GltfContainer gltfContainer,
+            int maxMeshCount)
+        {
+            var gltf = gltfContainer.Gltf;
+            var meshNodes = gltf.Nodes.Count(node => node.Mesh.HasValue);
+
+            if (meshNodes <= maxMeshCount)
+            {
+                return Enumerable.Empty<ValidationMessage>();
+            }
+
+            return new[]
+            {
+                CreateCountValidationMessage("Mesh Renderer", meshNodes, maxMeshCount)
+            };
+        }
+
+        internal static IEnumerable<ValidationMessage> ValidateMaterial(GltfContainer gltfContainer)
         {
             var validationMessages = new List<ValidationMessage>();
             var gltf = gltfContainer.Gltf;
@@ -181,7 +185,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             return validationMessages;
         }
 
-        static IEnumerable<ValidationMessage> ValidateTexture(GltfContainer gltfContainer)
+        internal static IEnumerable<ValidationMessage> ValidateTexture(GltfContainer gltfContainer)
         {
             var validationMessages = new List<ValidationMessage>();
 

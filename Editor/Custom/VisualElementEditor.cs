@@ -2,7 +2,6 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     public abstract class VisualElementEditor : UnityEditor.Editor
@@ -36,7 +35,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
         protected virtual VisualElement CreateField(SerializedProperty serializedProperty)
         {
-            return new PropertyField(serializedProperty) { name = "PropertyField:" + serializedProperty.propertyPath };
+            return serializedProperty.propertyType switch
+            {
+                SerializedPropertyType.Quaternion => QuaternionField.Create(serializedProperty.displayName, serializedProperty),
+                _ => new PropertyField(serializedProperty) { name = "PropertyField:" + serializedProperty.propertyPath },
+            };
         }
     }
 }

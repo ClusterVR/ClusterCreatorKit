@@ -15,6 +15,8 @@ namespace VGltf.Ext.Vrm0.Unity
 {
     public sealed class DefaultExporterBridge : VGltf.Ext.Vrm0.Unity.Bridge.IExporterBridge
     {
+        private readonly DefaultMaterialExporterBridge _materialExporterBridge = new ();
+
         public void ExportMeta(Exporter exporter, VGltf.Ext.Vrm0.Types.Vrm vrm, GameObject go)
         {
             var meta = go.GetComponent<VRM0Meta>();
@@ -198,18 +200,8 @@ namespace VGltf.Ext.Vrm0.Unity
             vrm.SecondaryAnimation = vrmSecondaryAnimation;
         }
 
-        public Types.Material CreateMaterialProp(IExporterContext context, Material mat)
-        {
-            var vrmMat = new Types.Material();
-
-            // TODO: if mat.shader is MToon, support that
-
-            vrmMat.Name = mat.name;
-            vrmMat.Shader = Types.Material.VRM_USE_GLTFSHADER;
-
-            return vrmMat;
-        }
-
+        public Types.Material CreateMaterialProp(IExporterContext context, Material mat) => _materialExporterBridge.CreateMaterialProp(context, mat);
+        
         static Types.BlendShape.GroupType.BlendShapePresetEnum ToVRM0Preset(VRM0BlendShapeProxy.BlendShapePreset kind)
         {
             switch (kind)

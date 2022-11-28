@@ -1,7 +1,6 @@
 using System;
 using ClusterVR.CreatorKit.Editor.Custom;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -23,17 +22,24 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
         VisualElement progressContainer;
         VisualElement completeContainer;
         ProgressBar progressBar;
+        Label uploadItemLabel;
 
-        public static ItemUploadProgressWindow CreateWindow(Rect parentRect)
+        public static ItemUploadProgressWindow CreateWindow(Rect parentRect, string editorTypeName)
         {
             var window = CreateInstance<ItemUploadProgressWindow>();
             var position = new Vector2(
                 parentRect.position.x + parentRect.width / 2 - WindowSize.x / 2,
                 parentRect.position.y + parentRect.height / 2 - WindowSize.y / 2);
             window.position = new Rect(position.x, position.y, WindowSize.x, WindowSize.y);
+            window.SetUploadLabelStr(editorTypeName);
             window.ShowPopup();
 
             return window;
+        }
+
+        void SetUploadLabelStr(string editorTypeName)
+        {
+            uploadItemLabel.text = $"{editorTypeName}のアップロード中";
         }
 
         public void SetStatus(ItemUploadStatus status)
@@ -75,6 +81,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             completeContainer = view.Q("complete-container");
 
             progressBar = view.Q<ProgressBar>("upload-progress-bar");
+
+            uploadItemLabel = view.Q<Label>("upload-item-label");
 
             return view;
         }

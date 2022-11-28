@@ -3,10 +3,11 @@
     "references": [
         "Unity.net.yutopp.vgltf",
         "Unity.net.yutopp.vgltf.unity",
-        "ClusterVR.CreatorKit.Item.Implements",
-        "ClusterVR.CreatorKit.World.Implements",
+        "ClusterVR.CreatorKit.Constants",
+        "ClusterVR.CreatorKit.Editor.Utils",
         "ClusterVR.CreatorKit.Item",
-        "ClusterVR.CreatorKit.Constants"
+        "ClusterVR.CreatorKit.Item.Implements",
+        "ClusterVR.CreatorKit.World.Implements"
     ],
     "includePlatforms": [
         "Editor"

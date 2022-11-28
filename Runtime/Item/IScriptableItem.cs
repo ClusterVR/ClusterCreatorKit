@@ -8,6 +8,7 @@ namespace ClusterVR.CreatorKit.Item
 
         event Action<string> OnSourceCodeChanged;
 
+        void Construct(string sourceCode);
         string GetSourceCode();
         void SetSourceCode(string sourceCode);
         bool IsValid();

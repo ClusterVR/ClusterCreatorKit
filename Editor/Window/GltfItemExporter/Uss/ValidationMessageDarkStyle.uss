@@ -1,6 +1,3 @@
-#warning-icon{
-    min-width: 16px;
-    min-height: 16px;
+.warning-icon-image{
     background-image: url("../Texture/icons_info_outlined_dark@4x.png");
-    -unity-background-scale-mode: scale-to-fit;
 }

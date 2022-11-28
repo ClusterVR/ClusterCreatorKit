@@ -18,36 +18,36 @@ namespace ClusterVR.CreatorKit.Proto {
     static ItemTemplateReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChNpdGVtX3RlbXBsYXRlLnByb3RvEhJjbHVzdGVyLmNyZWF0b3JraXQi4wIK",
+            "ChNpdGVtX3RlbXBsYXRlLnByb3RvEhJjbHVzdGVyLmNyZWF0b3JraXQi0wIK",
             "BEl0ZW0SKgoEbWV0YRgBIAEoCzIcLmNsdXN0ZXIuY3JlYXRvcmtpdC5JdGVt",
             "TWV0YRI1Cgxtb3ZhYmxlX2l0ZW0YAiABKAsyHy5jbHVzdGVyLmNyZWF0b3Jr",
             "aXQuTW92YWJsZUl0ZW0SNQoMcmlkYWJsZV9pdGVtGAMgASgLMh8uY2x1c3Rl",
             "ci5jcmVhdG9ya2l0LlJpZGFibGVJdGVtEjkKDmdyYWJiYWJsZV9pdGVtGAQg",
             "ASgLMiEuY2x1c3Rlci5jcmVhdG9ya2l0LkdyYWJiYWJsZUl0ZW0SOwoPc2Ny",
             "aXB0YWJsZV9pdGVtGAUgASgLMiIuY2x1c3Rlci5jcmVhdG9ya2l0LlNjcmlw",
-            "dGFibGVJdGVtEkkKFXJlc2VydmVkX2l0ZW1fZmllbGRfNhgGIAEoCzIqLmNs",
-            "dXN0ZXIuY3JlYXRvcmtpdC5SZXNlcnZlZEl0ZW1BdHRyaWJ1dGU2IkkKCEl0",
-            "ZW1NZXRhEi8KBG5hbWUYASADKAsyIS5jbHVzdGVyLmNyZWF0b3JraXQuTG9j",
-            "YWxpemVkVGV4dBIMCgRzaXplGAIgAygNIjAKDUxvY2FsaXplZFRleHQSEQoJ",
-            "bGFuZ19jb2RlGAEgASgJEgwKBHRleHQYAiABKAkiDQoLTW92YWJsZUl0ZW0i",
-            "pQEKC1JpZGFibGVJdGVtEgwKBHNlYXQYASABKA0SGgoSaGFzX2V4aXRfdHJh",
-            "bnNmb3JtGAIgASgIEhYKDmV4aXRfdHJhbnNmb3JtGAMgASgNEhUKDWhhc19s",
-            "ZWZ0X2dyaXAYBCABKAgSEQoJbGVmdF9ncmlwGAUgASgNEhYKDmhhc19yaWdo",
-            "dF9ncmlwGAYgASgIEhIKCnJpZ2h0X2dyaXAYByABKA0iLwoNR3JhYmJhYmxl",
-            "SXRlbRIQCghoYXNfZ3JpcBgBIAEoCBIMCgRncmlwGAIgASgNIiUKDlNjcmlw",
-            "dGFibGVJdGVtEhMKC3NvdXJjZV9jb2RlGAEgASgJIjUKD09mZnNldFRyYW5z",
-            "Zm9ybRIiChp0cmFuc2xhdGlvbl9yb3RhdGlvbl9zY2FsZRgBIAMoAiJBCiVS",
-            "ZXNlcnZlZEl0ZW1BdHRyaWJ1dGU2RmllbGRBdHRyaWJ1dGUyEhgKEHJlc2Vy",
-            "dmVkX2ZpZWxkXzEYASABKAkiwQEKFlJlc2VydmVkSXRlbUF0dHJpYnV0ZTYS",
-            "PQoQcmVzZXJ2ZWRfZmllbGRfMxgDIAEoCzIjLmNsdXN0ZXIuY3JlYXRvcmtp",
-            "dC5PZmZzZXRUcmFuc2Zvcm0SVQoQcmVzZXJ2ZWRfZmllbGRfMhgCIAEoCzI5",
-            "LmNsdXN0ZXIuY3JlYXRvcmtpdC5SZXNlcnZlZEl0ZW1BdHRyaWJ1dGU2Rmll",
-            "bGRBdHRyaWJ1dGUySABCEQoPcmVzZXJ2ZWRfY2FzZV8xQi1aDmNsdXN0ZXIu",
-            "bXUvcnBjqgIaQ2x1c3RlclZSLkNyZWF0b3JLaXQuUHJvdG9iBnByb3RvMw=="));
+            "dGFibGVJdGVtEjkKDmFjY2Vzc29yeV9pdGVtGAYgASgLMiEuY2x1c3Rlci5j",
+            "cmVhdG9ya2l0LkFjY2Vzc29yeUl0ZW0iSQoISXRlbU1ldGESLwoEbmFtZRgB",
+            "IAMoCzIhLmNsdXN0ZXIuY3JlYXRvcmtpdC5Mb2NhbGl6ZWRUZXh0EgwKBHNp",
+            "emUYAiADKA0iMAoNTG9jYWxpemVkVGV4dBIRCglsYW5nX2NvZGUYASABKAkS",
+            "DAoEdGV4dBgCIAEoCSINCgtNb3ZhYmxlSXRlbSKlAQoLUmlkYWJsZUl0ZW0S",
+            "DAoEc2VhdBgBIAEoDRIaChJoYXNfZXhpdF90cmFuc2Zvcm0YAiABKAgSFgoO",
+            "ZXhpdF90cmFuc2Zvcm0YAyABKA0SFQoNaGFzX2xlZnRfZ3JpcBgEIAEoCBIR",
+            "CglsZWZ0X2dyaXAYBSABKA0SFgoOaGFzX3JpZ2h0X2dyaXAYBiABKAgSEgoK",
+            "cmlnaHRfZ3JpcBgHIAEoDSIvCg1HcmFiYmFibGVJdGVtEhAKCGhhc19ncmlw",
+            "GAEgASgIEgwKBGdyaXAYAiABKA0iJQoOU2NyaXB0YWJsZUl0ZW0SEwoLc291",
+            "cmNlX2NvZGUYASABKAkiNQoPT2Zmc2V0VHJhbnNmb3JtEiIKGnRyYW5zbGF0",
+            "aW9uX3JvdGF0aW9uX3NjYWxlGAEgAygCIjoKEkF0dGFjaENhc2VUb0F2YXRh",
+            "chIkChxkZWZhdWx0X2h1bWFuX2JvZHlfYm9uZV9uYW1lGAEgASgJIq4BCg1B",
+            "Y2Nlc3NvcnlJdGVtEkUKGGRlZmF1bHRfb2Zmc2V0X3RyYW5zZm9ybRgDIAEo",
+            "CzIjLmNsdXN0ZXIuY3JlYXRvcmtpdC5PZmZzZXRUcmFuc2Zvcm0SRwoVYXR0",
+            "YWNoX2Nhc2VfdG9fYXZhdGFyGAIgASgLMiYuY2x1c3Rlci5jcmVhdG9ya2l0",
+            "LkF0dGFjaENhc2VUb0F2YXRhckgAQg0KC2F0dGFjaF9jYXNlQi1aDmNsdXN0",
+            "ZXIubXUvcnBjqgIaQ2x1c3RlclZSLkNyZWF0b3JLaXQuUHJvdG9iBnByb3Rv",
+            "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Item), global::ClusterVR.CreatorKit.Proto.Item.Parser, new[]{ "Meta", "MovableItem", "RidableItem", "GrabbableItem", "ScriptableItem", "ReservedItemField6" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Item), global::ClusterVR.CreatorKit.Proto.Item.Parser, new[]{ "Meta", "MovableItem", "RidableItem", "GrabbableItem", "ScriptableItem", "AccessoryItem" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ItemMeta), global::ClusterVR.CreatorKit.Proto.ItemMeta.Parser, new[]{ "Name", "Size" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.LocalizedText), global::ClusterVR.CreatorKit.Proto.LocalizedText.Parser, new[]{ "LangCode", "Text" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.MovableItem), global::ClusterVR.CreatorKit.Proto.MovableItem.Parser, null, null, null, null, null),
@@ -55,8 +55,8 @@ namespace ClusterVR.CreatorKit.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.GrabbableItem), global::ClusterVR.CreatorKit.Proto.GrabbableItem.Parser, new[]{ "HasGrip", "Grip" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ScriptableItem), global::ClusterVR.CreatorKit.Proto.ScriptableItem.Parser, new[]{ "SourceCode" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.OffsetTransform), global::ClusterVR.CreatorKit.Proto.OffsetTransform.Parser, new[]{ "TranslationRotationScale" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6FieldAttribute2), global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6FieldAttribute2.Parser, new[]{ "ReservedField1" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6), global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6.Parser, new[]{ "ReservedField3", "ReservedField2" }, new[]{ "ReservedCase1" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.AttachCaseToAvatar), global::ClusterVR.CreatorKit.Proto.AttachCaseToAvatar.Parser, new[]{ "DefaultHumanBodyBoneName" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.AccessoryItem), global::ClusterVR.CreatorKit.Proto.AccessoryItem.Parser, new[]{ "DefaultOffsetTransform", "AttachCaseToAvatar" }, new[]{ "AttachCase" }, null, null, null)
           }));
     }
     #endregion
@@ -102,7 +102,7 @@ namespace ClusterVR.CreatorKit.Proto {
       ridableItem_ = other.ridableItem_ != null ? other.ridableItem_.Clone() : null;
       grabbableItem_ = other.grabbableItem_ != null ? other.grabbableItem_.Clone() : null;
       scriptableItem_ = other.scriptableItem_ != null ? other.scriptableItem_.Clone() : null;
-      reservedItemField6_ = other.reservedItemField6_ != null ? other.reservedItemField6_.Clone() : null;
+      accessoryItem_ = other.accessoryItem_ != null ? other.accessoryItem_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -167,14 +167,14 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
-    public const int ReservedItemField6FieldNumber = 6;
-    private global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6 reservedItemField6_;
+    public const int AccessoryItemFieldNumber = 6;
+    private global::ClusterVR.CreatorKit.Proto.AccessoryItem accessoryItem_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6 ReservedItemField6 {
-      get { return reservedItemField6_; }
+    public global::ClusterVR.CreatorKit.Proto.AccessoryItem AccessoryItem {
+      get { return accessoryItem_; }
       set {
-        reservedItemField6_ = value;
+        accessoryItem_ = value;
       }
     }
 
@@ -198,7 +198,7 @@ namespace ClusterVR.CreatorKit.Proto {
       if (!object.Equals(RidableItem, other.RidableItem)) return false;
       if (!object.Equals(GrabbableItem, other.GrabbableItem)) return false;
       if (!object.Equals(ScriptableItem, other.ScriptableItem)) return false;
-      if (!object.Equals(ReservedItemField6, other.ReservedItemField6)) return false;
+      if (!object.Equals(AccessoryItem, other.AccessoryItem)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -211,7 +211,7 @@ namespace ClusterVR.CreatorKit.Proto {
       if (ridableItem_ != null) hash ^= RidableItem.GetHashCode();
       if (grabbableItem_ != null) hash ^= GrabbableItem.GetHashCode();
       if (scriptableItem_ != null) hash ^= ScriptableItem.GetHashCode();
-      if (reservedItemField6_ != null) hash ^= ReservedItemField6.GetHashCode();
+      if (accessoryItem_ != null) hash ^= AccessoryItem.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -250,9 +250,9 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteRawTag(42);
         output.WriteMessage(ScriptableItem);
       }
-      if (reservedItemField6_ != null) {
+      if (accessoryItem_ != null) {
         output.WriteRawTag(50);
-        output.WriteMessage(ReservedItemField6);
+        output.WriteMessage(AccessoryItem);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -284,9 +284,9 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteRawTag(42);
         output.WriteMessage(ScriptableItem);
       }
-      if (reservedItemField6_ != null) {
+      if (accessoryItem_ != null) {
         output.WriteRawTag(50);
-        output.WriteMessage(ReservedItemField6);
+        output.WriteMessage(AccessoryItem);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -313,8 +313,8 @@ namespace ClusterVR.CreatorKit.Proto {
       if (scriptableItem_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(ScriptableItem);
       }
-      if (reservedItemField6_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ReservedItemField6);
+      if (accessoryItem_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(AccessoryItem);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -358,11 +358,11 @@ namespace ClusterVR.CreatorKit.Proto {
         }
         ScriptableItem.MergeFrom(other.ScriptableItem);
       }
-      if (other.reservedItemField6_ != null) {
-        if (reservedItemField6_ == null) {
-          ReservedItemField6 = new global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6();
+      if (other.accessoryItem_ != null) {
+        if (accessoryItem_ == null) {
+          AccessoryItem = new global::ClusterVR.CreatorKit.Proto.AccessoryItem();
         }
-        ReservedItemField6.MergeFrom(other.ReservedItemField6);
+        AccessoryItem.MergeFrom(other.AccessoryItem);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -415,10 +415,10 @@ namespace ClusterVR.CreatorKit.Proto {
             break;
           }
           case 50: {
-            if (reservedItemField6_ == null) {
-              ReservedItemField6 = new global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6();
+            if (accessoryItem_ == null) {
+              AccessoryItem = new global::ClusterVR.CreatorKit.Proto.AccessoryItem();
             }
-            input.ReadMessage(ReservedItemField6);
+            input.ReadMessage(AccessoryItem);
             break;
           }
         }
@@ -472,10 +472,10 @@ namespace ClusterVR.CreatorKit.Proto {
             break;
           }
           case 50: {
-            if (reservedItemField6_ == null) {
-              ReservedItemField6 = new global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6();
+            if (accessoryItem_ == null) {
+              AccessoryItem = new global::ClusterVR.CreatorKit.Proto.AccessoryItem();
             }
-            input.ReadMessage(ReservedItemField6);
+            input.ReadMessage(AccessoryItem);
             break;
           }
         }
@@ -2060,16 +2060,16 @@ namespace ClusterVR.CreatorKit.Proto {
 
   }
 
-  public sealed partial class ReservedItemAttribute6FieldAttribute2 : pb::IMessage<ReservedItemAttribute6FieldAttribute2>
+  public sealed partial class AttachCaseToAvatar : pb::IMessage<AttachCaseToAvatar>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<ReservedItemAttribute6FieldAttribute2> _parser = new pb::MessageParser<ReservedItemAttribute6FieldAttribute2>(() => new ReservedItemAttribute6FieldAttribute2());
+    private static readonly pb::MessageParser<AttachCaseToAvatar> _parser = new pb::MessageParser<AttachCaseToAvatar>(() => new AttachCaseToAvatar());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<ReservedItemAttribute6FieldAttribute2> Parser { get { return _parser; } }
+    public static pb::MessageParser<AttachCaseToAvatar> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2085,7 +2085,7 @@ namespace ClusterVR.CreatorKit.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ReservedItemAttribute6FieldAttribute2() {
+    public AttachCaseToAvatar() {
       OnConstruction();
     }
 
@@ -2093,44 +2093,44 @@ namespace ClusterVR.CreatorKit.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ReservedItemAttribute6FieldAttribute2(ReservedItemAttribute6FieldAttribute2 other) : this() {
-      reservedField1_ = other.reservedField1_;
+    public AttachCaseToAvatar(AttachCaseToAvatar other) : this() {
+      defaultHumanBodyBoneName_ = other.defaultHumanBodyBoneName_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ReservedItemAttribute6FieldAttribute2 Clone() {
-      return new ReservedItemAttribute6FieldAttribute2(this);
+    public AttachCaseToAvatar Clone() {
+      return new AttachCaseToAvatar(this);
     }
 
-    public const int ReservedField1FieldNumber = 1;
-    private string reservedField1_ = "";
+    public const int DefaultHumanBodyBoneNameFieldNumber = 1;
+    private string defaultHumanBodyBoneName_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string ReservedField1 {
-      get { return reservedField1_; }
+    public string DefaultHumanBodyBoneName {
+      get { return defaultHumanBodyBoneName_; }
       set {
-        reservedField1_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        defaultHumanBodyBoneName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as ReservedItemAttribute6FieldAttribute2);
+      return Equals(other as AttachCaseToAvatar);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(ReservedItemAttribute6FieldAttribute2 other) {
+    public bool Equals(AttachCaseToAvatar other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (ReservedField1 != other.ReservedField1) return false;
+      if (DefaultHumanBodyBoneName != other.DefaultHumanBodyBoneName) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2138,7 +2138,7 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (ReservedField1.Length != 0) hash ^= ReservedField1.GetHashCode();
+      if (DefaultHumanBodyBoneName.Length != 0) hash ^= DefaultHumanBodyBoneName.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2157,9 +2157,9 @@ namespace ClusterVR.CreatorKit.Proto {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (ReservedField1.Length != 0) {
+      if (DefaultHumanBodyBoneName.Length != 0) {
         output.WriteRawTag(10);
-        output.WriteString(ReservedField1);
+        output.WriteString(DefaultHumanBodyBoneName);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -2171,9 +2171,9 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (ReservedField1.Length != 0) {
+      if (DefaultHumanBodyBoneName.Length != 0) {
         output.WriteRawTag(10);
-        output.WriteString(ReservedField1);
+        output.WriteString(DefaultHumanBodyBoneName);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -2185,8 +2185,8 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (ReservedField1.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(ReservedField1);
+      if (DefaultHumanBodyBoneName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(DefaultHumanBodyBoneName);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2196,12 +2196,12 @@ namespace ClusterVR.CreatorKit.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(ReservedItemAttribute6FieldAttribute2 other) {
+    public void MergeFrom(AttachCaseToAvatar other) {
       if (other == null) {
         return;
       }
-      if (other.ReservedField1.Length != 0) {
-        ReservedField1 = other.ReservedField1;
+      if (other.DefaultHumanBodyBoneName.Length != 0) {
+        DefaultHumanBodyBoneName = other.DefaultHumanBodyBoneName;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2219,7 +2219,7 @@ namespace ClusterVR.CreatorKit.Proto {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            ReservedField1 = input.ReadString();
+            DefaultHumanBodyBoneName = input.ReadString();
             break;
           }
         }
@@ -2238,7 +2238,7 @@ namespace ClusterVR.CreatorKit.Proto {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
-            ReservedField1 = input.ReadString();
+            DefaultHumanBodyBoneName = input.ReadString();
             break;
           }
         }
@@ -2248,16 +2248,16 @@ namespace ClusterVR.CreatorKit.Proto {
 
   }
 
-  public sealed partial class ReservedItemAttribute6 : pb::IMessage<ReservedItemAttribute6>
+  public sealed partial class AccessoryItem : pb::IMessage<AccessoryItem>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<ReservedItemAttribute6> _parser = new pb::MessageParser<ReservedItemAttribute6>(() => new ReservedItemAttribute6());
+    private static readonly pb::MessageParser<AccessoryItem> _parser = new pb::MessageParser<AccessoryItem>(() => new AccessoryItem());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<ReservedItemAttribute6> Parser { get { return _parser; } }
+    public static pb::MessageParser<AccessoryItem> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2273,7 +2273,7 @@ namespace ClusterVR.CreatorKit.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ReservedItemAttribute6() {
+    public AccessoryItem() {
       OnConstruction();
     }
 
@@ -2281,11 +2281,11 @@ namespace ClusterVR.CreatorKit.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ReservedItemAttribute6(ReservedItemAttribute6 other) : this() {
-      reservedField3_ = other.reservedField3_ != null ? other.reservedField3_.Clone() : null;
-      switch (other.ReservedCase1Case) {
-        case ReservedCase1OneofCase.ReservedField2:
-          ReservedField2 = other.ReservedField2.Clone();
+    public AccessoryItem(AccessoryItem other) : this() {
+      defaultOffsetTransform_ = other.defaultOffsetTransform_ != null ? other.defaultOffsetTransform_.Clone() : null;
+      switch (other.AttachCaseCase) {
+        case AttachCaseOneofCase.AttachCaseToAvatar:
+          AttachCaseToAvatar = other.AttachCaseToAvatar.Clone();
           break;
       }
 
@@ -2294,69 +2294,69 @@ namespace ClusterVR.CreatorKit.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ReservedItemAttribute6 Clone() {
-      return new ReservedItemAttribute6(this);
+    public AccessoryItem Clone() {
+      return new AccessoryItem(this);
     }
 
-    public const int ReservedField3FieldNumber = 3;
-    private global::ClusterVR.CreatorKit.Proto.OffsetTransform reservedField3_;
+    public const int DefaultOffsetTransformFieldNumber = 3;
+    private global::ClusterVR.CreatorKit.Proto.OffsetTransform defaultOffsetTransform_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ClusterVR.CreatorKit.Proto.OffsetTransform ReservedField3 {
-      get { return reservedField3_; }
+    public global::ClusterVR.CreatorKit.Proto.OffsetTransform DefaultOffsetTransform {
+      get { return defaultOffsetTransform_; }
       set {
-        reservedField3_ = value;
+        defaultOffsetTransform_ = value;
       }
     }
 
-    public const int ReservedField2FieldNumber = 2;
+    public const int AttachCaseToAvatarFieldNumber = 2;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6FieldAttribute2 ReservedField2 {
-      get { return reservedCase1Case_ == ReservedCase1OneofCase.ReservedField2 ? (global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6FieldAttribute2) reservedCase1_ : null; }
+    public global::ClusterVR.CreatorKit.Proto.AttachCaseToAvatar AttachCaseToAvatar {
+      get { return attachCaseCase_ == AttachCaseOneofCase.AttachCaseToAvatar ? (global::ClusterVR.CreatorKit.Proto.AttachCaseToAvatar) attachCase_ : null; }
       set {
-        reservedCase1_ = value;
-        reservedCase1Case_ = value == null ? ReservedCase1OneofCase.None : ReservedCase1OneofCase.ReservedField2;
+        attachCase_ = value;
+        attachCaseCase_ = value == null ? AttachCaseOneofCase.None : AttachCaseOneofCase.AttachCaseToAvatar;
       }
     }
 
-    private object reservedCase1_;
-    public enum ReservedCase1OneofCase {
+    private object attachCase_;
+    public enum AttachCaseOneofCase {
       None = 0,
-      ReservedField2 = 2,
+      AttachCaseToAvatar = 2,
     }
-    private ReservedCase1OneofCase reservedCase1Case_ = ReservedCase1OneofCase.None;
+    private AttachCaseOneofCase attachCaseCase_ = AttachCaseOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ReservedCase1OneofCase ReservedCase1Case {
-      get { return reservedCase1Case_; }
+    public AttachCaseOneofCase AttachCaseCase {
+      get { return attachCaseCase_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearReservedCase1() {
-      reservedCase1Case_ = ReservedCase1OneofCase.None;
-      reservedCase1_ = null;
+    public void ClearAttachCase() {
+      attachCaseCase_ = AttachCaseOneofCase.None;
+      attachCase_ = null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as ReservedItemAttribute6);
+      return Equals(other as AccessoryItem);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(ReservedItemAttribute6 other) {
+    public bool Equals(AccessoryItem other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (!object.Equals(ReservedField3, other.ReservedField3)) return false;
-      if (!object.Equals(ReservedField2, other.ReservedField2)) return false;
-      if (ReservedCase1Case != other.ReservedCase1Case) return false;
+      if (!object.Equals(DefaultOffsetTransform, other.DefaultOffsetTransform)) return false;
+      if (!object.Equals(AttachCaseToAvatar, other.AttachCaseToAvatar)) return false;
+      if (AttachCaseCase != other.AttachCaseCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2364,9 +2364,9 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (reservedField3_ != null) hash ^= ReservedField3.GetHashCode();
-      if (reservedCase1Case_ == ReservedCase1OneofCase.ReservedField2) hash ^= ReservedField2.GetHashCode();
-      hash ^= (int) reservedCase1Case_;
+      if (defaultOffsetTransform_ != null) hash ^= DefaultOffsetTransform.GetHashCode();
+      if (attachCaseCase_ == AttachCaseOneofCase.AttachCaseToAvatar) hash ^= AttachCaseToAvatar.GetHashCode();
+      hash ^= (int) attachCaseCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2385,13 +2385,13 @@ namespace ClusterVR.CreatorKit.Proto {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (reservedCase1Case_ == ReservedCase1OneofCase.ReservedField2) {
+      if (attachCaseCase_ == AttachCaseOneofCase.AttachCaseToAvatar) {
         output.WriteRawTag(18);
-        output.WriteMessage(ReservedField2);
+        output.WriteMessage(AttachCaseToAvatar);
       }
-      if (reservedField3_ != null) {
+      if (defaultOffsetTransform_ != null) {
         output.WriteRawTag(26);
-        output.WriteMessage(ReservedField3);
+        output.WriteMessage(DefaultOffsetTransform);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -2403,13 +2403,13 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (reservedCase1Case_ == ReservedCase1OneofCase.ReservedField2) {
+      if (attachCaseCase_ == AttachCaseOneofCase.AttachCaseToAvatar) {
         output.WriteRawTag(18);
-        output.WriteMessage(ReservedField2);
+        output.WriteMessage(AttachCaseToAvatar);
       }
-      if (reservedField3_ != null) {
+      if (defaultOffsetTransform_ != null) {
         output.WriteRawTag(26);
-        output.WriteMessage(ReservedField3);
+        output.WriteMessage(DefaultOffsetTransform);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -2421,11 +2421,11 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (reservedField3_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ReservedField3);
+      if (defaultOffsetTransform_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(DefaultOffsetTransform);
       }
-      if (reservedCase1Case_ == ReservedCase1OneofCase.ReservedField2) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ReservedField2);
+      if (attachCaseCase_ == AttachCaseOneofCase.AttachCaseToAvatar) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(AttachCaseToAvatar);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2435,22 +2435,22 @@ namespace ClusterVR.CreatorKit.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(ReservedItemAttribute6 other) {
+    public void MergeFrom(AccessoryItem other) {
       if (other == null) {
         return;
       }
-      if (other.reservedField3_ != null) {
-        if (reservedField3_ == null) {
-          ReservedField3 = new global::ClusterVR.CreatorKit.Proto.OffsetTransform();
+      if (other.defaultOffsetTransform_ != null) {
+        if (defaultOffsetTransform_ == null) {
+          DefaultOffsetTransform = new global::ClusterVR.CreatorKit.Proto.OffsetTransform();
         }
-        ReservedField3.MergeFrom(other.ReservedField3);
+        DefaultOffsetTransform.MergeFrom(other.DefaultOffsetTransform);
       }
-      switch (other.ReservedCase1Case) {
-        case ReservedCase1OneofCase.ReservedField2:
-          if (ReservedField2 == null) {
-            ReservedField2 = new global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6FieldAttribute2();
+      switch (other.AttachCaseCase) {
+        case AttachCaseOneofCase.AttachCaseToAvatar:
+          if (AttachCaseToAvatar == null) {
+            AttachCaseToAvatar = new global::ClusterVR.CreatorKit.Proto.AttachCaseToAvatar();
           }
-          ReservedField2.MergeFrom(other.ReservedField2);
+          AttachCaseToAvatar.MergeFrom(other.AttachCaseToAvatar);
           break;
       }
 
@@ -2470,19 +2470,19 @@ namespace ClusterVR.CreatorKit.Proto {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 18: {
-            global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6FieldAttribute2 subBuilder = new global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6FieldAttribute2();
-            if (reservedCase1Case_ == ReservedCase1OneofCase.ReservedField2) {
-              subBuilder.MergeFrom(ReservedField2);
+            global::ClusterVR.CreatorKit.Proto.AttachCaseToAvatar subBuilder = new global::ClusterVR.CreatorKit.Proto.AttachCaseToAvatar();
+            if (attachCaseCase_ == AttachCaseOneofCase.AttachCaseToAvatar) {
+              subBuilder.MergeFrom(AttachCaseToAvatar);
             }
             input.ReadMessage(subBuilder);
-            ReservedField2 = subBuilder;
+            AttachCaseToAvatar = subBuilder;
             break;
           }
           case 26: {
-            if (reservedField3_ == null) {
-              ReservedField3 = new global::ClusterVR.CreatorKit.Proto.OffsetTransform();
+            if (defaultOffsetTransform_ == null) {
+              DefaultOffsetTransform = new global::ClusterVR.CreatorKit.Proto.OffsetTransform();
             }
-            input.ReadMessage(ReservedField3);
+            input.ReadMessage(DefaultOffsetTransform);
             break;
           }
         }
@@ -2501,19 +2501,19 @@ namespace ClusterVR.CreatorKit.Proto {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 18: {
-            global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6FieldAttribute2 subBuilder = new global::ClusterVR.CreatorKit.Proto.ReservedItemAttribute6FieldAttribute2();
-            if (reservedCase1Case_ == ReservedCase1OneofCase.ReservedField2) {
-              subBuilder.MergeFrom(ReservedField2);
+            global::ClusterVR.CreatorKit.Proto.AttachCaseToAvatar subBuilder = new global::ClusterVR.CreatorKit.Proto.AttachCaseToAvatar();
+            if (attachCaseCase_ == AttachCaseOneofCase.AttachCaseToAvatar) {
+              subBuilder.MergeFrom(AttachCaseToAvatar);
             }
             input.ReadMessage(subBuilder);
-            ReservedField2 = subBuilder;
+            AttachCaseToAvatar = subBuilder;
             break;
           }
           case 26: {
-            if (reservedField3_ == null) {
-              ReservedField3 = new global::ClusterVR.CreatorKit.Proto.OffsetTransform();
+            if (defaultOffsetTransform_ == null) {
+              DefaultOffsetTransform = new global::ClusterVR.CreatorKit.Proto.OffsetTransform();
             }
-            input.ReadMessage(ReservedField3);
+            input.ReadMessage(DefaultOffsetTransform);
             break;
           }
         }

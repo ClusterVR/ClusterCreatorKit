@@ -7,7 +7,7 @@
 >
     <engine:VisualElement class="body">
         <engine:VisualElement name="progress-container" class="container">
-            <engine:Label text="アイテムのアップロード中"/>
+            <engine:Label name="upload-item-label" text="アイテムのアップロード中"/>
             <editor:ProgressBar name="upload-progress-bar"/>
             <engine:Label text="完了後、自動的にWebページが開きます" class="sub-text"/>
         </engine:VisualElement>
