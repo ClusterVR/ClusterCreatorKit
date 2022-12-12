@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
     [RequireComponent(typeof(MovableItemBase))]
-    public sealed class OnVelocityChangedItemTrigger : MonoBehaviour, IOnReceiveOwnershipItemTrigger
+    public sealed class OnVelocityChangedItemTrigger : MonoBehaviour, IOnReceiveOwnershipItemTrigger, IInvoluntaryItemTrigger
     {
         [SerializeField, HideInInspector] MovableItemBase movableItem;
         [SerializeField, ItemVariableTriggerParam(ParameterType.Vector3)]

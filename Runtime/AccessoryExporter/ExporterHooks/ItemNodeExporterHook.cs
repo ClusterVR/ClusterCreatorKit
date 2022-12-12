@@ -11,7 +11,10 @@ namespace ClusterVR.CreatorKit.AccessoryExporter.ExporterHooks
     {
         public override void PostHook(NodeExporter exporter, GameObject go, VGltf.Types.Node gltfNode)
         {
-            var proto = new ItemNode();
+            var proto = new ItemNode
+            {
+                Disabled = !go.activeSelf
+            };
 
             var extension = new GltfExtensions.ClusterItemNode
             {

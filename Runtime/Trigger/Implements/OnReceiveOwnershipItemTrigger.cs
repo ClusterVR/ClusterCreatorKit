@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
     [RequireComponent(typeof(Item.Implements.Item))]
-    public sealed class OnReceiveOwnershipItemTrigger : MonoBehaviour, IOnReceiveOwnershipItemTrigger
+    public sealed class OnReceiveOwnershipItemTrigger : MonoBehaviour, IOnReceiveOwnershipItemTrigger, IInvoluntaryItemTrigger
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
         [SerializeField] EventType eventType = EventType.Always;

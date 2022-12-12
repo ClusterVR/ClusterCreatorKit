@@ -159,6 +159,18 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             return validationMessages;
         }
 
+        internal static IEnumerable<ValidationMessage> ValidateRenderers(GameObject gameObject)
+        {
+            var validationMessages = new List<ValidationMessage>();
+
+            if (gameObject.GetComponentInChildren<MeshRenderer>(false) == null)
+            {
+                validationMessages.Add(new ValidationMessage("少なくとも1つのMeshが有効である必要があります", ValidationMessage.MessageType.Error));
+            }
+
+            return validationMessages;
+        }
+
         internal static IEnumerable<ValidationMessage> ValidateBehaviour(Behaviour behaviour, bool isRoot)
         {
             var validationMessages = new List<ValidationMessage>();

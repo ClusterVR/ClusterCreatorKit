@@ -7,6 +7,7 @@ namespace ClusterVR.CreatorKit.Item
         IItem Item { get; }
         bool IsDestroyed { get; }
         void Respawn();
+        bool IsDynamic { get; }
 
         Vector3 Position { get; }
         Quaternion Rotation { get; }

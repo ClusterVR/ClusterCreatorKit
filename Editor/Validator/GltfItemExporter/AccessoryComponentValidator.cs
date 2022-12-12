@@ -24,6 +24,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             validationMessages.AddRange(ComponentValidator.ValidateTransform(gameObject));
             validationMessages.AddRange(ComponentValidator.ValidateItem(gameObject, ItemSizeLimit, true, false));
             validationMessages.AddRange(ComponentValidator.ValidateAttachableItem(gameObject, OffsetPositionLimit));
+            validationMessages.AddRange(ComponentValidator.ValidateRenderers(gameObject));
 
             var requireComponentValidator = new RequireComponentValidator();
             foreach (var component in gameObject.GetComponentsInChildren<Component>(true))

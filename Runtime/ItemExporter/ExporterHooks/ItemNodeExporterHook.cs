@@ -21,6 +21,7 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
             {
                 PhysicalShapes = { PhysicalShapes(go, coordUtils) },
                 MainScreenView = TryGetMainScreenView(go),
+                Disabled = !go.activeSelf,
             };
 
             var extension = new GltfExtensions.ClusterItemNode

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
     [RequireComponent(typeof(Item.Implements.Item))]
-    public sealed class OnCreateItemTrigger : MonoBehaviour, IOnCreateItemTrigger, IItemTrigger
+    public sealed class OnCreateItemTrigger : MonoBehaviour, IOnCreateItemTrigger, IItemTrigger, IInvoluntaryItemTrigger
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
         [SerializeField, ItemConstantTriggerParam] ConstantTriggerParam[] triggers;

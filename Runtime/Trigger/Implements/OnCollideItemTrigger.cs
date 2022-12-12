@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
     [RequireComponent(typeof(Item.Implements.Item))]
-    public sealed class OnCollideItemTrigger : MonoBehaviour, IItemTrigger
+    public sealed class OnCollideItemTrigger : MonoBehaviour, IItemTrigger, IInvoluntaryItemTrigger
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
         [SerializeField] CollisionEventType collisionEventType;

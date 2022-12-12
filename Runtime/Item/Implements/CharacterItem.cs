@@ -12,6 +12,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         public override IItem Item => item != null ? item : item = GetComponent<Item>();
         bool IMovableItem.IsDestroyed => this == null;
+        bool IMovableItem.IsDynamic => true;
         Vector3 IMovableItem.Position => transform.position;
         Quaternion IMovableItem.Rotation => transform.rotation;
         public override Vector3 Velocity => characterController.velocity;

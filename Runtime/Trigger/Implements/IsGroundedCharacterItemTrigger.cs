@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Trigger.Implements
 {
     [RequireComponent(typeof(CharacterItem))]
-    public sealed class IsGroundedCharacterItemTrigger : MonoBehaviour, IOnReceiveOwnershipItemTrigger
+    public sealed class IsGroundedCharacterItemTrigger : MonoBehaviour, IOnReceiveOwnershipItemTrigger, IInvoluntaryItemTrigger
     {
         [SerializeField, HideInInspector] CharacterItem characterItem;
         [SerializeField, ItemVariableTriggerParam(ParameterType.Bool)]

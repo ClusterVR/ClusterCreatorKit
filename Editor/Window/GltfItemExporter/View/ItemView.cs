@@ -146,6 +146,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             catch
             {
                 Object.DestroyImmediate(thumbnail);
+                throw;
             }
         }
 
@@ -176,6 +177,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             GltfContainer container = null;
             validationMessages.Clear();
 
+            validationMessages.AddRange(GameObjectValidator.Validate(Item.gameObject));
             validationMessages.AddRange(componentValidator.Validate(Item));
 
             var buildGlbContainerValidationMessages = gltfValidator.Validate(Item).ToList();

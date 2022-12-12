@@ -42,6 +42,15 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         bool IMovableItem.IsDestroyed => this == null;
 
+        bool IMovableItem.IsDynamic
+        {
+            get
+            {
+                CacheInitialValue();
+                return !initialIsKinematic;
+            }
+        }
+
         Vector3 IMovableItem.Position => gameObject.activeInHierarchy ? Rigidbody.position : transform.position;
         Quaternion IMovableItem.Rotation => gameObject.activeInHierarchy ? Rigidbody.rotation : transform.rotation;
         public override Vector3 Velocity => Rigidbody.velocity;

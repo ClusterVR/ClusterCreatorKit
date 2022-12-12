@@ -53,8 +53,13 @@ namespace ClusterVR.CreatorKit.Editor.ItemExporter
 
         static Bounds EncapsulationBounds(GameObject go)
         {
-            return go.GetComponentsInChildren<Renderer>()
-                .Select(r => r.bounds)
+            var activeRenderers = go.GetComponentsInChildren<Renderer>();
+            if (activeRenderers.Length == 0)
+            {
+                return new Bounds(Vector3.zero, Vector3.one);
+            }
+
+            return activeRenderers.Select(r => r.bounds)
                 .Aggregate(((result, current) =>
                 {
                     result.Encapsulate(current);
