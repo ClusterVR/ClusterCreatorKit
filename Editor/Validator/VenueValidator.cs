@@ -83,7 +83,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
 
             var scriptableItems = allRootObjects.SelectMany(x =>
                 x.GetComponentsInChildren<ClusterVR.CreatorKit.Item.Implements.ScriptableItem>(true));
-            var invalidScriptableItems = scriptableItems.Where(s => !s.IsValid()).ToArray();
+            var invalidScriptableItems = scriptableItems.Where(s => !s.IsValid(true)).ToArray();
             if (invalidScriptableItems.Any())
             {
                 errorMessage = $"{nameof(ScriptableItem)}のsource codeが長すぎます｡最大値: {Constants.Constants.ScriptableItemMaxSourceCodeByteCount}bytes";
@@ -130,6 +130,28 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 const int vectorSuffixLength = 2;
                 errorMessage = $"Key は {Constants.TriggerGimmick.MaxKeyLength}文字以下({nameof(ParameterType)} が {nameof(ParameterType.Vector2)} もしくは {nameof(ParameterType.Vector3)} の場合は{Constants.TriggerGimmick.MaxKeyLength - vectorSuffixLength}文字)である必要があります。";
                 invalidObjects = invalidKeyLengthComponents.Select(x => x.gameObject).ToArray();
+                return false;
+            }
+
+            var idContainers = allRootObjects.SelectMany(x => x.GetComponentsInChildren<IIdContainer>(true)).ToArray();
+
+            var invalidCharacterIdContainers = idContainers
+                .Where(c => c.Ids.Any(id => !Constants.Component.ValidIdCharactersRegex.IsMatch(id)))
+                .ToArray();
+            if (invalidCharacterIdContainers.Any())
+            {
+                errorMessage = $"Id には英数字とアポストロフィ・カンマ・ハイフン・ピリオド・アンダースコアのみが使用可能です。";
+                invalidObjects = invalidCharacterIdContainers.OfType<Component>().Select(x => x.gameObject).ToArray();
+                return false;
+            }
+
+            var invalidLengthIdContainers = idContainers
+                .Where(c => c.Ids.Any(id => id.Length > Constants.Component.MaxIdLength))
+                .ToArray();
+            if (invalidLengthIdContainers.Any())
+            {
+                errorMessage = $"Id は {Constants.Component.MaxIdLength}文字以下である必要があります。";
+                invalidObjects = invalidLengthIdContainers.OfType<Component>().Select(x => x.gameObject).ToArray();
                 return false;
             }
 

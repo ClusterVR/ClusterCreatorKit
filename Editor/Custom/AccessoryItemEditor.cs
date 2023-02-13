@@ -90,6 +90,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 if (IsEditableAsset(material))
                 {
                     material.shader = targetShader;
+                    MToon.Utils.ValidateProperties(material);
                     EditorUtility.SetDirty(material);
                 }
                 else
@@ -123,6 +124,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
                     var copiedMaterial = new Material(material);
                     copiedMaterial.shader = targetShader;
+                    MToon.Utils.ValidateProperties(copiedMaterial);
 
                     AssetDatabase.CreateAsset(copiedMaterial, GetUniquePath(folderToSave, copiedMaterial));
                     foreach (var (renderer, index) in t)

@@ -13,13 +13,14 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
     {
         const int ItemNameLengthLimit = 64;
 
-        static readonly Type[] ItemComponentWhiteList =
+        static readonly Type[] RootComponentWhiteList =
         {
             typeof(Item.Implements.Item),
             typeof(GrabbableItem),
             typeof(MovableItem),
             typeof(RidableItem),
-            typeof(ScriptableItem)
+            typeof(ScriptableItem),
+            typeof(ItemAudioSetList)
         };
 
         static readonly Type[] AccessoryRootComponentWhiteList =
@@ -27,6 +28,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             typeof(Item.Implements.Item),
             typeof(AccessoryItem)
         };
+
         static readonly Type[] AccessoryComponentWhiteList =
         {
             typeof(Transform),
@@ -37,6 +39,11 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
         static readonly Type[] BehaviourWhiteList =
         {
             typeof(StandardMainScreenView),
+        };
+
+        static readonly Dictionary<Type, Type[]> AdditionalRequireComponents = new()
+        {
+            { typeof(ItemAudioSetList), new[] { typeof(ScriptableItem) } }
         };
 
         internal static IEnumerable<ValidationMessage> ValidateTransform(GameObject gameObject)
@@ -129,9 +136,9 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 return Enumerable.Empty<ValidationMessage>();
             }
 
-            return scriptableItem.IsValid()
+            return scriptableItem.IsValid(true)
                 ? Enumerable.Empty<ValidationMessage>()
-                : new[] { new ValidationMessage($"{gameObject.name}のScriptableItemのsource codeが長すぎます｡現在：{scriptableItem.GetByteCount()}bytes, 最大値：{Constants.Constants.ScriptableItemMaxSourceCodeByteCount}bytes", ValidationMessage.MessageType.Error) };
+                : new[] { new ValidationMessage($"{gameObject.name}のScriptableItemのsource codeが長すぎます｡現在：{scriptableItem.GetByteCount(true)}bytes, 最大値：{Constants.Constants.ScriptableItemMaxSourceCodeByteCount}bytes", ValidationMessage.MessageType.Error) };
         }
 
         internal static IEnumerable<ValidationMessage> ValidateAttachableItem(GameObject gameObject, Vector3 offsetPositionLimit)
@@ -174,28 +181,42 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
         internal static IEnumerable<ValidationMessage> ValidateBehaviour(Behaviour behaviour, bool isRoot)
         {
             var validationMessages = new List<ValidationMessage>();
+            var behaviourType = behaviour.GetType();
 
             var isInvalidComponent =
-                !BehaviourWhiteList.Contains(behaviour.GetType()) &&
-                !ItemComponentWhiteList.Contains(behaviour.GetType());
+                !BehaviourWhiteList.Contains(behaviourType) &&
+                !RootComponentWhiteList.Contains(behaviourType);
 
             if (isInvalidComponent)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{behaviour.gameObject.name}の{behaviour.GetType()}は対応していないため正しく動作しません。",
+                    $"{behaviour.gameObject.name}の{behaviourType}は対応していないため正しく動作しません。",
                     ValidationMessage.MessageType.Warning));
                 return validationMessages;
             }
 
             var isChildItemComponent =
-                !isRoot && ItemComponentWhiteList.Contains(behaviour.GetType());
+                !isRoot && RootComponentWhiteList.Contains(behaviourType);
 
             if (isChildItemComponent)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{behaviour.gameObject.name}の{behaviour.GetType()}は無効化されます。RootのGameObjectに設定してください。",
+                    $"{behaviour.gameObject.name}の{behaviourType}は無効化されます。RootのGameObjectに設定してください。",
                     ValidationMessage.MessageType.Warning));
                 return validationMessages;
+            }
+
+            if (AdditionalRequireComponents.TryGetValue(behaviourType, out var requireComponents))
+            {
+                if (!requireComponents.Any(t => behaviour.GetComponent(t) != null))
+                {
+                    var isSingular = requireComponents.Length == 1;
+                    var message = isSingular ?
+                        $"{behaviour.gameObject.name}の{behaviourType}は無効化されます。{requireComponents[0]}をGameObjectに設定してください。" :
+                        $"{behaviour.gameObject.name}の{behaviourType}は無効化されます。{string.Join(", ", requireComponents.Select(c => c.ToString()))}のいずれかをGameObjectに設定してください。";
+                    validationMessages.Add(new ValidationMessage(message, ValidationMessage.MessageType.Warning));
+                    return validationMessages;
+                }
             }
 
             return validationMessages;
@@ -299,6 +320,17 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                     $"{name}のBoundsSizeが規定値以上です。現在：{size}, 規定値：{boundsSizeLimit}",
                     ValidationMessage.MessageType.Error));
             }
+        }
+
+        public static IEnumerable<ValidationMessage> ValidateItemAudioSetList(GameObject gameObject)
+        {
+            var itemAudioSetList = gameObject.GetComponent<IItemAudioSetList>();
+            if (itemAudioSetList == null)
+            {
+                return Enumerable.Empty<ValidationMessage>();
+            }
+
+            return ItemAudioSetListValidator.Validate(itemAudioSetList);
         }
     }
 }

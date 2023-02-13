@@ -12,6 +12,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
         [SerializeField, TextArea] string sourceCode;
 
         bool isSourceCodeInitialized;
+        string usingSourceCode;
 
         Item item;
         public IItem Item
@@ -32,49 +33,45 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         public event Action<string> OnSourceCodeChanged;
 
-        public string GetSourceCode()
+        public string GetSourceCode(bool refresh = false)
         {
-            if (isSourceCodeInitialized)
+            if (refresh || !isSourceCodeInitialized)
             {
-                return sourceCode;
+                usingSourceCode = (sourceCodeAsset != null ? sourceCodeAsset.text : sourceCode) ?? "";
+                isSourceCodeInitialized = true;
             }
-            if (sourceCodeAsset != null)
-            {
-                sourceCode = sourceCodeAsset.text;
-            }
-            sourceCode ??= "";
-            isSourceCodeInitialized = true;
-            return sourceCode;
+            return usingSourceCode;
         }
 
         public void SetSourceCode(string sourceCode)
         {
             Assert.IsTrue(isSourceCodeInitialized);
 
-            if (this.sourceCode == sourceCode)
+            sourceCode ??= "";
+            if (usingSourceCode == sourceCode)
             {
                 return;
             }
-            this.sourceCode = sourceCode;
-            OnSourceCodeChanged?.Invoke(sourceCode);
+            usingSourceCode = sourceCode;
+            OnSourceCodeChanged?.Invoke(usingSourceCode);
         }
 
         public void Construct(string sourceCode)
         {
             Assert.IsFalse(isSourceCodeInitialized);
 
-            this.sourceCode = sourceCode;
+            this.sourceCode = usingSourceCode = sourceCode ?? "";
             isSourceCodeInitialized = true;
         }
 
-        public bool IsValid()
+        public bool IsValid(bool refresh = false)
         {
-            return GetByteCount() <= Constants.Constants.ScriptableItemMaxSourceCodeByteCount;
+            return GetByteCount(refresh) <= Constants.Constants.ScriptableItemMaxSourceCodeByteCount;
         }
 
-        public int GetByteCount()
+        public int GetByteCount(bool refresh)
         {
-            return Encoding.UTF8.GetByteCount(GetSourceCode());
+            return Encoding.UTF8.GetByteCount(GetSourceCode(refresh));
         }
     }
 }

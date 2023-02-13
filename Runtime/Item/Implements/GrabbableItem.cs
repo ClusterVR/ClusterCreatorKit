@@ -11,7 +11,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
         [SerializeField, HideInInspector] MovableItem movableItem;
         [SerializeField, Tooltip("持ち手（任意）")] Transform grip;
 
-        public override IItem Item => MovableItem.Item;
+        public override IItem Item => MovableItem != null ? MovableItem.Item : null;
 
         public IMovableItem MovableItem
         {

@@ -1,6 +1,7 @@
 {
     "name": "ClusterVR.CreatorKit.Item.Implements",
     "references": [
+        "ClusterVR.CreatorKit",
         "ClusterVR.CreatorKit.Item",
         "ClusterVR.CreatorKit.Constants",
         "ClusterVR.CreatorKit.Extensions",

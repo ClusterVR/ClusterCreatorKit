@@ -36,6 +36,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 
             validationMessages.AddRange(ComponentValidator.ValidateBounds(gameObject, BoundsCenterLimit, BoundsSizeLimit));
             validationMessages.AddRange(ComponentValidator.ValidateShader(gameObject, ShaderNameWhiteList, true));
+            validationMessages.AddRange(ComponentValidator.ValidateItemAudioSetList(gameObject));
 
             return validationMessages;
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.ItemExporter.Utils;
@@ -8,6 +9,11 @@ using Google.Protobuf.Collections;
 using UnityEngine;
 using VGltf.Types.Extensions;
 using VGltf.Unity;
+using ItemAudioSet = ClusterVR.CreatorKit.Item.ItemAudioSet;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
 {
@@ -54,6 +60,8 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 GrabbableItem = ExtractGrabbableItemProto(exporter, go),
                 ScriptableItem = ExtractScriptableItemProto(go)
             };
+
+            proto.ItemAudioSetList.AddRange(ExtractItemAudioSetListProto(go));
 
             var extension = new GltfExtensions.ClusterItem
             {
@@ -155,7 +163,7 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
             }
             return new ScriptableItem
             {
-                SourceCode = scriptableItemComponent.GetSourceCode()
+                SourceCode = scriptableItemComponent.GetSourceCode(true)
             };
         }
 
@@ -177,6 +185,116 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 return true;
             }
             return false;
+        }
+
+        IEnumerable<Proto.ItemAudioSet> ExtractItemAudioSetListProto(GameObject go)
+        {
+            var itemAudioSetList = go.GetComponent<IItemAudioSetList>();
+            if (itemAudioSetList == null)
+            {
+                return Enumerable.Empty<Proto.ItemAudioSet>();
+            }
+            if (go.GetComponent<IScriptableItem>() == null)
+            {
+                return Enumerable.Empty<Proto.ItemAudioSet>();
+            }
+
+            return itemAudioSetList.ItemAudioSets.Select(Convert);
+        }
+
+        static Proto.ItemAudioSet Convert(ItemAudioSet source)
+        {
+            var pcm = ExtractPcm(source.AudioClip, source.Id);
+            return new Proto.ItemAudioSet
+            {
+                Id = source.Id,
+                Audio = new Audio { Pcm = pcm },
+                Loop = source.Loop
+            };
+        }
+
+        static Pcm ExtractPcm(AudioClip audioClip, string id)
+        {
+            if (audioClip == null)
+            {
+                throw new MissingAudioClipException(id);
+            }
+
+            var data = ExtractAudioData(audioClip, id);
+            var pcm = new Pcm()
+            {
+                Channels = (uint)audioClip.channels,
+                SampleRate = (uint)audioClip.frequency,
+            };
+            pcm.Data.AddRange(data);
+            return pcm;
+        }
+
+        static float[] ExtractAudioData(AudioClip clip, string id)
+        {
+            if (clip.loadType == AudioClipLoadType.DecompressOnLoad)
+            {
+                var data = new float[clip.samples * clip.channels];
+                if (clip.GetData(data, 0))
+                {
+                    return data;
+                }
+                else
+                {
+                    throw new ExtractAudioDataFailedException(id);
+                }
+            }
+#if UNITY_EDITOR
+            var path = AssetDatabase.GetAssetPath(clip);
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ExtractAudioDataFailedException(id);
+            }
+            var importer = AssetImporter.GetAtPath(path) as AudioImporter;
+            if (importer == null)
+            {
+                throw new ExtractAudioDataFailedException(id);
+            }
+            var currentLoadInBackground = importer.loadInBackground;
+            importer.loadInBackground = false;
+            const string editorPlatform = "Standalone";
+            var hasOverrideSampleSettings = importer.ContainsSampleSettingsOverride(editorPlatform);
+            var currentSettings = importer.GetOverrideSampleSettings(editorPlatform);
+            var newSettings = currentSettings;
+            newSettings.loadType = AudioClipLoadType.DecompressOnLoad;
+            if (!importer.SetOverrideSampleSettings(editorPlatform, newSettings))
+            {
+                throw new ExtractAudioDataFailedException(id);
+            }
+            try
+            {
+                importer.SaveAndReimport();
+                var data = new float[clip.samples * clip.channels];
+                if (clip.GetData(data, 0))
+                {
+                    return data;
+                }
+                else
+                {
+                    throw new ExtractAudioDataFailedException(id);
+                }
+            }
+            finally
+            {
+                importer.loadInBackground = currentLoadInBackground;
+                if (hasOverrideSampleSettings)
+                {
+                    importer.SetOverrideSampleSettings(editorPlatform, currentSettings);
+                }
+                else
+                {
+                    importer.ClearSampleSettingOverride(editorPlatform);
+                }
+                importer.SaveAndReimport();
+            }
+#else
+            throw new ExtractAudioDataFailedException(id);
+#endif
         }
     }
 }

@@ -15,7 +15,22 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         [SerializeField, HideInInspector] Item.Implements.Item item;
         [SerializeField, ItemConstantTriggerParam] ConstantTriggerParam[] triggers;
 
-        public override IItem Item => item != null ? item : item = GetComponent<Item.Implements.Item>();
+        public override IItem Item
+        {
+            get
+            {
+                if (item != null)
+                {
+                    return item;
+                }
+                if (this == null)
+                {
+                    return null;
+                }
+                return item = GetComponent<Item.Implements.Item>();
+            }
+        }
+
         public override bool IsContactable => true;
         public override bool RequireOwnership => true;
         public event TriggerEventHandler TriggerEvent;

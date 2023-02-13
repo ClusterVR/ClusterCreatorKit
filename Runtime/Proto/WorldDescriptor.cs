@@ -18,10 +18,10 @@ namespace ClusterVR.CreatorKit.Proto {
     static WorldDescriptorReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChZ3b3JsZF9kZXNjcmlwdG9yLnByb3RvEhJjbHVzdGVyLmNyZWF0b3JraXQi",
-            "NgoPV29ybGREZXNjcmlwdG9yEiMKG3BlcnNpc3RlZF9wbGF5ZXJfc3RhdGVf",
-            "a2V5cxgBIAMoCUItWg5jbHVzdGVyLm11L3JwY6oCGkNsdXN0ZXJWUi5DcmVh",
-            "dG9yS2l0LlByb3RvYgZwcm90bzM="));
+            "CiVhcGkvY3JlYXRvcmtpdC93b3JsZF9kZXNjcmlwdG9yLnByb3RvEhJjbHVz",
+            "dGVyLmNyZWF0b3JraXQiNgoPV29ybGREZXNjcmlwdG9yEiMKG3BlcnNpc3Rl",
+            "ZF9wbGF5ZXJfc3RhdGVfa2V5cxgBIAMoCUItWg5jbHVzdGVyLm11L3JwY6oC",
+            "GkNsdXN0ZXJWUi5DcmVhdG9yS2l0LlByb3RvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {

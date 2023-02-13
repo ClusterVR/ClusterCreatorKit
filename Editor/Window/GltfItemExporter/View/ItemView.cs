@@ -7,6 +7,7 @@ using ClusterVR.CreatorKit.Editor.ItemExporter;
 using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.ItemExporter;
+using ClusterVR.CreatorKit.ItemExporter.ExporterHooks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -184,8 +185,22 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             validationMessages.AddRange(buildGlbContainerValidationMessages);
             if (buildGlbContainerValidationMessages.All(message => message.Type != ValidationMessage.MessageType.Error))
             {
-                container = itemExporter.ExportAsGltfContainer(Item);
-                validationMessages.AddRange(gltfValidator.Validate(container));
+                try
+                {
+                    container = itemExporter.ExportAsGltfContainer(Item);
+                    validationMessages.AddRange(gltfValidator.Validate(container));
+                }
+                catch (Exception e)
+                {
+                    if (TryGetReadableMessageOfGltfContainerException(e, out var message))
+                    {
+                        validationMessages.Add(new ValidationMessage(message, ValidationMessage.MessageType.Error));
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
 
             if (validationMessages.Count == 0)
@@ -196,6 +211,22 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             IsValid = validationMessages.All(message => message.Type != ValidationMessage.MessageType.Error);
 
             return container;
+        }
+
+        bool TryGetReadableMessageOfGltfContainerException(Exception exception, out string message)
+        {
+            switch (exception)
+            {
+                case MissingAudioClipException e:
+                    message = $"AudioClipがみつかりませんでした。ItemAudioSetにAudioClipを設定してください。(Id: {e.Id})";
+                    return true;
+                case ExtractAudioDataFailedException e:
+                    message = $"AudioClipの情報の取得に失敗しました。(Id: {e.Id})";
+                    return true;
+                default:
+                    message = default;
+                    return false;
+            }
         }
     }
 }
