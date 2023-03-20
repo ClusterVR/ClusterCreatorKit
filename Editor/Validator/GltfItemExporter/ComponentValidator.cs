@@ -23,6 +23,16 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             typeof(ItemAudioSetList)
         };
 
+        static readonly Type[] ItemComponentWhiteList =
+        {
+            typeof(Transform),
+            typeof(MeshFilter),
+            typeof(MeshRenderer),
+            typeof(Collider),
+            typeof(Rigidbody), // MovableItemで利用可能
+            typeof(StandardMainScreenView)
+        };
+
         static readonly Type[] AccessoryRootComponentWhiteList =
         {
             typeof(Item.Implements.Item),
@@ -36,15 +46,15 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             typeof(MeshRenderer),
         };
 
-        static readonly Type[] BehaviourWhiteList =
-        {
-            typeof(StandardMainScreenView),
-        };
-
         static readonly Dictionary<Type, Type[]> AdditionalRequireComponents = new()
         {
             { typeof(ItemAudioSetList), new[] { typeof(ScriptableItem) } }
         };
+
+        static bool Contains(IEnumerable<Type> list, Type target)
+        {
+            return list.Any(typeInList => (target.IsSubclassOf(typeInList) || target == typeInList));
+        }
 
         internal static IEnumerable<ValidationMessage> ValidateTransform(GameObject gameObject)
         {
@@ -178,42 +188,42 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             return validationMessages;
         }
 
-        internal static IEnumerable<ValidationMessage> ValidateBehaviour(Behaviour behaviour, bool isRoot)
+        internal static IEnumerable<ValidationMessage> ValidateComponent(Component component, bool isRoot)
         {
             var validationMessages = new List<ValidationMessage>();
-            var behaviourType = behaviour.GetType();
+            var componentType = component.GetType();
 
             var isInvalidComponent =
-                !BehaviourWhiteList.Contains(behaviourType) &&
-                !RootComponentWhiteList.Contains(behaviourType);
+                !Contains(ItemComponentWhiteList, componentType) &&
+                !RootComponentWhiteList.Contains(componentType);
 
             if (isInvalidComponent)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{behaviour.gameObject.name}の{behaviourType}は対応していないため正しく動作しません。",
+                    $"{component.gameObject.name}の{componentType}は対応していないため正しく動作しません。",
                     ValidationMessage.MessageType.Warning));
                 return validationMessages;
             }
 
             var isChildItemComponent =
-                !isRoot && RootComponentWhiteList.Contains(behaviourType);
+                !isRoot && RootComponentWhiteList.Contains(componentType);
 
             if (isChildItemComponent)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{behaviour.gameObject.name}の{behaviourType}は無効化されます。RootのGameObjectに設定してください。",
+                    $"{component.gameObject.name}の{componentType}は無効化されます。RootのGameObjectに設定してください。",
                     ValidationMessage.MessageType.Warning));
                 return validationMessages;
             }
 
-            if (AdditionalRequireComponents.TryGetValue(behaviourType, out var requireComponents))
+            if (AdditionalRequireComponents.TryGetValue(componentType, out var requireComponents))
             {
-                if (!requireComponents.Any(t => behaviour.GetComponent(t) != null))
+                if (!requireComponents.Any(t => component.GetComponent(t) != null))
                 {
                     var isSingular = requireComponents.Length == 1;
                     var message = isSingular ?
-                        $"{behaviour.gameObject.name}の{behaviourType}は無効化されます。{requireComponents[0]}をGameObjectに設定してください。" :
-                        $"{behaviour.gameObject.name}の{behaviourType}は無効化されます。{string.Join(", ", requireComponents.Select(c => c.ToString()))}のいずれかをGameObjectに設定してください。";
+                        $"{component.gameObject.name}の{componentType}は無効化されます。{requireComponents[0]}をGameObjectに設定してください。" :
+                        $"{component.gameObject.name}の{componentType}は無効化されます。{string.Join(", ", requireComponents.Select(c => c.ToString()))}のいずれかをGameObjectに設定してください。";
                     validationMessages.Add(new ValidationMessage(message, ValidationMessage.MessageType.Warning));
                     return validationMessages;
                 }
@@ -222,28 +232,28 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             return validationMessages;
         }
 
-        internal static IEnumerable<ValidationMessage> ValidateAccessoryComponent(Component behaviour, bool isRoot)
+        internal static IEnumerable<ValidationMessage> ValidateAccessoryComponent(Component component, bool isRoot)
         {
             var validationMessages = new List<ValidationMessage>();
 
             var validComponentList = AccessoryRootComponentWhiteList.Concat(AccessoryComponentWhiteList);
-            var isInvalidComponent = !validComponentList.Contains(behaviour.GetType());
+            var isInvalidComponent = !validComponentList.Contains(component.GetType());
 
             if (isInvalidComponent)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{behaviour.gameObject.name}の{behaviour.GetType()}は対応していません。",
+                    $"{component.gameObject.name}の{component.GetType()}は対応していません。",
                     ValidationMessage.MessageType.Error));
                 return validationMessages;
             }
 
             var isChildAccessoryComponent =
-                !isRoot && AccessoryRootComponentWhiteList.Contains(behaviour.GetType());
+                !isRoot && AccessoryRootComponentWhiteList.Contains(component.GetType());
 
             if (isChildAccessoryComponent)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{behaviour.gameObject.name}の{behaviour.GetType()}は無効化されます。RootのGameObjectに設定してください。",
+                    $"{component.gameObject.name}の{component.GetType()}は無効化されます。RootのGameObjectに設定してください。",
                     ValidationMessage.MessageType.Warning));
                 return validationMessages;
             }

@@ -14,7 +14,7 @@ namespace ClusterVR.CreatorKit.Operation.Implements
     public sealed class GlobalTimer : MonoBehaviour, IGlobalTrigger, IGlobalGimmick, IRerunOnReceiveOwnershipInvoluntaryGimmick
     {
         [SerializeField] GlobalGimmickKey globalGimmickKey;
-        [SerializeField] float delayTimeSeconds = 1;
+        [SerializeField, Min(0.01f)] float delayTimeSeconds = 1;
         [SerializeField, GlobalOperationTriggerParam] ConstantTriggerParam[] triggers;
 
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;
@@ -84,7 +84,6 @@ namespace ClusterVR.CreatorKit.Operation.Implements
 
         void OnValidate()
         {
-            delayTimeSeconds = Mathf.Max(delayTimeSeconds, 0.01f);
             triggers = triggers?.Select(trigger =>
             {
                 return trigger.Target != TriggerTarget.Global

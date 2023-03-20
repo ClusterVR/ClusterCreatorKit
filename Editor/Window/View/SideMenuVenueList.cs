@@ -65,8 +65,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             void RecreateVenuePicker(GroupID groupId)
             {
                 venuePickerHolder.Clear();
-                venuePickerHolder.Add(
-                    CreateVenuePicker(groupId, allVenues[groupId], cancellationToken, venueIdToSelect));
+                venuePickerHolder.Add(CreateVenuePicker(groupId, allVenues[groupId], cancellationToken, venueIdToSelect));
             }
 
             try
@@ -110,16 +109,22 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             }
         }
 
-        VisualElement CreateVenuePicker(GroupID groupId, Venues venues, CancellationToken cancellationToken,
-            VenueID venueIdToSelect = null)
+        VisualElement CreateVenuePicker(GroupID groupId, Venues venues, CancellationToken cancellationToken, VenueID venueIdToSelect)
         {
-            var venueList = new ScrollView(ScrollViewMode.Vertical)
+            var venuePicker = new VisualElement();
+            venuePicker.Add(new Button(() => CreateNewVenue(groupId, cancellationToken)) { text = "新規作成" });
+            venuePicker.Add(new Label() { text = "作成済みワールドから選ぶ", style = { marginTop = 12 } });
+            venuePicker.Add(CreateVenueList(venues, venueIdToSelect));
+            return venuePicker;
+        }
+
+        VisualElement CreateVenueList(Venues venues, VenueID venueIdToSelect)
+        {
+            var venueList = new ScrollView(ScrollViewMode.VerticalAndHorizontal)
             {
                 style = { marginTop = 8, flexGrow = 1 }
             };
-            venueList.Add(new Button(() => CreateNewVenue(groupId, cancellationToken)) { text = "新規作成" });
 
-            venueList.Add(new Label() { text = "作成済みワールドから選ぶ", style = { marginTop = 12 } });
             foreach (var venue in venues.List.OrderBy(venue => venue.Name))
             {
                 var venueButton = new Button(() => { reactiveCurrentVenue.Val = venue; })

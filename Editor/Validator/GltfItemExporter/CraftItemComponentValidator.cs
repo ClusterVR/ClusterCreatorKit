@@ -26,11 +26,11 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             validationMessages.AddRange(ComponentValidator.ValidateRenderers(gameObject));
 
             var requireComponentValidator = new RequireComponentValidator();
-            foreach (var behaviour in gameObject.GetComponentsInChildren<Behaviour>(true))
+            foreach (var component in gameObject.GetComponentsInChildren<Component>(true))
             {
-                var isRoot = behaviour.gameObject == gameObject;
-                validationMessages.AddRange(ComponentValidator.ValidateBehaviour(behaviour, isRoot));
-                requireComponentValidator.Validate(behaviour);
+                var isRoot = component.gameObject == gameObject;
+                validationMessages.AddRange(ComponentValidator.ValidateComponent(component, isRoot));
+                requireComponentValidator.Validate(component);
             }
             validationMessages.AddRange(requireComponentValidator.GetMessage());
 
