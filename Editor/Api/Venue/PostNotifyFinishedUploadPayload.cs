@@ -9,14 +9,10 @@ namespace ClusterVR.CreatorKit.Editor.Api.Venue
     [Serializable]
     public sealed class PostNotifyFinishedUploadPayload
     {
-        [SerializeField] bool isPublish;
         [SerializeField] string worldDescriptor;
 
-        public bool IsPublish => isPublish;
-
-        public PostNotifyFinishedUploadPayload(bool isPublish, WorldDescriptor worldDescriptor)
+        public PostNotifyFinishedUploadPayload(WorldDescriptor worldDescriptor)
         {
-            this.isPublish = isPublish;
             this.worldDescriptor = worldDescriptor.ToByteArray().ToSafeBase64();
         }
     }

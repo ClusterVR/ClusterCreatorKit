@@ -13,99 +13,137 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public sealed class SideMenuVenueList
+    public sealed class SideMenuVenueList : IDisposable
     {
         public readonly Reactive<Venue> reactiveCurrentVenue = new Reactive<Venue>();
 
         readonly UserInfo userInfo;
 
-        readonly Dictionary<GroupID, Venues> allVenues = new Dictionary<GroupID, Venues>();
+        readonly Dictionary<GroupID, Venues> loadedVenues = new Dictionary<GroupID, Venues>();
 
-        VisualElement selector;
+        VisualElement groupSelector;
+        VisualElement venueSelector;
+
+        CancellationTokenSource groupSelectCancellationTokenSource;
+        CancellationTokenSource venueSelectCancellationTokenSource;
 
         public SideMenuVenueList(UserInfo userInfo)
         {
             this.userInfo = userInfo;
         }
 
-        public void AddView(VisualElement parent, CancellationToken cancellationToken)
+        public void AddView(VisualElement parent)
         {
-            selector = new VisualElement()
+            groupSelector = new VisualElement()
             {
                 style = { flexGrow = 1 }
             };
-            parent.Add(selector);
-            _ = RefreshVenueSelector(cancellationToken);
+            venueSelector = new VisualElement()
+            {
+                style = { flexGrow = 1 }
+            };
+            parent.Add(groupSelector);
+            RefreshGroupSelector();
         }
 
-        public void RefetchVenueWithoutChangingSelection(CancellationToken cancellationToken)
+        public void RefetchVenueWithoutChangingSelection()
         {
             var currentVenue = reactiveCurrentVenue.Val;
             if (currentVenue != null)
             {
-                _ = RefreshVenueSelector(cancellationToken, currentVenue.Group.Id, currentVenue.VenueId);
+                RefreshGroupSelector(currentVenue.Group.Id, currentVenue.VenueId);
             }
             else
             {
-                _ = RefreshVenueSelector(cancellationToken);
+                RefreshGroupSelector();
             }
         }
 
-        async Task RefreshVenueSelector(CancellationToken cancellationToken, GroupID groupIdToSelect = null,
+        void RefreshVenueSelector(GroupID groupId, VenueID venueIdToSelect)
+        {
+            CancelVenueSelector();
+            venueSelectCancellationTokenSource = new();
+            _ = RefreshVenueSelectorAsync(groupId, venueIdToSelect, venueSelectCancellationTokenSource.Token);
+        }
+
+        async Task RefreshVenueSelectorAsync(GroupID groupId, VenueID venueIdToSelect, CancellationToken cancellationToken)
+        {
+            venueSelector.Clear();
+            venueSelector.Add(new Label() { text = "loading..." });
+
+            try
+            {
+                if (!loadedVenues.TryGetValue(groupId, out var venues))
+                {
+                    venues = await APIServiceClient.GetGroupVenues(groupId, userInfo.VerifiedToken, cancellationToken);
+                    loadedVenues.Add(groupId, venues);
+                }
+                venueSelector.Clear();
+                venueSelector.Add(CreateVenuePicker(groupId, venues, cancellationToken, venueIdToSelect));
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception e)
+            {
+                venueSelector.Clear();
+                venueSelector.Add(new IMGUIContainer(() => EditorGUILayout.HelpBox($"会場情報の取得に失敗しました", MessageType.Error)));
+            }
+        }
+
+        void RefreshGroupSelector(GroupID groupIdToSelect = null, VenueID venueIdToSelect = null)
+        {
+            CancelGroupSelector();
+            groupSelectCancellationTokenSource = new();
+            _ = RefreshGroupSelectorAsync(groupSelectCancellationTokenSource.Token, groupIdToSelect, venueIdToSelect);
+        }
+
+        async Task RefreshGroupSelectorAsync(CancellationToken cancellationToken, GroupID groupIdToSelect = null,
             VenueID venueIdToSelect = null)
         {
-            selector.Clear();
-            selector.Add(new Label() { text = "loading..." });
+            CancelVenueSelector();
 
-            var venuePickerHolder = new VisualElement()
-            {
-                style = { flexGrow = 1 }
-            };
+            venueSelector.Clear();
+            loadedVenues.Clear();
 
-            void RecreateVenuePicker(GroupID groupId)
-            {
-                venuePickerHolder.Clear();
-                venuePickerHolder.Add(CreateVenuePicker(groupId, allVenues[groupId], cancellationToken, venueIdToSelect));
-            }
+            groupSelector.Clear();
+            groupSelector.Add(new Label() { text = "loading..." });
 
             try
             {
                 var groups = await APIServiceClient.GetGroups(userInfo.VerifiedToken, cancellationToken);
-                foreach (var group in groups.List)
-                {
-                    allVenues[@group.Id] =
-                        await APIServiceClient.GetGroupVenues(@group.Id, userInfo.VerifiedToken, cancellationToken);
-                }
-
-                selector.Clear();
-                selector.Add(new Label("所属チーム"));
+                groupSelector.Clear();
+                groupSelector.Add(new Label("所属チーム"));
                 if (groups.List.Count == 0)
                 {
-                    selector.Add(new Label() { text = "読み込みに失敗しました" });
+                    groupSelector.Add(new Label() { text = "読み込みに失敗しました" });
                 }
                 else
                 {
                     var teamMenu = new PopupField<Group>(groups.List, 0, group => group.Name, group => group.Name);
-                    teamMenu.RegisterValueChangedCallback(ev => RecreateVenuePicker(ev.newValue.Id));
-                    selector.Add(teamMenu);
+                    teamMenu.RegisterValueChangedCallback(ev => RefreshVenueSelector(ev.newValue.Id, venueIdToSelect));
+                    groupSelector.Add(teamMenu);
 
                     var groupToSelect = groups.List.Find(group => group.Id == groupIdToSelect) ?? groups.List[0];
                     teamMenu.SetValueWithoutNotify(groupToSelect);
 
-                    RecreateVenuePicker(groupToSelect.Id);
+                    RefreshVenueSelector(groupToSelect.Id, venueIdToSelect);
                 }
 
-                selector.Add(UiUtils.Separator());
+                groupSelector.Add(UiUtils.Separator());
 
-                selector.Add(new Label() { text = "ワールド" });
-                selector.Add(venuePickerHolder);
-
+                groupSelector.Add(new Label() { text = "ワールド" });
+                groupSelector.Add(venueSelector);
+            }
+            catch (OperationCanceledException)
+            {
             }
             catch (Exception e)
             {
                 Debug.LogException(e);
-                selector.Clear();
-                selector.Add(new IMGUIContainer(() => EditorGUILayout.HelpBox($"会場情報の取得に失敗しました", MessageType.Error)));
+                groupSelector.Clear();
+                groupSelector.Add(new Label("所属チーム"));
+                groupSelector.Add(new Label() { text = "読み込みに失敗しました" });
             }
         }
 
@@ -148,16 +186,42 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     new PostNewVenuePayload("New World", "説明未設定", groupId.Value),
                     venue =>
                     {
-                        _ = RefreshVenueSelector(cancellationToken, groupId, venue.VenueId);
+                        RefreshGroupSelector(groupId, venue.VenueId);
                         reactiveCurrentVenue.Val = venue;
                     },
                     exception =>
                     {
                         Debug.LogException(exception);
-                        selector.Add(new IMGUIContainer(() =>
+                        groupSelector.Add(new IMGUIContainer(() =>
                             EditorGUILayout.HelpBox($"新規会場の登録ができませんでした。{exception.Message}", MessageType.Error)));
                     });
             postVenueService.Run(cancellationToken);
+        }
+
+        void CancelGroupSelector()
+        {
+            if (groupSelectCancellationTokenSource != null)
+            {
+                groupSelectCancellationTokenSource.Cancel();
+                groupSelectCancellationTokenSource.Dispose();
+                groupSelectCancellationTokenSource = null;
+            }
+        }
+
+        void CancelVenueSelector()
+        {
+            if (venueSelectCancellationTokenSource != null)
+            {
+                venueSelectCancellationTokenSource.Cancel();
+                venueSelectCancellationTokenSource.Dispose();
+                venueSelectCancellationTokenSource = null;
+            }
+        }
+
+        void IDisposable.Dispose()
+        {
+            CancelGroupSelector();
+            CancelVenueSelector();
         }
     }
 }

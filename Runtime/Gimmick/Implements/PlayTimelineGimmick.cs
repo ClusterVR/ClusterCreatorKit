@@ -21,13 +21,25 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         public event Action OnPlay;
         IStopTimelineGimmick stopTimelineGimmick;
 
+        bool isInitialized;
+
         void Start()
         {
+            EnforceInitialized();
+        }
+
+        void EnforceInitialized()
+        {
+            if (isInitialized)
+            {
+                return;
+            }
             if (playableDirector == null)
             {
                 playableDirector = GetComponent<PlayableDirector>();
             }
             stopTimelineGimmick = GetComponent<IStopTimelineGimmick>();
+            isInitialized = true;
         }
 
         public void Run(GimmickValue value, DateTime current)
@@ -42,6 +54,8 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
         void Run(GimmickValue value, DateTime current, bool useSameValue)
         {
+            EnforceInitialized();
+
             if (playableDirector == null)
             {
                 return;

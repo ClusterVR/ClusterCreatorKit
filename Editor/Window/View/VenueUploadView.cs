@@ -51,7 +51,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             container.Add(mainPane);
 
             var sideMenu = new SideMenuVenueList(userInfo);
-            sideMenu.AddView(sidePane, cancellationTokenSource.Token);
+            disposables.Add(sideMenu);
+            sideMenu.AddView(sidePane);
 
             var mainPaneDisposable = ReactiveBinder.Bind(sideMenu.reactiveCurrentVenue, currentVenue =>
             {
@@ -65,7 +66,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     var editAndUploadVenueView = new EditAndUploadVenueView(userInfo, currentVenue,
                         () =>
                         {
-                            sideMenu.RefetchVenueWithoutChangingSelection(cancellationTokenSource.Token);
+                            sideMenu.RefetchVenueWithoutChangingSelection();
                         });
                     editAndUploadVenueView.AddView(venueContent);
                     disposables.Add(editAndUploadVenueView);

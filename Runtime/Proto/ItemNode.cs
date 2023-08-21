@@ -19,36 +19,55 @@ namespace ClusterVR.CreatorKit.Proto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Ch5hcGkvY3JlYXRvcmtpdC9pdGVtX25vZGUucHJvdG8SEmNsdXN0ZXIuY3Jl",
-            "YXRvcmtpdCKWAQoISXRlbU5vZGUSOgoPcGh5c2ljYWxfc2hhcGVzGAEgAygL",
-            "MiEuY2x1c3Rlci5jcmVhdG9ya2l0LlBoeXNpY2FsU2hhcGUSPAoQbWFpbl9z",
-            "Y3JlZW5fdmlldxgCIAEoCzIiLmNsdXN0ZXIuY3JlYXRvcmtpdC5NYWluU2Ny",
-            "ZWVuVmlldxIQCghkaXNhYmxlZBgDIAEoCCI5Cg1QaHlzaWNhbFNoYXBlEigK",
-            "BXNoYXBlGAEgASgLMhkuY2x1c3Rlci5jcmVhdG9ya2l0LlNoYXBlIsABCgVT",
-            "aGFwZRImCgNib3gYASABKAsyFy5jbHVzdGVyLmNyZWF0b3JraXQuQm94SAAS",
-            "LAoGc3BoZXJlGAIgASgLMhouY2x1c3Rlci5jcmVhdG9ya2l0LlNwaGVyZUgA",
-            "Ei4KB2NhcHN1bGUYAyABKAsyGy5jbHVzdGVyLmNyZWF0b3JraXQuQ2Fwc3Vs",
-            "ZUgAEigKBG1lc2gYBCABKAsyGC5jbHVzdGVyLmNyZWF0b3JraXQuTWVzaEgA",
-            "QgcKBXNoYXBlIl0KA0JveBIrCgZjZW50ZXIYASABKAsyGy5jbHVzdGVyLmNy",
-            "ZWF0b3JraXQuVmVjdG9yMxIpCgRzaXplGAIgASgLMhsuY2x1c3Rlci5jcmVh",
-            "dG9ya2l0LlZlY3RvcjMiRQoGU3BoZXJlEisKBmNlbnRlchgBIAEoCzIbLmNs",
-            "dXN0ZXIuY3JlYXRvcmtpdC5WZWN0b3IzEg4KBnJhZGl1cxgCIAEoAiKyAQoH",
-            "Q2Fwc3VsZRIrCgZjZW50ZXIYASABKAsyGy5jbHVzdGVyLmNyZWF0b3JraXQu",
-            "VmVjdG9yMxI4CglkaXJlY3Rpb24YAiABKA4yJS5jbHVzdGVyLmNyZWF0b3Jr",
-            "aXQuQ2Fwc3VsZS5EaXJlY3Rpb24SDgoGaGVpZ2h0GAMgASgCEg4KBnJhZGl1",
-            "cxgEIAEoAiIgCglEaXJlY3Rpb24SBQoBWBAAEgUKAVkQARIFCgFaEAIiMwoE",
-            "TWVzaBIYChB2ZXJ0ZXhfcG9zaXRpb25zGAEgAygCEhEKCXRyaWFuZ2xlcxgC",
-            "IAMoBSIbCgdWZWN0b3IzEhAKCGVsZW1lbnRzGAEgAygCIqABCg5NYWluU2Ny",
-            "ZWVuVmlldxIbChNzY3JlZW5fYXNwZWN0X3JhdGlvGAEgASgCEmUKJXVubGl0",
-            "X25vbl90aWxlZF93aXRoX2JhY2tncm91bmRfY29sb3IYAiABKAsyNC5jbHVz",
-            "dGVyLmNyZWF0b3JraXQuVW5saXROb25UaWxlZFdpdGhCYWNrZ3JvdW5kQ29s",
-            "b3JIAEIKCghtYXRlcmlhbCI8CiBVbmxpdE5vblRpbGVkV2l0aEJhY2tncm91",
-            "bmRDb2xvchIYChBiYWNrZ3JvdW5kX2NvbG9yGAEgAygCQi1aDmNsdXN0ZXIu",
-            "bXUvcnBjqgIaQ2x1c3RlclZSLkNyZWF0b3JLaXQuUHJvdG9iBnByb3RvMw=="));
+            "YXRvcmtpdCKVBAoISXRlbU5vZGUSOgoPcGh5c2ljYWxfc2hhcGVzGAEgAygL",
+            "MiEuY2x1c3Rlci5jcmVhdG9ya2l0LlBoeXNpY2FsU2hhcGUSSQoXb3Zlcmxh",
+            "cF9kZXRlY3Rvcl9zaGFwZXMYCSADKAsyKC5jbHVzdGVyLmNyZWF0b3JraXQu",
+            "T3ZlcmxhcERldGVjdG9yU2hhcGUSRQoVb3ZlcmxhcF9zb3VyY2Vfc2hhcGVz",
+            "GAogAygLMiYuY2x1c3Rlci5jcmVhdG9ya2l0Lk92ZXJsYXBTb3VyY2VTaGFw",
+            "ZRJCChNpbnRlcmFjdGFibGVfc2hhcGVzGAYgAygLMiUuY2x1c3Rlci5jcmVh",
+            "dG9ya2l0LkludGVyYWN0YWJsZVNoYXBlEj8KEml0ZW1fc2VsZWN0X3NoYXBl",
+            "cxgHIAMoCzIjLmNsdXN0ZXIuY3JlYXRvcmtpdC5JdGVtU2VsZWN0U2hhcGUS",
+            "PAoQbWFpbl9zY3JlZW5fdmlldxgCIAEoCzIiLmNsdXN0ZXIuY3JlYXRvcmtp",
+            "dC5NYWluU2NyZWVuVmlldxIQCghkaXNhYmxlZBgDIAEoCBIqCgZtaXJyb3IY",
+            "BCABKAsyGi5jbHVzdGVyLmNyZWF0b3JraXQuTWlycm9ySgQIBRAGSgQICBAJ",
+            "Uhdjb250YWN0X2RldGVjdG9yX3NoYXBlc1IVY29udGFjdF9zb3VyY2Vfc2hh",
+            "cGVzIjkKDVBoeXNpY2FsU2hhcGUSKAoFc2hhcGUYASABKAsyGS5jbHVzdGVy",
+            "LmNyZWF0b3JraXQuU2hhcGUiQAoUT3ZlcmxhcERldGVjdG9yU2hhcGUSKAoF",
+            "c2hhcGUYASABKAsyGS5jbHVzdGVyLmNyZWF0b3JraXQuU2hhcGUiPgoST3Zl",
+            "cmxhcFNvdXJjZVNoYXBlEigKBXNoYXBlGAEgASgLMhkuY2x1c3Rlci5jcmVh",
+            "dG9ya2l0LlNoYXBlIj0KEUludGVyYWN0YWJsZVNoYXBlEigKBXNoYXBlGAEg",
+            "ASgLMhkuY2x1c3Rlci5jcmVhdG9ya2l0LlNoYXBlIjsKD0l0ZW1TZWxlY3RT",
+            "aGFwZRIoCgVzaGFwZRgBIAEoCzIZLmNsdXN0ZXIuY3JlYXRvcmtpdC5TaGFw",
+            "ZSLAAQoFU2hhcGUSJgoDYm94GAEgASgLMhcuY2x1c3Rlci5jcmVhdG9ya2l0",
+            "LkJveEgAEiwKBnNwaGVyZRgCIAEoCzIaLmNsdXN0ZXIuY3JlYXRvcmtpdC5T",
+            "cGhlcmVIABIuCgdjYXBzdWxlGAMgASgLMhsuY2x1c3Rlci5jcmVhdG9ya2l0",
+            "LkNhcHN1bGVIABIoCgRtZXNoGAQgASgLMhguY2x1c3Rlci5jcmVhdG9ya2l0",
+            "Lk1lc2hIAEIHCgVzaGFwZSJdCgNCb3gSKwoGY2VudGVyGAEgASgLMhsuY2x1",
+            "c3Rlci5jcmVhdG9ya2l0LlZlY3RvcjMSKQoEc2l6ZRgCIAEoCzIbLmNsdXN0",
+            "ZXIuY3JlYXRvcmtpdC5WZWN0b3IzIkUKBlNwaGVyZRIrCgZjZW50ZXIYASAB",
+            "KAsyGy5jbHVzdGVyLmNyZWF0b3JraXQuVmVjdG9yMxIOCgZyYWRpdXMYAiAB",
+            "KAIisgEKB0NhcHN1bGUSKwoGY2VudGVyGAEgASgLMhsuY2x1c3Rlci5jcmVh",
+            "dG9ya2l0LlZlY3RvcjMSOAoJZGlyZWN0aW9uGAIgASgOMiUuY2x1c3Rlci5j",
+            "cmVhdG9ya2l0LkNhcHN1bGUuRGlyZWN0aW9uEg4KBmhlaWdodBgDIAEoAhIO",
+            "CgZyYWRpdXMYBCABKAIiIAoJRGlyZWN0aW9uEgUKAVgQABIFCgFZEAESBQoB",
+            "WhACIjMKBE1lc2gSGAoQdmVydGV4X3Bvc2l0aW9ucxgBIAMoAhIRCgl0cmlh",
+            "bmdsZXMYAiADKAUiGwoHVmVjdG9yMxIQCghlbGVtZW50cxgBIAMoAiKgAQoO",
+            "TWFpblNjcmVlblZpZXcSGwoTc2NyZWVuX2FzcGVjdF9yYXRpbxgBIAEoAhJl",
+            "CiV1bmxpdF9ub25fdGlsZWRfd2l0aF9iYWNrZ3JvdW5kX2NvbG9yGAIgASgL",
+            "MjQuY2x1c3Rlci5jcmVhdG9ya2l0LlVubGl0Tm9uVGlsZWRXaXRoQmFja2dy",
+            "b3VuZENvbG9ySABCCgoIbWF0ZXJpYWwiPAogVW5saXROb25UaWxlZFdpdGhC",
+            "YWNrZ3JvdW5kQ29sb3ISGAoQYmFja2dyb3VuZF9jb2xvchgBIAMoAiIICgZN",
+            "aXJyb3JCLVoOY2x1c3Rlci5tdS9ycGOqAhpDbHVzdGVyVlIuQ3JlYXRvcktp",
+            "dC5Qcm90b2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ItemNode), global::ClusterVR.CreatorKit.Proto.ItemNode.Parser, new[]{ "PhysicalShapes", "MainScreenView", "Disabled" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ItemNode), global::ClusterVR.CreatorKit.Proto.ItemNode.Parser, new[]{ "PhysicalShapes", "OverlapDetectorShapes", "OverlapSourceShapes", "InteractableShapes", "ItemSelectShapes", "MainScreenView", "Disabled", "Mirror" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.PhysicalShape), global::ClusterVR.CreatorKit.Proto.PhysicalShape.Parser, new[]{ "Shape" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.OverlapDetectorShape), global::ClusterVR.CreatorKit.Proto.OverlapDetectorShape.Parser, new[]{ "Shape" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.OverlapSourceShape), global::ClusterVR.CreatorKit.Proto.OverlapSourceShape.Parser, new[]{ "Shape" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.InteractableShape), global::ClusterVR.CreatorKit.Proto.InteractableShape.Parser, new[]{ "Shape" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ItemSelectShape), global::ClusterVR.CreatorKit.Proto.ItemSelectShape.Parser, new[]{ "Shape" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Shape), global::ClusterVR.CreatorKit.Proto.Shape.Parser, new[]{ "Box", "Sphere", "Capsule", "Mesh" }, new[]{ "Shape" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Box), global::ClusterVR.CreatorKit.Proto.Box.Parser, new[]{ "Center", "Size" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Sphere), global::ClusterVR.CreatorKit.Proto.Sphere.Parser, new[]{ "Center", "Radius" }, null, null, null, null),
@@ -56,7 +75,8 @@ namespace ClusterVR.CreatorKit.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Mesh), global::ClusterVR.CreatorKit.Proto.Mesh.Parser, new[]{ "VertexPositions", "Triangles" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Vector3), global::ClusterVR.CreatorKit.Proto.Vector3.Parser, new[]{ "Elements" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.MainScreenView), global::ClusterVR.CreatorKit.Proto.MainScreenView.Parser, new[]{ "ScreenAspectRatio", "UnlitNonTiledWithBackgroundColor" }, new[]{ "Material" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.UnlitNonTiledWithBackgroundColor), global::ClusterVR.CreatorKit.Proto.UnlitNonTiledWithBackgroundColor.Parser, new[]{ "BackgroundColor" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.UnlitNonTiledWithBackgroundColor), global::ClusterVR.CreatorKit.Proto.UnlitNonTiledWithBackgroundColor.Parser, new[]{ "BackgroundColor" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Mirror), global::ClusterVR.CreatorKit.Proto.Mirror.Parser, null, null, null, null, null)
           }));
     }
     #endregion
@@ -98,8 +118,13 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ItemNode(ItemNode other) : this() {
       physicalShapes_ = other.physicalShapes_.Clone();
+      overlapDetectorShapes_ = other.overlapDetectorShapes_.Clone();
+      overlapSourceShapes_ = other.overlapSourceShapes_.Clone();
+      interactableShapes_ = other.interactableShapes_.Clone();
+      itemSelectShapes_ = other.itemSelectShapes_.Clone();
       mainScreenView_ = other.mainScreenView_ != null ? other.mainScreenView_.Clone() : null;
       disabled_ = other.disabled_;
+      mirror_ = other.mirror_ != null ? other.mirror_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -117,6 +142,46 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.PhysicalShape> PhysicalShapes {
       get { return physicalShapes_; }
+    }
+
+    public const int OverlapDetectorShapesFieldNumber = 9;
+    private static readonly pb::FieldCodec<global::ClusterVR.CreatorKit.Proto.OverlapDetectorShape> _repeated_overlapDetectorShapes_codec
+        = pb::FieldCodec.ForMessage(74, global::ClusterVR.CreatorKit.Proto.OverlapDetectorShape.Parser);
+    private readonly pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.OverlapDetectorShape> overlapDetectorShapes_ = new pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.OverlapDetectorShape>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.OverlapDetectorShape> OverlapDetectorShapes {
+      get { return overlapDetectorShapes_; }
+    }
+
+    public const int OverlapSourceShapesFieldNumber = 10;
+    private static readonly pb::FieldCodec<global::ClusterVR.CreatorKit.Proto.OverlapSourceShape> _repeated_overlapSourceShapes_codec
+        = pb::FieldCodec.ForMessage(82, global::ClusterVR.CreatorKit.Proto.OverlapSourceShape.Parser);
+    private readonly pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.OverlapSourceShape> overlapSourceShapes_ = new pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.OverlapSourceShape>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.OverlapSourceShape> OverlapSourceShapes {
+      get { return overlapSourceShapes_; }
+    }
+
+    public const int InteractableShapesFieldNumber = 6;
+    private static readonly pb::FieldCodec<global::ClusterVR.CreatorKit.Proto.InteractableShape> _repeated_interactableShapes_codec
+        = pb::FieldCodec.ForMessage(50, global::ClusterVR.CreatorKit.Proto.InteractableShape.Parser);
+    private readonly pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.InteractableShape> interactableShapes_ = new pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.InteractableShape>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.InteractableShape> InteractableShapes {
+      get { return interactableShapes_; }
+    }
+
+    public const int ItemSelectShapesFieldNumber = 7;
+    private static readonly pb::FieldCodec<global::ClusterVR.CreatorKit.Proto.ItemSelectShape> _repeated_itemSelectShapes_codec
+        = pb::FieldCodec.ForMessage(58, global::ClusterVR.CreatorKit.Proto.ItemSelectShape.Parser);
+    private readonly pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.ItemSelectShape> itemSelectShapes_ = new pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.ItemSelectShape>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.ItemSelectShape> ItemSelectShapes {
+      get { return itemSelectShapes_; }
     }
 
     public const int MainScreenViewFieldNumber = 2;
@@ -141,6 +206,17 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
+    public const int MirrorFieldNumber = 4;
+    private global::ClusterVR.CreatorKit.Proto.Mirror mirror_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ClusterVR.CreatorKit.Proto.Mirror Mirror {
+      get { return mirror_; }
+      set {
+        mirror_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -157,8 +233,13 @@ namespace ClusterVR.CreatorKit.Proto {
         return true;
       }
       if(!physicalShapes_.Equals(other.physicalShapes_)) return false;
+      if(!overlapDetectorShapes_.Equals(other.overlapDetectorShapes_)) return false;
+      if(!overlapSourceShapes_.Equals(other.overlapSourceShapes_)) return false;
+      if(!interactableShapes_.Equals(other.interactableShapes_)) return false;
+      if(!itemSelectShapes_.Equals(other.itemSelectShapes_)) return false;
       if (!object.Equals(MainScreenView, other.MainScreenView)) return false;
       if (Disabled != other.Disabled) return false;
+      if (!object.Equals(Mirror, other.Mirror)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -167,8 +248,13 @@ namespace ClusterVR.CreatorKit.Proto {
     public override int GetHashCode() {
       int hash = 1;
       hash ^= physicalShapes_.GetHashCode();
+      hash ^= overlapDetectorShapes_.GetHashCode();
+      hash ^= overlapSourceShapes_.GetHashCode();
+      hash ^= interactableShapes_.GetHashCode();
+      hash ^= itemSelectShapes_.GetHashCode();
       if (mainScreenView_ != null) hash ^= MainScreenView.GetHashCode();
       if (Disabled != false) hash ^= Disabled.GetHashCode();
+      if (mirror_ != null) hash ^= Mirror.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -196,6 +282,14 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteRawTag(24);
         output.WriteBool(Disabled);
       }
+      if (mirror_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(Mirror);
+      }
+      interactableShapes_.WriteTo(output, _repeated_interactableShapes_codec);
+      itemSelectShapes_.WriteTo(output, _repeated_itemSelectShapes_codec);
+      overlapDetectorShapes_.WriteTo(output, _repeated_overlapDetectorShapes_codec);
+      overlapSourceShapes_.WriteTo(output, _repeated_overlapSourceShapes_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -215,6 +309,14 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteRawTag(24);
         output.WriteBool(Disabled);
       }
+      if (mirror_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(Mirror);
+      }
+      interactableShapes_.WriteTo(ref output, _repeated_interactableShapes_codec);
+      itemSelectShapes_.WriteTo(ref output, _repeated_itemSelectShapes_codec);
+      overlapDetectorShapes_.WriteTo(ref output, _repeated_overlapDetectorShapes_codec);
+      overlapSourceShapes_.WriteTo(ref output, _repeated_overlapSourceShapes_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -226,11 +328,18 @@ namespace ClusterVR.CreatorKit.Proto {
     public int CalculateSize() {
       int size = 0;
       size += physicalShapes_.CalculateSize(_repeated_physicalShapes_codec);
+      size += overlapDetectorShapes_.CalculateSize(_repeated_overlapDetectorShapes_codec);
+      size += overlapSourceShapes_.CalculateSize(_repeated_overlapSourceShapes_codec);
+      size += interactableShapes_.CalculateSize(_repeated_interactableShapes_codec);
+      size += itemSelectShapes_.CalculateSize(_repeated_itemSelectShapes_codec);
       if (mainScreenView_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(MainScreenView);
       }
       if (Disabled != false) {
         size += 1 + 1;
+      }
+      if (mirror_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Mirror);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -245,6 +354,10 @@ namespace ClusterVR.CreatorKit.Proto {
         return;
       }
       physicalShapes_.Add(other.physicalShapes_);
+      overlapDetectorShapes_.Add(other.overlapDetectorShapes_);
+      overlapSourceShapes_.Add(other.overlapSourceShapes_);
+      interactableShapes_.Add(other.interactableShapes_);
+      itemSelectShapes_.Add(other.itemSelectShapes_);
       if (other.mainScreenView_ != null) {
         if (mainScreenView_ == null) {
           MainScreenView = new global::ClusterVR.CreatorKit.Proto.MainScreenView();
@@ -253,6 +366,12 @@ namespace ClusterVR.CreatorKit.Proto {
       }
       if (other.Disabled != false) {
         Disabled = other.Disabled;
+      }
+      if (other.mirror_ != null) {
+        if (mirror_ == null) {
+          Mirror = new global::ClusterVR.CreatorKit.Proto.Mirror();
+        }
+        Mirror.MergeFrom(other.Mirror);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -284,6 +403,29 @@ namespace ClusterVR.CreatorKit.Proto {
             Disabled = input.ReadBool();
             break;
           }
+          case 34: {
+            if (mirror_ == null) {
+              Mirror = new global::ClusterVR.CreatorKit.Proto.Mirror();
+            }
+            input.ReadMessage(Mirror);
+            break;
+          }
+          case 50: {
+            interactableShapes_.AddEntriesFrom(input, _repeated_interactableShapes_codec);
+            break;
+          }
+          case 58: {
+            itemSelectShapes_.AddEntriesFrom(input, _repeated_itemSelectShapes_codec);
+            break;
+          }
+          case 74: {
+            overlapDetectorShapes_.AddEntriesFrom(input, _repeated_overlapDetectorShapes_codec);
+            break;
+          }
+          case 82: {
+            overlapSourceShapes_.AddEntriesFrom(input, _repeated_overlapSourceShapes_codec);
+            break;
+          }
         }
       }
     #endif
@@ -312,6 +454,29 @@ namespace ClusterVR.CreatorKit.Proto {
           }
           case 24: {
             Disabled = input.ReadBool();
+            break;
+          }
+          case 34: {
+            if (mirror_ == null) {
+              Mirror = new global::ClusterVR.CreatorKit.Proto.Mirror();
+            }
+            input.ReadMessage(Mirror);
+            break;
+          }
+          case 50: {
+            interactableShapes_.AddEntriesFrom(ref input, _repeated_interactableShapes_codec);
+            break;
+          }
+          case 58: {
+            itemSelectShapes_.AddEntriesFrom(ref input, _repeated_itemSelectShapes_codec);
+            break;
+          }
+          case 74: {
+            overlapDetectorShapes_.AddEntriesFrom(ref input, _repeated_overlapDetectorShapes_codec);
+            break;
+          }
+          case 82: {
+            overlapSourceShapes_.AddEntriesFrom(ref input, _repeated_overlapSourceShapes_codec);
             break;
           }
         }
@@ -518,6 +683,794 @@ namespace ClusterVR.CreatorKit.Proto {
 
   }
 
+  public sealed partial class OverlapDetectorShape : pb::IMessage<OverlapDetectorShape>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<OverlapDetectorShape> _parser = new pb::MessageParser<OverlapDetectorShape>(() => new OverlapDetectorShape());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<OverlapDetectorShape> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public OverlapDetectorShape() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public OverlapDetectorShape(OverlapDetectorShape other) : this() {
+      shape_ = other.shape_ != null ? other.shape_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public OverlapDetectorShape Clone() {
+      return new OverlapDetectorShape(this);
+    }
+
+    public const int ShapeFieldNumber = 1;
+    private global::ClusterVR.CreatorKit.Proto.Shape shape_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ClusterVR.CreatorKit.Proto.Shape Shape {
+      get { return shape_; }
+      set {
+        shape_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as OverlapDetectorShape);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(OverlapDetectorShape other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Shape, other.Shape)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (shape_ != null) hash ^= Shape.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (shape_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Shape);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (shape_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Shape);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (shape_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Shape);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(OverlapDetectorShape other) {
+      if (other == null) {
+        return;
+      }
+      if (other.shape_ != null) {
+        if (shape_ == null) {
+          Shape = new global::ClusterVR.CreatorKit.Proto.Shape();
+        }
+        Shape.MergeFrom(other.Shape);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (shape_ == null) {
+              Shape = new global::ClusterVR.CreatorKit.Proto.Shape();
+            }
+            input.ReadMessage(Shape);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            if (shape_ == null) {
+              Shape = new global::ClusterVR.CreatorKit.Proto.Shape();
+            }
+            input.ReadMessage(Shape);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class OverlapSourceShape : pb::IMessage<OverlapSourceShape>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<OverlapSourceShape> _parser = new pb::MessageParser<OverlapSourceShape>(() => new OverlapSourceShape());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<OverlapSourceShape> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public OverlapSourceShape() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public OverlapSourceShape(OverlapSourceShape other) : this() {
+      shape_ = other.shape_ != null ? other.shape_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public OverlapSourceShape Clone() {
+      return new OverlapSourceShape(this);
+    }
+
+    public const int ShapeFieldNumber = 1;
+    private global::ClusterVR.CreatorKit.Proto.Shape shape_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ClusterVR.CreatorKit.Proto.Shape Shape {
+      get { return shape_; }
+      set {
+        shape_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as OverlapSourceShape);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(OverlapSourceShape other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Shape, other.Shape)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (shape_ != null) hash ^= Shape.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (shape_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Shape);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (shape_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Shape);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (shape_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Shape);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(OverlapSourceShape other) {
+      if (other == null) {
+        return;
+      }
+      if (other.shape_ != null) {
+        if (shape_ == null) {
+          Shape = new global::ClusterVR.CreatorKit.Proto.Shape();
+        }
+        Shape.MergeFrom(other.Shape);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (shape_ == null) {
+              Shape = new global::ClusterVR.CreatorKit.Proto.Shape();
+            }
+            input.ReadMessage(Shape);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            if (shape_ == null) {
+              Shape = new global::ClusterVR.CreatorKit.Proto.Shape();
+            }
+            input.ReadMessage(Shape);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class InteractableShape : pb::IMessage<InteractableShape>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<InteractableShape> _parser = new pb::MessageParser<InteractableShape>(() => new InteractableShape());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<InteractableShape> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public InteractableShape() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public InteractableShape(InteractableShape other) : this() {
+      shape_ = other.shape_ != null ? other.shape_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public InteractableShape Clone() {
+      return new InteractableShape(this);
+    }
+
+    public const int ShapeFieldNumber = 1;
+    private global::ClusterVR.CreatorKit.Proto.Shape shape_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ClusterVR.CreatorKit.Proto.Shape Shape {
+      get { return shape_; }
+      set {
+        shape_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as InteractableShape);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(InteractableShape other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Shape, other.Shape)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (shape_ != null) hash ^= Shape.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (shape_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Shape);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (shape_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Shape);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (shape_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Shape);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(InteractableShape other) {
+      if (other == null) {
+        return;
+      }
+      if (other.shape_ != null) {
+        if (shape_ == null) {
+          Shape = new global::ClusterVR.CreatorKit.Proto.Shape();
+        }
+        Shape.MergeFrom(other.Shape);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (shape_ == null) {
+              Shape = new global::ClusterVR.CreatorKit.Proto.Shape();
+            }
+            input.ReadMessage(Shape);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            if (shape_ == null) {
+              Shape = new global::ClusterVR.CreatorKit.Proto.Shape();
+            }
+            input.ReadMessage(Shape);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class ItemSelectShape : pb::IMessage<ItemSelectShape>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ItemSelectShape> _parser = new pb::MessageParser<ItemSelectShape>(() => new ItemSelectShape());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ItemSelectShape> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ItemSelectShape() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ItemSelectShape(ItemSelectShape other) : this() {
+      shape_ = other.shape_ != null ? other.shape_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ItemSelectShape Clone() {
+      return new ItemSelectShape(this);
+    }
+
+    public const int ShapeFieldNumber = 1;
+    private global::ClusterVR.CreatorKit.Proto.Shape shape_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ClusterVR.CreatorKit.Proto.Shape Shape {
+      get { return shape_; }
+      set {
+        shape_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ItemSelectShape);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ItemSelectShape other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Shape, other.Shape)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (shape_ != null) hash ^= Shape.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (shape_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Shape);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (shape_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Shape);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (shape_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Shape);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ItemSelectShape other) {
+      if (other == null) {
+        return;
+      }
+      if (other.shape_ != null) {
+        if (shape_ == null) {
+          Shape = new global::ClusterVR.CreatorKit.Proto.Shape();
+        }
+        Shape.MergeFrom(other.Shape);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (shape_ == null) {
+              Shape = new global::ClusterVR.CreatorKit.Proto.Shape();
+            }
+            input.ReadMessage(Shape);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            if (shape_ == null) {
+              Shape = new global::ClusterVR.CreatorKit.Proto.Shape();
+            }
+            input.ReadMessage(Shape);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
   public sealed partial class Shape : pb::IMessage<Shape>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -532,7 +1485,7 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[2]; }
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -918,7 +1871,7 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[3]; }
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1160,7 +2113,7 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[4]; }
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1393,7 +2346,7 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[5]; }
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1711,7 +2664,7 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[6]; }
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1917,7 +2870,7 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[7]; }
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2096,7 +3049,7 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[8]; }
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2362,7 +3315,7 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[9]; }
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2520,6 +3473,158 @@ namespace ClusterVR.CreatorKit.Proto {
             backgroundColor_.AddEntriesFrom(ref input, _repeated_backgroundColor_codec);
             break;
           }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class Mirror : pb::IMessage<Mirror>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<Mirror> _parser = new pb::MessageParser<Mirror>(() => new Mirror());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<Mirror> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[14]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Mirror() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Mirror(Mirror other) : this() {
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Mirror Clone() {
+      return new Mirror(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as Mirror);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(Mirror other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(Mirror other) {
+      if (other == null) {
+        return;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
         }
       }
     }

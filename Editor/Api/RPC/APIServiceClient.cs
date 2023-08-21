@@ -61,7 +61,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         {
             return ApiClient.Post<PostNotifyFinishedUploadPayload, VenueUploadRequestCompletionResponse>(payload,
                 accessToken,
-                $"{Constants.ApiBaseUrl}/v1/venues/{venueId.Value}/upload/{uploadRequestId.Value}/done?isPublish={payload.IsPublish}",
+                $"{Constants.ApiBaseUrl}/v1/venues/{venueId.Value}/upload/{uploadRequestId.Value}/done",
                 cancellationToken);
         }
 

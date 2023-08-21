@@ -84,11 +84,11 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 yield return null;
             }
 
-            if (uploadFileWebRequest.isNetworkError)
+            if (uploadFileWebRequest.result == UnityWebRequest.Result.ConnectionError)
             {
                 HandleError(new Exception(uploadFileWebRequest.error));
             }
-            else if (uploadFileWebRequest.isHttpError)
+            else if (uploadFileWebRequest.result == UnityWebRequest.Result.ProtocolError)
             {
                 HandleError(new Exception(uploadFileWebRequest.downloadHandler.text));
             }

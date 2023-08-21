@@ -19,7 +19,7 @@ namespace ClusterVR.CreatorKit.Proto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CiJhcGkvY3JlYXRvcmtpdC9pdGVtX3RlbXBsYXRlLnByb3RvEhJjbHVzdGVy",
-            "LmNyZWF0b3JraXQikgMKBEl0ZW0SKgoEbWV0YRgBIAEoCzIcLmNsdXN0ZXIu",
+            "LmNyZWF0b3JraXQi2gMKBEl0ZW0SKgoEbWV0YRgBIAEoCzIcLmNsdXN0ZXIu",
             "Y3JlYXRvcmtpdC5JdGVtTWV0YRI1Cgxtb3ZhYmxlX2l0ZW0YAiABKAsyHy5j",
             "bHVzdGVyLmNyZWF0b3JraXQuTW92YWJsZUl0ZW0SNQoMcmlkYWJsZV9pdGVt",
             "GAMgASgLMh8uY2x1c3Rlci5jcmVhdG9ya2l0LlJpZGFibGVJdGVtEjkKDmdy",
@@ -28,35 +28,38 @@ namespace ClusterVR.CreatorKit.Proto {
             "cmVhdG9ya2l0LlNjcmlwdGFibGVJdGVtEjkKDmFjY2Vzc29yeV9pdGVtGAYg",
             "ASgLMiEuY2x1c3Rlci5jcmVhdG9ya2l0LkFjY2Vzc29yeUl0ZW0SPQoTaXRl",
             "bV9hdWRpb19zZXRfbGlzdBgHIAMoCzIgLmNsdXN0ZXIuY3JlYXRvcmtpdC5J",
-            "dGVtQXVkaW9TZXQiSQoISXRlbU1ldGESLwoEbmFtZRgBIAMoCzIhLmNsdXN0",
-            "ZXIuY3JlYXRvcmtpdC5Mb2NhbGl6ZWRUZXh0EgwKBHNpemUYAiADKA0iMAoN",
-            "TG9jYWxpemVkVGV4dBIRCglsYW5nX2NvZGUYASABKAkSDAoEdGV4dBgCIAEo",
-            "CSINCgtNb3ZhYmxlSXRlbSKlAQoLUmlkYWJsZUl0ZW0SDAoEc2VhdBgBIAEo",
-            "DRIaChJoYXNfZXhpdF90cmFuc2Zvcm0YAiABKAgSFgoOZXhpdF90cmFuc2Zv",
-            "cm0YAyABKA0SFQoNaGFzX2xlZnRfZ3JpcBgEIAEoCBIRCglsZWZ0X2dyaXAY",
-            "BSABKA0SFgoOaGFzX3JpZ2h0X2dyaXAYBiABKAgSEgoKcmlnaHRfZ3JpcBgH",
-            "IAEoDSIvCg1HcmFiYmFibGVJdGVtEhAKCGhhc19ncmlwGAEgASgIEgwKBGdy",
-            "aXAYAiABKA0iJQoOU2NyaXB0YWJsZUl0ZW0SEwoLc291cmNlX2NvZGUYASAB",
-            "KAkiNQoPT2Zmc2V0VHJhbnNmb3JtEiIKGnRyYW5zbGF0aW9uX3JvdGF0aW9u",
-            "X3NjYWxlGAEgAygCIjoKEkF0dGFjaENhc2VUb0F2YXRhchIkChxkZWZhdWx0",
-            "X2h1bWFuX2JvZHlfYm9uZV9uYW1lGAEgASgJIq4BCg1BY2Nlc3NvcnlJdGVt",
-            "EkUKGGRlZmF1bHRfb2Zmc2V0X3RyYW5zZm9ybRgDIAEoCzIjLmNsdXN0ZXIu",
-            "Y3JlYXRvcmtpdC5PZmZzZXRUcmFuc2Zvcm0SRwoVYXR0YWNoX2Nhc2VfdG9f",
-            "YXZhdGFyGAIgASgLMiYuY2x1c3Rlci5jcmVhdG9ya2l0LkF0dGFjaENhc2VU",
-            "b0F2YXRhckgAQg0KC2F0dGFjaF9jYXNlIlIKDEl0ZW1BdWRpb1NldBIKCgJp",
-            "ZBgBIAEoCRIoCgVhdWRpbxgCIAEoCzIZLmNsdXN0ZXIuY3JlYXRvcmtpdC5B",
-            "dWRpbxIMCgRsb29wGAMgASgIIj0KBUF1ZGlvEiYKA3BjbRgBIAEoCzIXLmNs",
-            "dXN0ZXIuY3JlYXRvcmtpdC5QY21IAEIMCgphdWRpb19jYXNlIjoKA1BjbRIQ",
-            "CghjaGFubmVscxgBIAEoDRITCgtzYW1wbGVfcmF0ZRgCIAEoDRIMCgRkYXRh",
-            "GAMgAygCQi1aDmNsdXN0ZXIubXUvcnBjqgIaQ2x1c3RlclZSLkNyZWF0b3JL",
-            "aXQuUHJvdG9iBnByb3RvMw=="));
+            "dGVtQXVkaW9TZXQSRgoXaHVtYW5vaWRfYW5pbWF0aW9uX2xpc3QYCCADKAsy",
+            "JS5jbHVzdGVyLmNyZWF0b3JraXQuSHVtYW5vaWRBbmltYXRpb24iSQoISXRl",
+            "bU1ldGESLwoEbmFtZRgBIAMoCzIhLmNsdXN0ZXIuY3JlYXRvcmtpdC5Mb2Nh",
+            "bGl6ZWRUZXh0EgwKBHNpemUYAiADKA0iMAoNTG9jYWxpemVkVGV4dBIRCgls",
+            "YW5nX2NvZGUYASABKAkSDAoEdGV4dBgCIAEoCSIvCgtNb3ZhYmxlSXRlbRIS",
+            "Cgppc19keW5hbWljGAEgASgIEgwKBG1hc3MYAiABKAIipQEKC1JpZGFibGVJ",
+            "dGVtEgwKBHNlYXQYASABKA0SGgoSaGFzX2V4aXRfdHJhbnNmb3JtGAIgASgI",
+            "EhYKDmV4aXRfdHJhbnNmb3JtGAMgASgNEhUKDWhhc19sZWZ0X2dyaXAYBCAB",
+            "KAgSEQoJbGVmdF9ncmlwGAUgASgNEhYKDmhhc19yaWdodF9ncmlwGAYgASgI",
+            "EhIKCnJpZ2h0X2dyaXAYByABKA0iLwoNR3JhYmJhYmxlSXRlbRIQCghoYXNf",
+            "Z3JpcBgBIAEoCBIMCgRncmlwGAIgASgNIiUKDlNjcmlwdGFibGVJdGVtEhMK",
+            "C3NvdXJjZV9jb2RlGAEgASgJIjUKD09mZnNldFRyYW5zZm9ybRIiChp0cmFu",
+            "c2xhdGlvbl9yb3RhdGlvbl9zY2FsZRgBIAMoAiI6ChJBdHRhY2hDYXNlVG9B",
+            "dmF0YXISJAocZGVmYXVsdF9odW1hbl9ib2R5X2JvbmVfbmFtZRgBIAEoCSKu",
+            "AQoNQWNjZXNzb3J5SXRlbRJFChhkZWZhdWx0X29mZnNldF90cmFuc2Zvcm0Y",
+            "AyABKAsyIy5jbHVzdGVyLmNyZWF0b3JraXQuT2Zmc2V0VHJhbnNmb3JtEkcK",
+            "FWF0dGFjaF9jYXNlX3RvX2F2YXRhchgCIAEoCzImLmNsdXN0ZXIuY3JlYXRv",
+            "cmtpdC5BdHRhY2hDYXNlVG9BdmF0YXJIAEINCgthdHRhY2hfY2FzZSJSCgxJ",
+            "dGVtQXVkaW9TZXQSCgoCaWQYASABKAkSKAoFYXVkaW8YAiABKAsyGS5jbHVz",
+            "dGVyLmNyZWF0b3JraXQuQXVkaW8SDAoEbG9vcBgDIAEoCCI9CgVBdWRpbxIm",
+            "CgNwY20YASABKAsyFy5jbHVzdGVyLmNyZWF0b3JraXQuUGNtSABCDAoKYXVk",
+            "aW9fY2FzZSI6CgNQY20SEAoIY2hhbm5lbHMYASABKA0SEwoLc2FtcGxlX3Jh",
+            "dGUYAiABKA0SDAoEZGF0YRgDIAMoAiIyChFIdW1hbm9pZEFuaW1hdGlvbhIK",
+            "CgJpZBgBIAEoCRIRCglhbmltYXRpb24YAiABKA1CLVoOY2x1c3Rlci5tdS9y",
+            "cGOqAhpDbHVzdGVyVlIuQ3JlYXRvcktpdC5Qcm90b2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Item), global::ClusterVR.CreatorKit.Proto.Item.Parser, new[]{ "Meta", "MovableItem", "RidableItem", "GrabbableItem", "ScriptableItem", "AccessoryItem", "ItemAudioSetList" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Item), global::ClusterVR.CreatorKit.Proto.Item.Parser, new[]{ "Meta", "MovableItem", "RidableItem", "GrabbableItem", "ScriptableItem", "AccessoryItem", "ItemAudioSetList", "HumanoidAnimationList" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ItemMeta), global::ClusterVR.CreatorKit.Proto.ItemMeta.Parser, new[]{ "Name", "Size" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.LocalizedText), global::ClusterVR.CreatorKit.Proto.LocalizedText.Parser, new[]{ "LangCode", "Text" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.MovableItem), global::ClusterVR.CreatorKit.Proto.MovableItem.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.MovableItem), global::ClusterVR.CreatorKit.Proto.MovableItem.Parser, new[]{ "IsDynamic", "Mass" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.RidableItem), global::ClusterVR.CreatorKit.Proto.RidableItem.Parser, new[]{ "Seat", "HasExitTransform", "ExitTransform", "HasLeftGrip", "LeftGrip", "HasRightGrip", "RightGrip" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.GrabbableItem), global::ClusterVR.CreatorKit.Proto.GrabbableItem.Parser, new[]{ "HasGrip", "Grip" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ScriptableItem), global::ClusterVR.CreatorKit.Proto.ScriptableItem.Parser, new[]{ "SourceCode" }, null, null, null, null),
@@ -65,7 +68,8 @@ namespace ClusterVR.CreatorKit.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.AccessoryItem), global::ClusterVR.CreatorKit.Proto.AccessoryItem.Parser, new[]{ "DefaultOffsetTransform", "AttachCaseToAvatar" }, new[]{ "AttachCase" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ItemAudioSet), global::ClusterVR.CreatorKit.Proto.ItemAudioSet.Parser, new[]{ "Id", "Audio", "Loop" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Audio), global::ClusterVR.CreatorKit.Proto.Audio.Parser, new[]{ "Pcm" }, new[]{ "AudioCase" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Pcm), global::ClusterVR.CreatorKit.Proto.Pcm.Parser, new[]{ "Channels", "SampleRate", "Data" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Pcm), global::ClusterVR.CreatorKit.Proto.Pcm.Parser, new[]{ "Channels", "SampleRate", "Data" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.HumanoidAnimation), global::ClusterVR.CreatorKit.Proto.HumanoidAnimation.Parser, new[]{ "Id", "Animation" }, null, null, null, null)
           }));
     }
     #endregion
@@ -113,6 +117,7 @@ namespace ClusterVR.CreatorKit.Proto {
       scriptableItem_ = other.scriptableItem_ != null ? other.scriptableItem_.Clone() : null;
       accessoryItem_ = other.accessoryItem_ != null ? other.accessoryItem_.Clone() : null;
       itemAudioSetList_ = other.itemAudioSetList_.Clone();
+      humanoidAnimationList_ = other.humanoidAnimationList_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -198,6 +203,16 @@ namespace ClusterVR.CreatorKit.Proto {
       get { return itemAudioSetList_; }
     }
 
+    public const int HumanoidAnimationListFieldNumber = 8;
+    private static readonly pb::FieldCodec<global::ClusterVR.CreatorKit.Proto.HumanoidAnimation> _repeated_humanoidAnimationList_codec
+        = pb::FieldCodec.ForMessage(66, global::ClusterVR.CreatorKit.Proto.HumanoidAnimation.Parser);
+    private readonly pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.HumanoidAnimation> humanoidAnimationList_ = new pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.HumanoidAnimation>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.HumanoidAnimation> HumanoidAnimationList {
+      get { return humanoidAnimationList_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -220,6 +235,7 @@ namespace ClusterVR.CreatorKit.Proto {
       if (!object.Equals(ScriptableItem, other.ScriptableItem)) return false;
       if (!object.Equals(AccessoryItem, other.AccessoryItem)) return false;
       if(!itemAudioSetList_.Equals(other.itemAudioSetList_)) return false;
+      if(!humanoidAnimationList_.Equals(other.humanoidAnimationList_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -234,6 +250,7 @@ namespace ClusterVR.CreatorKit.Proto {
       if (scriptableItem_ != null) hash ^= ScriptableItem.GetHashCode();
       if (accessoryItem_ != null) hash ^= AccessoryItem.GetHashCode();
       hash ^= itemAudioSetList_.GetHashCode();
+      hash ^= humanoidAnimationList_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -277,6 +294,7 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteMessage(AccessoryItem);
       }
       itemAudioSetList_.WriteTo(output, _repeated_itemAudioSetList_codec);
+      humanoidAnimationList_.WriteTo(output, _repeated_humanoidAnimationList_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -312,6 +330,7 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteMessage(AccessoryItem);
       }
       itemAudioSetList_.WriteTo(ref output, _repeated_itemAudioSetList_codec);
+      humanoidAnimationList_.WriteTo(ref output, _repeated_humanoidAnimationList_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -341,6 +360,7 @@ namespace ClusterVR.CreatorKit.Proto {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(AccessoryItem);
       }
       size += itemAudioSetList_.CalculateSize(_repeated_itemAudioSetList_codec);
+      size += humanoidAnimationList_.CalculateSize(_repeated_humanoidAnimationList_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -390,6 +410,7 @@ namespace ClusterVR.CreatorKit.Proto {
         AccessoryItem.MergeFrom(other.AccessoryItem);
       }
       itemAudioSetList_.Add(other.itemAudioSetList_);
+      humanoidAnimationList_.Add(other.humanoidAnimationList_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -451,6 +472,10 @@ namespace ClusterVR.CreatorKit.Proto {
             itemAudioSetList_.AddEntriesFrom(input, _repeated_itemAudioSetList_codec);
             break;
           }
+          case 66: {
+            humanoidAnimationList_.AddEntriesFrom(input, _repeated_humanoidAnimationList_codec);
+            break;
+          }
         }
       }
     #endif
@@ -510,6 +535,10 @@ namespace ClusterVR.CreatorKit.Proto {
           }
           case 58: {
             itemAudioSetList_.AddEntriesFrom(ref input, _repeated_itemAudioSetList_codec);
+            break;
+          }
+          case 66: {
+            humanoidAnimationList_.AddEntriesFrom(ref input, _repeated_humanoidAnimationList_codec);
             break;
           }
         }
@@ -981,6 +1010,8 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public MovableItem(MovableItem other) : this() {
+      isDynamic_ = other.isDynamic_;
+      mass_ = other.mass_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -988,6 +1019,28 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public MovableItem Clone() {
       return new MovableItem(this);
+    }
+
+    public const int IsDynamicFieldNumber = 1;
+    private bool isDynamic_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool IsDynamic {
+      get { return isDynamic_; }
+      set {
+        isDynamic_ = value;
+      }
+    }
+
+    public const int MassFieldNumber = 2;
+    private float mass_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public float Mass {
+      get { return mass_; }
+      set {
+        mass_ = value;
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1005,6 +1058,8 @@ namespace ClusterVR.CreatorKit.Proto {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (IsDynamic != other.IsDynamic) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Mass, other.Mass)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1012,6 +1067,8 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
+      if (IsDynamic != false) hash ^= IsDynamic.GetHashCode();
+      if (Mass != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Mass);
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1030,6 +1087,14 @@ namespace ClusterVR.CreatorKit.Proto {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
+      if (IsDynamic != false) {
+        output.WriteRawTag(8);
+        output.WriteBool(IsDynamic);
+      }
+      if (Mass != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(Mass);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1040,6 +1105,14 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (IsDynamic != false) {
+        output.WriteRawTag(8);
+        output.WriteBool(IsDynamic);
+      }
+      if (Mass != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(Mass);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -1050,6 +1123,12 @@ namespace ClusterVR.CreatorKit.Proto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
+      if (IsDynamic != false) {
+        size += 1 + 1;
+      }
+      if (Mass != 0F) {
+        size += 1 + 4;
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -1061,6 +1140,12 @@ namespace ClusterVR.CreatorKit.Proto {
     public void MergeFrom(MovableItem other) {
       if (other == null) {
         return;
+      }
+      if (other.IsDynamic != false) {
+        IsDynamic = other.IsDynamic;
+      }
+      if (other.Mass != 0F) {
+        Mass = other.Mass;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1077,6 +1162,14 @@ namespace ClusterVR.CreatorKit.Proto {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
+          case 8: {
+            IsDynamic = input.ReadBool();
+            break;
+          }
+          case 21: {
+            Mass = input.ReadFloat();
+            break;
+          }
         }
       }
     #endif
@@ -1092,6 +1185,14 @@ namespace ClusterVR.CreatorKit.Proto {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
+          case 8: {
+            IsDynamic = input.ReadBool();
+            break;
+          }
+          case 21: {
+            Mass = input.ReadFloat();
+            break;
+          }
         }
       }
     }
@@ -3298,6 +3399,230 @@ namespace ClusterVR.CreatorKit.Proto {
           case 26:
           case 29: {
             data_.AddEntriesFrom(ref input, _repeated_data_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class HumanoidAnimation : pb::IMessage<HumanoidAnimation>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<HumanoidAnimation> _parser = new pb::MessageParser<HumanoidAnimation>(() => new HumanoidAnimation());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<HumanoidAnimation> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ClusterVR.CreatorKit.Proto.ItemTemplateReflection.Descriptor.MessageTypes[13]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public HumanoidAnimation() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public HumanoidAnimation(HumanoidAnimation other) : this() {
+      id_ = other.id_;
+      animation_ = other.animation_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public HumanoidAnimation Clone() {
+      return new HumanoidAnimation(this);
+    }
+
+    public const int IdFieldNumber = 1;
+    private string id_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Id {
+      get { return id_; }
+      set {
+        id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    public const int AnimationFieldNumber = 2;
+    private uint animation_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public uint Animation {
+      get { return animation_; }
+      set {
+        animation_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as HumanoidAnimation);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(HumanoidAnimation other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Id != other.Id) return false;
+      if (Animation != other.Animation) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Id.Length != 0) hash ^= Id.GetHashCode();
+      if (Animation != 0) hash ^= Animation.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Id.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
+      if (Animation != 0) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(Animation);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Id.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
+      if (Animation != 0) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(Animation);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Id.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
+      }
+      if (Animation != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Animation);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(HumanoidAnimation other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Id.Length != 0) {
+        Id = other.Id;
+      }
+      if (other.Animation != 0) {
+        Animation = other.Animation;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
+          case 16: {
+            Animation = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
+          case 16: {
+            Animation = input.ReadUInt32();
             break;
           }
         }

@@ -10,7 +10,6 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
     public sealed class PostNotifyFinishedUploadService
     {
         readonly string accessToken;
-        readonly bool isPublish;
         readonly Action<Exception> onError;
         readonly Action<VenueUploadRequestCompletionResponse> onSuccess;
         readonly UploadRequestID uploadRequestId;
@@ -21,7 +20,6 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             string accessToken,
             VenueID venueId,
             UploadRequestID uploadRequestId,
-            bool isPublish,
             WorldDescriptor worldDescriptor,
             Action<VenueUploadRequestCompletionResponse> onSuccess = null,
             Action<Exception> onError = null
@@ -30,7 +28,6 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             this.accessToken = accessToken;
             this.venueId = venueId;
             this.uploadRequestId = uploadRequestId;
-            this.isPublish = isPublish;
             this.worldDescriptor = worldDescriptor;
             this.onSuccess = onSuccess;
             this.onError = onError;
@@ -43,7 +40,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         async Task PostNotifyFinishedUploadAsync(CancellationToken cancellationToken)
         {
-            var payload = new PostNotifyFinishedUploadPayload(isPublish, worldDescriptor);
+            var payload = new PostNotifyFinishedUploadPayload(worldDescriptor);
             try
             {
                 var response =

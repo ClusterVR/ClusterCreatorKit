@@ -6,6 +6,7 @@ namespace ClusterVR.CreatorKit.World.Implements.Speaker
     public sealed class Speaker : MonoBehaviour, ISpeaker
     {
         AudioSource audioSource;
+        [SerializeField] SpeakerType speakerType;
 
         public AudioSource AudioSource
         {
@@ -19,6 +20,8 @@ namespace ClusterVR.CreatorKit.World.Implements.Speaker
                 return audioSource;
             }
         }
+
+        public SpeakerType SpeakerType => speakerType;
 
         void Start()
         {

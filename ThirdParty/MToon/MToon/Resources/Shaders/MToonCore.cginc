@@ -32,7 +32,8 @@ half _OutlineWidth;
 half _OutlineScaledMaxDistance;
 fixed4 _OutlineColor;
 half _OutlineLightingMix;
-sampler2D _UvAnimMaskTexture;
+// NOTE: "tex2d() * _Time.y" returns mediump value if sampler is half precision in Android VR platform
+sampler2D_float _UvAnimMaskTexture;
 float _UvAnimScrollX;
 float _UvAnimScrollY;
 float _UvAnimRotation;
@@ -51,15 +52,16 @@ struct v2f
     float isOutline : TEXCOORD5;
     fixed4 color : TEXCOORD6;
     UNITY_FOG_COORDS(7)
-    SHADOW_COORDS(8)
+    UNITY_SHADOW_COORDS(8)
     //UNITY_VERTEX_INPUT_INSTANCE_ID // necessary only if any instanced properties are going to be accessed in the fragment Shader.
+    UNITY_VERTEX_OUTPUT_STEREO 
 };
 
 inline v2f InitializeV2F(appdata_full v, float4 projectedVertex, float isOutline)
 {
     v2f o;
     UNITY_INITIALIZE_OUTPUT(v2f, o);
-    UNITY_SETUP_INSTANCE_ID(v);
+    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
     //UNITY_TRANSFER_INSTANCE_ID(v, o);
     
     o.pos = projectedVertex;
@@ -74,7 +76,7 @@ inline v2f InitializeV2F(appdata_full v, float4 projectedVertex, float isOutline
     o.tspace2 = half3(worldTangent.z, worldBitangent.z, worldNormal.z);
     o.isOutline = isOutline;
     o.color = v.color;
-    TRANSFER_SHADOW(o);
+    UNITY_TRANSFER_SHADOW(o, o._ShadowCoord);
     UNITY_TRANSFER_FOG(o, o.pos);
     return o;
 }
@@ -114,6 +116,7 @@ float4 frag_forward(v2f i) : SV_TARGET
 #endif
 
     //UNITY_TRANSFER_INSTANCE_ID(v, o);
+    UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
     
     // const
     const float PI_2 = 6.28318530718;
@@ -144,6 +147,9 @@ float4 frag_forward(v2f i) : SV_TARGET
 #endif
 #ifdef _ALPHABLEND_ON
     alpha = _Color.a * mainTex.a;
+#if !_ALPHATEST_ON && SHADER_API_D3D11 // Only enable this on D3D11, where I tested it
+    clip(alpha - 0.0001);              // Slightly improves rendering with layered transparency
+#endif
 #endif
     
     // normal
@@ -224,7 +230,7 @@ float4 frag_forward(v2f i) : SV_TARGET
     half3 mixedRimLighting = lighting + indirectLighting;
 #endif
     half3 rimLighting = lerp(staticRimLighting, mixedRimLighting, _RimLightingMix);
-    half3 rim = pow(saturate(1.0 - dot(worldNormal, worldView) + _RimLift), _RimFresnelPower) * _RimColor.rgb * tex2D(_RimTexture, mainUv).rgb;
+    half3 rim = pow(saturate(1.0 - dot(worldNormal, worldView) + _RimLift), max(_RimFresnelPower, EPS_COL)) * _RimColor.rgb * tex2D(_RimTexture, mainUv).rgb;
     col += lerp(rim * rimLighting, half3(0, 0, 0), i.isOutline);
 
     // additive matcap

@@ -248,7 +248,6 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                     accessToken,
                     venue.VenueId,
                     uploadRequestId,
-                    false,
                     worldDescriptor,
                     response =>
                     {

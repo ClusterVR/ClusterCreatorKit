@@ -223,8 +223,8 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
             var data = ExtractAudioData(audioClip, id);
             var pcm = new Pcm()
             {
-                Channels = (uint)audioClip.channels,
-                SampleRate = (uint)audioClip.frequency,
+                Channels = (uint) audioClip.channels,
+                SampleRate = (uint) audioClip.frequency,
             };
             pcm.Data.AddRange(data);
             return pcm;

@@ -51,13 +51,13 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 yield return null;
             }
 
-            if (downloadThumbnailRequest.isNetworkError)
+            if (downloadThumbnailRequest.result == UnityWebRequest.Result.ConnectionError)
             {
                 HandleError(new Exception(downloadThumbnailRequest.error));
                 yield break;
             }
 
-            if (downloadThumbnailRequest.isHttpError)
+            if (downloadThumbnailRequest.result == UnityWebRequest.Result.ProtocolError)
             {
                 HandleError(new Exception(downloadThumbnailRequest.downloadHandler.text));
                 yield break;

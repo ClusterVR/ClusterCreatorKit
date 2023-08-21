@@ -111,7 +111,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 await Task.Delay(50, cancellationToken);
             }
 
-            if (webRequest.isNetworkError)
+            if (webRequest.result == UnityWebRequest.Result.ConnectionError)
             {
                 throw new Exception(webRequest.error);
             }
@@ -121,9 +121,9 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 throw new Exception("アカウントが停止されているため、使える機能が制限されています");
             }
 
-            if (webRequest.isHttpError)
+            if (webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
-                throw new HttpException((int)webRequest.responseCode, webRequest.downloadHandler.text);
+                throw new HttpException((int) webRequest.responseCode, webRequest.downloadHandler.text);
             }
 
             return webRequest.downloadHandler.text;
