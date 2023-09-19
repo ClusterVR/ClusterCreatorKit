@@ -9,12 +9,14 @@ namespace ClusterVR.CreatorKit.Editor.Api.Venue
         [SerializeField] string name;
         [SerializeField] string description;
         [SerializeField] string groupId;
+        [SerializeField] bool isBeta;
 
-        public PostNewVenuePayload(string name, string description, string groupId)
+        public PostNewVenuePayload(string name, string description, string groupId, bool isBeta)
         {
             this.name = name;
             this.description = description;
             this.groupId = groupId;
+            this.isBeta = isBeta;
         }
     }
 }

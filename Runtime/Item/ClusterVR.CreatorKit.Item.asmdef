@@ -2,6 +2,7 @@
     "name": "ClusterVR.CreatorKit.Item",
     "references": [
         "ClusterVR.CreatorKit",
+        "ClusterVR.CreatorKit.Common",
         "ClusterVR.CreatorKit.ProductUgc"
     ],
     "includePlatforms": [],

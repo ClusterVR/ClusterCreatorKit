@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="/UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="base-container">
+        <ui:VisualElement name="main-view">
+            <ui:ScrollView>
+                <ui:TextField name="main-field" readonly="true" />
+            </ui:ScrollView>
+        </ui:VisualElement>
+        <ui:VisualElement name="footer" class="horizontal">
+            <ui:Button name="prev-button" text="&lt; 前へ" />
+            <ui:Button name="next-button" text="次へ &gt;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

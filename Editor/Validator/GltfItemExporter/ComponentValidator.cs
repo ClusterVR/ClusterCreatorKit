@@ -4,7 +4,9 @@ using System.Linq;
 using ClusterVR.CreatorKit.Editor.Utils;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
+using ClusterVR.CreatorKit.World;
 using ClusterVR.CreatorKit.World.Implements.MainScreenViews;
+using ClusterVR.CreatorKit.World.Implements.Mirror;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
@@ -20,7 +22,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             typeof(MovableItem),
             typeof(RidableItem),
             typeof(ScriptableItem),
-            typeof(ItemAudioSetList)
+            typeof(ItemAudioSetList),
+            typeof(HumanoidAnimationList)
         };
 
         static readonly Type[] ItemComponentWhiteList =
@@ -30,7 +33,13 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             typeof(MeshRenderer),
             typeof(Collider),
             typeof(Rigidbody), // MovableItemで利用可能
-            typeof(StandardMainScreenView)
+            typeof(StandardMainScreenView),
+            typeof(Mirror),
+            typeof(PhysicalShape),
+            typeof(OverlapSourceShape),
+            typeof(OverlapDetectorShape),
+            typeof(InteractableShape),
+            typeof(ItemSelectShape)
         };
 
         static readonly Type[] AccessoryRootComponentWhiteList =
@@ -136,6 +145,27 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             }
 
             return validationMessages;
+        }
+
+        internal static IEnumerable<ValidationMessage> ValidateMovableItem(GameObject gameObject, bool isBeta)
+        {
+            if (isBeta)
+            {
+                return Enumerable.Empty<ValidationMessage>();
+            }
+
+            var movableItem = gameObject.GetComponent<MovableItem>();
+            if (movableItem == null)
+            {
+                return Enumerable.Empty<ValidationMessage>();
+            }
+
+            if (movableItem.IsDynamic)
+            {
+                var message = $"現在、ベータ機能を有効にせずにアップロードしたアイテムは物理挙動しません。";
+                return new[] { new ValidationMessage(message, ValidationMessage.MessageType.Warning) };
+            }
+            return Enumerable.Empty<ValidationMessage>();
         }
 
         internal static IEnumerable<ValidationMessage> ValidateScriptableItem(GameObject gameObject)
@@ -341,6 +371,37 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             }
 
             return ItemAudioSetListValidator.Validate(itemAudioSetList);
+        }
+
+        public static IEnumerable<ValidationMessage> ValidateMirror(GameObject gameObject, int maxMirrorCount)
+        {
+            var mirrors = gameObject.GetComponentsInChildren<IMirror>(true);
+            var count = mirrors.Length;
+            if (count <= maxMirrorCount)
+            {
+                return Enumerable.Empty<ValidationMessage>();
+            }
+
+            return new List<ValidationMessage>()
+            {
+                new($"Mirrorの数が多すぎます。現在：{count}, 最大値：{maxMirrorCount}", ValidationMessage.MessageType.Error)
+            };
+        }
+
+        public static IEnumerable<ValidationMessage> ValidateCollider(GameObject gameObject)
+        {
+            var colliders = gameObject.GetComponentsInChildren<Collider>(true);
+            var validationMessages = new List<ValidationMessage>();
+            foreach (var collider in colliders)
+            {
+                if (collider.GetComponent<IShape>() == null && collider.isTrigger)
+                {
+                    validationMessages.Add(new ValidationMessage(
+                        $"Collider\"{collider.name}\"は、isTriggerがonかつShapeがついていないため無効化されます。isTriggerをoffにするか{nameof(OverlapSourceShape)}, {nameof(OverlapDetectorShape)}, {nameof(InteractableShape)}, {nameof(ItemSelectShape)}のいずれかを追加してください。",
+                        ValidationMessage.MessageType.Warning));
+                }
+            }
+            return validationMessages;
         }
     }
 }

@@ -27,6 +27,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         string errorMessage;
 
         bool executeUpload;
+        bool isBeta;
 
         public UploadVenueView(UserInfo userInfo, Venue venue, ImageView thumbnail)
         {
@@ -75,6 +76,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
                 ItemIdAssigner.AssignItemId();
                 ItemTemplateIdAssigner.Execute();
+                HumanoidAnimationAssigner.Execute();
                 LayerCorrector.CorrectLayer();
 
                 try
@@ -89,7 +91,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 }
 
                 currentUploadService = new UploadVenueService(userInfo.VerifiedToken, venue,
-                    WorldDescriptorCreator.Create(SceneManager.GetActiveScene()), completionResponse =>
+                    WorldDescriptorCreator.Create(SceneManager.GetActiveScene()),
+                    isBeta,
+                    completionResponse =>
                     {
                         errorMessage = "";
                         if (EditorPrefsUtils.OpenWorldManagementPageAfterUpload)
@@ -133,13 +137,22 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             {
                 EditorGUILayout.HelpBox(uploadSettingErrorMessage, MessageType.Error);
             }
-            using (new EditorGUI.DisabledScope(!isVenueUploadSettingValid))
+
+            var betaSettingValid = venue.IsBeta == ClusterCreatorKitSettings.instance.IsBeta;
+            if (!betaSettingValid)
             {
-                var uploadButton = GUILayout.Button($"'{venue.Name}'としてアップロードする");
+                var message = venue.IsBeta ? "ベータ機能を有効にしたワールドには、ベータ機能を有効にする設定が ON になっていないとアップロードできません" : "ベータ機能が無効なワールドには、ベータ機能を有効にする設定が OFF になっていないとアップロードできません";
+                EditorGUILayout.HelpBox(message, MessageType.Error);
+            }
+
+            using (new EditorGUI.DisabledScope(!isVenueUploadSettingValid || !betaSettingValid))
+            {
+                var uploadButton = GUILayout.Button($"{(venue.IsBeta ? "ベータ機能が有効な " : "")}'{venue.Name}' としてアップロードする");
                 if (uploadButton)
                 {
                     executeUpload = EditorUtility.DisplayDialog("ワールドをアップロードする", $"'{venue.Name}'としてアップロードします。よろしいですか？",
                         "アップロード", "キャンセル");
+                    isBeta = ClusterCreatorKitSettings.instance.IsBeta;
                 }
             }
 

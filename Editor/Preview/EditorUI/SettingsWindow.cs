@@ -28,6 +28,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
             root.Add(GenerateCameraControlSection());
             root.Add(UiUtils.Separator());
             root.Add(GenerateSavedStateSection());
+            root.Add(UiUtils.Separator());
             root.Add(GenerateLangCodeSection());
         }
 

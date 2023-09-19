@@ -20,6 +20,7 @@ namespace VGltf.Unity
         public IndexedResourceDict<Material, Material> Materials = new IndexedResourceDict<Material, Material>();
         public IndexedResourceDict<(Mesh, Material[]), Mesh> Meshes = new IndexedResourceDict<(Mesh, Material[]), Mesh>(new MeshEqualityComparer());
         public IndexedResourceDict<Mesh, Skin> Skins = new IndexedResourceDict<Mesh, Skin>();
+        public IndexedResourceDict<AnimationClip, AnimationClip> Animations = new IndexedResourceDict<AnimationClip, AnimationClip>();
 
         public void Dispose()
         {

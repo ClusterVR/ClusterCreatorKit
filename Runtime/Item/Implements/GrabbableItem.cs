@@ -35,8 +35,8 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         public Transform Grip => grip;
 
-        public event Action OnGrabbed;
-        public event Action OnReleased;
+        public event Action<bool> OnGrabbed;
+        public event Action<bool> OnReleased;
 
         public void Construct(Transform grip)
         {
@@ -48,16 +48,16 @@ namespace ClusterVR.CreatorKit.Item.Implements
             gameObject.SetLayerRecursively(LayerName.InteractableItem);
         }
 
-        public void OnGrab()
+        public void OnGrab(bool isLeftHand)
         {
             gameObject.SetLayerRecursively(LayerName.GrabbingItem);
-            OnGrabbed?.Invoke();
+            OnGrabbed?.Invoke(isLeftHand);
         }
 
-        public void OnRelease()
+        public void OnRelease(bool isLeftHand)
         {
             gameObject.SetLayerRecursively(LayerName.InteractableItem);
-            OnReleased?.Invoke();
+            OnReleased?.Invoke(isLeftHand);
         }
 
         void Reset()

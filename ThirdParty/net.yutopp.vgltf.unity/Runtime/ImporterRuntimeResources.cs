@@ -17,10 +17,12 @@ namespace VGltf.Unity
         public IndexedResourceDict<int, Texture2D> Textures = new IndexedResourceDict<int, Texture2D>();
         public IndexedResourceDict<int, Material> Materials = new IndexedResourceDict<int, Material>();
         public IndexedResourceDict<int, Mesh> Meshes = new IndexedResourceDict<int, Mesh>();
+        public IndexedDisposableResourceDict<int, IDisposable> Animations = new IndexedDisposableResourceDict<int, IDisposable>();
         public Dictionary<object, IDisposable> AuxResources { get; } = new Dictionary<object, IDisposable>();
 
         public void Dispose()
         {
+            Animations.Dispose();
             Nodes.Dispose();
             Meshes.Dispose();
             Materials.Dispose();

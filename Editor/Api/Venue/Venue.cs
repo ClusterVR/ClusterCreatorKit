@@ -12,6 +12,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.Venue
         [SerializeField] ThumbnailUrl[] thumbnailUrls;
         [SerializeField] string venueId;
         [SerializeField] string worldDetailUrl;
+        [SerializeField] bool isBeta;
 
         public string Description => description;
         public string Name => name;
@@ -19,5 +20,6 @@ namespace ClusterVR.CreatorKit.Editor.Api.Venue
         public ThumbnailUrl[] ThumbnailUrls => thumbnailUrls;
         public VenueID VenueId => new VenueID(venueId);
         public string WorldDetailUrl => worldDetailUrl;
+        public bool IsBeta => isBeta;
     }
 }

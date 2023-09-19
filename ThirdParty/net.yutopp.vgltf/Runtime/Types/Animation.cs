@@ -26,7 +26,7 @@ namespace VGltf.Types
         //
 
         [JsonSchema(Id = "animation.channel.schema.json")]
-        public class ChannelType : GltfProperty
+        public sealed class ChannelType : GltfProperty
         {
             [JsonField(Name = "sampler")]
             [JsonSchemaRequired, JsonSchemaRef(typeof(GltfID))]
@@ -39,35 +39,25 @@ namespace VGltf.Types
             //
 
             [JsonSchema(Id = "animation.channel.target.schema.json")]
-            public class TargetType : GltfProperty
+            public sealed class TargetType : GltfProperty
             {
-                [JsonField(Name = "node")]
+                public const string PathEnumTranslation = "translation";
+                public const string PathEnumRotation = "rotation";
+                public const string PathEnumScale = "scale";
+                public const string PathEnumWeights = "weights";
+
+                [JsonField(Name = "node"), JsonFieldIgnorable]
                 [JsonSchemaRef(typeof(GltfID))]
-                public int Node;
+                public int? Node;
 
                 [JsonField(Name = "path")]
                 [JsonSchemaRequired]
-                public PathEnum Path;
-
-                //
-
-                [Json(EnumConversion = EnumConversionType.AsString)]
-                public enum PathEnum
-                {
-                    [JsonField(Name = "translation")]
-                    Translation,
-                    [JsonField(Name = "rotation")]
-                    Rotation,
-                    [JsonField(Name = "scale")]
-                    Scale,
-                    [JsonField(Name = "weights")]
-                    Weights,
-                }
+                public string Path;
             }
         }
 
         [JsonSchema(Id = "animation.sampler.schema.json")]
-        public class SamplerType
+        public sealed class SamplerType : GltfProperty
         {
             [JsonField(Name = "input")]
             [JsonSchemaRequired, JsonSchemaRef(typeof(GltfID))]

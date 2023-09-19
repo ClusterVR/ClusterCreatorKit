@@ -1,6 +1,8 @@
 ﻿/* ========= Copyright 2016-2017, HTC Corporation. All rights reserved. =========== */
 
 using System;
+using System.Linq;
+using ClusterVR.CreatorKit.Extensions;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.XR;
@@ -8,7 +10,7 @@ using UnityEngine.XR;
 namespace ClusterVR.CreatorKit.World.Implements.Mirror
 {
     [DisallowMultipleComponent, RequireComponent(typeof(MeshRenderer))]
-    public class Mirror : MonoBehaviour
+    public class Mirror : MonoBehaviour, IMirror
     {
         enum Eye
         {
@@ -62,7 +64,9 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
             preRenderCamera.enabled = false;
 
             cachedRenderer = GetComponent<Renderer>();
-            material = cachedRenderer.material;
+            var materials = RendererMaterialUtility.GetSharedMaterials(cachedRenderer).Select(Instantiate).ToArray();
+            material = materials[0];
+            RendererMaterialUtility.SetMaterials(cachedRenderer, materials);
 
             if (material.shader.name == ShaderName)
             {
@@ -422,6 +426,14 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
         void OnDestroy()
         {
             ReleaseTemporalRenderTextures();
+            if (material != null)
+            {
+                Destroy(material);
+            }
+            if (cachedRenderer != null)
+            {
+                RendererMaterialUtility.ClearMaterials(cachedRenderer);
+            }
         }
 
         void ReleaseTemporalRenderTextures()

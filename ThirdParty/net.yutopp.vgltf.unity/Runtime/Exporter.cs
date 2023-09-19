@@ -121,6 +121,14 @@ namespace VGltf.Unity
             }
         }
 
+        public void ExportEmpty()
+        {
+            foreach (var hook in Hooks)
+            {
+                hook.PostHook(this, null);
+            }
+        }
+
         void ExportGameObjectAsSceneWithoutNormalize(GameObject go)
         {
             Func<IndexedResource<GameObject>[]> generator = () =>

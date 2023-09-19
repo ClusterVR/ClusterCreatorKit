@@ -7,7 +7,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
     {
         void SetAccessToken(string accessToken);
 
-        Task<string> UploadItemAsync(byte[] binary, CancellationToken cancellationToken);
+        Task<string> UploadItemAsync(byte[] binary, bool isBeta, CancellationToken cancellationToken);
         string UploadedItemsManagementUrl { get; }
+        bool ApplyBeta { get; }
     }
 }

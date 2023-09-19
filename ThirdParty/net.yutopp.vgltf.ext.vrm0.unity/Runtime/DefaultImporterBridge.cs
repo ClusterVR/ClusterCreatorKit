@@ -98,11 +98,15 @@ namespace VGltf.Ext.Vrm0.Unity
 
         public void ImportSecondaryAnimation(IImporterContext context, VGltf.Ext.Vrm0.Types.SecondaryAnimation vrmSecondaryAnimation, GameObject go)
         {
-            // if the node named "secondary" exists, attach VRM0SecondaryAnimation to this. Otherwise, ignore that.
+            // if the node named "secondary" exists, attach VRM0SecondaryAnimation to this.
+            // Otherwise, create a new node named "secondary" and attach VRM0SecondaryAnimation to it.
             var secondaryNode = go.transform.Find("secondary");
             if (secondaryNode == null)
             {
-                return;
+                var secondaryGo = new GameObject("secondary");
+                secondaryGo.transform.SetParent(go.transform);
+
+                secondaryNode = secondaryGo.transform;
             }
 
             var sa = secondaryNode.gameObject.AddComponent<VRM0SecondaryAnimation>();

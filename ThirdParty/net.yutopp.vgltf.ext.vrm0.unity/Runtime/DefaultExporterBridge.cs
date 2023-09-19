@@ -15,7 +15,7 @@ namespace VGltf.Ext.Vrm0.Unity
 {
     public sealed class DefaultExporterBridge : VGltf.Ext.Vrm0.Unity.Bridge.IExporterBridge
     {
-        private readonly DefaultMaterialExporterBridge _materialExporterBridge = new ();
+        private readonly DefaultMaterialExporterBridge _materialExporterBridge = new DefaultMaterialExporterBridge();
 
         public void ExportMeta(Exporter exporter, VGltf.Ext.Vrm0.Types.Vrm vrm, GameObject go)
         {

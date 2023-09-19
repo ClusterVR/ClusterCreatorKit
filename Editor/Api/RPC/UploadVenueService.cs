@@ -36,6 +36,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         readonly Venue.Venue venue;
 
         readonly WorldDescriptor worldDescriptor;
+        readonly bool isBeta;
 
         VenueUploadRequestCompletionResponse completionResponse;
 
@@ -45,6 +46,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             string accessToken,
             Venue.Venue venue,
             WorldDescriptor worldDescriptor,
+            bool isBeta,
             Action<VenueUploadRequestCompletionResponse> onSuccess = null,
             Action<Exception> onError = null
         )
@@ -52,6 +54,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             this.accessToken = accessToken;
             this.venue = venue;
             this.worldDescriptor = worldDescriptor;
+            this.isBeta = isBeta;
             this.onSuccess = onSuccess;
             this.onError = onError;
 
@@ -105,6 +108,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 var uploadRequest = new PostUploadRequestService(
                     accessToken,
                     venue.VenueId,
+                    isBeta,
                     request =>
                     {
                         Debug.Log($"make new upload request, Request ID : {request.UploadRequestId}");

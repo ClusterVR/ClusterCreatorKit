@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Editor.Custom;
 using ClusterVR.CreatorKit.Editor.ItemExporter;
 using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
 using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.Item.Implements;
 using ClusterVR.CreatorKit.ItemExporter;
 using ClusterVR.CreatorKit.ItemExporter.ExporterHooks;
 using UnityEditor;
@@ -51,7 +53,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             this.builder = itemTemplateBuilder;
         }
 
-        public void SetItem(GameObject item)
+        public void SetItem(GameObject item, bool isBeta)
         {
             try
             {
@@ -62,6 +64,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
                 {
                     Name = itemComponent.ItemName;
                     Size = itemComponent.Size;
+
+                    BuildHumanoidAnimation(itemComponent);
                 }
                 else
                 {
@@ -69,7 +73,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
                     Size = Vector3Int.zero;
                 }
 
-                gltfContainer = ValidateAndBuildGltfContainer();
+                gltfContainer = ValidateAndBuildGltfContainer(isBeta);
 
                 CreateThumbnail(item);
             }
@@ -173,13 +177,13 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             Object.DestroyImmediate(thumbnail);
         }
 
-        GltfContainer ValidateAndBuildGltfContainer()
+        GltfContainer ValidateAndBuildGltfContainer(bool isBeta)
         {
             GltfContainer container = null;
             validationMessages.Clear();
 
             validationMessages.AddRange(GameObjectValidator.Validate(Item.gameObject));
-            validationMessages.AddRange(componentValidator.Validate(Item));
+            validationMessages.AddRange(componentValidator.Validate(Item, isBeta));
 
             var buildGlbContainerValidationMessages = gltfValidator.Validate(Item).ToList();
             validationMessages.AddRange(buildGlbContainerValidationMessages);
@@ -187,7 +191,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             {
                 try
                 {
-                    container = itemExporter.ExportAsGltfContainer(Item);
+                    container = itemExporter.ExportAsGltfContainer(Item, isBeta);
                     validationMessages.AddRange(gltfValidator.Validate(container));
                 }
                 catch (Exception e)
@@ -226,6 +230,34 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
                 default:
                     message = default;
                     return false;
+            }
+        }
+
+        void BuildHumanoidAnimation(IItem item)
+        {
+            var humanoidAnimationList = item.GetComponent<HumanoidAnimationList>();
+            if (humanoidAnimationList == null)
+            {
+                return;
+            }
+
+            var animations = humanoidAnimationList.RawHumanoidAnimations;
+            if (animations == null)
+            {
+                return;
+            }
+
+            var humanoidAnimations = new Dictionary<AnimationClip, HumanoidAnimation>();
+
+            foreach (var animation in animations)
+            {
+                var animationClip = animation.Animation;
+                if (!humanoidAnimations.TryGetValue(animationClip, out var humanoidAnimation))
+                {
+                    humanoidAnimation = HumanoidAnimationBuilder.Build(animation.Animation);
+                    humanoidAnimations.Add(animationClip, humanoidAnimation);
+                }
+                animation.SetHumanoidAnimation(humanoidAnimation);
             }
         }
     }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
+using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -150,7 +151,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         VisualElement CreateVenuePicker(GroupID groupId, Venues venues, CancellationToken cancellationToken, VenueID venueIdToSelect)
         {
             var venuePicker = new VisualElement();
-            venuePicker.Add(new Button(() => CreateNewVenue(groupId, cancellationToken)) { text = "新規作成" });
+
+            void OnNewVenueClicked()
+            {
+                var isBeta = ClusterCreatorKitSettings.instance.IsBeta;
+                CreateNewVenue(groupId, isBeta, cancellationToken);
+            }
+
+            venuePicker.Add(new Button(OnNewVenueClicked) { text = "新規作成" });
             venuePicker.Add(new Label() { text = "作成済みワールドから選ぶ", style = { marginTop = 12 } });
             venuePicker.Add(CreateVenueList(venues, venueIdToSelect));
             return venuePicker;
@@ -167,7 +175,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             {
                 var venueButton = new Button(() => { reactiveCurrentVenue.Val = venue; })
                 {
-                    text = venue.Name,
+                    text = venue.IsBeta ? $"[bata] {venue.Name}" : venue.Name,
                     style = { unityTextAlign = TextAnchor.MiddleLeft }
                 };
                 venueList.Add(venueButton);
@@ -178,12 +186,12 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             return venueList;
         }
 
-        void CreateNewVenue(GroupID groupId, CancellationToken cancellationToken)
+        void CreateNewVenue(GroupID groupId, bool isBeta, CancellationToken cancellationToken)
         {
             var postVenueService =
                 new PostRegisterNewVenueService(
                     userInfo.VerifiedToken,
-                    new PostNewVenuePayload("New World", "説明未設定", groupId.Value),
+                    new PostNewVenuePayload("New World", "説明未設定", groupId.Value, isBeta),
                     venue =>
                     {
                         RefreshGroupSelector(groupId, venue.VenueId);

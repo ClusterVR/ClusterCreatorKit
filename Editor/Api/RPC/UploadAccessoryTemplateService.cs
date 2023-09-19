@@ -15,6 +15,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         string accessToken;
 
+        public bool ApplyBeta => false;
+
         public string UploadedItemsManagementUrl => Constants.WebBaseUrl + "/account/contents/accessories";
 
         public void SetAccessToken(string accessToken)
@@ -22,7 +24,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             this.accessToken = accessToken;
         }
 
-        public Task<string> UploadItemAsync(byte[] binary, CancellationToken cancellationToken)
+        public Task<string> UploadItemAsync(byte[] binary, bool isBeta, CancellationToken cancellationToken)
         {
             return UploadAsync(string.Empty, binary, cancellationToken);
         }

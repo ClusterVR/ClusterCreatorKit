@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClusterVR.CreatorKit.Extensions;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -23,6 +24,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
         static readonly int SrcBlendId = Shader.PropertyToID("_SrcBlend");
         static readonly int DstBlendId = Shader.PropertyToID("_DstBlend");
         static readonly int ZWriteId = Shader.PropertyToID("_ZWrite");
+        static readonly int MetallicId = Shader.PropertyToID("_Metallic");
 
         enum ManipulationState
         {
@@ -44,7 +46,6 @@ namespace ClusterVR.CreatorKit.Item.Implements
         bool disbodied;
 
         readonly List<(Material, Color)> instancedMaterialAndBaseColors = new List<(Material, Color)>();
-        readonly Dictionary<Renderer, Material[]> originalMaterials = new Dictionary<Renderer, Material[]>();
 
         public void Construct(string itemName, Vector3Int size)
         {
@@ -139,10 +140,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
             foreach (var renderer in gameObject.GetComponentsInChildren<Renderer>(true))
             {
-                if (originalMaterials.TryGetValue(renderer, out var original))
-                {
-                    renderer.materials = original;
-                }
+                RendererMaterialUtility.ClearOverrideMaterials(renderer);
             }
 
             ReleaseMaterials();
@@ -160,8 +158,21 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
             foreach (var renderer in gameObject.GetComponentsInChildren<Renderer>(true))
             {
-                originalMaterials[renderer] = renderer.sharedMaterials;
-                instancedMaterialAndBaseColors.AddRange(renderer.materials.Select(m => (m, GetBaseColor(m))));
+                var instancedMaterials = RendererMaterialUtility.GetSharedMaterials(renderer).Select(Instantiate).ToArray();
+                for (var i = 0; i < instancedMaterials.Length; i++)
+                {
+                    var m = instancedMaterials[i];
+                    if (m.shader.name is "Standard" or "ClusterVR/UnlitNonTiledWithBackgroundColor")
+                    {
+                    }
+                    else
+                    {
+                        m.shader = Shader.Find("Standard");
+                        m.SetFloat(MetallicId, 0);
+                    }
+                    instancedMaterialAndBaseColors.Add((m, GetBaseColor(m)));
+                }
+                RendererMaterialUtility.SetOverrideMaterials(renderer, instancedMaterials);
             }
 
             foreach (var (material, baseColor) in instancedMaterialAndBaseColors)
@@ -240,12 +251,14 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         void ReleaseMaterials()
         {
-            foreach (var (material, _) in instancedMaterialAndBaseColors)
+            foreach (var (m, _) in instancedMaterialAndBaseColors)
             {
-                Destroy(material);
+                if (m != null)
+                {
+                    Destroy(m);
+                }
             }
             instancedMaterialAndBaseColors.Clear();
-            originalMaterials.Clear();
         }
 
         void OnDrawGizmosSelected()

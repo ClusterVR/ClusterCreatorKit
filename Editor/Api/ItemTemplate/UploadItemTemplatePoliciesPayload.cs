@@ -9,12 +9,14 @@ namespace ClusterVR.CreatorKit.Editor.Api.ItemTemplate
         [SerializeField] string contentType;
         [SerializeField] string fileName;
         [SerializeField] long fileSize;
+        [SerializeField] bool isBeta;
 
-        public UploadItemTemplatePoliciesPayload(string contentType, string fileName, long fileSize)
+        public UploadItemTemplatePoliciesPayload(string contentType, string fileName, long fileSize, bool isBeta)
         {
             this.contentType = contentType;
             this.fileName = fileName;
             this.fileSize = fileSize;
+            this.isBeta = isBeta;
         }
     }
 }

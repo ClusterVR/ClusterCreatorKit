@@ -271,6 +271,18 @@ namespace VGltf.Types.Extensions
             return n;
         }
 
+        public static int AddAnimation(this Gltf gltf, Animation item)
+        {
+            if (gltf.Animations == null)
+            {
+                gltf.Animations = new List<Animation>();
+            }
+
+            var n = gltf.Animations.Count;
+            gltf.Animations.Add(item);
+            return n;
+        }
+
         public static void AddExtensionUsed(this Gltf gltf, string name)
         {
             if (gltf.ExtensionsUsed == null)

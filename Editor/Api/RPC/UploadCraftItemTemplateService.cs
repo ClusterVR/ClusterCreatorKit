@@ -15,6 +15,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         string accessToken;
 
+        public bool ApplyBeta => true;
+
         public string UploadedItemsManagementUrl => Constants.WebBaseUrl + "/account/contents/items";
 
         public void SetAccessToken(string accessToken)
@@ -22,9 +24,9 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             this.accessToken = accessToken;
         }
 
-        public async Task<string> UploadItemAsync(byte[] binary, CancellationToken cancellationToken)
+        public async Task<string> UploadItemAsync(byte[] binary, bool isBeta, CancellationToken cancellationToken)
         {
-            var payload = new UploadItemTemplatePoliciesPayload(ContentType, FileName, binary.Length);
+            var payload = new UploadItemTemplatePoliciesPayload(ContentType, FileName, binary.Length, isBeta);
             var policy = await APIServiceClient.PostItemTemplatePolicies(payload, accessToken,
                 JsonConvert.DeserializeObject<UploadItemTemplatePoliciesResponse>,
                 cancellationToken);

@@ -27,7 +27,7 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
             {
                 grabbableItem = GetComponent<GrabbableItem>();
             }
-            grabbableItem.OnReleased += Invoke;
+            grabbableItem.OnReleased += _ => Invoke();
         }
 
         void Invoke()

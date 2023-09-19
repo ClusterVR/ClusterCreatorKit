@@ -17,7 +17,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 
         static readonly Vector3 OffsetPositionLimit = new Vector3(2, 2, 2);
 
-        public IEnumerable<ValidationMessage> Validate(GameObject gameObject)
+        public IEnumerable<ValidationMessage> Validate(GameObject gameObject, bool isBeta)
         {
             var validationMessages = new List<ValidationMessage>();
 

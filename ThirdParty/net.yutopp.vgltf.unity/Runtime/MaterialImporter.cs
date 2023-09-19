@@ -313,6 +313,15 @@ namespace VGltf.Unity
                 }
                 else
                 {
+                    var key = new NormalTexKey // TODO: support multi-set
+                    {
+                        Index = index,
+                    };
+                    if (context.Resources.AuxResources.TryGetValue(key, out var auxRes))
+                    {
+                        return (auxRes as Utils.DestroyOnDispose<Texture2D>).Value;
+                    }
+
                     var src = await context.Importers.Textures.RawImport(index, true, ct);
                     using (var srcRes = new Utils.DestroyOnDispose<Texture2D>(src))
                     {
@@ -324,10 +333,7 @@ namespace VGltf.Unity
                             context.ImportingSetting.TextureUpdateMipmaps,
                             context.ImportingSetting.TextureMakeNoLongerReadable,
                             compressHighQual);
-                        context.Resources.AuxResources.Add(new NormalTexKey // TODO: support multi-set
-                        {
-                            Index = index,
-                        }, new Utils.DestroyOnDispose<Texture2D>(texture));
+                        context.Resources.AuxResources.Add(key, new Utils.DestroyOnDispose<Texture2D>(texture));
 
                         await context.TimeSlicer.Slice(ct);
 
@@ -389,6 +395,15 @@ namespace VGltf.Unity
                     return res.Value;
                 }
 
+                var key = new OcclusionTexKey // TODO: support multi-set
+                {
+                    Index = index,
+                };
+                if (context.Resources.AuxResources.TryGetValue(key, out var auxRes))
+                {
+                    return (auxRes as Utils.DestroyOnDispose<Texture2D>).Value;
+                }
+
                 var src = await context.Importers.Textures.RawImport(index, false, ct);
                 using (var srcRes = new Utils.DestroyOnDispose<Texture2D>(src))
                 {
@@ -400,10 +415,7 @@ namespace VGltf.Unity
                         context.ImportingSetting.TextureUpdateMipmaps,
                         context.ImportingSetting.TextureMakeNoLongerReadable,
                         compressHighQual);
-                    context.Resources.AuxResources.Add(new OcclusionTexKey // TODO: support multi-set
-                    {
-                        Index = index,
-                    }, new Utils.DestroyOnDispose<Texture2D>(texture));
+                    context.Resources.AuxResources.Add(key, new Utils.DestroyOnDispose<Texture2D>(texture));
 
                     await context.TimeSlicer.Slice(ct);
 
@@ -471,6 +483,15 @@ namespace VGltf.Unity
                     return res.Value;
                 }
 
+                var key = new MetallicRoughnessTexKey // TODO: support multi-set
+                {
+                    Index = index,
+                };
+                if (context.Resources.AuxResources.TryGetValue(key, out var auxRes))
+                {
+                    return (auxRes as Utils.DestroyOnDispose<Texture2D>).Value;
+                }
+
                 var src = await context.Importers.Textures.RawImport(index, true, ct);
                 using (var srcRes = new Utils.DestroyOnDispose<Texture2D>(src))
                 {
@@ -484,10 +505,7 @@ namespace VGltf.Unity
                         context.ImportingSetting.TextureUpdateMipmaps,
                         context.ImportingSetting.TextureMakeNoLongerReadable,
                         compressHighQual);
-                    context.Resources.AuxResources.Add(new MetallicRoughnessTexKey // TODO: support multi-set
-                    {
-                        Index = index,
-                    }, new Utils.DestroyOnDispose<Texture2D>(texture));
+                    context.Resources.AuxResources.Add(key, new Utils.DestroyOnDispose<Texture2D>(texture));
 
                     await context.TimeSlicer.Slice(ct);
 

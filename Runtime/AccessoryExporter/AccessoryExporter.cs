@@ -18,7 +18,7 @@ namespace ClusterVR.CreatorKit.AccessoryExporter
             return exporter;
         }
 
-        public GltfContainer ExportAsGltfContainer(GameObject go)
+        public GltfContainer ExportAsGltfContainer(GameObject go, bool isBeta)
         {
             using var exporter = CreateExporter();
 

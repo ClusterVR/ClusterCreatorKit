@@ -2,9 +2,10 @@
     "name": "ClusterVR.CreatorKit.Item.Implements",
     "references": [
         "ClusterVR.CreatorKit",
-        "ClusterVR.CreatorKit.Item",
+        "ClusterVR.CreatorKit.Common",
         "ClusterVR.CreatorKit.Constants",
         "ClusterVR.CreatorKit.Extensions",
+        "ClusterVR.CreatorKit.Item",
         "ClusterVR.CreatorKit.ProductUgc"
     ],
     "includePlatforms": [],

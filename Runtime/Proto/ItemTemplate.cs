@@ -32,34 +32,35 @@ namespace ClusterVR.CreatorKit.Proto {
             "JS5jbHVzdGVyLmNyZWF0b3JraXQuSHVtYW5vaWRBbmltYXRpb24iSQoISXRl",
             "bU1ldGESLwoEbmFtZRgBIAMoCzIhLmNsdXN0ZXIuY3JlYXRvcmtpdC5Mb2Nh",
             "bGl6ZWRUZXh0EgwKBHNpemUYAiADKA0iMAoNTG9jYWxpemVkVGV4dBIRCgls",
-            "YW5nX2NvZGUYASABKAkSDAoEdGV4dBgCIAEoCSIvCgtNb3ZhYmxlSXRlbRIS",
-            "Cgppc19keW5hbWljGAEgASgIEgwKBG1hc3MYAiABKAIipQEKC1JpZGFibGVJ",
-            "dGVtEgwKBHNlYXQYASABKA0SGgoSaGFzX2V4aXRfdHJhbnNmb3JtGAIgASgI",
-            "EhYKDmV4aXRfdHJhbnNmb3JtGAMgASgNEhUKDWhhc19sZWZ0X2dyaXAYBCAB",
-            "KAgSEQoJbGVmdF9ncmlwGAUgASgNEhYKDmhhc19yaWdodF9ncmlwGAYgASgI",
-            "EhIKCnJpZ2h0X2dyaXAYByABKA0iLwoNR3JhYmJhYmxlSXRlbRIQCghoYXNf",
-            "Z3JpcBgBIAEoCBIMCgRncmlwGAIgASgNIiUKDlNjcmlwdGFibGVJdGVtEhMK",
-            "C3NvdXJjZV9jb2RlGAEgASgJIjUKD09mZnNldFRyYW5zZm9ybRIiChp0cmFu",
-            "c2xhdGlvbl9yb3RhdGlvbl9zY2FsZRgBIAMoAiI6ChJBdHRhY2hDYXNlVG9B",
-            "dmF0YXISJAocZGVmYXVsdF9odW1hbl9ib2R5X2JvbmVfbmFtZRgBIAEoCSKu",
-            "AQoNQWNjZXNzb3J5SXRlbRJFChhkZWZhdWx0X29mZnNldF90cmFuc2Zvcm0Y",
-            "AyABKAsyIy5jbHVzdGVyLmNyZWF0b3JraXQuT2Zmc2V0VHJhbnNmb3JtEkcK",
-            "FWF0dGFjaF9jYXNlX3RvX2F2YXRhchgCIAEoCzImLmNsdXN0ZXIuY3JlYXRv",
-            "cmtpdC5BdHRhY2hDYXNlVG9BdmF0YXJIAEINCgthdHRhY2hfY2FzZSJSCgxJ",
-            "dGVtQXVkaW9TZXQSCgoCaWQYASABKAkSKAoFYXVkaW8YAiABKAsyGS5jbHVz",
-            "dGVyLmNyZWF0b3JraXQuQXVkaW8SDAoEbG9vcBgDIAEoCCI9CgVBdWRpbxIm",
-            "CgNwY20YASABKAsyFy5jbHVzdGVyLmNyZWF0b3JraXQuUGNtSABCDAoKYXVk",
-            "aW9fY2FzZSI6CgNQY20SEAoIY2hhbm5lbHMYASABKA0SEwoLc2FtcGxlX3Jh",
-            "dGUYAiABKA0SDAoEZGF0YRgDIAMoAiIyChFIdW1hbm9pZEFuaW1hdGlvbhIK",
-            "CgJpZBgBIAEoCRIRCglhbmltYXRpb24YAiABKA1CLVoOY2x1c3Rlci5tdS9y",
-            "cGOqAhpDbHVzdGVyVlIuQ3JlYXRvcktpdC5Qcm90b2IGcHJvdG8z"));
+            "YW5nX2NvZGUYASABKAkSDAoEdGV4dBgCIAEoCSJICgtNb3ZhYmxlSXRlbRIS",
+            "Cgppc19keW5hbWljGAEgASgIEgwKBG1hc3MYAiABKAISFwoPZGlzYWJsZV9n",
+            "cmF2aXR5GAMgASgIIqUBCgtSaWRhYmxlSXRlbRIMCgRzZWF0GAEgASgNEhoK",
+            "Emhhc19leGl0X3RyYW5zZm9ybRgCIAEoCBIWCg5leGl0X3RyYW5zZm9ybRgD",
+            "IAEoDRIVCg1oYXNfbGVmdF9ncmlwGAQgASgIEhEKCWxlZnRfZ3JpcBgFIAEo",
+            "DRIWCg5oYXNfcmlnaHRfZ3JpcBgGIAEoCBISCgpyaWdodF9ncmlwGAcgASgN",
+            "Ii8KDUdyYWJiYWJsZUl0ZW0SEAoIaGFzX2dyaXAYASABKAgSDAoEZ3JpcBgC",
+            "IAEoDSIlCg5TY3JpcHRhYmxlSXRlbRITCgtzb3VyY2VfY29kZRgBIAEoCSI1",
+            "Cg9PZmZzZXRUcmFuc2Zvcm0SIgoadHJhbnNsYXRpb25fcm90YXRpb25fc2Nh",
+            "bGUYASADKAIiOgoSQXR0YWNoQ2FzZVRvQXZhdGFyEiQKHGRlZmF1bHRfaHVt",
+            "YW5fYm9keV9ib25lX25hbWUYASABKAkirgEKDUFjY2Vzc29yeUl0ZW0SRQoY",
+            "ZGVmYXVsdF9vZmZzZXRfdHJhbnNmb3JtGAMgASgLMiMuY2x1c3Rlci5jcmVh",
+            "dG9ya2l0Lk9mZnNldFRyYW5zZm9ybRJHChVhdHRhY2hfY2FzZV90b19hdmF0",
+            "YXIYAiABKAsyJi5jbHVzdGVyLmNyZWF0b3JraXQuQXR0YWNoQ2FzZVRvQXZh",
+            "dGFySABCDQoLYXR0YWNoX2Nhc2UiUgoMSXRlbUF1ZGlvU2V0EgoKAmlkGAEg",
+            "ASgJEigKBWF1ZGlvGAIgASgLMhkuY2x1c3Rlci5jcmVhdG9ya2l0LkF1ZGlv",
+            "EgwKBGxvb3AYAyABKAgiPQoFQXVkaW8SJgoDcGNtGAEgASgLMhcuY2x1c3Rl",
+            "ci5jcmVhdG9ya2l0LlBjbUgAQgwKCmF1ZGlvX2Nhc2UiOgoDUGNtEhAKCGNo",
+            "YW5uZWxzGAEgASgNEhMKC3NhbXBsZV9yYXRlGAIgASgNEgwKBGRhdGEYAyAD",
+            "KAIiMgoRSHVtYW5vaWRBbmltYXRpb24SCgoCaWQYASABKAkSEQoJYW5pbWF0",
+            "aW9uGAIgASgNQi1aDmNsdXN0ZXIubXUvcnBjqgIaQ2x1c3RlclZSLkNyZWF0",
+            "b3JLaXQuUHJvdG9iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Item), global::ClusterVR.CreatorKit.Proto.Item.Parser, new[]{ "Meta", "MovableItem", "RidableItem", "GrabbableItem", "ScriptableItem", "AccessoryItem", "ItemAudioSetList", "HumanoidAnimationList" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ItemMeta), global::ClusterVR.CreatorKit.Proto.ItemMeta.Parser, new[]{ "Name", "Size" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.LocalizedText), global::ClusterVR.CreatorKit.Proto.LocalizedText.Parser, new[]{ "LangCode", "Text" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.MovableItem), global::ClusterVR.CreatorKit.Proto.MovableItem.Parser, new[]{ "IsDynamic", "Mass" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.MovableItem), global::ClusterVR.CreatorKit.Proto.MovableItem.Parser, new[]{ "IsDynamic", "Mass", "DisableGravity" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.RidableItem), global::ClusterVR.CreatorKit.Proto.RidableItem.Parser, new[]{ "Seat", "HasExitTransform", "ExitTransform", "HasLeftGrip", "LeftGrip", "HasRightGrip", "RightGrip" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.GrabbableItem), global::ClusterVR.CreatorKit.Proto.GrabbableItem.Parser, new[]{ "HasGrip", "Grip" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ScriptableItem), global::ClusterVR.CreatorKit.Proto.ScriptableItem.Parser, new[]{ "SourceCode" }, null, null, null, null),
@@ -1012,6 +1013,7 @@ namespace ClusterVR.CreatorKit.Proto {
     public MovableItem(MovableItem other) : this() {
       isDynamic_ = other.isDynamic_;
       mass_ = other.mass_;
+      disableGravity_ = other.disableGravity_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1043,6 +1045,17 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
+    public const int DisableGravityFieldNumber = 3;
+    private bool disableGravity_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool DisableGravity {
+      get { return disableGravity_; }
+      set {
+        disableGravity_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -1060,6 +1073,7 @@ namespace ClusterVR.CreatorKit.Proto {
       }
       if (IsDynamic != other.IsDynamic) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Mass, other.Mass)) return false;
+      if (DisableGravity != other.DisableGravity) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1069,6 +1083,7 @@ namespace ClusterVR.CreatorKit.Proto {
       int hash = 1;
       if (IsDynamic != false) hash ^= IsDynamic.GetHashCode();
       if (Mass != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Mass);
+      if (DisableGravity != false) hash ^= DisableGravity.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1095,6 +1110,10 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteRawTag(21);
         output.WriteFloat(Mass);
       }
+      if (DisableGravity != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(DisableGravity);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1113,6 +1132,10 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteRawTag(21);
         output.WriteFloat(Mass);
       }
+      if (DisableGravity != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(DisableGravity);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -1128,6 +1151,9 @@ namespace ClusterVR.CreatorKit.Proto {
       }
       if (Mass != 0F) {
         size += 1 + 4;
+      }
+      if (DisableGravity != false) {
+        size += 1 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1146,6 +1172,9 @@ namespace ClusterVR.CreatorKit.Proto {
       }
       if (other.Mass != 0F) {
         Mass = other.Mass;
+      }
+      if (other.DisableGravity != false) {
+        DisableGravity = other.DisableGravity;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1170,6 +1199,10 @@ namespace ClusterVR.CreatorKit.Proto {
             Mass = input.ReadFloat();
             break;
           }
+          case 24: {
+            DisableGravity = input.ReadBool();
+            break;
+          }
         }
       }
     #endif
@@ -1191,6 +1224,10 @@ namespace ClusterVR.CreatorKit.Proto {
           }
           case 21: {
             Mass = input.ReadFloat();
+            break;
+          }
+          case 24: {
+            DisableGravity = input.ReadBool();
             break;
           }
         }

@@ -35,7 +35,7 @@
 
         <engine:VisualElement class="footer-container">
             <engine:VisualElement name="HorizontalLayout" class="reverse-horizontal">
-                <engine:Button name="upload-button" text="アップロード" class="default-button"/>
+                <engine:Button name="upload-button" class="default-button"/>
                 <engine:Label name="item-count-label"/>
             </engine:VisualElement>
         </engine:VisualElement>

@@ -1,0 +1,8 @@
+.horizontal {
+    flex-direction: row;
+    justify-content: center;
+}
+
+Button{
+    height: 24px;
+}

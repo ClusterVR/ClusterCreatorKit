@@ -42,7 +42,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         bool IMovableItem.IsDestroyed => this == null;
 
-        bool IMovableItem.IsDynamic
+        public bool IsDynamic
         {
             get
             {
@@ -51,9 +51,19 @@ namespace ClusterVR.CreatorKit.Item.Implements
             }
         }
 
+        float IMovableItem.Mass => Rigidbody.mass;
+
+        bool IMovableItem.UseGravity
+        {
+            get => Rigidbody.useGravity;
+            set => Rigidbody.useGravity = value;
+        }
+
         Vector3 IMovableItem.Position => gameObject.activeInHierarchy ? Rigidbody.position : transform.position;
         Quaternion IMovableItem.Rotation => gameObject.activeInHierarchy ? Rigidbody.rotation : transform.rotation;
+
         public override Vector3 Velocity => Rigidbody.velocity;
+
         public override Vector3 AngularVelocity => Rigidbody.angularVelocity;
 
         enum State
@@ -198,6 +208,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
             {
                 return;
             }
+            CacheInitialValue();
             rb.AddForce(force, mode);
         }
 
@@ -207,7 +218,18 @@ namespace ClusterVR.CreatorKit.Item.Implements
             {
                 return;
             }
+            CacheInitialValue();
             rb.AddTorque(torque, mode);
+        }
+
+        public void AddForceAtPosition(Vector3 force, Vector3 position, ForceMode mode)
+        {
+            if (state != State.Free)
+            {
+                return;
+            }
+            CacheInitialValue();
+            rb.AddForceAtPosition(force, position, mode);
         }
 
         public void SetVelocity(Vector3 velocity)
@@ -216,6 +238,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
             {
                 return;
             }
+            CacheInitialValue();
             rb.velocity = velocity;
         }
 
@@ -225,6 +248,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
             {
                 return;
             }
+            CacheInitialValue();
             rb.angularVelocity = angularVelocity;
         }
 

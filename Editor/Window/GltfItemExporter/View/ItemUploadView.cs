@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
+using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
 using ClusterVR.CreatorKit.Editor.Window.View;
 using ClusterVR.CreatorKit.ItemExporter;
@@ -36,14 +37,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
         VisualElement itemContainer;
         VisualElement helpViewContainer;
         VisualElement dragAreaPanel;
-        IDisposable disposable;
+        IDisposable uploadStatusBinding;
 
         Button clearItemViewsButton;
         Button uploadItemsButton;
 
         ItemUploadProgressWindow progressWindow;
 
-        CancellationTokenSource cancellationTokenSource;
+        CancellationTokenSource uploadCancellationTokenSource;
         readonly IItemExporter itemExporter;
         readonly IComponentValidator componentValidator;
         readonly IGltfValidator gltfValidator;
@@ -105,7 +106,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             };
 
             uploadItemsButton = view.Q<Button>("upload-button");
-            uploadItemsButton.clicked += UploadItems;
+            uploadItemsButton.clicked += () => UploadItems(ClusterCreatorKitSettings.instance.IsBeta);
+            uploadItemsButton.text = uploadService.ApplyBeta && ClusterCreatorKitSettings.instance.IsBeta ? "ベータ機能利用アイテムとしてアップロード" : "アップロード";
 
             Func<VisualElement> makeItemView = () =>
             {
@@ -140,7 +142,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             EnableDragAreaPanel(false);
             RefreshItemList();
 
-            disposable = ReactiveBinder.Bind(reactiveItemUploadStatus, (status) =>
+            uploadStatusBinding = ReactiveBinder.Bind(reactiveItemUploadStatus, (status) =>
             {
                 switch (status)
                 {
@@ -189,6 +191,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 
             progressWindow?.Close();
             progressWindow = null;
+
+            uploadStatusBinding?.Dispose();
+            uploadStatusBinding = null;
         }
 
         public void AddObjectPickerItem()
@@ -202,15 +207,15 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
                 if (Event.current.commandName == "ObjectSelectorClosed")
                 {
                     var obj = EditorGUIUtility.GetObjectPickerObject();
-                    AddItems(new[] { obj });
+                    AddItems(new[] { obj }, ClusterCreatorKitSettings.instance.IsBeta);
                     Event.current.Use();
                 }
             }
         }
 
-        void UploadItems()
+        void UploadItems(bool isBeta)
         {
-            _ = UploadAsync();
+            _ = UploadAsync(isBeta);
         }
 
         void OnDragEnter(DragEnterEvent arg)
@@ -226,7 +231,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
         void OnDragExited(DragExitedEvent arg)
         {
             EnableDragAreaPanel(false);
-            AddItems(DragAndDrop.objectReferences);
+            AddItems(DragAndDrop.objectReferences, ClusterCreatorKitSettings.instance.IsBeta);
         }
 
         void OnDragUpdate(DragUpdatedEvent arg)
@@ -251,7 +256,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             return (obj is GameObject gameObject) && EditorUtility.IsPersistent(gameObject);
         }
 
-        void AddItems(Object[] objects)
+        void AddItems(Object[] objects, bool isBeta)
         {
             foreach (var obj in objects)
             {
@@ -265,20 +270,20 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
                         item.Item != null && item.Item.GetInstanceID() == gameObject.GetInstanceID());
                 if (targetItemView != null)
                 {
-                    targetItemView.SetItem(gameObject);
+                    targetItemView.SetItem(gameObject, isBeta);
                 }
                 else
                 {
-                    AddNewItem(gameObject);
+                    AddNewItem(gameObject, isBeta);
                 }
             }
             RefreshItemList();
         }
 
-        void AddNewItem(GameObject gameObject)
+        void AddNewItem(GameObject gameObject, bool isBeta)
         {
             var itemView = new ItemView(itemExporter, componentValidator, gltfValidator, itemTemplateBuilder);
-            itemView.SetItem(gameObject);
+            itemView.SetItem(gameObject, isBeta);
             itemView.OnRemoveButtonClicked += RemoveItem;
 
             itemViews.Insert(0, itemView);
@@ -339,12 +344,12 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 
         void OnProgressWindowClosed()
         {
-            UploadCancelRequest();
+            CancelUpload();
             progressWindow = null;
             reactiveItemUploadStatus.Val = ItemUploadProgressWindow.ItemUploadStatus.Standby;
         }
 
-        async Task UploadAsync()
+        async Task UploadAsync(bool isBeta)
         {
             if (!loginUserInfo.HasValue ||
                 reactiveItemUploadStatus.Val == ItemUploadProgressWindow.ItemUploadStatus.Uploading)
@@ -354,10 +359,10 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             try
             {
                 reactiveItemUploadStatus.Val = ItemUploadProgressWindow.ItemUploadStatus.Uploading;
-                UploadCancelRequest();
-                cancellationTokenSource = new CancellationTokenSource();
+                CancelUpload();
+                uploadCancellationTokenSource = new CancellationTokenSource();
 
-                await UploadItemAsync(loginUserInfo.Value.VerifiedToken, cancellationTokenSource.Token);
+                await UploadItemAsync(loginUserInfo.Value.VerifiedToken, isBeta, uploadCancellationTokenSource.Token);
 
                 reactiveItemUploadStatus.Val = ItemUploadProgressWindow.ItemUploadStatus.Finish;
                 Application.OpenURL(uploadService.UploadedItemsManagementUrl);
@@ -374,7 +379,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             }
         }
 
-        async Task UploadItemAsync(string verifiedToken, CancellationToken cancellationToken)
+        async Task UploadItemAsync(string verifiedToken, bool isBeta, CancellationToken cancellationToken)
         {
             uploadService.SetAccessToken(verifiedToken);
 
@@ -387,24 +392,23 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 
                 progressWindow?.SetProgressRate(i * 100f / length);
                 var zipBinary = await itemView.BuildZippedItemBinary();
-                var itemTemplateId = await uploadService.UploadItemAsync(zipBinary, cancellationToken);
+                var itemTemplateId = await uploadService.UploadItemAsync(zipBinary, isBeta, cancellationToken);
                 itemList.Add((itemView.Item, itemTemplateId));
             }
             OnItemUploaded?.Invoke(itemList);
         }
 
-        void UploadCancelRequest()
+        void CancelUpload()
         {
-            cancellationTokenSource?.Cancel();
-            cancellationTokenSource?.Dispose();
-            cancellationTokenSource = null;
+            uploadCancellationTokenSource?.Cancel();
+            uploadCancellationTokenSource?.Dispose();
+            uploadCancellationTokenSource = null;
         }
 
         public void Dispose()
         {
-            UploadCancelRequest();
+            CancelUpload();
             Clear();
-            disposable?.Dispose();
         }
     }
 }

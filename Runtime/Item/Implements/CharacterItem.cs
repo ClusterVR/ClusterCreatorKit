@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Item.Implements
@@ -13,10 +14,23 @@ namespace ClusterVR.CreatorKit.Item.Implements
         public override IItem Item => item != null ? item : item = GetComponent<Item>();
         bool IMovableItem.IsDestroyed => this == null;
         bool IMovableItem.IsDynamic => true;
+        float IMovableItem.Mass => throw new NotImplementedException();
+
+        bool useGravity = true;
+
+        bool IMovableItem.UseGravity
+        {
+            get => useGravity;
+            set => useGravity = value;
+        }
+
         Vector3 IMovableItem.Position => transform.position;
         Quaternion IMovableItem.Rotation => transform.rotation;
+
         public override Vector3 Velocity => characterController.velocity;
+
         public override Vector3 AngularVelocity => angularVelocity;
+
         public bool IsGrounded => characterController.isGrounded;
 
         bool controlling = true;
@@ -60,7 +74,10 @@ namespace ClusterVR.CreatorKit.Item.Implements
                 velocity.y = 0f;
             }
 
-            velocity.y += Gravity * Time.unscaledDeltaTime;
+            if (useGravity)
+            {
+                velocity.y += Gravity * Time.unscaledDeltaTime;
+            }
             characterController.Move(velocity * Time.unscaledDeltaTime);
             transform.Rotate(Vector3.up, angularVelocity.y * Mathf.Rad2Deg * Time.unscaledDeltaTime);
         }
@@ -115,6 +132,28 @@ namespace ClusterVR.CreatorKit.Item.Implements
         public void SetAngularVelocityY(float value)
         {
             angularVelocity.y = value;
+        }
+
+        public void SetVelocity(Vector3 value)
+        {
+            velocity = value;
+        }
+
+        public void SetAngularVelocity(Vector3 value)
+        {
+            SetAngularVelocityY(value.y);
+        }
+
+        void IMovableItem.AddForce(Vector3 force, ForceMode mode)
+        {
+        }
+
+        void IMovableItem.AddTorque(Vector3 force, ForceMode mode)
+        {
+        }
+
+        void IMovableItem.AddForceAtPosition(Vector3 force, Vector3 position, ForceMode mode)
+        {
         }
 
         void Reset()

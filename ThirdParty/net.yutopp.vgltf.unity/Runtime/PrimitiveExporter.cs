@@ -64,6 +64,21 @@ namespace VGltf.Unity
             return buffer;
         }
 
+        public static byte[] Marshal(float[] arr)
+        {
+            // TODO: optimize
+            using (var ms = new MemoryStream())
+            using (var w = new BinaryWriter(ms))
+            {
+                foreach (var v in arr)
+                {
+                    w.Write(v);
+                }
+                w.Flush();
+                return ms.ToArray();
+            }
+        }
+
         public static byte[] Marshal(Vector2[] vec2)
         {
             // TODO: optimize
@@ -192,6 +207,26 @@ namespace VGltf.Unity
                     w.Write(Marshal(m.GetColumn(1)));
                     w.Write(Marshal(m.GetColumn(2)));
                     w.Write(Marshal(m.GetColumn(3)));
+                }
+                w.Flush();
+                buffer = ms.ToArray();
+            }
+            return buffer;
+        }
+
+        public static byte[] Marshal(Quaternion[] quaternions)
+        {
+            // TODO: optimize
+            byte[] buffer;
+            using (var ms = new MemoryStream())
+            using (var w = new BinaryWriter(ms))
+            {
+                foreach (var v in quaternions)
+                {
+                    w.Write(v.x);
+                    w.Write(v.y);
+                    w.Write(v.z);
+                    w.Write(v.w);
                 }
                 w.Flush();
                 buffer = ms.ToArray();

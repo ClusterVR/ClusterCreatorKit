@@ -29,11 +29,11 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                Release();
+                Release(false);
             }
             if (grabbingItem != null && !grabbingItem.Item.gameObject.activeInHierarchy)
             {
-                Release();
+                Release(false);
             }
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -66,8 +66,8 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
                 switch (item)
                 {
                     case IGrabbableItem grabbableItem:
-                        Release();
-                        Grab(grabbableItem, hitPoint);
+                        Release(false);
+                        Grab(grabbableItem, hitPoint, false);
                         break;
                     case IInteractableItem interactableItem:
                         interactableItem.Invoke();
@@ -80,10 +80,10 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             }
         }
 
-        void Grab(IGrabbableItem target, Vector3 hitPoint)
+        void Grab(IGrabbableItem target, Vector3 hitPoint, bool isLeftHand)
         {
             itemView.SetGrabbingItem(target);
-            target.OnGrab();
+            target.OnGrab(isLeftHand);
             grabbingItem = target;
 
             if (target.Grip == null)
@@ -119,14 +119,14 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
                 grabPointRotation * grabPointToTargetOffsetRotation);
         }
 
-        void Release()
+        void Release(bool isLeftHand)
         {
             if (grabbingItem == null)
             {
                 return;
             }
             grabbingItem.MovableItem.EnablePhysics();
-            grabbingItem.OnRelease();
+            grabbingItem.OnRelease(isLeftHand);
             grabbingItem = null;
             itemView.SetGrabbingItem(null);
             SetCursorLock(false);

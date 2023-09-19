@@ -11,7 +11,7 @@ Label {
 }
 
 .default-button {
-    width: 152px;
+    min-width: 152px;
     height: 24px;
 }
 

@@ -48,11 +48,11 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 $"{Constants.ApiBaseUrl}/v1/venues/{venueId.Value}", cancellationToken);
         }
 
-        public static Task<UploadRequest> PostUploadRequest(VenueID venueId, string accessToken,
+        public static Task<UploadRequest> PostUploadRequest(VenueID venueId, bool isBeta, string accessToken,
             CancellationToken cancellationToken)
         {
             return ApiClient.Post<Empty, UploadRequest>(Empty.Value, accessToken,
-                $"{Constants.ApiBaseUrl}/v1/venues/{venueId.Value}/upload/new", cancellationToken);
+                $"{Constants.ApiBaseUrl}/v1/venues/{venueId.Value}/upload/new?is_beta={isBeta}", cancellationToken);
         }
 
         public static Task<VenueUploadRequestCompletionResponse> PostNotifyFinishedUpload(VenueID venueId,
@@ -107,6 +107,14 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             return ApiClient.Post(payload, accessToken,
                 $"{Constants.ApiBaseUrl}/v1/upload/accessory_template/policies", jsonDeserializer,
                 cancellationToken);
+        }
+
+        public static Task<OwnItemTemplateListResponse> GetOwnItemTemplatesAsync(string accessToken,
+            int count, string filter, int page,
+            CancellationToken cancellationToken)
+        {
+            return ApiClient.Get<Empty, OwnItemTemplateListResponse>(Empty.Value, accessToken,
+                $"{Constants.ApiBaseUrl}/v1/item_templates/own_for_creator?count={count}&filter={filter}&page={page}", cancellationToken);
         }
     }
 }

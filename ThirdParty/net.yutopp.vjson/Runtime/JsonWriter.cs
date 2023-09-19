@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.IO;
 
@@ -242,12 +243,12 @@ namespace VJson
 
         void WritePrimitive(float v)
         {
-            WritePrimitive<string>(string.Format("{0:G9}", v));
+            WritePrimitive<string>(string.Format(CultureInfo.InvariantCulture, "{0:G9}", v));
         }
 
         void WritePrimitive(double v)
         {
-            WritePrimitive<string>(string.Format("{0:G17}", v));
+            WritePrimitive<string>(string.Format(CultureInfo.InvariantCulture, "{0:G17}", v));
         }
 
         void WritePrimitive<T>(T v)

@@ -9,7 +9,6 @@ using Google.Protobuf.Collections;
 using UnityEngine;
 using VGltf.Types.Extensions;
 using VGltf.Unity;
-using ItemAudioSet = ClusterVR.CreatorKit.Item.ItemAudioSet;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -20,6 +19,13 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
     public sealed class ItemExporterHook : ExporterHookBase
     {
         const string LangCodeJa = "ja";
+
+        readonly bool useDynamic;
+
+        public ItemExporterHook(bool useDynamic)
+        {
+            this.useDynamic = useDynamic;
+        }
 
         public override void PostHook(Exporter exporter, GameObject go)
         {
@@ -58,10 +64,10 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 MovableItem = ExtractMovableItemProto(go),
                 RidableItem = ExtractRidableItemProto(exporter, go),
                 GrabbableItem = ExtractGrabbableItemProto(exporter, go),
-                ScriptableItem = ExtractScriptableItemProto(go)
+                ScriptableItem = ExtractScriptableItemProto(go),
+                ItemAudioSetList = { ExtractItemAudioSetListProto(go) },
+                HumanoidAnimationList = { ExportAndExtractHumanoidAnimations(exporter, go) },
             };
-
-            proto.ItemAudioSetList.AddRange(ExtractItemAudioSetListProto(go));
 
             var extension = new GltfExtensions.ClusterItem
             {
@@ -89,10 +95,13 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
             }
             if (ridableItemComponent != null || grabbableItemComponent != null)
             {
-                var colliderCount = go.GetComponentsInChildren<Collider>().Count(c => !c.isTrigger);
-                if (colliderCount == 0)
+                var wouldHavePhysicalShape = go.GetComponentInChildren<Item.Implements.PhysicalShape>(true) != null ||
+                    go.GetComponentsInChildren<Collider>(true).Any(c => !c.isTrigger && !c.TryGetComponent<IShape>(out _));
+                var haveInteractableShape = go.GetComponentInChildren<Item.Implements.InteractableShape>(true) != null;
+                if (!wouldHavePhysicalShape && !haveInteractableShape)
                 {
-                    throw new MissingComponentException("GrabbableItem and RidableItem require Collider");
+                    throw new MissingComponentException(
+                        "GrabbableItem and RidableItem require PhysicalShape or InteractableShape");
                 }
             }
         }
@@ -104,7 +113,11 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
             {
                 return null;
             }
-            return new MovableItem();
+            return new MovableItem
+            {
+                IsDynamic = useDynamic && movableItemComponent.IsDynamic,
+                Mass = movableItemComponent.Mass,
+            };
         }
 
         Proto.RidableItem ExtractRidableItemProto(Exporter exporter, GameObject go)
@@ -181,7 +194,7 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 {
                     continue;
                 }
-                targetIndex = (uint) indexedResource.Index;
+                targetIndex = (uint)indexedResource.Index;
                 return true;
             }
             return false;
@@ -202,7 +215,7 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
             return itemAudioSetList.ItemAudioSets.Select(Convert);
         }
 
-        static Proto.ItemAudioSet Convert(ItemAudioSet source)
+        static Proto.ItemAudioSet Convert(Item.ItemAudioSet source)
         {
             var pcm = ExtractPcm(source.AudioClip, source.Id);
             return new Proto.ItemAudioSet
@@ -295,6 +308,27 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
 #else
             throw new ExtractAudioDataFailedException(id);
 #endif
+        }
+
+        IEnumerable<HumanoidAnimation> ExportAndExtractHumanoidAnimations(Exporter exporter, GameObject go)
+        {
+            var humanoidAnimationList = go.GetComponent<IHumanoidAnimationList>();
+            if (humanoidAnimationList == null || humanoidAnimationList.HumanoidAnimations == null)
+            {
+                return Enumerable.Empty<HumanoidAnimation>();
+            }
+            if (go.GetComponent<IScriptableItem>() == null)
+            {
+                return Enumerable.Empty<HumanoidAnimation>();
+            }
+
+            var humanoidAnimations = new HumanoidAnimation[humanoidAnimationList.HumanoidAnimations.Count];
+            foreach (var (entry, index) in humanoidAnimationList.HumanoidAnimations.Select((h, i) => (h, i)))
+            {
+                var animationIndex = HumanoidAnimationExporter.Export(exporter, entry.Id, entry.HumanoidAnimation);
+                humanoidAnimations[index] = new HumanoidAnimation { Id = entry.Id, Animation = (uint) animationIndex };
+            }
+            return humanoidAnimations;
         }
     }
 }

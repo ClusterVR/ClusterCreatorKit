@@ -7,9 +7,15 @@
 
 namespace VGltf.Unity
 {
-    public class IndexedResource<T>
+    public sealed class IndexedResource<T>
     {
-        public int Index;
-        public T Value;
+        public readonly int Index;
+        public readonly T Value;
+
+        public IndexedResource(int index, T value)
+        {
+            Index = index;
+            Value = value;
+        }
     }
 }

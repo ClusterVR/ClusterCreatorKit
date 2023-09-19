@@ -8,10 +8,10 @@ namespace ClusterVR.CreatorKit.Item
         IMovableItem MovableItem { get; }
         bool IsDestroyed { get; }
         Transform Grip { get; }
-        void OnGrab();
-        void OnRelease();
+        void OnGrab(bool isLeftHand);
+        void OnRelease(bool isLeftHand);
 
-        event Action OnGrabbed;
-        event Action OnReleased;
+        event Action<bool> OnGrabbed;
+        event Action<bool> OnReleased;
     }
 }
