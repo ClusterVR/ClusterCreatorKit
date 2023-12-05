@@ -3,27 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Editor.Preview.Item;
 using ClusterVR.CreatorKit.Editor.Preview.RoomState;
+using ClusterVR.CreatorKit.Editor.Preview.World;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Item;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
 {
     public sealed class GimmickManager : IGimmickUpdater
     {
         readonly RoomStateRepository roomStateRepository;
-        readonly Dictionary<string, HashSet<GimmickStateValueSet>> gimmicks = new Dictionary<string, HashSet<GimmickStateValueSet>>();
+        readonly Dictionary<string, HashSet<GimmickStateValueSet>> gimmicks = new();
 
-        readonly Dictionary<ulong, (GimmickStateValueSet, string)[]>
-            gimmicksInItems = new Dictionary<ulong, (GimmickStateValueSet, string)[]>();
+        readonly Dictionary<ulong, IReadOnlyList<(GimmickStateValueSet, string)>> gimmicksInItems = new();
+        readonly Dictionary<string, IReadOnlyList<(GimmickStateValueSet, string)>> gimmicksInSubScenes = new();
 
         public GimmickManager(RoomStateRepository roomStateRepository, ItemCreator itemCreator,
-            ItemDestroyer itemDestroyer)
+            ItemDestroyer itemDestroyer, SubSceneManager subSceneManager)
         {
             this.roomStateRepository = roomStateRepository;
             itemCreator.OnCreate += OnCreateItem;
             itemCreator.OnCreateCompleted += OnCreateItemCompleted;
             itemDestroyer.OnDestroy += OnDestroyItem;
+
+            subSceneManager.OnSubSceneActiveChanged += OnSubSceneActiveChanged;
         }
 
         public void AddGimmicksInScene(IEnumerable<IGimmick> gimmicks)
@@ -58,14 +62,18 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
 
         void OnCreateItemCompleted(IItem item)
         {
+            RunGimmicks(item.gameObject.GetComponentsInChildren<IGimmick>(true).SelectMany(GimmickStateValueSets));
+        }
+
+        void RunGimmicks(IEnumerable<(GimmickStateValueSet, string)> gimmickAndKeys)
+        {
             var now = DateTime.UtcNow;
-            foreach (var (gimmick, key) in item.gameObject.GetComponentsInChildren<IGimmick>(true).SelectMany(GimmickStateValueSets))
+            foreach (var (gimmick, key) in gimmickAndKeys)
             {
-                if (!roomStateRepository.TryGetValue(key, out var value))
+                if (roomStateRepository.TryGetValue(key, out var value))
                 {
-                    continue;
+                    gimmick.Run(key, value, now);
                 }
-                gimmick.Run(key, value, now);
             }
         }
 
@@ -118,6 +126,53 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Gimmick
                         gimmick.Run(key, value, now);
                     }
                 }
+            }
+        }
+
+        void OnSubSceneActiveChanged((string subSceneName, bool isActive) ev)
+        {
+            if (ev.isActive)
+            {
+                OnSubSceneLoaded(ev.subSceneName);
+            }
+            else
+            {
+                OnSubSceneUnloaded(ev.subSceneName);
+            }
+        }
+
+        void OnSubSceneLoaded(string subSceneName)
+        {
+            var sceneRootObjects = SceneManager.GetSceneByName(subSceneName).GetRootGameObjects();
+            var gimmicks = sceneRootObjects.SelectMany(g => g.GetComponentsInChildren<IGimmick>(true));
+            var gimmickAndKeys = gimmicks.SelectMany(GimmickStateValueSets).ToArray();
+            if (gimmickAndKeys.Length == 0)
+            {
+                return;
+            }
+
+            AddGimmicksInSubScene(gimmickAndKeys, subSceneName);
+            RunGimmicks(gimmickAndKeys);
+        }
+
+        void AddGimmicksInSubScene(IReadOnlyList<(GimmickStateValueSet, string)> gimmickAndKeys, string subSceneName)
+        {
+            gimmicksInSubScenes[subSceneName] = gimmickAndKeys;
+            foreach (var (gimmick, key) in gimmickAndKeys)
+            {
+                AddGimmick(key, gimmick);
+            }
+        }
+
+        void OnSubSceneUnloaded(string subSceneName)
+        {
+            if (gimmicksInSubScenes.TryGetValue(subSceneName, out var gimmickAndKeys))
+            {
+                foreach (var gimmickAndKey in gimmickAndKeys)
+                {
+                    RemoveGimmick(gimmickAndKey.Item2, gimmickAndKey.Item1);
+                }
+                gimmicksInSubScenes.Remove(subSceneName);
             }
         }
 

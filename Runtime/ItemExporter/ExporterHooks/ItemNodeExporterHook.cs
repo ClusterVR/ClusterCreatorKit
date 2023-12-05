@@ -27,7 +27,8 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 ItemSelectShapes = { ItemSelectShapes(go, coordUtils) },
                 MainScreenView = TryGetMainScreenView(go),
                 Disabled = !go.activeSelf,
-                Mirror = TryGetMirror(go)
+                Mirror = TryGetMirror(go),
+                TextView = TryGetTextView(go),
             };
 
             var extension = new GltfExtensions.ClusterItemNode
@@ -209,5 +210,48 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
         {
             return new[] { color.r, color.g, color.b, color.a };
         }
+
+        static Proto.TextView TryGetTextView(GameObject go)
+        {
+            if (go.TryGetComponent<ITextView>(out var textViewComponent))
+            {
+                return new TextView
+                {
+                    Text = textViewComponent.Text,
+                    Size = textViewComponent.Size,
+                    TextAnchor = Convert(textViewComponent.TextAnchor),
+                    TextAlignment = Convert(textViewComponent.TextAlignment),
+                    Color = { ColorToFloats(textViewComponent.Color) },
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        static TextView.Types.TextAnchor Convert(TextAnchor textAnchor) =>
+            textAnchor switch
+            {
+                TextAnchor.UpperLeft => TextView.Types.TextAnchor.UpperLeft,
+                TextAnchor.UpperCenter => TextView.Types.TextAnchor.UpperCenter,
+                TextAnchor.UpperRight => TextView.Types.TextAnchor.UpperRight,
+                TextAnchor.MiddleLeft => TextView.Types.TextAnchor.MiddleLeft,
+                TextAnchor.MiddleCenter => TextView.Types.TextAnchor.MiddleCenter,
+                TextAnchor.MiddleRight => TextView.Types.TextAnchor.MiddleRight,
+                TextAnchor.LowerLeft => TextView.Types.TextAnchor.LowerLeft,
+                TextAnchor.LowerCenter => TextView.Types.TextAnchor.LowerCenter,
+                TextAnchor.LowerRight => TextView.Types.TextAnchor.LowerRight,
+                _ => throw new NotImplementedException(),
+            };
+
+        static TextView.Types.TextAlignment Convert(TextAlignment textAlignment) =>
+            textAlignment switch
+            {
+                TextAlignment.Left => TextView.Types.TextAlignment.Left,
+                TextAlignment.Center => TextView.Types.TextAlignment.Center,
+                TextAlignment.Right => TextView.Types.TextAlignment.Right,
+                _ => throw new NotImplementedException(),
+            };
     }
 }

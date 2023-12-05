@@ -82,6 +82,15 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 cancellationToken);
         }
 
+        public static Task<AssetUploadPolicy> PostUploadVenueAssetPolicies(UploadRequestID uploadRequestId,
+            PostUploadVenueAssetPoliciesPayload payload, string accessToken, Func<string, AssetUploadPolicy> jsonDeserializer,
+            CancellationToken cancellationToken)
+        {
+            return ApiClient.Post(payload, accessToken,
+                $"{Constants.ApiBaseUrl}/v1/upload/venue/{uploadRequestId.Value}/asset/policies", jsonDeserializer,
+                cancellationToken);
+        }
+
         public static Task PostAnalyticsEvent(EventPayload payload, string accessToken,
             CancellationToken cancellationToken)
         {

@@ -2,6 +2,7 @@
     "name": "ClusterVR.CreatorKit.Editor.Preview.Trigger",
     "references": [
         "ClusterVR.CreatorKit",
+        "ClusterVR.CreatorKit.Common",
         "ClusterVR.CreatorKit.Item",
         "ClusterVR.CreatorKit.Trigger",
         "ClusterVR.CreatorKit.Gimmick",

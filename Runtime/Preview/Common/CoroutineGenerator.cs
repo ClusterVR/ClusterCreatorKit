@@ -24,9 +24,17 @@ namespace ClusterVR.CreatorKit.Preview.Common
             }
         }
 
-        public static void StartStaticCoroutine(IEnumerator enumerable)
+        public static Coroutine StartStaticCoroutine(IEnumerator enumerable)
         {
-            Instance.StartCoroutine(enumerable);
+            return Instance.StartCoroutine(enumerable);
+        }
+
+        public static void StopStaticCoroutine(Coroutine coroutine)
+        {
+            if (coroutine != null)
+            {
+                Instance.StopCoroutine(coroutine);
+            }
         }
     }
 }

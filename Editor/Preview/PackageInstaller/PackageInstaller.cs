@@ -13,7 +13,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
 
         static async void AsyncInitialize()
         {
-            await PackageListRepository.UpdatePackageList();
+            await PackageListRepository.UpdatePackageList(default);
             var packageStates = new PackageStates(
                 PackageListRepository.Contain("timeline"),
                 PackageListRepository.Contain("textmeshpro"),

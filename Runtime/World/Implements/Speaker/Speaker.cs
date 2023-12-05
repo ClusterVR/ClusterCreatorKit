@@ -34,5 +34,10 @@ namespace ClusterVR.CreatorKit.World.Implements.Speaker
             audioSource.enabled = true;
             audioSource.loop = true;
         }
+
+        void Reset()
+        {
+            AudioSource.dopplerLevel = 0.0f;
+        }
     }
 }

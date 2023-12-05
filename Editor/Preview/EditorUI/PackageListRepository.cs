@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.PackageManager;
@@ -18,14 +19,14 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
 
         static PackageListRepository()
         {
-            _ = UpdatePackageList();
+            _ = UpdatePackageList(default);
         }
 
-        public static async Task UpdatePackageList()
+        public static async Task UpdatePackageList(CancellationToken cancellationToken)
         {
             while (status == StatusCode.InProgress)
             {
-                await Task.Delay(TimeSpan.FromMilliseconds(10));
+                await Task.Delay(TimeSpan.FromMilliseconds(10), cancellationToken);
             }
 
             if (!ShouldUpdate())
@@ -35,9 +36,17 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
 
             var request = Client.List();
             status = StatusCode.InProgress;
-            while (request.Status == StatusCode.InProgress)
+            try
             {
-                await Task.Delay(TimeSpan.FromMilliseconds(10));
+                while (request.Status == StatusCode.InProgress)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(10));
+                }
+            }
+            catch (Exception)
+            {
+                status = StatusCode.Failure;
+                throw;
             }
 
             if (request.Status == StatusCode.Failure)

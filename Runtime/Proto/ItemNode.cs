@@ -19,7 +19,7 @@ namespace ClusterVR.CreatorKit.Proto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Ch5hcGkvY3JlYXRvcmtpdC9pdGVtX25vZGUucHJvdG8SEmNsdXN0ZXIuY3Jl",
-            "YXRvcmtpdCKVBAoISXRlbU5vZGUSOgoPcGh5c2ljYWxfc2hhcGVzGAEgAygL",
+            "YXRvcmtpdCLGBAoISXRlbU5vZGUSOgoPcGh5c2ljYWxfc2hhcGVzGAEgAygL",
             "MiEuY2x1c3Rlci5jcmVhdG9ya2l0LlBoeXNpY2FsU2hhcGUSSQoXb3Zlcmxh",
             "cF9kZXRlY3Rvcl9zaGFwZXMYCSADKAsyKC5jbHVzdGVyLmNyZWF0b3JraXQu",
             "T3ZlcmxhcERldGVjdG9yU2hhcGUSRQoVb3ZlcmxhcF9zb3VyY2Vfc2hhcGVz",
@@ -29,40 +29,53 @@ namespace ClusterVR.CreatorKit.Proto {
             "cxgHIAMoCzIjLmNsdXN0ZXIuY3JlYXRvcmtpdC5JdGVtU2VsZWN0U2hhcGUS",
             "PAoQbWFpbl9zY3JlZW5fdmlldxgCIAEoCzIiLmNsdXN0ZXIuY3JlYXRvcmtp",
             "dC5NYWluU2NyZWVuVmlldxIQCghkaXNhYmxlZBgDIAEoCBIqCgZtaXJyb3IY",
-            "BCABKAsyGi5jbHVzdGVyLmNyZWF0b3JraXQuTWlycm9ySgQIBRAGSgQICBAJ",
-            "Uhdjb250YWN0X2RldGVjdG9yX3NoYXBlc1IVY29udGFjdF9zb3VyY2Vfc2hh",
-            "cGVzIjkKDVBoeXNpY2FsU2hhcGUSKAoFc2hhcGUYASABKAsyGS5jbHVzdGVy",
-            "LmNyZWF0b3JraXQuU2hhcGUiQAoUT3ZlcmxhcERldGVjdG9yU2hhcGUSKAoF",
-            "c2hhcGUYASABKAsyGS5jbHVzdGVyLmNyZWF0b3JraXQuU2hhcGUiPgoST3Zl",
-            "cmxhcFNvdXJjZVNoYXBlEigKBXNoYXBlGAEgASgLMhkuY2x1c3Rlci5jcmVh",
-            "dG9ya2l0LlNoYXBlIj0KEUludGVyYWN0YWJsZVNoYXBlEigKBXNoYXBlGAEg",
-            "ASgLMhkuY2x1c3Rlci5jcmVhdG9ya2l0LlNoYXBlIjsKD0l0ZW1TZWxlY3RT",
-            "aGFwZRIoCgVzaGFwZRgBIAEoCzIZLmNsdXN0ZXIuY3JlYXRvcmtpdC5TaGFw",
-            "ZSLAAQoFU2hhcGUSJgoDYm94GAEgASgLMhcuY2x1c3Rlci5jcmVhdG9ya2l0",
-            "LkJveEgAEiwKBnNwaGVyZRgCIAEoCzIaLmNsdXN0ZXIuY3JlYXRvcmtpdC5T",
-            "cGhlcmVIABIuCgdjYXBzdWxlGAMgASgLMhsuY2x1c3Rlci5jcmVhdG9ya2l0",
-            "LkNhcHN1bGVIABIoCgRtZXNoGAQgASgLMhguY2x1c3Rlci5jcmVhdG9ya2l0",
-            "Lk1lc2hIAEIHCgVzaGFwZSJdCgNCb3gSKwoGY2VudGVyGAEgASgLMhsuY2x1",
-            "c3Rlci5jcmVhdG9ya2l0LlZlY3RvcjMSKQoEc2l6ZRgCIAEoCzIbLmNsdXN0",
-            "ZXIuY3JlYXRvcmtpdC5WZWN0b3IzIkUKBlNwaGVyZRIrCgZjZW50ZXIYASAB",
-            "KAsyGy5jbHVzdGVyLmNyZWF0b3JraXQuVmVjdG9yMxIOCgZyYWRpdXMYAiAB",
-            "KAIisgEKB0NhcHN1bGUSKwoGY2VudGVyGAEgASgLMhsuY2x1c3Rlci5jcmVh",
-            "dG9ya2l0LlZlY3RvcjMSOAoJZGlyZWN0aW9uGAIgASgOMiUuY2x1c3Rlci5j",
-            "cmVhdG9ya2l0LkNhcHN1bGUuRGlyZWN0aW9uEg4KBmhlaWdodBgDIAEoAhIO",
-            "CgZyYWRpdXMYBCABKAIiIAoJRGlyZWN0aW9uEgUKAVgQABIFCgFZEAESBQoB",
-            "WhACIjMKBE1lc2gSGAoQdmVydGV4X3Bvc2l0aW9ucxgBIAMoAhIRCgl0cmlh",
-            "bmdsZXMYAiADKAUiGwoHVmVjdG9yMxIQCghlbGVtZW50cxgBIAMoAiKgAQoO",
-            "TWFpblNjcmVlblZpZXcSGwoTc2NyZWVuX2FzcGVjdF9yYXRpbxgBIAEoAhJl",
-            "CiV1bmxpdF9ub25fdGlsZWRfd2l0aF9iYWNrZ3JvdW5kX2NvbG9yGAIgASgL",
-            "MjQuY2x1c3Rlci5jcmVhdG9ya2l0LlVubGl0Tm9uVGlsZWRXaXRoQmFja2dy",
-            "b3VuZENvbG9ySABCCgoIbWF0ZXJpYWwiPAogVW5saXROb25UaWxlZFdpdGhC",
-            "YWNrZ3JvdW5kQ29sb3ISGAoQYmFja2dyb3VuZF9jb2xvchgBIAMoAiIICgZN",
-            "aXJyb3JCLVoOY2x1c3Rlci5tdS9ycGOqAhpDbHVzdGVyVlIuQ3JlYXRvcktp",
-            "dC5Qcm90b2IGcHJvdG8z"));
+            "BCABKAsyGi5jbHVzdGVyLmNyZWF0b3JraXQuTWlycm9yEi8KCXRleHRfdmll",
+            "dxgLIAEoCzIcLmNsdXN0ZXIuY3JlYXRvcmtpdC5UZXh0Vmlld0oECAUQBkoE",
+            "CAgQCVIXY29udGFjdF9kZXRlY3Rvcl9zaGFwZXNSFWNvbnRhY3Rfc291cmNl",
+            "X3NoYXBlcyI5Cg1QaHlzaWNhbFNoYXBlEigKBXNoYXBlGAEgASgLMhkuY2x1",
+            "c3Rlci5jcmVhdG9ya2l0LlNoYXBlIkAKFE92ZXJsYXBEZXRlY3RvclNoYXBl",
+            "EigKBXNoYXBlGAEgASgLMhkuY2x1c3Rlci5jcmVhdG9ya2l0LlNoYXBlIj4K",
+            "Ek92ZXJsYXBTb3VyY2VTaGFwZRIoCgVzaGFwZRgBIAEoCzIZLmNsdXN0ZXIu",
+            "Y3JlYXRvcmtpdC5TaGFwZSI9ChFJbnRlcmFjdGFibGVTaGFwZRIoCgVzaGFw",
+            "ZRgBIAEoCzIZLmNsdXN0ZXIuY3JlYXRvcmtpdC5TaGFwZSI7Cg9JdGVtU2Vs",
+            "ZWN0U2hhcGUSKAoFc2hhcGUYASABKAsyGS5jbHVzdGVyLmNyZWF0b3JraXQu",
+            "U2hhcGUiwAEKBVNoYXBlEiYKA2JveBgBIAEoCzIXLmNsdXN0ZXIuY3JlYXRv",
+            "cmtpdC5Cb3hIABIsCgZzcGhlcmUYAiABKAsyGi5jbHVzdGVyLmNyZWF0b3Jr",
+            "aXQuU3BoZXJlSAASLgoHY2Fwc3VsZRgDIAEoCzIbLmNsdXN0ZXIuY3JlYXRv",
+            "cmtpdC5DYXBzdWxlSAASKAoEbWVzaBgEIAEoCzIYLmNsdXN0ZXIuY3JlYXRv",
+            "cmtpdC5NZXNoSABCBwoFc2hhcGUiXQoDQm94EisKBmNlbnRlchgBIAEoCzIb",
+            "LmNsdXN0ZXIuY3JlYXRvcmtpdC5WZWN0b3IzEikKBHNpemUYAiABKAsyGy5j",
+            "bHVzdGVyLmNyZWF0b3JraXQuVmVjdG9yMyJFCgZTcGhlcmUSKwoGY2VudGVy",
+            "GAEgASgLMhsuY2x1c3Rlci5jcmVhdG9ya2l0LlZlY3RvcjMSDgoGcmFkaXVz",
+            "GAIgASgCIrIBCgdDYXBzdWxlEisKBmNlbnRlchgBIAEoCzIbLmNsdXN0ZXIu",
+            "Y3JlYXRvcmtpdC5WZWN0b3IzEjgKCWRpcmVjdGlvbhgCIAEoDjIlLmNsdXN0",
+            "ZXIuY3JlYXRvcmtpdC5DYXBzdWxlLkRpcmVjdGlvbhIOCgZoZWlnaHQYAyAB",
+            "KAISDgoGcmFkaXVzGAQgASgCIiAKCURpcmVjdGlvbhIFCgFYEAASBQoBWRAB",
+            "EgUKAVoQAiIzCgRNZXNoEhgKEHZlcnRleF9wb3NpdGlvbnMYASADKAISEQoJ",
+            "dHJpYW5nbGVzGAIgAygFIhsKB1ZlY3RvcjMSEAoIZWxlbWVudHMYASADKAIi",
+            "oAEKDk1haW5TY3JlZW5WaWV3EhsKE3NjcmVlbl9hc3BlY3RfcmF0aW8YASAB",
+            "KAISZQoldW5saXRfbm9uX3RpbGVkX3dpdGhfYmFja2dyb3VuZF9jb2xvchgC",
+            "IAEoCzI0LmNsdXN0ZXIuY3JlYXRvcmtpdC5VbmxpdE5vblRpbGVkV2l0aEJh",
+            "Y2tncm91bmRDb2xvckgAQgoKCG1hdGVyaWFsIjwKIFVubGl0Tm9uVGlsZWRX",
+            "aXRoQmFja2dyb3VuZENvbG9yEhgKEGJhY2tncm91bmRfY29sb3IYASADKAIi",
+            "CAoGTWlycm9yIq0ECghUZXh0VmlldxIMCgR0ZXh0GAEgASgJEgwKBHNpemUY",
+            "AiABKAISPAoLdGV4dF9hbmNob3IYAyABKA4yJy5jbHVzdGVyLmNyZWF0b3Jr",
+            "aXQuVGV4dFZpZXcuVGV4dEFuY2hvchJCCg50ZXh0X2FsaWdubWVudBgEIAEo",
+            "DjIqLmNsdXN0ZXIuY3JlYXRvcmtpdC5UZXh0Vmlldy5UZXh0QWxpZ25tZW50",
+            "Eg0KBWNvbG9yGAUgAygCIpQCCgpUZXh0QW5jaG9yEhoKFlRFWFRfQU5DSE9S",
+            "X1VQUEVSX0xFRlQQABIcChhURVhUX0FOQ0hPUl9VUFBFUl9DRU5URVIQARIb",
+            "ChdURVhUX0FOQ0hPUl9VUFBFUl9SSUdIVBACEhsKF1RFWFRfQU5DSE9SX01J",
+            "RERMRV9MRUZUEAMSHQoZVEVYVF9BTkNIT1JfTUlERExFX0NFTlRFUhAEEhwK",
+            "GFRFWFRfQU5DSE9SX01JRERMRV9SSUdIVBAFEhoKFlRFWFRfQU5DSE9SX0xP",
+            "V0VSX0xFRlQQBhIcChhURVhUX0FOQ0hPUl9MT1dFUl9DRU5URVIQBxIbChdU",
+            "RVhUX0FOQ0hPUl9MT1dFUl9SSUdIVBAIIl0KDVRleHRBbGlnbm1lbnQSFwoT",
+            "VEVYVF9BTElHTk1FTlRfTEVGVBAAEhkKFVRFWFRfQUxJR05NRU5UX0NFTlRF",
+            "UhABEhgKFFRFWFRfQUxJR05NRU5UX1JJR0hUEAJCLVoOY2x1c3Rlci5tdS9y",
+            "cGOqAhpDbHVzdGVyVlIuQ3JlYXRvcktpdC5Qcm90b2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ItemNode), global::ClusterVR.CreatorKit.Proto.ItemNode.Parser, new[]{ "PhysicalShapes", "OverlapDetectorShapes", "OverlapSourceShapes", "InteractableShapes", "ItemSelectShapes", "MainScreenView", "Disabled", "Mirror" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ItemNode), global::ClusterVR.CreatorKit.Proto.ItemNode.Parser, new[]{ "PhysicalShapes", "OverlapDetectorShapes", "OverlapSourceShapes", "InteractableShapes", "ItemSelectShapes", "MainScreenView", "Disabled", "Mirror", "TextView" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.PhysicalShape), global::ClusterVR.CreatorKit.Proto.PhysicalShape.Parser, new[]{ "Shape" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.OverlapDetectorShape), global::ClusterVR.CreatorKit.Proto.OverlapDetectorShape.Parser, new[]{ "Shape" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.OverlapSourceShape), global::ClusterVR.CreatorKit.Proto.OverlapSourceShape.Parser, new[]{ "Shape" }, null, null, null, null),
@@ -76,7 +89,8 @@ namespace ClusterVR.CreatorKit.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Vector3), global::ClusterVR.CreatorKit.Proto.Vector3.Parser, new[]{ "Elements" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.MainScreenView), global::ClusterVR.CreatorKit.Proto.MainScreenView.Parser, new[]{ "ScreenAspectRatio", "UnlitNonTiledWithBackgroundColor" }, new[]{ "Material" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.UnlitNonTiledWithBackgroundColor), global::ClusterVR.CreatorKit.Proto.UnlitNonTiledWithBackgroundColor.Parser, new[]{ "BackgroundColor" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Mirror), global::ClusterVR.CreatorKit.Proto.Mirror.Parser, null, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Mirror), global::ClusterVR.CreatorKit.Proto.Mirror.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.TextView), global::ClusterVR.CreatorKit.Proto.TextView.Parser, new[]{ "Text", "Size", "TextAnchor", "TextAlignment", "Color" }, null, new[]{ typeof(global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAnchor), typeof(global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAlignment) }, null, null)
           }));
     }
     #endregion
@@ -125,6 +139,7 @@ namespace ClusterVR.CreatorKit.Proto {
       mainScreenView_ = other.mainScreenView_ != null ? other.mainScreenView_.Clone() : null;
       disabled_ = other.disabled_;
       mirror_ = other.mirror_ != null ? other.mirror_.Clone() : null;
+      textView_ = other.textView_ != null ? other.textView_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -217,6 +232,17 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
+    public const int TextViewFieldNumber = 11;
+    private global::ClusterVR.CreatorKit.Proto.TextView textView_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ClusterVR.CreatorKit.Proto.TextView TextView {
+      get { return textView_; }
+      set {
+        textView_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -240,6 +266,7 @@ namespace ClusterVR.CreatorKit.Proto {
       if (!object.Equals(MainScreenView, other.MainScreenView)) return false;
       if (Disabled != other.Disabled) return false;
       if (!object.Equals(Mirror, other.Mirror)) return false;
+      if (!object.Equals(TextView, other.TextView)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -255,6 +282,7 @@ namespace ClusterVR.CreatorKit.Proto {
       if (mainScreenView_ != null) hash ^= MainScreenView.GetHashCode();
       if (Disabled != false) hash ^= Disabled.GetHashCode();
       if (mirror_ != null) hash ^= Mirror.GetHashCode();
+      if (textView_ != null) hash ^= TextView.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -290,6 +318,10 @@ namespace ClusterVR.CreatorKit.Proto {
       itemSelectShapes_.WriteTo(output, _repeated_itemSelectShapes_codec);
       overlapDetectorShapes_.WriteTo(output, _repeated_overlapDetectorShapes_codec);
       overlapSourceShapes_.WriteTo(output, _repeated_overlapSourceShapes_codec);
+      if (textView_ != null) {
+        output.WriteRawTag(90);
+        output.WriteMessage(TextView);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -317,6 +349,10 @@ namespace ClusterVR.CreatorKit.Proto {
       itemSelectShapes_.WriteTo(ref output, _repeated_itemSelectShapes_codec);
       overlapDetectorShapes_.WriteTo(ref output, _repeated_overlapDetectorShapes_codec);
       overlapSourceShapes_.WriteTo(ref output, _repeated_overlapSourceShapes_codec);
+      if (textView_ != null) {
+        output.WriteRawTag(90);
+        output.WriteMessage(TextView);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -340,6 +376,9 @@ namespace ClusterVR.CreatorKit.Proto {
       }
       if (mirror_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Mirror);
+      }
+      if (textView_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(TextView);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -372,6 +411,12 @@ namespace ClusterVR.CreatorKit.Proto {
           Mirror = new global::ClusterVR.CreatorKit.Proto.Mirror();
         }
         Mirror.MergeFrom(other.Mirror);
+      }
+      if (other.textView_ != null) {
+        if (textView_ == null) {
+          TextView = new global::ClusterVR.CreatorKit.Proto.TextView();
+        }
+        TextView.MergeFrom(other.TextView);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -426,6 +471,13 @@ namespace ClusterVR.CreatorKit.Proto {
             overlapSourceShapes_.AddEntriesFrom(input, _repeated_overlapSourceShapes_codec);
             break;
           }
+          case 90: {
+            if (textView_ == null) {
+              TextView = new global::ClusterVR.CreatorKit.Proto.TextView();
+            }
+            input.ReadMessage(TextView);
+            break;
+          }
         }
       }
     #endif
@@ -477,6 +529,13 @@ namespace ClusterVR.CreatorKit.Proto {
           }
           case 82: {
             overlapSourceShapes_.AddEntriesFrom(ref input, _repeated_overlapSourceShapes_codec);
+            break;
+          }
+          case 90: {
+            if (textView_ == null) {
+              TextView = new global::ClusterVR.CreatorKit.Proto.TextView();
+            }
+            input.ReadMessage(TextView);
             break;
           }
         }
@@ -3629,6 +3688,354 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
     #endif
+
+  }
+
+  public sealed partial class TextView : pb::IMessage<TextView>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<TextView> _parser = new pb::MessageParser<TextView>(() => new TextView());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<TextView> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ClusterVR.CreatorKit.Proto.ItemNodeReflection.Descriptor.MessageTypes[15]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TextView() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TextView(TextView other) : this() {
+      text_ = other.text_;
+      size_ = other.size_;
+      textAnchor_ = other.textAnchor_;
+      textAlignment_ = other.textAlignment_;
+      color_ = other.color_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TextView Clone() {
+      return new TextView(this);
+    }
+
+    public const int TextFieldNumber = 1;
+    private string text_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Text {
+      get { return text_; }
+      set {
+        text_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    public const int SizeFieldNumber = 2;
+    private float size_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public float Size {
+      get { return size_; }
+      set {
+        size_ = value;
+      }
+    }
+
+    public const int TextAnchorFieldNumber = 3;
+    private global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAnchor textAnchor_ = global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAnchor.UpperLeft;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAnchor TextAnchor {
+      get { return textAnchor_; }
+      set {
+        textAnchor_ = value;
+      }
+    }
+
+    public const int TextAlignmentFieldNumber = 4;
+    private global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAlignment textAlignment_ = global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAlignment.Left;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAlignment TextAlignment {
+      get { return textAlignment_; }
+      set {
+        textAlignment_ = value;
+      }
+    }
+
+    public const int ColorFieldNumber = 5;
+    private static readonly pb::FieldCodec<float> _repeated_color_codec
+        = pb::FieldCodec.ForFloat(42);
+    private readonly pbc::RepeatedField<float> color_ = new pbc::RepeatedField<float>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<float> Color {
+      get { return color_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as TextView);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(TextView other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Text != other.Text) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Size, other.Size)) return false;
+      if (TextAnchor != other.TextAnchor) return false;
+      if (TextAlignment != other.TextAlignment) return false;
+      if(!color_.Equals(other.color_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Text.Length != 0) hash ^= Text.GetHashCode();
+      if (Size != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Size);
+      if (TextAnchor != global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAnchor.UpperLeft) hash ^= TextAnchor.GetHashCode();
+      if (TextAlignment != global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAlignment.Left) hash ^= TextAlignment.GetHashCode();
+      hash ^= color_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Text.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Text);
+      }
+      if (Size != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(Size);
+      }
+      if (TextAnchor != global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAnchor.UpperLeft) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) TextAnchor);
+      }
+      if (TextAlignment != global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAlignment.Left) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) TextAlignment);
+      }
+      color_.WriteTo(output, _repeated_color_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Text.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Text);
+      }
+      if (Size != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(Size);
+      }
+      if (TextAnchor != global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAnchor.UpperLeft) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) TextAnchor);
+      }
+      if (TextAlignment != global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAlignment.Left) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) TextAlignment);
+      }
+      color_.WriteTo(ref output, _repeated_color_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Text.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Text);
+      }
+      if (Size != 0F) {
+        size += 1 + 4;
+      }
+      if (TextAnchor != global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAnchor.UpperLeft) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) TextAnchor);
+      }
+      if (TextAlignment != global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAlignment.Left) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) TextAlignment);
+      }
+      size += color_.CalculateSize(_repeated_color_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(TextView other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Text.Length != 0) {
+        Text = other.Text;
+      }
+      if (other.Size != 0F) {
+        Size = other.Size;
+      }
+      if (other.TextAnchor != global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAnchor.UpperLeft) {
+        TextAnchor = other.TextAnchor;
+      }
+      if (other.TextAlignment != global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAlignment.Left) {
+        TextAlignment = other.TextAlignment;
+      }
+      color_.Add(other.color_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Text = input.ReadString();
+            break;
+          }
+          case 21: {
+            Size = input.ReadFloat();
+            break;
+          }
+          case 24: {
+            TextAnchor = (global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAnchor) input.ReadEnum();
+            break;
+          }
+          case 32: {
+            TextAlignment = (global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAlignment) input.ReadEnum();
+            break;
+          }
+          case 42:
+          case 45: {
+            color_.AddEntriesFrom(input, _repeated_color_codec);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Text = input.ReadString();
+            break;
+          }
+          case 21: {
+            Size = input.ReadFloat();
+            break;
+          }
+          case 24: {
+            TextAnchor = (global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAnchor) input.ReadEnum();
+            break;
+          }
+          case 32: {
+            TextAlignment = (global::ClusterVR.CreatorKit.Proto.TextView.Types.TextAlignment) input.ReadEnum();
+            break;
+          }
+          case 42:
+          case 45: {
+            color_.AddEntriesFrom(ref input, _repeated_color_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+    #region Nested types
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static partial class Types {
+      public enum TextAnchor {
+        [pbr::OriginalName("TEXT_ANCHOR_UPPER_LEFT")] UpperLeft = 0,
+        [pbr::OriginalName("TEXT_ANCHOR_UPPER_CENTER")] UpperCenter = 1,
+        [pbr::OriginalName("TEXT_ANCHOR_UPPER_RIGHT")] UpperRight = 2,
+        [pbr::OriginalName("TEXT_ANCHOR_MIDDLE_LEFT")] MiddleLeft = 3,
+        [pbr::OriginalName("TEXT_ANCHOR_MIDDLE_CENTER")] MiddleCenter = 4,
+        [pbr::OriginalName("TEXT_ANCHOR_MIDDLE_RIGHT")] MiddleRight = 5,
+        [pbr::OriginalName("TEXT_ANCHOR_LOWER_LEFT")] LowerLeft = 6,
+        [pbr::OriginalName("TEXT_ANCHOR_LOWER_CENTER")] LowerCenter = 7,
+        [pbr::OriginalName("TEXT_ANCHOR_LOWER_RIGHT")] LowerRight = 8,
+      }
+
+      public enum TextAlignment {
+        [pbr::OriginalName("TEXT_ALIGNMENT_LEFT")] Left = 0,
+        [pbr::OriginalName("TEXT_ALIGNMENT_CENTER")] Center = 1,
+        [pbr::OriginalName("TEXT_ALIGNMENT_RIGHT")] Right = 2,
+      }
+
+    }
+    #endregion
 
   }
 

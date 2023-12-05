@@ -71,6 +71,14 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 {
                     return await Call(request, accessToken, url, httpVerb, deserializer, cancellationToken);
                 }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (Failure e) when (e.StatusCode is >= 400 and < 500)
+                {
+                    throw;
+                }
                 catch (Exception)
                 {
                     await Task.Delay((int) backoffMs, cancellationToken);
@@ -123,7 +131,16 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
             if (webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
-                throw new HttpException((int) webRequest.responseCode, webRequest.downloadHandler.text);
+                Error error;
+                try
+                {
+                    error = JsonDeserializer<Error>(webRequest.downloadHandler.text);
+                }
+                catch (Exception e)
+                {
+                    throw new ApiErrorResponseParseFailedException(webRequest, e);
+                }
+                throw new Failure((int) webRequest.responseCode, error);
             }
 
             return webRequest.downloadHandler.text;

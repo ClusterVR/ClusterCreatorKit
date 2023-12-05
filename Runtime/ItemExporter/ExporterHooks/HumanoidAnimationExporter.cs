@@ -14,6 +14,10 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
     {
         public static int Export(Exporter exporter, string name, IHumanoidAnimation humanoidAnimation)
         {
+            if (humanoidAnimation == null)
+            {
+                throw new MissingHumanoidAnimationException(name);
+            }
             var humanoidAnimationCurves = humanoidAnimation.Curves;
             var context = exporter.Context;
 

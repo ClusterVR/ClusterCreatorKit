@@ -46,9 +46,12 @@ namespace VGltf.Unity
             if (mr != null)
             {
                 var meshFilter = mr.gameObject.GetComponent<MeshFilter>();
-                var sharedMesh = meshFilter.sharedMesh;
+                if (meshFilter != null)
+                {
+                    var sharedMesh = meshFilter.sharedMesh;
 
-                meshResource = Context.Exporters.Meshes.Export(mr, sharedMesh);
+                    meshResource = Context.Exporters.Meshes.Export(mr, sharedMesh);
+                }
             }
             else if (smr != null)
             {

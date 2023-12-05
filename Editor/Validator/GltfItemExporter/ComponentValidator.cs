@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using ClusterVR.CreatorKit.Editor.Utils;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
 using ClusterVR.CreatorKit.World;
 using ClusterVR.CreatorKit.World.Implements.MainScreenViews;
 using ClusterVR.CreatorKit.World.Implements.Mirror;
+using ClusterVR.CreatorKit.World.Implements.TextView;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
@@ -39,7 +41,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             typeof(OverlapSourceShape),
             typeof(OverlapDetectorShape),
             typeof(InteractableShape),
-            typeof(ItemSelectShape)
+            typeof(ItemSelectShape),
+            typeof(TextView),
         };
 
         static readonly Type[] AccessoryRootComponentWhiteList =
@@ -57,7 +60,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 
         static readonly Dictionary<Type, Type[]> AdditionalRequireComponents = new()
         {
-            { typeof(ItemAudioSetList), new[] { typeof(ScriptableItem) } }
+            { typeof(ItemAudioSetList), new[] { typeof(ScriptableItem) } },
+            { typeof(HumanoidAnimationList), new[] { typeof(ScriptableItem) } }
         };
 
         static bool Contains(IEnumerable<Type> list, Type target)
@@ -401,6 +405,51 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                         ValidationMessage.MessageType.Warning));
                 }
             }
+            return validationMessages;
+        }
+
+        public static IEnumerable<ValidationMessage> ValidateHumanoidAnimationList(GameObject gameObject)
+        {
+            var humanoidAnimationList = gameObject.GetComponent<IHumanoidAnimationList>();
+            if (humanoidAnimationList == null)
+            {
+                return Enumerable.Empty<ValidationMessage>();
+            }
+
+            return HumanoidAnimationListValidator.Validate(humanoidAnimationList);
+        }
+
+        public static IEnumerable<ValidationMessage> ValidateTextViews(GameObject gameObject, bool isBeta)
+        {
+            var textViews = gameObject.GetComponentsInChildren<ITextView>(true);
+            if (textViews == null || textViews.Length == 0)
+            {
+                return Enumerable.Empty<ValidationMessage>();
+            }
+
+            if (!isBeta)
+            {
+                return new[]
+                {
+                    new ValidationMessage(
+                        $"{nameof(World.Implements.TextView)} を使うにはベータ機能を有効にする必要があります。",
+                        ValidationMessage.MessageType.Error)
+                };
+            }
+
+            var validationMessages = new List<ValidationMessage>();
+            foreach (var textView in textViews)
+            {
+                const int maxTextByteCount = 1000;
+                var textByteCount = textView.Text != null ? Encoding.UTF8.GetByteCount(textView.Text) : 0;
+                if (textByteCount > maxTextByteCount)
+                {
+                    validationMessages.Add(new(
+                        $"{nameof(World.Implements.TextView)} の {nameof(TextView.Text)} のサイズが大きすぎます。現在：{textByteCount}, 最大値：{maxTextByteCount}",
+                        ValidationMessage.MessageType.Error));
+                }
+            }
+
             return validationMessages;
         }
     }

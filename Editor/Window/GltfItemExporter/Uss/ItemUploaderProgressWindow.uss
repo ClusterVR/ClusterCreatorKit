@@ -8,11 +8,16 @@
     border-color: gray;
 }
 
+.complete-button-container {
+    padding-top: 12px;
+    flex-direction: row;
+}
+
 #progress-container{
     padding: 30px 20px;
 }
 
-#complete-container{
+.complete-container{
     padding: 50px 20px;
 }
 

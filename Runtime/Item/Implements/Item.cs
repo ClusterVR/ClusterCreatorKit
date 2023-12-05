@@ -45,7 +45,21 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         bool disbodied;
 
-        readonly List<(Material, Color)> instancedMaterialAndBaseColors = new List<(Material, Color)>();
+        readonly List<MaterialInfo> instanceMaterialInfos = new();
+
+        readonly struct MaterialInfo
+        {
+            public Material Material { get; }
+            public Color BaseColor { get; }
+            public bool HasMode { get; }
+
+            public MaterialInfo(Material material, Color baseColor, bool hasMode)
+            {
+                Material = material;
+                BaseColor = baseColor;
+                HasMode = hasMode;
+            }
+        }
 
         public void Construct(string itemName, Vector3Int size)
         {
@@ -161,36 +175,44 @@ namespace ClusterVR.CreatorKit.Item.Implements
                 var instancedMaterials = RendererMaterialUtility.GetSharedMaterials(renderer).Select(Instantiate).ToArray();
                 for (var i = 0; i < instancedMaterials.Length; i++)
                 {
+                    bool hasMode;
                     var m = instancedMaterials[i];
-                    if (m.shader.name is "Standard" or "ClusterVR/UnlitNonTiledWithBackgroundColor")
+                    switch (m.shader.name)
                     {
+                        case "Standard" or "ClusterVR/UnlitNonTiledWithBackgroundColor":
+                            hasMode = true;
+                            break;
+                        case "ClusterVR/Text/ZTest Text":
+                            hasMode = false;
+                            break;
+                        default:
+                            m.shader = Shader.Find("Standard");
+                            m.SetFloat(MetallicId, 0);
+                            hasMode = true;
+                            break;
                     }
-                    else
-                    {
-                        m.shader = Shader.Find("Standard");
-                        m.SetFloat(MetallicId, 0);
-                    }
-                    instancedMaterialAndBaseColors.Add((m, GetBaseColor(m)));
+                    instanceMaterialInfos.Add(new MaterialInfo(m, GetBaseColor(m, hasMode), hasMode));
                 }
                 RendererMaterialUtility.SetOverrideMaterials(renderer, instancedMaterials);
             }
 
-            foreach (var (material, baseColor) in instancedMaterialAndBaseColors)
+            foreach (var materialInfo in instanceMaterialInfos)
             {
-                if (!IsMode(material, TransparentModeValue))
+                var material = materialInfo.Material;
+                if (materialInfo.HasMode && !IsMode(material, TransparentModeValue))
                 {
                     SetTransparent(material);
                 }
-                var color = baseColor;
+                var color = materialInfo.BaseColor;
                 color.a = color.a * DisbodiedAlpha;
                 material.color = color;
             }
             disbodied = true;
         }
 
-        static Color GetBaseColor(Material material)
+        static Color GetBaseColor(Material material, bool hasMode)
         {
-            var isOpaque = IsMode(material, OpaqueModeValue);
+            var isOpaque = hasMode && IsMode(material, OpaqueModeValue);
             var color = material.color;
             if (isOpaque)
             {
@@ -210,9 +232,9 @@ namespace ClusterVR.CreatorKit.Item.Implements
             var state = isPlaceable ? ManipulationState.Placeable : ManipulationState.Unplaceable;
             if (state == manipulationState) return;
             var maskColor = isPlaceable ? PlaceableColorMask : UnplaceableColorMask;
-            foreach (var (material, baseColor) in instancedMaterialAndBaseColors)
+            foreach (var materialInfo in instanceMaterialInfos)
             {
-                SetRGBMask(material, baseColor, maskColor); // アルファはDisbody/EmbodyでやっているのでMaskでは影響させない
+                SetRGBMask(materialInfo.Material, materialInfo.BaseColor, maskColor); // アルファはDisbody/EmbodyでやっているのでMaskでは影響させない
             }
             manipulationState = state;
         }
@@ -251,14 +273,15 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         void ReleaseMaterials()
         {
-            foreach (var (m, _) in instancedMaterialAndBaseColors)
+            foreach (var info in instanceMaterialInfos)
             {
+                var m = info.Material;
                 if (m != null)
                 {
                     Destroy(m);
                 }
             }
-            instancedMaterialAndBaseColors.Clear();
+            instanceMaterialInfos.Clear();
         }
 
         void OnDrawGizmosSelected()

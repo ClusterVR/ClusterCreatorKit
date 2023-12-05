@@ -10,6 +10,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
         const string TmpUserIdKey = "ClusterTmpUserId";
         const string EnableSendingAnalyticsDataKey = "ClusterEnableSendingAnalyticsData";
         const string OpenWorldManagementPageAfterUploadKey = "OpenWorldManagementPageAfterUpload";
+        const string NextEnqueteAskTimeKey = "NextEnqueteAskTime";
 
         public static bool HasAlreadyShownAboutWindow
         {
@@ -39,6 +40,12 @@ namespace ClusterVR.CreatorKit.Editor.Builder
         {
             get => EditorPrefs.GetBool(OpenWorldManagementPageAfterUploadKey, true);
             set => EditorPrefs.SetBool(OpenWorldManagementPageAfterUploadKey, value);
+        }
+
+        public static int NextEnqueteAskTime
+        {
+            get => EditorPrefs.GetInt(NextEnqueteAskTimeKey, 0);
+            set => EditorPrefs.SetInt(NextEnqueteAskTimeKey, value);
         }
     }
 }

@@ -6,6 +6,7 @@ using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Editor.Builder;
+using ClusterVR.CreatorKit.Editor.Enquete;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using ClusterVR.CreatorKit.Editor.Validator;
 using UnityEditor;
@@ -54,7 +55,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 executeUpload = false;
                 currentUploadService = null;
 
-                if (!VenueValidator.ValidateVenue(out errorMessage, out var invalidObjects))
+                if (!VenueValidator.ValidateVenue(isBeta, out errorMessage, out var invalidObjects))
                 {
                     EditorUtility.DisplayDialog("Cluster Creator Kit", errorMessage, "閉じる");
                     if (invalidObjects.Any())
@@ -78,6 +79,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 ItemTemplateIdAssigner.Execute();
                 HumanoidAnimationAssigner.Execute();
                 LayerCorrector.CorrectLayer();
+                SubSceneNameAssigner.Execute();
 
                 try
                 {
@@ -176,10 +178,18 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             if (!currentUploadService.IsProcessing)
             {
                 EditorUtility.ClearProgressBar();
+
+                var succeeded = true;
                 foreach (var status in currentUploadService.UploadStatus)
                 {
                     var text = status.Value ? "Success" : "Failed";
+                    succeeded &= status.Value;
                     EditorGUILayout.LabelField(status.Key.ToString(), text);
+                }
+
+                if (succeeded && EnqueteService.ShouldShowEnqueteRequest())
+                {
+                    EnqueteService.ShowEnqueteDialog();
                 }
             }
             else
@@ -203,37 +213,10 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             EditorGUILayout.Space();
 
-            var windowsPath = BuiltAssetBundlePaths.instance.Find(BuildTarget.StandaloneWindows);
-            if (File.Exists(windowsPath))
-            {
-                var fileInfo = new FileInfo(windowsPath);
-                EditorGUILayout.LabelField("Windowsサイズ",
-                    $"{(double) fileInfo.Length / (1024 * 1024):F2} MB"); // Byte => MByte
-            }
-
-            var macPath = BuiltAssetBundlePaths.instance.Find(BuildTarget.StandaloneOSX);
-            if (File.Exists(macPath))
-            {
-                var fileInfo = new FileInfo(macPath);
-                EditorGUILayout.LabelField("Macサイズ",
-                    $"{(double) fileInfo.Length / (1024 * 1024):F2} MB"); // Byte => MByte
-            }
-
-            var androidPath = BuiltAssetBundlePaths.instance.Find(BuildTarget.Android);
-            if (File.Exists(androidPath))
-            {
-                var fileInfo = new FileInfo(androidPath);
-                EditorGUILayout.LabelField("Androidサイズ",
-                    $"{(double) fileInfo.Length / (1024 * 1024):F2} MB"); // Byte => MByte
-            }
-
-            var iosPath = BuiltAssetBundlePaths.instance.Find(BuildTarget.iOS);
-            if (File.Exists(iosPath))
-            {
-                var fileInfo = new FileInfo(iosPath);
-                EditorGUILayout.LabelField("iOSサイズ",
-                    $"{(double) fileInfo.Length / (1024 * 1024):F2} MB"); // Byte => MByte
-            }
+            ShowBuiltAssetBundleSize(BuildTarget.StandaloneWindows);
+            ShowBuiltAssetBundleSize(BuildTarget.StandaloneOSX);
+            ShowBuiltAssetBundleSize(BuildTarget.Android);
+            ShowBuiltAssetBundleSize(BuildTarget.iOS);
         }
 
         bool IsVenueUploadSettingValid(out string uploadSettingErrorMessage)
@@ -251,6 +234,54 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             }
 
             uploadSettingErrorMessage = default;
+            return true;
+        }
+
+        void ShowBuiltAssetBundleSize(BuildTarget target)
+        {
+            var buildTargetName = target.DisplayName();
+            var assetBundlePaths = BuiltAssetBundlePaths.instance.SelectBuildTargetAssetBundlePaths(target)
+                .OrderBy(a => a.SceneType == AssetSceneType.Main ? 0 : 1);
+            var subSceneIndex = 1;
+            foreach (var assetBundlePath in assetBundlePaths)
+            {
+                if (TryGetTotalSize(assetBundlePath, out var size))
+                {
+                    var sceneTypeName = assetBundlePath.SceneType == AssetSceneType.Main ? "メインシーン" : $"サブシーン{subSceneIndex}";
+                    EditorGUILayout.LabelField($"{buildTargetName} {sceneTypeName} サイズ",
+                        $"{(double) size / (1024 * 1024):F2} MB"); // Byte => MByte
+
+                    if (assetBundlePath.SceneType == AssetSceneType.Sub)
+                    {
+                        subSceneIndex++;
+                    }
+                }
+            }
+        }
+
+        bool TryGetTotalSize(AssetBundlePath assetBundlePath, out long size)
+        {
+            if (!File.Exists(assetBundlePath.Path))
+            {
+                size = default;
+                return false;
+            }
+            size = new FileInfo(assetBundlePath.Path).Length;
+            if (assetBundlePath.SceneType == AssetSceneType.Main)
+            {
+                if (assetBundlePath.AssetIdsDependsOn != null)
+                {
+                    foreach (var assetIds in assetBundlePath.AssetIdsDependsOn)
+                    {
+                        var asset = BuiltAssetBundlePaths.instance.SelectBuildTargetVenueAssetPaths(assetBundlePath.Target)
+                            .FirstOrDefault(v => v.Path.EndsWith(assetIds, StringComparison.Ordinal));
+                        if (asset != null && File.Exists(asset.Path))
+                        {
+                            size += new FileInfo(asset.Path).Length;
+                        }
+                    }
+                }
+            }
             return true;
         }
 

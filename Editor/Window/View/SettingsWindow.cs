@@ -1,4 +1,5 @@
 using ClusterVR.CreatorKit.Editor.Builder;
+using ClusterVR.CreatorKit.Editor.Enquete;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using UnityEditor;
 using UnityEditor.Compilation;
@@ -30,6 +31,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             container.Add(CreatePrivacySettings());
             container.Add(UiUtils.Separator());
             container.Add(CreateBetaSettings());
+            container.Add(UiUtils.Separator());
+            container.Add(CreateEnqueteRequestView());
+
             return container;
         }
 
@@ -73,6 +77,26 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             var betaDescriptionLabel = new Label("有効にすると Creator Kit の実験的な機能が使えるようになります。\nアップロードされるワールドやアイテムはベータ版機能を利用しているとして個別にカテゴライズされます。");
             container.Add(betaDescriptionLabel);
+
+            return container;
+        }
+
+        static VisualElement CreateEnqueteRequestView()
+        {
+            var container = new VisualElement();
+            var heading = new Label("アンケート");
+            heading.EnableInClassList("h1", true);
+            container.Add(heading);
+
+            var betaDescriptionLabel = new Label("Creator Kit の品質を向上するためのアンケートにご協力いただけると助かります。");
+            container.Add(betaDescriptionLabel);
+
+            container.Add(
+                new Button(EnqueteService.OpenEnqueteLink)
+                {
+                    text = "回答する"
+                }
+            );
 
             return container;
         }

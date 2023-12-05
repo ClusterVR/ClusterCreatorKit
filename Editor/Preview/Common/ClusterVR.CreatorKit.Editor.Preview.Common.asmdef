@@ -1,0 +1,16 @@
+{
+    "name": "ClusterVR.CreatorKit.Editor.Preview.Common",
+    "references": [
+        "ClusterVR.CreatorKit.Common"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

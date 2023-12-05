@@ -10,49 +10,17 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
     public sealed class PostNotifyFinishedUploadService
     {
         readonly string accessToken;
-        readonly Action<Exception> onError;
-        readonly Action<VenueUploadRequestCompletionResponse> onSuccess;
-        readonly UploadRequestID uploadRequestId;
-        readonly VenueID venueId;
-        readonly WorldDescriptor worldDescriptor;
 
-        public PostNotifyFinishedUploadService(
-            string accessToken,
-            VenueID venueId,
-            UploadRequestID uploadRequestId,
-            WorldDescriptor worldDescriptor,
-            Action<VenueUploadRequestCompletionResponse> onSuccess = null,
-            Action<Exception> onError = null
-        )
+        public PostNotifyFinishedUploadService(string accessToken)
         {
             this.accessToken = accessToken;
-            this.venueId = venueId;
-            this.uploadRequestId = uploadRequestId;
-            this.worldDescriptor = worldDescriptor;
-            this.onSuccess = onSuccess;
-            this.onError = onError;
         }
 
-        public void Run(CancellationToken cancellationToken)
-        {
-            _ = PostNotifyFinishedUploadAsync(cancellationToken);
-        }
-
-        async Task PostNotifyFinishedUploadAsync(CancellationToken cancellationToken)
+        public async Task<VenueUploadRequestCompletionResponse> PostNotifyFinishedUploadAsync(VenueID venueId,
+            UploadRequestID uploadRequestId, WorldDescriptor worldDescriptor, CancellationToken cancellationToken)
         {
             var payload = new PostNotifyFinishedUploadPayload(worldDescriptor);
-            try
-            {
-                var response =
-                    await APIServiceClient.PostNotifyFinishedUpload(venueId, uploadRequestId, payload, accessToken,
-                        cancellationToken);
-                onSuccess?.Invoke(response);
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-                onError?.Invoke(e);
-            }
+            return await APIServiceClient.PostNotifyFinishedUpload(venueId, uploadRequestId, payload, accessToken, cancellationToken);
         }
     }
 }

@@ -113,10 +113,19 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
             {
                 return null;
             }
+            if (useDynamic)
+            {
+                return new MovableItem
+                {
+                    IsDynamic = movableItemComponent.IsDynamic,
+                    Mass = movableItemComponent.Mass,
+                    DisableGravity = movableItemComponent.IsDynamic && !movableItemComponent.UseGravity
+                };
+            }
             return new MovableItem
             {
-                IsDynamic = useDynamic && movableItemComponent.IsDynamic,
-                Mass = movableItemComponent.Mass,
+                IsDynamic = false,
+                Mass = movableItemComponent.Mass
             };
         }
 
@@ -194,7 +203,7 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 {
                     continue;
                 }
-                targetIndex = (uint)indexedResource.Index;
+                targetIndex = (uint) indexedResource.Index;
                 return true;
             }
             return false;

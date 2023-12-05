@@ -1,5 +1,7 @@
 using System;
+using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Editor.Custom;
+using ClusterVR.CreatorKit.Editor.Enquete;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -66,8 +68,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 
         VisualElement CreateView()
         {
-            var template = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
-                "Packages/mu.cluster.cluster-creator-kit/Editor/Window/GltfItemExporter/Uxml/ItemUploaderProgressWindow.uxml");
+            var template = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/mu.cluster.cluster-creator-kit/Editor/Window/GltfItemExporter/Uxml/ItemUploaderProgressWindow.uxml");
+
             VisualElement view = template.CloneTree();
 
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(
@@ -77,12 +79,30 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             var closeButton = view.Q<Button>("close-button");
             closeButton.clicked += Close;
 
-            progressContainer = view.Q("progress-container");
-            completeContainer = view.Q("complete-container");
+            var enqueteButton = view.Q<Button>("enquete-button");
+            enqueteButton.clicked += EnqueteService.OpenEnqueteLink;
+            enqueteButton.clicked += Close;
 
+            var enqueteCloseButton = view.Q<Button>("enquete-close-button");
+            enqueteCloseButton.clicked += Close;
+            enqueteCloseButton.clicked += EnqueteService.CancelEnquete;
+
+            progressContainer = view.Q("progress-container");
             progressBar = view.Q<ProgressBar>("upload-progress-bar");
 
             uploadItemLabel = view.Q<Label>("upload-item-label");
+
+            var shouldShowEnquete = EnqueteService.ShouldShowEnqueteRequest();
+
+            var normalButtonContainer = view.Q<VisualElement>("normal-complete-container");
+            var enqueteButtonContainer = view.Q<VisualElement>("enquete-complete-container");
+
+            normalButtonContainer.SetVisibility(!shouldShowEnquete);
+            enqueteButtonContainer.SetVisibility(shouldShowEnquete);
+
+            completeContainer = shouldShowEnquete
+                ? enqueteButtonContainer
+                : normalButtonContainer;
 
             return view;
         }

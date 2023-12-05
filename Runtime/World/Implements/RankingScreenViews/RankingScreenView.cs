@@ -12,6 +12,8 @@ namespace ClusterVR.CreatorKit.World.Implements.RankingScreenViews
 
         public event Action OnDestroyed;
 
+        public bool HasInvalidCell() => boardCells.Any(cell => cell == null);
+
         void Start()
         {
             this.DisableRichText();
@@ -27,6 +29,10 @@ namespace ClusterVR.CreatorKit.World.Implements.RankingScreenViews
         {
             for (var i = 0; i < boardCells.Count; i++)
             {
+                if (boardCells[i] == null)
+                {
+                    continue;
+                }
                 var ranking = rankings.FirstOrDefault(r => r.Rank == i + 1);
                 if (ranking == null)
                 {
@@ -39,13 +45,16 @@ namespace ClusterVR.CreatorKit.World.Implements.RankingScreenViews
                 }
             }
 
-            if (selfRanking.Rank == 0 || selfRanking.Rank > 10)
+            if (lowRankerCell != null)
             {
-                lowRankerCell.Rankout(selfRanking);
-            }
-            else
-            {
-                lowRankerCell.Rankin();
+                if (selfRanking.Rank == 0 || selfRanking.Rank > 10)
+                {
+                    lowRankerCell.Rankout(selfRanking);
+                }
+                else
+                {
+                    lowRankerCell.Rankin();
+                }
             }
         }
 

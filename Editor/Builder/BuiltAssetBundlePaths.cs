@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -8,43 +7,48 @@ namespace ClusterVR.CreatorKit.Editor.Builder
 {
     public sealed class BuiltAssetBundlePaths : ScriptableSingleton<BuiltAssetBundlePaths>
     {
-        [SerializeField] List<AssetBundlePath> assetBundlePaths = new List<AssetBundlePath>();
+        [SerializeField] List<AssetBundlePath> assetBundlePaths = new();
+        [SerializeField] List<VenueAssetPath> venueAssetPaths = new();
 
-        public void AddOrUpdate(BuildTarget target, string path)
+        public void AddOrUpdateMainScene(BuildTarget target, string path, string[] assetIdsDependsOn)
         {
-            var assetBundlePath = assetBundlePaths.FirstOrDefault(x => x.Target == target);
-            if (assetBundlePath != null)
-            {
-                assetBundlePath.Path = path;
-            }
-            else
-            {
-                assetBundlePaths.Add(new AssetBundlePath { Target = target, Path = path });
-            }
+            assetBundlePaths.RemoveAll(x => x.Target == target && x.SceneType == AssetSceneType.Main);
+            assetBundlePaths.Add(new AssetBundlePath { Target = target, Path = path, SceneType = AssetSceneType.Main, AssetIdsDependsOn = assetIdsDependsOn });
         }
 
-        public string Find(BuildTarget target)
+        public void AddSubScene(BuildTarget target, string path, string[] assetIdsDependsOn)
         {
-            return assetBundlePaths.FirstOrDefault(x => x.Target == target)?.Path;
+            assetBundlePaths.Add(new AssetBundlePath { Target = target, Path = path, SceneType = AssetSceneType.Sub, AssetIdsDependsOn = assetIdsDependsOn });
         }
 
-        [Serializable]
-        sealed class AssetBundlePath
+        public void AddVenueAsset(BuildTarget target, string path)
         {
-            [SerializeField] BuildTarget target;
-            [SerializeField] string path;
+            venueAssetPaths.Add(new VenueAssetPath { Target = target, Path = path });
+        }
 
-            public BuildTarget Target
-            {
-                get => target;
-                set => target = value;
-            }
+        public AssetBundlePath FindMainScene(BuildTarget target)
+        {
+            return assetBundlePaths.FirstOrDefault(x => x.Target == target && x.SceneType == AssetSceneType.Main);
+        }
 
-            public string Path
-            {
-                get => path;
-                set => path = value;
-            }
+        public IEnumerable<AssetBundlePath> SelectBuildTargetAssetBundlePaths(BuildTarget target)
+        {
+            return assetBundlePaths.Where(x => x.Target == target);
+        }
+
+        public IEnumerable<VenueAssetPath> SelectBuildTargetVenueAssetPaths(BuildTarget target)
+        {
+            return venueAssetPaths.Where(x => x.Target == target);
+        }
+
+        public void ClearSubScenes()
+        {
+            assetBundlePaths.RemoveAll(x => x.SceneType == AssetSceneType.Sub);
+        }
+
+        public void ClearVenueAssets()
+        {
+            venueAssetPaths.Clear();
         }
     }
 }

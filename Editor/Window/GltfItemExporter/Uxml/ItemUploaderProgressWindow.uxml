@@ -11,10 +11,18 @@
             <editor:ProgressBar name="upload-progress-bar"/>
             <engine:Label text="完了後、自動的にWebページが開きます" class="sub-text"/>
         </engine:VisualElement>
-        
-        <engine:VisualElement name="complete-container" class="container">
+
+        <engine:VisualElement name="normal-complete-container" class="container complete-container">
             <engine:Label text="アップロードが完了しました"/>
             <engine:Button text="閉じる" name="close-button"/>
+        </engine:VisualElement>
+
+        <engine:VisualElement name="enquete-complete-container" class="container complete-container">
+            <engine:Label text="アップロードが完了しました\nよろしければ Creator Kit に関するアンケートにご協力ください！"/>
+            <engine:VisualElement name="complete-button-container" class="complete-button-container">
+                <engine:Button text="アンケートに回答する" name="enquete-button"/>
+                <engine:Button text="閉じる" name="enquete-close-button"/>
+            </engine:VisualElement>
         </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>

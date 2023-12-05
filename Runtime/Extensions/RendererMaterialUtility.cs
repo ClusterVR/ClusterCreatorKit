@@ -9,6 +9,11 @@ namespace ClusterVR.CreatorKit.Extensions
             return GetOrAddMaterialHolder(renderer).GetSharedMaterials();
         }
 
+        public static void SetSharedMaterials(Renderer renderer, Material[] materials)
+        {
+            GetOrAddMaterialHolder(renderer).SetSharedMaterials(materials);
+        }
+
         public static void SetMaterials(Renderer renderer, Material[] materials)
         {
             GetOrAddMaterialHolder(renderer).SetMaterials(materials);

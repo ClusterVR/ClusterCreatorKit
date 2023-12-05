@@ -1,6 +1,7 @@
 {
     "name": "ClusterVR.CreatorKit.Editor.Preview",
     "references": [
+        "ClusterVR.CreatorKit.Common",
         "ClusterVR.CreatorKit.Editor",
         "ClusterVR.CreatorKit.World",
         "ClusterVR.CreatorKit.Preview",
@@ -16,7 +17,8 @@
         "ClusterVR.CreatorKit.Editor.Preview.RoomState",
         "ClusterVR.CreatorKit.Editor.Preview.Trigger",
         "ClusterVR.CreatorKit.Editor.Preview.Item",
-        "ClusterVR.CreatorKit.Editor.Preview.World"
+        "ClusterVR.CreatorKit.Editor.Preview.World",
+        "ClusterVR.CreatorKit.World.Implements"
     ],
     "includePlatforms": [
         "Editor"

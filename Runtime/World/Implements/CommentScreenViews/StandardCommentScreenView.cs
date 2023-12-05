@@ -25,6 +25,7 @@ namespace ClusterVR.CreatorKit.World.Implements.CommentScreenViews
             {
                 Destroy(content.transform.GetChild(i).gameObject);
             }
+            cells.Clear();
         }
 
         void Start()

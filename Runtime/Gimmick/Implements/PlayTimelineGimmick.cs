@@ -1,4 +1,5 @@
 using System;
+using ClusterVR.CreatorKit.Common;
 using ClusterVR.CreatorKit.Item;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -6,8 +7,10 @@ using UnityEngine.Playables;
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [DisallowMultipleComponent, RequireComponent(typeof(PlayableDirector))]
-    public sealed class PlayTimelineGimmick : MonoBehaviour, IPlayTimelineGimmick, IGlobalGimmick, IRerunOnPauseResumedGimmick
+    public sealed class PlayTimelineGimmick : MonoBehaviour, IPlayTimelineGimmick, IGlobalGimmick, IRerunOnPauseResumedGimmick, ITimeProviderRequester
     {
+        const float TimeDifferenceTolerantSeconds = 1f;
+
         [SerializeField, HideInInspector] PlayableDirector playableDirector;
         [SerializeField] GlobalGimmickKey globalGimmickKey;
 
@@ -20,8 +23,12 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         public DateTime LastTriggeredAt { get; private set; }
         public event Action OnPlay;
         IStopTimelineGimmick stopTimelineGimmick;
+        ITimeProvider timeProvider;
 
         bool isInitialized;
+        bool hasPlayed;
+        double startTime;
+        DateTime startDate;
 
         void Start()
         {
@@ -42,6 +49,11 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
             isInitialized = true;
         }
 
+        void ITimeProviderRequester.SetTimeProvider(ITimeProvider timeProvider)
+        {
+            this.timeProvider = timeProvider;
+        }
+
         public void Run(GimmickValue value, DateTime current)
         {
             Run(value, current, false);
@@ -56,7 +68,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         {
             EnforceInitialized();
 
-            if (playableDirector == null)
+            if (playableDirector == null || timeProvider == null)
             {
                 return;
             }
@@ -112,6 +124,62 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
 
             playableDirector.time = time;
             playableDirector.Play();
+            startTime = time;
+            startDate = timeProvider.GetTime();
+            hasPlayed = true;
+        }
+
+        void Update()
+        {
+            CorrectWhenTimeDiffers();
+        }
+
+        void CorrectWhenTimeDiffers()
+        {
+            if (!hasPlayed || timeProvider == null)
+            {
+                return;
+            }
+
+            if (playableDirector.state != PlayState.Playing)
+            {
+                return;
+            }
+
+            if (playableDirector.time == playableDirector.duration)
+            {
+                return;
+            }
+
+            if (playableDirector.duration < TimeDifferenceTolerantSeconds)
+            {
+                return;
+            }
+
+            var expectedTime = startTime + (timeProvider.GetTime() - startDate).TotalSeconds;
+            var currentTime = playableDirector.time;
+            if (playableDirector.extrapolationMode == DirectorWrapMode.Loop && expectedTime > 0)
+            {
+                expectedTime %= playableDirector.duration;
+                var diff = Math.Abs(expectedTime - currentTime);
+                if (diff > TimeDifferenceTolerantSeconds && diff < playableDirector.duration - TimeDifferenceTolerantSeconds)
+                {
+                    CorrectTime(expectedTime);
+                }
+            }
+            else
+            {
+                var diff = Math.Abs(expectedTime - currentTime);
+                if (diff > TimeDifferenceTolerantSeconds)
+                {
+                    CorrectTime(expectedTime);
+                }
+            }
+        }
+
+        void CorrectTime(double expectedTime)
+        {
+            playableDirector.time = expectedTime;
         }
 
         void OnValidate()

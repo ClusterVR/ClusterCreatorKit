@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
+using ClusterVR.CreatorKit.Editor.Builder;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -14,67 +15,44 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
     public sealed class UploadAssetService
     {
         readonly string accessToken;
-        readonly string filePath;
-        readonly UploadRequestID uploadRequestId;
-        readonly PostUploadAssetPolicyPayload payload;
-        readonly Action<AssetUploadPolicy> onSuccess;
-        readonly Action<Exception> onError;
 
-        public UploadAssetService(
-            string accessToken,
-            string fileType,
-            string filePath,
-            UploadRequestID uploadRequestId,
-            Action<AssetUploadPolicy> onSuccess = null,
-            Action<Exception> onError = null
-        )
+        public UploadAssetService(string accessToken)
         {
             this.accessToken = accessToken;
-            this.filePath = filePath;
-            this.uploadRequestId = uploadRequestId;
-            this.onSuccess = onSuccess;
-            this.onError = onError;
-
-            var fileInfo = new FileInfo(filePath);
-            payload = new PostUploadAssetPolicyPayload(fileType, fileInfo.Name, fileInfo.Length);
         }
 
-        public void Run(CancellationToken cancellationToken)
+        public async Task<AssetUploadPolicy> UploadAsync(AssetBundlePath assetBundlePath, UploadRequestID uploadRequestId, CancellationToken cancellationToken)
         {
-            _ = UploadAsync(cancellationToken);
+            var fileInfo = new FileInfo(assetBundlePath.Path);
+            var payload = new PostUploadAssetPolicyPayload(assetBundlePath.AssetIdsDependsOn, assetBundlePath.FileType, fileInfo.Name, fileInfo.Length,
+                assetBundlePath.SceneType);
+            var policy = await APIServiceClient.PostUploadAssetPolicy(uploadRequestId, payload, accessToken,
+                JsonConvert.DeserializeObject<AssetUploadPolicy>, cancellationToken);
+
+            await UploadAsync(assetBundlePath.Path, policy, cancellationToken);
+
+            return policy;
         }
 
-        async Task UploadAsync(CancellationToken cancellationToken)
+        public async Task<AssetUploadPolicy> UploadAsync(VenueAssetPath venueAssetPath, UploadRequestID uploadRequestId, CancellationToken cancellationToken)
         {
-            try
-            {
-                var policy = await APIServiceClient.PostUploadAssetPolicy(uploadRequestId, payload, accessToken,
-                    JsonConvert.DeserializeObject<AssetUploadPolicy>, cancellationToken);
-                EditorCoroutine.Start(Upload(policy));
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
-            }
+            var fileInfo = new FileInfo(venueAssetPath.Path);
+            var payload = new PostUploadVenueAssetPoliciesPayload(venueAssetPath.FileType, fileInfo.Name, fileInfo.Length);
+            var policy = await APIServiceClient.PostUploadVenueAssetPolicies(uploadRequestId, payload, accessToken,
+                JsonConvert.DeserializeObject<AssetUploadPolicy>, cancellationToken);
+
+            await UploadAsync(venueAssetPath.Path, policy, cancellationToken);
+
+            return policy;
         }
 
-        IEnumerator Upload(AssetUploadPolicy policy)
+        async Task UploadAsync(string filePath, AssetUploadPolicy policy, CancellationToken cancellationToken)
         {
-            byte[] fileBytes;
-            try
-            {
-                fileBytes = ReadFile(filePath);
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
-                yield break;
-            }
+            var fileBytes = ReadFile(filePath);
 
             if (policy == null || fileBytes == null)
             {
-                HandleError(new Exception("unknown error"));
-                yield break;
+                throw new Exception("unknown error");
             }
 
             var form = BuildFormSections(fileBytes, policy);
@@ -83,21 +61,20 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             uploadFileWebRequest.SendWebRequest();
             while (!uploadFileWebRequest.isDone)
             {
-                yield return null;
+                await Task.Delay(50, cancellationToken);
             }
 
-            if (uploadFileWebRequest.isNetworkError)
+            if (uploadFileWebRequest.result == UnityWebRequest.Result.ConnectionError)
             {
-                HandleError(new Exception(uploadFileWebRequest.error));
+                throw new Exception(uploadFileWebRequest.error);
             }
-            else if (uploadFileWebRequest.isHttpError)
+            else if (uploadFileWebRequest.result == UnityWebRequest.Result.ProtocolError)
             {
-                HandleError(new Exception(uploadFileWebRequest.downloadHandler.text));
+                throw new Exception(uploadFileWebRequest.downloadHandler.text);
             }
             else
             {
                 Debug.Log($"Success Upload {policy.fileType}");
-                onSuccess?.Invoke(policy);
             }
         }
 
@@ -130,12 +107,6 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
             form.Add(new MultipartFormFileSection("file", file, policy.fileName, "application/octet-stream"));
             return form;
-        }
-
-        void HandleError(Exception e)
-        {
-            Debug.LogException(e);
-            onError?.Invoke(e);
         }
     }
 }

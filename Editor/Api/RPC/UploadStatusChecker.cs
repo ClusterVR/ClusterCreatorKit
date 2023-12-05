@@ -66,13 +66,13 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                             throw new NotImplementedException();
                     }
                 }
-                catch (HttpException e)
+                catch (Failure e)
                 {
                     if (retryCount >= MaxRetryCount)
                     {
                         throw;
                     }
-                    switch (e.GetHttpCode())
+                    switch (e.StatusCode)
                     {
                         case 500:
                         case 503:

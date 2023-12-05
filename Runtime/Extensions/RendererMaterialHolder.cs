@@ -22,6 +22,13 @@ namespace ClusterVR.CreatorKit.Extensions
             return sharedMaterials;
         }
 
+        public void SetSharedMaterials(Material[] materials)
+        {
+            CacheRendererAndMaterialsOnce();
+            sharedMaterials = materials;
+            renderer.sharedMaterials = materials;
+        }
+
         public void SetMaterials(Material[] materials)
         {
             CacheRendererAndMaterialsOnce();

@@ -1,8 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Proto;
@@ -71,217 +72,160 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         public void Run(CancellationToken cancellationToken)
         {
-            if (!File.Exists(BuiltAssetBundlePaths.instance.Find(BuildTarget.StandaloneWindows)))
+            if (!ValidatePlatformVenue(BuildTarget.StandaloneWindows))
             {
-                onError?.Invoke(new FileNotFoundException("Windows Build"));
                 return;
             }
 
-            if (!File.Exists(BuiltAssetBundlePaths.instance.Find(BuildTarget.StandaloneOSX)))
+            if (!ValidatePlatformVenue(BuildTarget.StandaloneOSX))
             {
-                onError?.Invoke(new FileNotFoundException("Mac Build"));
                 return;
             }
 
-            if (!File.Exists(BuiltAssetBundlePaths.instance.Find(BuildTarget.Android)))
+            if (!ValidatePlatformVenue(BuildTarget.Android))
             {
-                onError?.Invoke(new FileNotFoundException("Android Build"));
                 return;
             }
 
-            if (!File.Exists(BuiltAssetBundlePaths.instance.Find(BuildTarget.iOS)))
+            if (!ValidatePlatformVenue(BuildTarget.iOS))
             {
-                onError?.Invoke(new FileNotFoundException("iOS Build"));
                 return;
             }
 
-            EditorCoroutine.Start(UploadVenue(cancellationToken));
+            _ = UploadVenueAsync(cancellationToken);
         }
 
-        IEnumerator UploadVenue(CancellationToken cancellationToken)
+        bool ValidatePlatformVenue(BuildTarget target)
+        {
+            return ValidateMainSceneAssetBundle(target) && ValidateSubSceneAssetBundles(target) && ValidateVenueAssetBundles(target);
+        }
+
+        bool ValidateMainSceneAssetBundle(BuildTarget target)
+        {
+            var assetBundlePath = BuiltAssetBundlePaths.instance.FindMainScene(target);
+            if (!File.Exists(assetBundlePath?.Path))
+            {
+                onError?.Invoke(new FileNotFoundException($"{target.DisplayName()} Main Scene Build"));
+                return false;
+            }
+
+            if (!ValidateAssetDependsOn(target, assetBundlePath))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        bool ValidateSubSceneAssetBundles(BuildTarget target)
+        {
+            var assetBundlePaths = BuiltAssetBundlePaths.instance.SelectBuildTargetAssetBundlePaths(target)
+                .Where(x => x.SceneType == AssetSceneType.Sub);
+            foreach (var assetBundlePath in assetBundlePaths)
+            {
+                if (!File.Exists(assetBundlePath.Path))
+                {
+                    onError?.Invoke(
+                        new FileNotFoundException($"{target.DisplayName()} Sub Scene Build: ${assetBundlePath.Path}"));
+                    return false;
+                }
+
+                if (!ValidateAssetDependsOn(target, assetBundlePath))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        bool ValidateAssetDependsOn(BuildTarget target, AssetBundlePath assetBundlePath)
+        {
+            var assetIdsDependsOn = assetBundlePath.AssetIdsDependsOn;
+            if (assetIdsDependsOn == null)
+            {
+                return true;
+            }
+            foreach (var assetIdDependsOn in assetIdsDependsOn)
+            {
+                if (!BuiltAssetBundlePaths.instance.SelectBuildTargetVenueAssetPaths(target).Any(asset => asset.Path.EndsWith(assetIdDependsOn, StringComparison.Ordinal)))
+                {
+                    onError?.Invoke(new Exception($"{target.DisplayName()} Venue Asset is missing: ${assetIdDependsOn}"));
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        bool ValidateVenueAssetBundles(BuildTarget target)
+        {
+            var venueAssetPaths = BuiltAssetBundlePaths.instance.SelectBuildTargetVenueAssetPaths(target);
+            foreach (var venueAssetPath in venueAssetPaths)
+            {
+                if (!File.Exists(venueAssetPath.Path))
+                {
+                    onError?.Invoke(new FileNotFoundException($"{target.DisplayName()} Venue Asset Build: ${venueAssetPath.Path}"));
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        async Task UploadVenueAsync(CancellationToken cancellationToken)
         {
             isProcessing = true;
 
-            if (!uploadStatus[UploadState.PreProcess])
+            try
             {
-                var postUploadRequestProcess = false;
-                var uploadRequest = new PostUploadRequestService(
-                    accessToken,
-                    venue.VenueId,
-                    isBeta,
-                    request =>
-                    {
-                        Debug.Log($"make new upload request, Request ID : {request.UploadRequestId}");
-                        uploadRequestId = request.UploadRequestId;
-                        postUploadRequestProcess = true;
-                        uploadStatus[UploadState.PreProcess] = true;
-                    },
-                    exception =>
-                    {
-                        HandleError(exception);
-                        postUploadRequestProcess = true;
-                    }
-                );
-                uploadRequest.Run(cancellationToken);
+                var uploadRequest = new PostUploadRequestService(accessToken, isBeta);
+                var uploadRequestRespose = await uploadRequest.PostUploadRequestAsync(venue.VenueId, cancellationToken);
+                Debug.Log($"make new upload request, Request ID : {uploadRequestRespose.UploadRequestId}");
+                uploadRequestId = uploadRequestRespose.UploadRequestId;
+                uploadStatus[UploadState.PreProcess] = true;
 
-                while (!postUploadRequestProcess)
+                await Task.WhenAll(new[]
                 {
-                    yield return null;
-                }
-            }
+                    UploadAssetBundlesAsync(BuildTarget.StandaloneWindows, UploadState.Windows, cancellationToken),
+                    UploadAssetBundlesAsync(BuildTarget.StandaloneOSX, UploadState.Mac, cancellationToken),
+                    UploadAssetBundlesAsync(BuildTarget.Android, UploadState.Android, cancellationToken),
+                    UploadAssetBundlesAsync(BuildTarget.iOS, UploadState.IOS, cancellationToken)
+                });
 
-            if (!uploadStatus[UploadState.PreProcess])
+                var notifyFinishedRequest = new PostNotifyFinishedUploadService(accessToken);
+                completionResponse = await notifyFinishedRequest.PostNotifyFinishedUploadAsync(
+                    venue.VenueId, uploadRequestId, worldDescriptor, cancellationToken);
+
+                Debug.Log($"notify finished upload request, Request ID : {completionResponse.UploadRequestId}");
+                uploadRequestId = null;
+                uploadStatus[UploadState.PostProcess] = true;
+
+                onSuccess?.Invoke(completionResponse);
+            }
+            catch (Exception e)
             {
-                yield break;
+                HandleError(e);
             }
-
-            var uploadAssetServiceList = new List<UploadAssetService>();
-
-            var winAssetUploadProcess = uploadStatus[UploadState.Windows];
-            var macAssetUploadProcess = uploadStatus[UploadState.Mac];
-            var androidAssetUploadProcess = uploadStatus[UploadState.Android];
-            var iosAssetUploadProcess = uploadStatus[UploadState.IOS];
-
-            if (!uploadStatus[UploadState.Windows])
+            finally
             {
-                var winAssetUploadService = new UploadAssetService(
-                    accessToken,
-                    "assetbundle/win",
-                    BuiltAssetBundlePaths.instance.Find(BuildTarget.StandaloneWindows),
-                    uploadRequestId,
-                    request =>
-                    {
-                        Debug.Log($"success win asset upload, uploaded url : {request.uploadUrl}");
-                        winAssetUploadProcess = true;
-                        uploadStatus[UploadState.Windows] = true;
-                    },
-                    exception =>
-                    {
-                        HandleError(exception);
-                        winAssetUploadProcess = true;
-                    }
-                );
-                uploadAssetServiceList.Add(winAssetUploadService);
+                isProcessing = false;
             }
+        }
 
-            if (!uploadStatus[UploadState.Mac])
+        async Task UploadAssetBundlesAsync(BuildTarget target, UploadState state, CancellationToken cancellationToken)
+        {
+            var buildTargetName = target.DisplayName();
+            var assetUploadService = new UploadAssetService(accessToken);
+            foreach (var assetBundlePath in BuiltAssetBundlePaths.instance.SelectBuildTargetAssetBundlePaths(target))
             {
-                var macAssetUploadService = new UploadAssetService(
-                    accessToken,
-                    "assetbundle/mac",
-                    BuiltAssetBundlePaths.instance.Find(BuildTarget.StandaloneOSX),
-                    uploadRequestId,
-                    request =>
-                    {
-                        Debug.Log($"success mac asset upload, uploaded url : {request.uploadUrl}");
-                        macAssetUploadProcess = true;
-                        uploadStatus[UploadState.Mac] = true;
-                    },
-                    exception =>
-                    {
-                        HandleError(exception);
-                        macAssetUploadProcess = true;
-                    }
-                );
-                uploadAssetServiceList.Add(macAssetUploadService);
+                var policy = await assetUploadService.UploadAsync(assetBundlePath, uploadRequestId, cancellationToken);
+                Debug.Log($"success {buildTargetName} {assetBundlePath.SceneType} scene asset upload, uploaded url : {policy.uploadUrl}");
             }
-
-            if (!uploadStatus[UploadState.Android])
+            foreach (var venueAssetPath in BuiltAssetBundlePaths.instance.SelectBuildTargetVenueAssetPaths(target))
             {
-                var androidAssetUploadService = new UploadAssetService(
-                    accessToken,
-                    "assetbundle/android",
-                    BuiltAssetBundlePaths.instance.Find(BuildTarget.Android),
-                    uploadRequestId,
-                    request =>
-                    {
-                        Debug.Log($"success android asset upload, uploaded url : {request.uploadUrl}");
-                        androidAssetUploadProcess = true;
-                        uploadStatus[UploadState.Android] = true;
-                    },
-                    exception =>
-                    {
-                        HandleError(exception);
-                        androidAssetUploadProcess = true;
-                    }
-                );
-                uploadAssetServiceList.Add(androidAssetUploadService);
+                var policy = await assetUploadService.UploadAsync(venueAssetPath, uploadRequestId, cancellationToken);
+                Debug.Log($"success {buildTargetName} venue asset upload, uploaded url : {policy.uploadUrl}");
             }
-
-            if (!uploadStatus[UploadState.IOS])
-            {
-                var iosAssetUploadService = new UploadAssetService(
-                    accessToken,
-                    "assetbundle/ios",
-                    BuiltAssetBundlePaths.instance.Find(BuildTarget.iOS),
-                    uploadRequestId,
-                    request =>
-                    {
-                        Debug.Log($"success ios asset upload, uploaded url : {request.uploadUrl}");
-                        iosAssetUploadProcess = true;
-                        uploadStatus[UploadState.IOS] = true;
-                    },
-                    exception =>
-                    {
-                        HandleError(exception);
-                        iosAssetUploadProcess = true;
-                    }
-                );
-                uploadAssetServiceList.Add(iosAssetUploadService);
-            }
-
-            uploadAssetServiceList.ForEach(x => x.Run(cancellationToken));
-
-            while (!winAssetUploadProcess || !macAssetUploadProcess || !androidAssetUploadProcess || !iosAssetUploadProcess)
-            {
-                yield return null;
-            }
-
-            if (!uploadStatus[UploadState.Windows] ||
-                !uploadStatus[UploadState.Mac] ||
-                !uploadStatus[UploadState.Android] ||
-                !uploadStatus[UploadState.IOS])
-            {
-                yield break;
-            }
-
-            if (!uploadStatus[UploadState.PostProcess])
-            {
-                var postNotifyFinishProcess = false;
-                var notifyFinishedRequest = new PostNotifyFinishedUploadService(
-                    accessToken,
-                    venue.VenueId,
-                    uploadRequestId,
-                    worldDescriptor,
-                    response =>
-                    {
-                        Debug.Log($"notify finished upload request, Request ID : {response.UploadRequestId}");
-                        uploadRequestId = null;
-                        postNotifyFinishProcess = true;
-                        uploadStatus[UploadState.PostProcess] = true;
-                        completionResponse = response;
-                    },
-                    exception =>
-                    {
-                        HandleError(exception);
-                        postNotifyFinishProcess = true;
-                    }
-                );
-                notifyFinishedRequest.Run(cancellationToken);
-
-                while (!postNotifyFinishProcess)
-                {
-                    yield return null;
-                }
-            }
-
-            if (!uploadStatus[UploadState.PostProcess])
-            {
-                yield break;
-            }
-
-            onSuccess?.Invoke(completionResponse);
-            isProcessing = false;
+            uploadStatus[state] = true;
         }
 
         void HandleError(Exception e)

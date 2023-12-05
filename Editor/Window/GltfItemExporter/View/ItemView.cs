@@ -224,6 +224,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
                 case MissingAudioClipException e:
                     message = $"AudioClipがみつかりませんでした。ItemAudioSetにAudioClipを設定してください。(Id: {e.Id})";
                     return true;
+                case MissingHumanoidAnimationException e:
+                    message = $"Animationがみつかりませんでした。HumanoidAnimationにAnimation Clipを設定してください。(Id: {e.Id})";
+                    return true;
                 case ExtractAudioDataFailedException e:
                     message = $"AudioClipの情報の取得に失敗しました。(Id: {e.Id})";
                     return true;
