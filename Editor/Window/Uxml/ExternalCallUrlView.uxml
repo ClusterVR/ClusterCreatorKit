@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="/UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="base-container">
+        <ui:VisualElement name="url-view">
+            <ui:Label name="current-url-title-label" text="登録中のURL" style="-unity-font-style: bold;" />
+            <ui:Label name="current-url-label" />
+            <ui:VisualElement style="height: 20px;" />
+            <ui:Label name="update-url-title-label" text="URLの登録" style="-unity-font-style: bold;" />
+            <ui:TextField name="update-url-field" />
+            <ui:Button name="update-button" text="登録" />
+            <ui:Button name="delete-button" text="削除" />
+        </ui:VisualElement>
+        <ui:VisualElement style="height: 20px;" />
+        <ui:VisualElement name="token-view">
+            <ui:Label text="verify用トークン" style="-unity-font-style: bold;" />
+            <ui:TextField name="token-field" readonly="true" />
+            <ui:Label text="* このトークンは一度しか表示されません。紛失した場合は URL を登録し直して下さい。" style="white-space: normal;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

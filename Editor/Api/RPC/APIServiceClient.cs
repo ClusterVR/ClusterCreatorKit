@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.AccessoryTemplate;
 using ClusterVR.CreatorKit.Editor.Api.Analytics;
+using ClusterVR.CreatorKit.Editor.Api.ExternalCall;
 using ClusterVR.CreatorKit.Editor.Api.ItemTemplate;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 
@@ -124,6 +125,25 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         {
             return ApiClient.Get<Empty, OwnItemTemplateListResponse>(Empty.Value, accessToken,
                 $"{Constants.ApiBaseUrl}/v1/item_templates/own_for_creator?count={count}&filter={filter}&page={page}", cancellationToken);
+        }
+
+        public static async Task<GetWebRPCURLResponse> GetWebRPCURLAsync(string accessToken, CancellationToken cancellationToken)
+        {
+            return await ApiClient.Get<Empty, GetWebRPCURLResponse>(Empty.Value, accessToken, $"{Constants.ApiBaseUrl}/v1/user/web_rpc_url", cancellationToken);
+        }
+
+        public static async Task<RegisterWebRPCURLResponse> RegisterWebRPCURLAsync(
+            RegisterWebRPCURLPayload payload,
+            string accessToken, CancellationToken cancellationToken)
+        {
+            return await ApiClient.Post<RegisterWebRPCURLPayload, RegisterWebRPCURLResponse>(payload,
+                accessToken, $"{Constants.ApiBaseUrl}/v1/user/web_rpc_url",
+                cancellationToken);
+        }
+
+        public static async Task DeleteUserWebRPCURLAsync(string accessToken, CancellationToken cancellationToken)
+        {
+            await ApiClient.Post<Empty, Empty>(Empty.Value, accessToken, $"{Constants.ApiBaseUrl}/v1/user/web_rpc_url/delete", cancellationToken);
         }
     }
 }

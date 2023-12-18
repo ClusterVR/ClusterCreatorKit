@@ -40,7 +40,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
             {
                 while (request.Status == StatusCode.InProgress)
                 {
-                    await Task.Delay(TimeSpan.FromMilliseconds(10));
+                    await Task.Delay(TimeSpan.FromMilliseconds(10), cancellationToken);
                 }
             }
             catch (Exception)
