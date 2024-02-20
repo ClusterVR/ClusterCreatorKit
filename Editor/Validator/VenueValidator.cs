@@ -393,15 +393,6 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 return false;
             }
 
-            if (!isBeta)
-            {
-                if (!ValidateNoComponents<ITextView>(allRootObjects, _ => true, out invalidObjects))
-                {
-                    errorMessage = $"{nameof(World.Implements.TextView)} を使うにはベータ機能を有効にする必要があります。";
-                    return false;
-                }
-            }
-
             errorMessage = default;
             invalidObjects = default;
             return true;

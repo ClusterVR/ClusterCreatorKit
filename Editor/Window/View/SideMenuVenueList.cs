@@ -175,7 +175,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             {
                 var venueButton = new Button(() => { reactiveCurrentVenue.Val = venue; })
                 {
-                    text = venue.IsBeta ? $"[bata] {venue.Name}" : venue.Name,
+                    text = venue.IsBeta ? $"[beta] {venue.Name}" : venue.Name,
                     style = { unityTextAlign = TextAnchor.MiddleLeft }
                 };
                 venueList.Add(venueButton);

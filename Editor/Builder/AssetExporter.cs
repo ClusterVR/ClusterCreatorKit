@@ -77,7 +77,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
 
                 if (subScenes.Any())
                 {
-                    if (CreateVenueAssetBundle(mainSceneInfo.tempPath, out var venueAssetBundleBuild))
+                    if (CreateVenueAssetBundle(mainSceneInfo.tempPath, target, out var venueAssetBundleBuild))
                     {
                         venueAssetInfos.Add(venueAssetBundleBuild);
                         assetIds = new[] { venueAssetBundleBuild.assetBundleName };
@@ -168,11 +168,11 @@ namespace ClusterVR.CreatorKit.Editor.Builder
             return (tempPath, assetBundleBuild, isMainScene, Array.Empty<string>());
         }
 
-        static bool CreateVenueAssetBundle(string scenePath, out AssetBundleBuild assetBundleBuild)
+        static bool CreateVenueAssetBundle(string scenePath, BuildTarget target, out AssetBundleBuild assetBundleBuild)
         {
-            var assetNames = SceneBuildDependenciesCollector.Collect(scenePath);
+            var assetNames = SceneBuildDependenciesCollector.Collect(scenePath, target);
 
-            if (assetNames.Count == 0)
+            if (assetNames.Length == 0)
             {
                 assetBundleBuild = default;
                 return false;
@@ -181,7 +181,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
             var assetBundleName = $"asset_{Guid.NewGuid()}";
             assetBundleBuild = new AssetBundleBuild
             {
-                assetNames = assetNames.ToArray(),
+                assetNames = assetNames,
                 assetBundleName = assetBundleName,
             };
             return true;

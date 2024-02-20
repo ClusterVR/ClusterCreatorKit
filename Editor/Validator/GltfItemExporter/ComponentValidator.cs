@@ -427,16 +427,6 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 return Enumerable.Empty<ValidationMessage>();
             }
 
-            if (!isBeta)
-            {
-                return new[]
-                {
-                    new ValidationMessage(
-                        $"{nameof(World.Implements.TextView)} を使うにはベータ機能を有効にする必要があります。",
-                        ValidationMessage.MessageType.Error)
-                };
-            }
-
             var validationMessages = new List<ValidationMessage>();
             foreach (var textView in textViews)
             {

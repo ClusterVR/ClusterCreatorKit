@@ -1,107 +1,101 @@
 using System;
-using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEditor;
-using UnityEditor.SceneManagement;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Builder
 {
     public static class SceneBuildDependenciesCollector
     {
-        public static IReadOnlyCollection<string> Collect(string sceneAssetPath)
+        public static string[] Collect(string sceneAssetPath, BuildTarget target)
         {
-            var assetsForBuild = new HashSet<string>();
-            var assetsNotForBuild = new HashSet<string>();
+            var lastBuildReportPath = "Library/LastBuild.buildreport";
+            var lastWriteTime = File.GetLastWriteTimeUtc(lastBuildReportPath);
 
-            var tempScenePath = $"Assets/{Guid.NewGuid()}.unity";
-            AssetDatabase.CopyAsset(sceneAssetPath, tempScenePath);
+            BuildAndCleanUp(sceneAssetPath, target);
+
+            if (File.GetLastWriteTimeUtc(lastBuildReportPath) == lastWriteTime)
+            {
+                throw new Exception($"{lastBuildReportPath} has not been updated");
+            }
+
+            var copiedBuildReportPath = AssetDatabase.GenerateUniqueAssetPath($"Assets/LastBuild.buildreport");
+            CopyAndImport(lastBuildReportPath, copiedBuildReportPath);
             try
             {
-                var scene = EditorSceneManager.OpenScene(tempScenePath, OpenSceneMode.Additive);
+                var buildReport = AssetDatabase.LoadAssetAtPath<BuildReport>(copiedBuildReportPath);
                 try
                 {
-                    foreach (var root in scene.GetRootGameObjects())
-                    {
-                        UnpackAll(root);
-                    }
-                    EditorSceneManager.SaveScene(scene);
+                    return GetAssetsForBuild(buildReport);
                 }
                 finally
                 {
-                    EditorSceneManager.CloseScene(scene, true);
-                }
-
-                foreach (var dependency in AssetDatabase.GetDependencies(tempScenePath, false))
-                {
-                    GatherAssetsForBuild(assetsForBuild, assetsNotForBuild, dependency);
+                    Resources.UnloadAsset(buildReport);
                 }
             }
             finally
             {
-                AssetDatabase.DeleteAsset(tempScenePath);
-            }
-
-            return assetsForBuild;
-        }
-
-        static void UnpackAll(GameObject go)
-        {
-            if (PrefabUtility.IsOutermostPrefabInstanceRoot(go))
-            {
-                PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
-            }
-            else
-            {
-                foreach (Transform child in go.transform)
-                {
-                    UnpackAll(child.gameObject);
-                }
+                AssetDatabase.DeleteAsset(copiedBuildReportPath);
             }
         }
 
-        static void GatherAssetsForBuild(HashSet<string> assetsForBuild, HashSet<string> assetsNotForBuild, string target)
+        static void BuildAndCleanUp(string assetPath, BuildTarget target)
         {
-            if (assetsForBuild.Contains(target) || assetsNotForBuild.Contains(target))
+            var assetBundleName = "BuildForCollectDependency";
+            var assetBundleBuild = new AssetBundleBuild
             {
-                return;
-            }
-            var type = AssetDatabase.GetMainAssetTypeAtPath(target);
-            if (type == typeof(SceneAsset) || type == typeof(MonoScript))
-            {
-                assetsNotForBuild.Add(target);
-            }
-            else
-            {
-                assetsForBuild.Add(target);
-                var dependencies = type == typeof(GameObject) ? GetPrefabDependencies(target) : AssetDatabase.GetDependencies(target, false);
-                foreach (var dependency in dependencies)
-                {
-                    GatherAssetsForBuild(assetsForBuild, assetsNotForBuild, dependency);
-                }
-            }
+                assetBundleName = assetBundleName,
+                assetNames = new[] { assetPath },
+            };
+
+            var outputPath = $"{Application.temporaryCachePath}/{new Guid()}";
+            var options = BuildAssetBundleOptions.ForceRebuildAssetBundle;
+            Directory.CreateDirectory(outputPath);
+            BuildPipeline.BuildAssetBundles(outputPath, new[] { assetBundleBuild }, options, target);
+            Directory.Delete(outputPath, true);
         }
 
-        static IEnumerable<string> GetPrefabDependencies(string target)
+        static string[] GetAssetsForBuild(BuildReport buildReport)
         {
-            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(target);
-            var tempPath = $"Assets/{Guid.NewGuid()}.prefab";
-            var instance = UnityEngine.Object.Instantiate(prefab);
+            return buildReport.packedAssets
+                .Where(p => Path.GetExtension(p.shortPath) == ".sharedAssets")
+                .SelectMany(p => p.contents)
+                .Where(c => !string.IsNullOrEmpty(c.sourceAssetPath))
+                .Where(IsAssetForBuild)
+                .Select(c => c.sourceAssetPath)
+                .Distinct()
+                .ToArray();
+        }
+
+        static void CopyAndImport(string src, string dest)
+        {
+            File.Copy(src, dest);
             try
             {
-                PrefabUtility.SaveAsPrefabAsset(instance, tempPath);
-                try
-                {
-                    return AssetDatabase.GetDependencies(tempPath, false);
-                }
-                finally
-                {
-                    AssetDatabase.DeleteAsset(tempPath);
-                }
+                AssetDatabase.ImportAsset(dest);
             }
-            finally
+            catch (Exception)
             {
-                UnityEngine.Object.DestroyImmediate(instance);
+                File.Delete(dest);
+                throw;
             }
+        }
+
+        static bool IsAssetForBuild(PackedAssetInfo packedAssetInfo)
+        {
+            var path = packedAssetInfo.sourceAssetPath;
+            if (string.IsNullOrEmpty(path) || path == "Resources/unity_builtin_extra")
+            {
+                return false;
+            }
+            if (packedAssetInfo.type == typeof(MonoScript))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

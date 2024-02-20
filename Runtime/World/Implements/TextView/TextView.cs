@@ -1,5 +1,7 @@
-﻿using ClusterVR.CreatorKit.Extensions;
+﻿using System;
+using ClusterVR.CreatorKit.Extensions;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace ClusterVR.CreatorKit.World.Implements.TextView
 {
@@ -12,13 +14,13 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
         const float TextScale = 18.5f;
         const HideFlags RendererHideFlags = HideFlags.HideInInspector | HideFlags.DontSave;
 
+        [SerializeField, HideInInspector] TextMesh textMesh;
         [SerializeField, Multiline] string text;
         [SerializeField, Range(0f, 5f)] float size = 0.1f;
         [SerializeField] TextAnchor textAnchor;
         [SerializeField] TextAlignment textAlignment;
         [SerializeField] Color color = Color.white;
 
-        TextMesh textMesh;
         MeshRenderer meshRenderer;
         bool isFontSetAndShaderSet;
         Font font;
@@ -96,7 +98,7 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
         void Awake()
         {
 #if UNITY_EDITOR
-            if (!ValidateToAdd())
+            if (!ValidateInternal())
             {
                 return;
             }
@@ -208,7 +210,17 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
 #if UNITY_EDITOR
         void Reset()
         {
-            ValidateToAdd();
+            ValidateInternal();
+        }
+
+        bool ValidateInternal()
+        {
+            if (textMesh != null && textMesh.gameObject == gameObject)
+            {
+                return true;
+            }
+
+            return ValidateToAdd();
         }
 
         bool ValidateToAdd()
@@ -228,6 +240,7 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
                 {
                     UnityEditor.EditorUtility.DisplayDialog($"{nameof(TextView)} を追加できません", message, "Cancel");
                 }
+
                 DestroyImmediate(this);
                 return false;
             }
@@ -237,13 +250,14 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
         {
             var textMesh = GetComponent<TextMesh>();
             var renderer = GetComponent<Renderer>();
-            if (Application.isPlaying)
+            return textMesh == null && renderer == null || textMesh != null && textMesh.hideFlags == RendererHideFlags && renderer != null && renderer.hideFlags == RendererHideFlags;
+        }
+
+        void OnValidate()
+        {
+            if (textMesh == null || textMesh.gameObject != gameObject)
             {
-                return textMesh != null || renderer == null;
-            }
-            else
-            {
-                return textMesh == null && renderer == null || textMesh != null && textMesh.hideFlags == RendererHideFlags && renderer != null && renderer.hideFlags == RendererHideFlags;
+                textMesh = GetComponent<TextMesh>();
             }
         }
 #endif
