@@ -25,7 +25,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             typeof(RidableItem),
             typeof(ScriptableItem),
             typeof(ItemAudioSetList),
-            typeof(HumanoidAnimationList)
+            typeof(HumanoidAnimationList),
+            typeof(ItemMaterialSetList),
         };
 
         static readonly Type[] ItemComponentWhiteList =
@@ -61,7 +62,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
         static readonly Dictionary<Type, Type[]> AdditionalRequireComponents = new()
         {
             { typeof(ItemAudioSetList), new[] { typeof(ScriptableItem) } },
-            { typeof(HumanoidAnimationList), new[] { typeof(ScriptableItem) } }
+            { typeof(HumanoidAnimationList), new[] { typeof(ScriptableItem) } },
+            { typeof(ItemMaterialSetList), new[] { typeof(ScriptableItem) } }
         };
 
         static bool Contains(IEnumerable<Type> list, Type target)
@@ -441,6 +443,17 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             }
 
             return validationMessages;
+        }
+
+        public static IEnumerable<ValidationMessage> ValidateItemMaterialSetList(GameObject gameObject, bool isBeta)
+        {
+            var itemMaterialSetList = gameObject.GetComponent<IItemMaterialSetList>();
+            if (itemMaterialSetList == null)
+            {
+                return Enumerable.Empty<ValidationMessage>();
+            }
+
+            return ItemMaterialSetListValidator.Validate(isBeta, gameObject, itemMaterialSetList);
         }
     }
 }

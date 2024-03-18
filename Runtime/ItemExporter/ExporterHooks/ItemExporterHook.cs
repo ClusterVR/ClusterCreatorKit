@@ -67,6 +67,7 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 ScriptableItem = ExtractScriptableItemProto(go),
                 ItemAudioSetList = { ExtractItemAudioSetListProto(go) },
                 HumanoidAnimationList = { ExportAndExtractHumanoidAnimations(exporter, go) },
+                ItemMaterialSetList = { ExtractItemMaterialSetListProto(exporter, go) }
             };
 
             var extension = new GltfExtensions.ClusterItem
@@ -338,6 +339,37 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 humanoidAnimations[index] = new HumanoidAnimation { Id = entry.Id, Animation = (uint) animationIndex };
             }
             return humanoidAnimations;
+        }
+
+        IEnumerable<Proto.ItemMaterialSet> ExtractItemMaterialSetListProto(Exporter exporter, GameObject go)
+        {
+            var itemMaterialSetList = go.GetComponent<IItemMaterialSetList>();
+            if (itemMaterialSetList == null)
+            {
+                return Enumerable.Empty<Proto.ItemMaterialSet>();
+            }
+            if (go.GetComponent<IScriptableItem>() == null)
+            {
+                return Enumerable.Empty<Proto.ItemMaterialSet>();
+            }
+
+            return itemMaterialSetList.ItemMaterialSets
+                .Select(source => Convert(exporter, source))
+                .Where(source => source != null);
+        }
+
+        static Proto.ItemMaterialSet Convert(Exporter exporter, Item.ItemMaterialSet source)
+        {
+            if (!exporter.Context.Resources.Materials.TryGetValue(source.Material, out var materialIndex))
+            {
+                return null;
+            }
+            var index = (uint) materialIndex.Index;
+            return new Proto.ItemMaterialSet
+            {
+                Id = source.Id,
+                MaterialIndex = index,
+            };
         }
     }
 }

@@ -39,17 +39,19 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             }
         }
 
-        public static Result Validate(IItem itemTemplate, bool onlyErrors = false)
+        public static Result Validate(bool isBeta, IItem itemTemplate, bool onlyErrors = false)
         {
-            return new Result(GetErrors(itemTemplate),
+            return new Result(GetErrors(isBeta, itemTemplate),
                 onlyErrors ? Enumerable.Empty<Result.Factor>() : GetWarnings(itemTemplate));
         }
 
-        static IReadOnlyCollection<Result.Factor> GetErrors(IItem itemTemplate)
+        static IReadOnlyCollection<Result.Factor> GetErrors(bool isBeta, IItem itemTemplate)
         {
             var errors = new List<Result.Factor>();
 
             AddUnacceptableError<PlayerLocalUI>(itemTemplate, errors);
+
+            AddMaterialError(isBeta, itemTemplate, errors);
 
             return errors;
         }
@@ -85,6 +87,19 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             {
                 warnings.Add(new Result.Factor($"Item Template の {typeof(T).Name} は動作しません", objects));
             }
+        }
+
+        static void AddMaterialError(bool isBeta, IItem itemTemplate, List<Result.Factor> errors)
+        {
+            var gameObject = itemTemplate.gameObject;
+            var itemMaterialSetList = gameObject.GetComponent<IItemMaterialSetList>();
+            if (itemMaterialSetList == null)
+            {
+                return;
+            }
+
+            var errorMessages = ItemMaterialSetListValidator.Validate(isBeta, gameObject, itemMaterialSetList);
+            errors.AddRange(errorMessages.Select(msg => new Result.Factor(msg, new[] { gameObject })));
         }
     }
 }

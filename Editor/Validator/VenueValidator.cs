@@ -107,7 +107,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
 
             foreach (var itemTemplate in itemTemplates)
             {
-                var result = ItemTemplateValidator.Validate(itemTemplate, true);
+                var result = ItemTemplateValidator.Validate(isBeta, itemTemplate, true);
                 if (result.Errors.Any())
                 {
                     var firstError = result.Errors.First();
@@ -167,6 +167,14 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             if (subSceneSubstitutes.Any(s => ((ISubSceneSubstitutes) s).SubScene == null))
             {
                 Debug.LogWarning($"Unity Sceneを指定していない{nameof(SubSceneSubstitutes)}があります");
+            }
+
+            foreach (var item in items)
+            {
+                if (!ValidateMaterialSetList(isBeta, item, out errorMessage, out invalidObjects))
+                {
+                    return false;
+                }
             }
 
             errorMessage = default;
@@ -407,6 +415,25 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 return false;
             }
 
+            invalidObjects = default;
+            return true;
+        }
+
+        static bool ValidateMaterialSetList(bool isBeta, IItem item, out string errorMessage, out GameObject[] invalidObjects)
+        {
+            var gameObject = item.gameObject;
+            var itemMaterialSetList = gameObject.GetComponent<IItemMaterialSetList>();
+            if (itemMaterialSetList != null)
+            {
+                var errorMessages = ItemMaterialSetListValidator.Validate(isBeta, item.gameObject, itemMaterialSetList).ToArray();
+                if (errorMessages.Any())
+                {
+                    errorMessage = string.Join('\n', errorMessages);
+                    invalidObjects = new[] { gameObject };
+                    return false;
+                }
+            }
+            errorMessage = default;
             invalidObjects = default;
             return true;
         }

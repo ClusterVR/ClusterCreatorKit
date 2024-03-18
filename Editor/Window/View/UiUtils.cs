@@ -25,5 +25,23 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 }
             };
         }
+
+        public static void IMGUISeparator()
+        {
+            var style = new GUIStyle
+            {
+                normal =
+                {
+                    background = Texture2D.grayTexture
+                },
+                margin =
+                {
+                    top = 8,
+                    bottom = 8
+                },
+                fixedHeight = 2
+            };
+            GUILayout.Box(GUIContent.none, style);
+        }
     }
 }

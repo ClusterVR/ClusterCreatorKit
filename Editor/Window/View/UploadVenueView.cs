@@ -75,9 +75,21 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     return;
                 }
 
+                var tempAssetsDirName = venue.VenueId.Value;
+                var guid = AssetDatabase.CreateFolder("Assets", tempAssetsDirName);
+                var tempAssetsDirPath = AssetDatabase.GUIDToAssetPath(guid);
+
+                void DeleteTempAssetsDirectory()
+                {
+                    if (!string.IsNullOrEmpty(tempAssetsDirPath))
+                    {
+                        AssetDatabase.DeleteAsset(tempAssetsDirPath);
+                    }
+                }
+
                 ItemIdAssigner.AssignItemId();
                 ItemTemplateIdAssigner.Execute();
-                HumanoidAnimationAssigner.Execute();
+                HumanoidAnimationAssigner.Execute(tempAssetsDirPath);
                 LayerCorrector.CorrectLayer();
                 SubSceneNameAssigner.Execute();
 
@@ -87,6 +99,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 }
                 catch (Exception e)
                 {
+                    DeleteTempAssetsDirectory();
                     errorMessage = "ワールドのビルドに失敗しました。";
                     Debug.LogError(e);
                     return;
@@ -97,6 +110,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     isBeta,
                     completionResponse =>
                     {
+                        DeleteTempAssetsDirectory();
                         errorMessage = "";
                         if (EditorPrefsUtils.OpenWorldManagementPageAfterUpload)
                         {
@@ -104,6 +118,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                         }
                     }, exception =>
                     {
+                        DeleteTempAssetsDirectory();
                         Debug.LogException(exception);
                         EditorWindow.GetWindow<VenueUploadWindow>().Repaint();
                         if (exception is FileNotFoundException)

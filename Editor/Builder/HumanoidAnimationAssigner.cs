@@ -10,7 +10,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
 {
     public static class HumanoidAnimationAssigner
     {
-        public static void Execute()
+        public static void Execute(string tempAssetsDirPath)
         {
             var scene = SceneManager.GetActiveScene();
             var rootGameObjects = scene.GetRootGameObjects()
@@ -32,6 +32,8 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                     if (!humanoidAnimations.TryGetValue(animationClip, out var humanoidAnimation))
                     {
                         humanoidAnimation = HumanoidAnimationBuilder.Build(animation.Animation);
+                        AssetDatabase.CreateAsset(humanoidAnimation, $"{tempAssetsDirPath}/{GUID.Generate()}");
+                        AssetDatabase.SaveAssets();
                         humanoidAnimations.Add(animationClip, humanoidAnimation);
                     }
                     animation.SetHumanoidAnimation(humanoidAnimation);
