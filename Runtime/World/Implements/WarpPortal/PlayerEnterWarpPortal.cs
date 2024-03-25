@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using ClusterVR.CreatorKit.Validator;
+using UnityEngine;
 
 namespace ClusterVR.CreatorKit.World.Implements.WarpPortal
 {
     [RequireComponent(typeof(Collider))]
+    [RequireIsTriggerSettings]
     public sealed class PlayerEnterWarpPortal : MonoBehaviour, IWarpPortal
     {
         [SerializeField] Transform target;

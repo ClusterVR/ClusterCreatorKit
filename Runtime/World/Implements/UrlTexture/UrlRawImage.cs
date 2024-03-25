@@ -7,8 +7,9 @@ namespace ClusterVR.CreatorKit.World.Implements.UrlTexture
     public sealed class UrlRawImage : MonoBehaviour, IUrlTexture
     {
         [SerializeField] string url;
+        [SerializeField] TextureWrapMode wrapMode = TextureWrapMode.Repeat;
         [SerializeField] RawImage rawImage;
-        string IUrlTexture.Url => url;
+        UrlTextureSettings IUrlTexture.Settings => new(url, wrapMode);
         GameObject IUrlTexture.GameObject => gameObject;
 
         void IUrlTexture.SetTexture(Texture2D texture)

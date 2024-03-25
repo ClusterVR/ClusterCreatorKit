@@ -407,6 +407,26 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                         ValidationMessage.MessageType.Warning));
                 }
             }
+
+            var baseShapes = gameObject.GetComponentsInChildren<BaseShape>(true);
+            foreach (var shape in baseShapes)
+            {
+                if (!shape.IsTrigger)
+                    continue;
+
+                foreach (var collider in shape.GetComponents<MeshCollider>())
+                {
+                    if (!collider.isTrigger && !collider.convex)
+                    {
+                        var message = $"{shape.GetType().Name}でMesh Colliderを利用する際はConvexとis TriggerをTrueにしないと動作しません。";
+                        validationMessages.Add(new ValidationMessage(
+                            $"Collider\"{collider.name}\" {message}",
+                            ValidationMessage.MessageType.Error));
+                        break;
+                    }
+                }
+            }
+
             return validationMessages;
         }
 

@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Validator;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -6,6 +7,7 @@ using UnityEditor;
 namespace ClusterVR.CreatorKit.World
 {
     [RequireComponent(typeof(Collider))]
+    [RequireIsTriggerSettings]
     public sealed class SubScene : MonoBehaviour, ISubScene
     {
         [SerializeField, HideInInspector] string sceneName;

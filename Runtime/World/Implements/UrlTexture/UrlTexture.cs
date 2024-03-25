@@ -6,10 +6,11 @@ namespace ClusterVR.CreatorKit.World.Implements.UrlTexture
     public sealed class UrlTexture : MonoBehaviour, IUrlTexture
     {
         [SerializeField] string url;
+        [SerializeField] TextureWrapMode wrapMode = TextureWrapMode.Repeat;
         [SerializeField] new Renderer renderer;
         [SerializeField] string targetMaterialPropertyName = "_MainTex";
 
-        string IUrlTexture.Url => url;
+        UrlTextureSettings IUrlTexture.Settings => new(url, wrapMode);
         GameObject IUrlTexture.GameObject => gameObject;
         Material[] materials;
 

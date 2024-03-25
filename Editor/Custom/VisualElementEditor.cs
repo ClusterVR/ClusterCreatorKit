@@ -1,5 +1,7 @@
+using ClusterVR.CreatorKit.Validator;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
@@ -30,6 +32,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             container.Bind(serializedObject);
 
+            ComponentValidationMessage(container);
+
             return container;
         }
 
@@ -40,6 +44,29 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 SerializedPropertyType.Quaternion => QuaternionField.Create(serializedProperty.displayName, serializedProperty),
                 _ => new PropertyField(serializedProperty) { name = "PropertyField:" + serializedProperty.propertyPath },
             };
+        }
+
+        void ComponentValidationMessage(VisualElement container)
+        {
+            var warningContainer = new IMGUIContainer(() =>
+            {
+                foreach (var obj in targets)
+                {
+                    if (obj is MonoBehaviour component)
+                    {
+                        var attr = (ComponentValidatorAttribute[]) component.GetType().GetCustomAttributes(typeof(ComponentValidatorAttribute), true);
+                        foreach (var validator in attr)
+                        {
+                            if (!validator.Validate(component, out UnityEditor.MessageType type, out string message))
+                            {
+                                EditorGUILayout.HelpBox(message, type);
+                                return;
+                            }
+                        }
+                    }
+                }
+            });
+            container.Add(warningContainer);
         }
     }
 }

@@ -17,7 +17,8 @@
         "ClusterVR.CreatorKit.World",
         "ClusterVR.CreatorKit.World.Implements",
         "Unity.net.yutopp.vjson",
-        "MToon"
+        "MToon",
+        "ClusterVR.CreatorKit.Validator"
     ],
     "includePlatforms": [
         "Editor"

@@ -6,7 +6,8 @@
         "ClusterVR.CreatorKit.Constants",
         "ClusterVR.CreatorKit.Extensions",
         "ClusterVR.CreatorKit.Item",
-        "ClusterVR.CreatorKit.ProductUgc"
+        "ClusterVR.CreatorKit.ProductUgc",
+        "ClusterVR.CreatorKit.Validator"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

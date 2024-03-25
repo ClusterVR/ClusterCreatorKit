@@ -22,7 +22,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
         {
             byte[] imageBlob = null;
             var gameObject = urlTexture.GameObject;
-            using (var req = UnityWebRequest.Get(urlTexture.Url))
+            using (var req = UnityWebRequest.Get(urlTexture.Settings.Url))
             {
                 req.timeout = 10;
                 yield return req.SendWebRequest();
@@ -32,6 +32,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             {
                 var texture = new Texture2D(1, 1, TextureFormat.RGBA32, false, false);
                 texture.LoadImage(imageBlob);
+                texture.wrapMode = urlTexture.Settings.WrapMode;
                 urlTexture.SetTexture(texture);
             }
         }

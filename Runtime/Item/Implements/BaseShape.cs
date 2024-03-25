@@ -2,10 +2,10 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Item.Implements
 {
-    [RequireComponent(typeof(Collider)), DisallowMultipleComponent]
+    [RequireComponent(typeof(Collider)), DisallowMultipleComponent, RequireIsTriggerSettingsOfShapeAttribute]
     public abstract class BaseShape : MonoBehaviour
     {
-        protected abstract bool IsTrigger { get; }
+        public abstract bool IsTrigger { get; }
 
         void Awake()
         {

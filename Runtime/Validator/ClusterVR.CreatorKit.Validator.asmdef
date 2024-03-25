@@ -1,11 +1,6 @@
 {
-    "name": "ClusterVR.CreatorKit.World.Implements",
-    "references": [
-        "ClusterVR.CreatorKit.World",
-        "ClusterVR.CreatorKit.Extensions",
-        "ClusterVR.CreatorKit",
-        "ClusterVR.CreatorKit.Validator"
-    ],
+    "name": "ClusterVR.CreatorKit.Validator",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

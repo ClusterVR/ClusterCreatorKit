@@ -2,6 +2,6 @@
 {
     public sealed class OverlapSourceShape : BaseShape, IOverlapSourceShape
     {
-        protected override bool IsTrigger => true;
+        public override bool IsTrigger => true;
     }
 }
