@@ -162,6 +162,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview
 
             SetupTriggerGimmicks(rootGameObjects, ItemCreator, ItemDestroyer, timeProvider, subSceneManager);
 
+            WorldRuntimeSettingValidator.ShowWarningIfPreviewUnsupportedSettingDetected(activeScene);
+
             SetIsInGameMode(true);
             OnInitializedEvent?.Invoke();
         }

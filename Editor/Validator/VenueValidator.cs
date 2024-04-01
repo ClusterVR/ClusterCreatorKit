@@ -11,6 +11,7 @@ using ClusterVR.CreatorKit.World;
 using ClusterVR.CreatorKit.World.Implements.DespawnHeights;
 using ClusterVR.CreatorKit.World.Implements.PlayerLocalUI;
 using ClusterVR.CreatorKit.World.Implements.SpawnPoints;
+using ClusterVR.CreatorKit.World.Implements.WorldRuntimeSetting;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -67,6 +68,15 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 errorMessage =
                     $"ワールドには{nameof(SpawnPoint)}が「{nameof(SpawnType.Entrance)}」の{nameof(SpawnPoint)}が1つ以上配置されている必要があります";
                 invalidObjects = spawnPoints.Select(x => x.gameObject).ToArray();
+                return false;
+            }
+
+            var worldRuntimeSettings = WorldRuntimeSettingGatherer.GatherWorldRuntimeSettings(scene);
+            if (worldRuntimeSettings.Length >= 2)
+            {
+                errorMessage =
+                    $"ワールドに配置できる{nameof(WorldRuntimeSetting)}は最大1つです。現在配置されている{nameof(WorldRuntimeSetting)}の数は {worldRuntimeSettings.Length} です";
+                invalidObjects = worldRuntimeSettings.Select(x => x.gameObject).ToArray();
                 return false;
             }
 

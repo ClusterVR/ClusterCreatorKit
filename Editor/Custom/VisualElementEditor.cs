@@ -1,3 +1,4 @@
+using System.Linq;
 using ClusterVR.CreatorKit.Validator;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -44,6 +45,13 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 SerializedPropertyType.Quaternion => QuaternionField.Create(serializedProperty.displayName, serializedProperty),
                 _ => new PropertyField(serializedProperty) { name = "PropertyField:" + serializedProperty.propertyPath },
             };
+        }
+
+        protected PropertyField FindPropertyField(VisualElement container, string propertyName)
+        {
+            return container.Children()
+                .OfType<PropertyField>()
+                .First(c => c.bindingPath == propertyName);
         }
 
         void ComponentValidationMessage(VisualElement container)

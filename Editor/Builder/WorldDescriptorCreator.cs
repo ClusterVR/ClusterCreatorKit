@@ -1,5 +1,6 @@
 using ClusterVR.CreatorKit.Proto;
 using UnityEngine.SceneManagement;
+using DefaultValues = ClusterVR.CreatorKit.World.Implements.WorldRuntimeSetting.WorldRuntimeSetting.DefaultValues;
 
 namespace ClusterVR.CreatorKit.Editor.Builder
 {
@@ -10,6 +11,23 @@ namespace ClusterVR.CreatorKit.Editor.Builder
             var descriptor = new WorldDescriptor();
             var persistedPlayerStateKeys = PersistedPlayerStateKeysGatherer.Gather(scene);
             descriptor.PersistedPlayerStateKeys.AddRange(persistedPlayerStateKeys);
+
+            var worldRuntimeSetting = new WorldRuntimeSetting();
+            var hasWorldRuntimeSetting =
+                WorldRuntimeSettingGatherer.TryGetWorldRuntimeSetting(scene, out var setting);
+            if (hasWorldRuntimeSetting)
+            {
+                worldRuntimeSetting.UseMovingPlatform = setting.UseMovingPlatform;
+                worldRuntimeSetting.UseMovingPlatformHorizontalInertia = setting.MovingPlatformHorizontalInertia;
+                worldRuntimeSetting.UseMovingPlatformVerticalInertia = setting.MovingPlatformVerticalInertia;
+            }
+            else
+            {
+                worldRuntimeSetting.UseMovingPlatform = DefaultValues.UseMovingPlatform;
+                worldRuntimeSetting.UseMovingPlatformHorizontalInertia = DefaultValues.MovingPlatformHorizontalInertia;
+                worldRuntimeSetting.UseMovingPlatformVerticalInertia = DefaultValues.MovingPlatformVerticalInertia;
+            }
+            descriptor.WorldRuntimeSetting = worldRuntimeSetting;
 
             return descriptor;
         }
