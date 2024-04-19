@@ -20,12 +20,14 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 worldRuntimeSetting.UseMovingPlatform = setting.UseMovingPlatform;
                 worldRuntimeSetting.UseMovingPlatformHorizontalInertia = setting.MovingPlatformHorizontalInertia;
                 worldRuntimeSetting.UseMovingPlatformVerticalInertia = setting.MovingPlatformVerticalInertia;
+                worldRuntimeSetting.UseWorldShadow = setting.UseWorldShadow;
             }
             else
             {
                 worldRuntimeSetting.UseMovingPlatform = DefaultValues.UseMovingPlatform;
                 worldRuntimeSetting.UseMovingPlatformHorizontalInertia = DefaultValues.MovingPlatformHorizontalInertia;
                 worldRuntimeSetting.UseMovingPlatformVerticalInertia = DefaultValues.MovingPlatformVerticalInertia;
+                worldRuntimeSetting.UseWorldShadow = DefaultValues.UseWorldShadow;
             }
             descriptor.WorldRuntimeSetting = worldRuntimeSetting;
 

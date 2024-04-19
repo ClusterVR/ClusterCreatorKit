@@ -1,7 +1,6 @@
 ﻿/* ========= Copyright 2016-2017, HTC Corporation. All rights reserved. =========== */
 
 using System;
-using System.Linq;
 using ClusterVR.CreatorKit.Extensions;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -45,9 +44,9 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
         RenderTexture rightRenderTexture;
         bool isRenderPrepared;
 
-        protected virtual LayerMask CullingMask { get; } = 704478423;
+        protected virtual LayerMask CullingMask { get; } = 704609495;
 
-        static readonly LayerMask AvatarOnlyCullingMask = 25232576;
+        static readonly LayerMask AvatarOnlyCullingMask = 25363648;
 
         protected virtual bool UseLightweightStereo =>
 #if CLUSTER_QUEST
@@ -59,24 +58,37 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
 
         void Start()
         {
-            preRenderCamera = new GameObject("PreRenderCamera").AddComponent<Camera>();
-            preRenderCamera.transform.SetParent(transform);
-            preRenderCamera.enabled = false;
-
             cachedRenderer = GetComponent<Renderer>();
-            var materials = RendererMaterialUtility.GetSharedMaterials(cachedRenderer).Select(Instantiate).ToArray();
-            material = materials[0];
-            RendererMaterialUtility.SetMaterials(cachedRenderer, materials);
+            var sharedMaterials = RendererMaterialUtility.GetSharedMaterials(cachedRenderer);
+            if (sharedMaterials.Length == 0)
+            {
+                return;
+            }
+            var targetMaterial = sharedMaterials[0];
+            if (targetMaterial == null)
+            {
+                return;
+            }
 
+            material = Instantiate(targetMaterial);
             if (material.shader.name == ShaderName)
             {
                 material.shader = Shader.Find(ShaderName);
             }
+
+            var newMaterials = new Material[sharedMaterials.Length];
+            newMaterials[0] = material;
+            Array.Copy(sharedMaterials, 1, newMaterials, 1, sharedMaterials.Length - 1);
+            RendererMaterialUtility.SetMaterials(cachedRenderer, newMaterials);
+
+            preRenderCamera = new GameObject("PreRenderCamera").AddComponent<Camera>();
+            preRenderCamera.transform.SetParent(transform);
+            preRenderCamera.enabled = false;
         }
 
         void OnWillRenderObject()
         {
-            if (!material.HasProperty(LeftEyeTextureId) && !material.HasProperty(RightEyeTextureId))
+            if (material == null || !material.HasProperty(LeftEyeTextureId) && !material.HasProperty(RightEyeTextureId))
             {
                 return;
             }
