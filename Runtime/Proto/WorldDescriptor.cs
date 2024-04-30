@@ -22,17 +22,20 @@ namespace ClusterVR.CreatorKit.Proto {
             "dGVyLmNyZWF0b3JraXQifgoPV29ybGREZXNjcmlwdG9yEiMKG3BlcnNpc3Rl",
             "ZF9wbGF5ZXJfc3RhdGVfa2V5cxgBIAMoCRJGChV3b3JsZF9ydW50aW1lX3Nl",
             "dHRpbmcYAiABKAsyJy5jbHVzdGVyLmNyZWF0b3JraXQuV29ybGRSdW50aW1l",
-            "U2V0dGluZyLAAQoTV29ybGRSdW50aW1lU2V0dGluZxIbChN1c2VfbW92aW5n",
+            "U2V0dGluZyK9AgoTV29ybGRSdW50aW1lU2V0dGluZxIbChN1c2VfbW92aW5n",
             "X3BsYXRmb3JtGAEgASgIEi4KJnVzZV9tb3ZpbmdfcGxhdGZvcm1faG9yaXpv",
             "bnRhbF9pbmVydGlhGAIgASgIEiwKJHVzZV9tb3ZpbmdfcGxhdGZvcm1fdmVy",
             "dGljYWxfaW5lcnRpYRgDIAEoCBIYChB1c2Vfd29ybGRfc2hhZG93GAQgASgI",
-            "EhQKDHVzZV9tYW50bGluZxgFIAEoCEItWg5jbHVzdGVyLm11L3JwY6oCGkNs",
-            "dXN0ZXJWUi5DcmVhdG9yS2l0LlByb3RvYgZwcm90bzM="));
+            "EhQKDHVzZV9tYW50bGluZxgFIAEoCBJBCghodWRfdHlwZRgGIAEoDjIvLmNs",
+            "dXN0ZXIuY3JlYXRvcmtpdC5Xb3JsZFJ1bnRpbWVTZXR0aW5nLkhVRFR5cGUi",
+            "OAoHSFVEVHlwZRIPCgtVTktOT1dOX0hVRBAAEg4KCkxFR0FDWV9IVUQQARIM",
+            "CghHQU1FX0hVRBACQi1aDmNsdXN0ZXIubXUvcnBjqgIaQ2x1c3RlclZSLkNy",
+            "ZWF0b3JLaXQuUHJvdG9iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.WorldDescriptor), global::ClusterVR.CreatorKit.Proto.WorldDescriptor.Parser, new[]{ "PersistedPlayerStateKeys", "WorldRuntimeSetting" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting), global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Parser, new[]{ "UseMovingPlatform", "UseMovingPlatformHorizontalInertia", "UseMovingPlatformVerticalInertia", "UseWorldShadow", "UseMantling" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting), global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Parser, new[]{ "UseMovingPlatform", "UseMovingPlatformHorizontalInertia", "UseMovingPlatformVerticalInertia", "UseWorldShadow", "UseMantling", "HudType" }, null, new[]{ typeof(global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Types.HUDType) }, null, null)
           }));
     }
     #endregion
@@ -300,6 +303,7 @@ namespace ClusterVR.CreatorKit.Proto {
       useMovingPlatformVerticalInertia_ = other.useMovingPlatformVerticalInertia_;
       useWorldShadow_ = other.useWorldShadow_;
       useMantling_ = other.useMantling_;
+      hudType_ = other.hudType_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -364,6 +368,17 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
+    public const int HudTypeFieldNumber = 6;
+    private global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Types.HUDType hudType_ = global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Types.HUDType.UnknownHud;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Types.HUDType HudType {
+      get { return hudType_; }
+      set {
+        hudType_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -384,6 +399,7 @@ namespace ClusterVR.CreatorKit.Proto {
       if (UseMovingPlatformVerticalInertia != other.UseMovingPlatformVerticalInertia) return false;
       if (UseWorldShadow != other.UseWorldShadow) return false;
       if (UseMantling != other.UseMantling) return false;
+      if (HudType != other.HudType) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -396,6 +412,7 @@ namespace ClusterVR.CreatorKit.Proto {
       if (UseMovingPlatformVerticalInertia != false) hash ^= UseMovingPlatformVerticalInertia.GetHashCode();
       if (UseWorldShadow != false) hash ^= UseWorldShadow.GetHashCode();
       if (UseMantling != false) hash ^= UseMantling.GetHashCode();
+      if (HudType != global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Types.HUDType.UnknownHud) hash ^= HudType.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -434,6 +451,10 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteRawTag(40);
         output.WriteBool(UseMantling);
       }
+      if (HudType != global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Types.HUDType.UnknownHud) {
+        output.WriteRawTag(48);
+        output.WriteEnum((int) HudType);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -464,6 +485,10 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteRawTag(40);
         output.WriteBool(UseMantling);
       }
+      if (HudType != global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Types.HUDType.UnknownHud) {
+        output.WriteRawTag(48);
+        output.WriteEnum((int) HudType);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -488,6 +513,9 @@ namespace ClusterVR.CreatorKit.Proto {
       }
       if (UseMantling != false) {
         size += 1 + 1;
+      }
+      if (HudType != global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Types.HUDType.UnknownHud) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) HudType);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -515,6 +543,9 @@ namespace ClusterVR.CreatorKit.Proto {
       }
       if (other.UseMantling != false) {
         UseMantling = other.UseMantling;
+      }
+      if (other.HudType != global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Types.HUDType.UnknownHud) {
+        HudType = other.HudType;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -549,6 +580,10 @@ namespace ClusterVR.CreatorKit.Proto {
           }
           case 40: {
             UseMantling = input.ReadBool();
+            break;
+          }
+          case 48: {
+            HudType = (global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Types.HUDType) input.ReadEnum();
             break;
           }
         }
@@ -586,10 +621,27 @@ namespace ClusterVR.CreatorKit.Proto {
             UseMantling = input.ReadBool();
             break;
           }
+          case 48: {
+            HudType = (global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Types.HUDType) input.ReadEnum();
+            break;
+          }
         }
       }
     }
     #endif
+
+    #region Nested types
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static partial class Types {
+      public enum HUDType {
+        [pbr::OriginalName("UNKNOWN_HUD")] UnknownHud = 0,
+        [pbr::OriginalName("LEGACY_HUD")] LegacyHud = 1,
+        [pbr::OriginalName("GAME_HUD")] GameHud = 2,
+      }
+
+    }
+    #endregion
 
   }
 
