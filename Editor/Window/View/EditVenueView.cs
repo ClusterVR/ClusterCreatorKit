@@ -17,8 +17,10 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
         readonly ImageView thumbnailView;
         readonly UserInfo userInfo;
-        readonly Venue venue;
         readonly Action venueChangeCallback;
+        readonly VisualElement view;
+
+        Venue venue;
         string errorMessage;
         string newThumbnailPath;
         string newVenueDesc;
@@ -28,27 +30,33 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         IDisposable disposable;
         readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-        public EditVenueView(UserInfo userInfo, Venue venue, ImageView thumbnailView, Action venueChangeCallback)
+        public EditVenueView(UserInfo userInfo, ImageView thumbnailView, Action venueChangeCallback)
         {
-            Assert.IsNotNull(venue);
-
             this.userInfo = userInfo;
-            this.venue = venue;
             this.venueChangeCallback = venueChangeCallback;
 
-            newVenueName = venue.Name;
-            newVenueDesc = venue.Description;
-
             this.thumbnailView = thumbnailView;
-            var thumbnailUrl = venue.ThumbnailUrls.FirstOrDefault(x => x != null);
-            thumbnailView.SetImageUrl(thumbnailUrl ?? new ThumbnailUrl(""));
+            view = new VisualElement();
         }
 
-        public VisualElement CreateView()
+        public void SetVenue(Venue venue)
         {
-            var container = new VisualElement();
+            Assert.IsNotNull(venue);
+            this.venue = venue;
+            newVenueName = venue.Name;
+            newVenueDesc = venue.Description;
+            var thumbnailUrl = venue.ThumbnailUrls.FirstOrDefault(x => x != null);
+            thumbnailView.SetImageUrl(thumbnailUrl ?? new ThumbnailUrl(""));
+            UpdateView();
+        }
+
+        public VisualElement CreateView() => view;
+
+        void UpdateView()
+        {
+            view.Clear();
             var topSection = new VisualElement() { style = { flexDirection = FlexDirection.Row } };
-            container.Add(topSection);
+            view.Add(topSection);
 
             {
                 var thumbnailSection = new VisualElement();
@@ -166,6 +174,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 };
                 buttons.Add(applyEdit);
                 buttons.Add(cancelEdit);
+                disposable?.Dispose();
                 disposable = ReactiveBinder.Bind(reactiveEdited,
                     edited => { buttons.style.display = edited ? DisplayStyle.Flex : DisplayStyle.None; });
 
@@ -181,8 +190,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
                 topSection.Add(editSection);
             }
-
-            return container;
         }
 
         void UpdateVenue()

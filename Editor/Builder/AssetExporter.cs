@@ -13,13 +13,9 @@ namespace ClusterVR.CreatorKit.Editor.Builder
 {
     public static class AssetExporter
     {
-        static readonly BuildTarget[] BuildTargets = { BuildTarget.StandaloneWindows, BuildTarget.StandaloneOSX, BuildTarget.Android, BuildTarget.iOS };
-
-        public static void ExportCurrentSceneResource(string venueId)
+        public static ExportedAssetInfo ExportCurrentSceneResource(string venueId, bool useWindows, bool useMac, bool useIOS, bool useAndroid)
         {
-            BuiltAssetBundlePaths.instance.ClearSubScenes();
-            BuiltAssetBundlePaths.instance.ClearVenueAssets();
-
+            var platformInfos = new List<ExportedPlatformAssetInfo>();
             try
             {
                 EditorUtility.DisplayProgressBar("Pre-Process Export Resource", "", 1 / 3f);
@@ -46,9 +42,21 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 var currentBuildTarget = EditorUserBuildSettings.activeBuildTarget;
                 try
                 {
-                    foreach (var buildTarget in BuildTargets)
+                    if (useWindows)
                     {
-                        BuildAssetBundles(scene.path, subScenes, venueId, buildTarget);
+                        platformInfos.Add(BuildAssetBundles(scene.path, subScenes, venueId, BuildTarget.StandaloneWindows));
+                    }
+                    if (useMac)
+                    {
+                        platformInfos.Add(BuildAssetBundles(scene.path, subScenes, venueId, BuildTarget.StandaloneOSX));
+                    }
+                    if (useIOS)
+                    {
+                        platformInfos.Add(BuildAssetBundles(scene.path, subScenes, venueId, BuildTarget.iOS));
+                    }
+                    if (useAndroid)
+                    {
+                        platformInfos.Add(BuildAssetBundles(scene.path, subScenes, venueId, BuildTarget.Android));
                     }
                 }
                 finally
@@ -62,9 +70,10 @@ namespace ClusterVR.CreatorKit.Editor.Builder
             {
                 EditorUtility.ClearProgressBar();
             }
+            return new ExportedAssetInfo(platformInfos);
         }
 
-        static void BuildAssetBundles(string mainScenePath, IReadOnlyList<(string scenePath, string sceneName)> subScenes, string venueId, BuildTarget target)
+        static ExportedPlatformAssetInfo BuildAssetBundles(string mainScenePath, IReadOnlyList<(string scenePath, string sceneName)> subScenes, string venueId, BuildTarget target)
         {
             var buildInfos = new List<(string tempScenePath, AssetBundleBuild assetBundleBuild, bool isMainScene, string[] assetIdsDependsOn)>();
             var venueAssetInfos = new List<AssetBundleBuild>();
@@ -113,24 +122,29 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 Debug.Log($"Building to {exportDirPath}");
                 BuildPipeline.BuildAssetBundles(exportDirPath, assetBundleBuilds, BuildAssetBundleOptions.ForceRebuildAssetBundle, target);
 
+                ExportedSceneInfo exportedMainSceneInfo = null;
+                var exportedSubSceneInfos = new List<ExportedSceneInfo>(buildInfos.Count - 1);
+                var exportedVenueAssetInfos = new List<ExportedVenueAssetInfo>(venueAssetInfos.Count);
                 foreach (var (_, assetBundleBuild, isMainScene, assetIdsDependsOn) in buildInfos)
                 {
                     var exportFilePath = $"{exportDirPath}/{assetBundleBuild.assetBundleName}";
                     if (isMainScene)
                     {
-                        BuiltAssetBundlePaths.instance.AddOrUpdateMainScene(target, exportFilePath, assetIdsDependsOn);
+                        exportedMainSceneInfo = new ExportedSceneInfo(exportFilePath, assetIdsDependsOn);
                     }
                     else
                     {
-                        BuiltAssetBundlePaths.instance.AddSubScene(target, exportFilePath, assetIdsDependsOn);
+                        exportedSubSceneInfos.Add(new ExportedSceneInfo(exportFilePath, assetIdsDependsOn));
                     }
                 }
 
                 foreach (var assetBundleBuild in venueAssetInfos)
                 {
                     var exportFilePath = $"{exportDirPath}/{assetBundleBuild.assetBundleName}";
-                    BuiltAssetBundlePaths.instance.AddVenueAsset(target, exportFilePath);
+                    exportedVenueAssetInfos.Add(new ExportedVenueAssetInfo(assetBundleBuild.assetBundleName, exportFilePath));
                 }
+
+                return new ExportedPlatformAssetInfo(target, exportedMainSceneInfo, exportedSubSceneInfos, exportedVenueAssetInfos);
             }
             finally
             {

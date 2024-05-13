@@ -9,7 +9,6 @@ namespace ClusterVR.CreatorKit.Editor.Builder
         const string AccessTokenSaveKey = "cluster_sdk_access_token";
         const string TmpUserIdKey = "ClusterTmpUserId";
         const string EnableSendingAnalyticsDataKey = "ClusterEnableSendingAnalyticsData";
-        const string OpenWorldManagementPageAfterUploadKey = "OpenWorldManagementPageAfterUpload";
         const string NextEnqueteAskTimeKey = "NextEnqueteAskTime";
 
         public static bool HasAlreadyShownAboutWindow
@@ -34,12 +33,6 @@ namespace ClusterVR.CreatorKit.Editor.Builder
         {
             get => EditorPrefs.GetBool(EnableSendingAnalyticsDataKey, true);
             set => EditorPrefs.SetBool(EnableSendingAnalyticsDataKey, value);
-        }
-
-        public static bool OpenWorldManagementPageAfterUpload
-        {
-            get => EditorPrefs.GetBool(OpenWorldManagementPageAfterUploadKey, true);
-            set => EditorPrefs.SetBool(OpenWorldManagementPageAfterUploadKey, value);
         }
 
         public static int NextEnqueteAskTime

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -21,28 +22,53 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
     {
         readonly ImageView thumbnail;
         readonly UserInfo userInfo;
-        readonly Venue venue;
         readonly string worldManagementUrl;
+        readonly Action venueChangeCallback;
         readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+        Venue venue;
+        ExportedAssetInfo exportedAssetInfo;
         UploadVenueService currentUploadService;
         string errorMessage;
 
+        bool previewUploadSelected;
+        bool previewUploadWindowsSelected;
+        bool previewUploadMacSelected;
+        bool previewUploadIOSSelected;
+        bool previewUploadAndroidSelected;
+
         bool executeUpload;
+        bool isPreviewUpload;
         bool isBeta;
 
-        public UploadVenueView(UserInfo userInfo, Venue venue, ImageView thumbnail)
+        public UploadVenueView(UserInfo userInfo, ImageView thumbnail, Action venueChangeCallback)
+        {
+            this.userInfo = userInfo;
+            this.thumbnail = thumbnail;
+            this.venueChangeCallback = venueChangeCallback;
+            worldManagementUrl = Api.RPC.Constants.WebBaseUrl + "/account/worlds";
+
+#if UNITY_EDITOR_WIN
+            previewUploadWindowsSelected = true;
+#elif UNITY_EDITOR_OSX
+            previewUploadMacSelected = true;
+#endif
+        }
+
+        public void SetVenue(Venue venue)
         {
             Assert.IsNotNull(venue);
-            this.userInfo = userInfo;
             this.venue = venue;
-            this.thumbnail = thumbnail;
-            worldManagementUrl = Api.RPC.Constants.WebBaseUrl + "/account/worlds";
         }
 
         public VisualElement CreateView()
         {
             return new IMGUIContainer(() =>
             {
+                if (venue == null)
+                {
+                    return;
+                }
                 Process();
                 DrawUI();
             });
@@ -93,9 +119,13 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 LayerCorrector.CorrectLayer();
                 SubSceneNameAssigner.Execute();
 
+                var useWindows = !isPreviewUpload || previewUploadWindowsSelected;
+                var useMac = !isPreviewUpload || previewUploadMacSelected;
+                var useIOS = !isPreviewUpload || previewUploadIOSSelected;
+                var useAndroid = !isPreviewUpload || previewUploadAndroidSelected;
                 try
                 {
-                    AssetExporter.ExportCurrentSceneResource(venue.VenueId.Value);
+                    exportedAssetInfo = AssetExporter.ExportCurrentSceneResource(venue.VenueId.Value, useWindows, useMac, useIOS, useAndroid);
                 }
                 catch (Exception e)
                 {
@@ -107,15 +137,25 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
                 currentUploadService = new UploadVenueService(userInfo.VerifiedToken, venue,
                     WorldDescriptorCreator.Create(SceneManager.GetActiveScene()),
-                    isBeta,
+                    isBeta, isPreviewUpload,
+                    exportedAssetInfo,
                     completionResponse =>
                     {
                         DeleteTempAssetsDirectory();
                         errorMessage = "";
-                        if (EditorPrefsUtils.OpenWorldManagementPageAfterUpload)
+                        if (isPreviewUpload)
                         {
-                            Application.OpenURL(worldManagementUrl);
+                            EditorUtility.DisplayDialog("テスト用のアップロードが完了しました", "入室後「デベロッパーツール」>「テスト用のスペースをはじめる」から利用可能です。", "閉じる");
                         }
+                        else
+                        {
+                            var openWorldManagementUrl = EditorUtility.DisplayDialog("アップロードが完了しました", "アップロードが完了しました", "ワールド管理ページを開く", "閉じる");
+                            if (openWorldManagementUrl)
+                            {
+                                Application.OpenURL(worldManagementUrl);
+                            }
+                        }
+                        venueChangeCallback?.Invoke();
                     }, exception =>
                     {
                         DeleteTempAssetsDirectory();
@@ -145,8 +185,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         void DrawUI()
         {
             EditorGUILayout.Space();
-            EditorPrefsUtils.OpenWorldManagementPageAfterUpload = EditorGUILayout.ToggleLeft("アップロード後にワールド管理ページを開く",
-                EditorPrefsUtils.OpenWorldManagementPageAfterUpload);
             EditorGUILayout.HelpBox("アップロードするシーンを開いておいてください。", MessageType.Info);
 
             var isVenueUploadSettingValid = IsVenueUploadSettingValid(out var uploadSettingErrorMessage);
@@ -162,13 +200,16 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 EditorGUILayout.HelpBox(message, MessageType.Error);
             }
 
-            using (new EditorGUI.DisabledScope(!isVenueUploadSettingValid || !betaSettingValid))
+            var canUpload = isVenueUploadSettingValid && betaSettingValid;
+
+            using (new EditorGUI.DisabledScope(!canUpload))
             {
                 var uploadButton = GUILayout.Button($"{(venue.IsBeta ? "ベータ機能が有効な " : "")}'{venue.Name}' としてアップロードする");
                 if (uploadButton)
                 {
                     executeUpload = EditorUtility.DisplayDialog("ワールドをアップロードする", $"'{venue.Name}'としてアップロードします。よろしいですか？",
                         "アップロード", "キャンセル");
+                    isPreviewUpload = false;
                     isBeta = ClusterCreatorKitSettings.instance.IsBeta;
                 }
             }
@@ -180,22 +221,97 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             EditorGUILayout.Space();
 
+            var alreadyUploaded = !string.IsNullOrEmpty(venue.WorldDetailUrl);
+            var canSelectPreviewUpload = canUpload && alreadyUploaded;
+            using (new EditorGUI.DisabledScope(!canSelectPreviewUpload))
+            {
+                var previewSelectAreaStyle = new GUIStyle(EditorStyles.helpBox) { padding = { bottom = 6 } };
+                using (new GUILayout.VerticalScope(previewSelectAreaStyle))
+                {
+                    previewUploadSelected = GUILayout.Toggle(previewUploadSelected, "テスト用にアップロードする");
+                    using (new GUILayout.HorizontalScope())
+                    {
+                        EditorGUILayout.Space(10f, false);
+                        using (new GUILayout.VerticalScope())
+                        {
+                            var previewUploadDescription = "選択したデバイスでテスト用のスペースが利用できるようになります。";
+                            GUILayout.Label(previewUploadDescription);
+                            if (previewUploadSelected)
+                            {
+                                using (new EditorGUI.DisabledScope(!previewUploadSelected))
+                                {
+                                    previewUploadWindowsSelected = GUILayout.Toggle(previewUploadWindowsSelected, "Windows");
+                                    previewUploadMacSelected = GUILayout.Toggle(previewUploadMacSelected, "Mac");
+                                    previewUploadIOSSelected = GUILayout.Toggle(previewUploadIOSSelected, "iOS");
+                                    previewUploadAndroidSelected = GUILayout.Toggle(previewUploadAndroidSelected, "Android / Quest");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!alreadyUploaded)
+            {
+                var previewDisabledDescription = "※テスト用にアップロードを行うには、一度アップロードすることが必要です";
+                GUILayout.Label(previewDisabledDescription);
+            }
+
+            if (previewUploadSelected)
+            {
+                using (new EditorGUI.DisabledScope(!canSelectPreviewUpload))
+                {
+                    var defaultRichText = EditorStyles.helpBox.richText;
+                    var defaultSize = EditorStyles.helpBox.fontSize;
+                    EditorStyles.helpBox.richText = true;
+                    EditorStyles.helpBox.fontSize = defaultSize + 1;
+                    try
+                    {
+                        EditorGUILayout.HelpBox("テストのはじめ方\n<b>入室後「デベロッパーメニュー」>「テスト用のスペースをはじめる」から利用可能です。</b>", MessageType.Info);
+                    }
+                    finally
+                    {
+                        EditorStyles.helpBox.richText = defaultRichText;
+                        EditorStyles.helpBox.fontSize = defaultSize;
+                    }
+                }
+            }
+
+            var anyPreviewPlatformSelected = previewUploadWindowsSelected || previewUploadMacSelected || previewUploadIOSSelected || previewUploadAndroidSelected;
+            var canPreviewUpload = previewUploadSelected && anyPreviewPlatformSelected;
+            using (new EditorGUI.DisabledScope(!canPreviewUpload))
+            {
+                var previewUploadButton = GUILayout.Button("テスト用にアップロードする");
+                if (previewUploadButton)
+                {
+                    executeUpload = EditorUtility.DisplayDialog("ワールドをアップロードする", $"'{venue.Name}'としてアップロードします。よろしいですか？",
+                        "アップロード", "キャンセル");
+                    isPreviewUpload = true;
+                    isBeta = ClusterCreatorKitSettings.instance.IsBeta;
+                }
+            }
+
+            EditorGUILayout.Space();
+
             if (!string.IsNullOrEmpty(errorMessage))
             {
                 EditorGUILayout.HelpBox(errorMessage, MessageType.Error);
             }
 
-            if (currentUploadService == null)
+            if (currentUploadService != null)
             {
-                return;
+                ShowUploadInfo();
             }
+        }
 
+        void ShowUploadInfo()
+        {
             if (!currentUploadService.IsProcessing)
             {
                 EditorUtility.ClearProgressBar();
 
                 var succeeded = true;
-                foreach (var status in currentUploadService.UploadStatus)
+                foreach (var status in currentUploadService.UploadStatus.OrderBy(x => x.Key))
                 {
                     var text = status.Value ? "Success" : "Failed";
                     succeeded &= status.Value;
@@ -228,10 +344,10 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             EditorGUILayout.Space();
 
-            ShowBuiltAssetBundleSize(BuildTarget.StandaloneWindows);
-            ShowBuiltAssetBundleSize(BuildTarget.StandaloneOSX);
-            ShowBuiltAssetBundleSize(BuildTarget.Android);
-            ShowBuiltAssetBundleSize(BuildTarget.iOS);
+            foreach (var platformInfo in exportedAssetInfo.PlatformInfos)
+            {
+                ShowBuiltAssetBundleSize(platformInfo);
+            }
         }
 
         bool IsVenueUploadSettingValid(out string uploadSettingErrorMessage)
@@ -252,51 +368,53 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             return true;
         }
 
-        void ShowBuiltAssetBundleSize(BuildTarget target)
+        void ShowBuiltAssetBundleSize(ExportedPlatformAssetInfo info)
         {
-            var buildTargetName = target.DisplayName();
-            var assetBundlePaths = BuiltAssetBundlePaths.instance.SelectBuildTargetAssetBundlePaths(target)
-                .OrderBy(a => a.SceneType == AssetSceneType.Main ? 0 : 1);
-            var subSceneIndex = 1;
-            foreach (var assetBundlePath in assetBundlePaths)
+            var buildTargetName = info.BuildTarget.DisplayName();
             {
-                if (TryGetTotalSize(assetBundlePath, out var size))
+                if (TryGetSceneAndDependAssetTotalSize(info.MainSceneInfo, info.VenueAssetInfos, out var size))
                 {
-                    var sceneTypeName = assetBundlePath.SceneType == AssetSceneType.Main ? "メインシーン" : $"サブシーン{subSceneIndex}";
-                    EditorGUILayout.LabelField($"{buildTargetName} {sceneTypeName} サイズ",
-                        $"{(double) size / (1024 * 1024):F2} MB"); // Byte => MByte
-
-                    if (assetBundlePath.SceneType == AssetSceneType.Sub)
-                    {
-                        subSceneIndex++;
-                    }
+                    EditorGUILayout.LabelField($"{buildTargetName} メインシーン サイズ", $"{(double) size / (1024 * 1024):F2} MB"); // Byte => MByte
+                }
+            }
+            var subSceneIndex = 1;
+            foreach (var sceneInfo in info.SubSceneInfos)
+            {
+                if (TryGetFileSize(sceneInfo.BuiltAssetBundlePath, out var size))
+                {
+                    EditorGUILayout.LabelField($"{buildTargetName} サブシーン{subSceneIndex} サイズ", $"{(double) size / (1024 * 1024):F2} MB"); // Byte => MByte
+                    ++subSceneIndex;
                 }
             }
         }
 
-        bool TryGetTotalSize(AssetBundlePath assetBundlePath, out long size)
+        bool TryGetFileSize(string path, out long size)
         {
-            if (!File.Exists(assetBundlePath.Path))
+            if (!File.Exists(path))
             {
                 size = default;
                 return false;
             }
-            size = new FileInfo(assetBundlePath.Path).Length;
-            if (assetBundlePath.SceneType == AssetSceneType.Main)
+            size = new FileInfo(path).Length;
+            return true;
+        }
+
+        bool TryGetSceneAndDependAssetTotalSize(ExportedSceneInfo sceneInfo, IReadOnlyList<ExportedVenueAssetInfo> venueAssetInfos, out long size)
+        {
+            if (!TryGetFileSize(sceneInfo.BuiltAssetBundlePath, out size))
             {
-                if (assetBundlePath.AssetIdsDependsOn != null)
+                return false;
+            }
+
+            foreach (var assetIdDependsOn in sceneInfo.AssetIdsDependsOn)
+            {
+                var asset = venueAssetInfos.FirstOrDefault(i => i.Id == assetIdDependsOn);
+                if (asset != null && TryGetFileSize(asset.BuiltAssetBundlePath, out var venueAssetSize))
                 {
-                    foreach (var assetIds in assetBundlePath.AssetIdsDependsOn)
-                    {
-                        var asset = BuiltAssetBundlePaths.instance.SelectBuildTargetVenueAssetPaths(assetBundlePath.Target)
-                            .FirstOrDefault(v => v.Path.EndsWith(assetIds, StringComparison.Ordinal));
-                        if (asset != null && File.Exists(asset.Path))
-                        {
-                            size += new FileInfo(asset.Path).Length;
-                        }
-                    }
+                    size += venueAssetSize;
                 }
             }
+
             return true;
         }
 

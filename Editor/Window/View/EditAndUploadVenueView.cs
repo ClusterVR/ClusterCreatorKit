@@ -11,21 +11,26 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         readonly EditVenueView editVenueView;
         readonly UploadVenueView uploadVenueView;
 
-        public EditAndUploadVenueView(UserInfo userInfo, Venue venue, Action venueChangeCallback)
+        public EditAndUploadVenueView(UserInfo userInfo, Action venueChangeCallback)
         {
-            Assert.IsNotNull(venue);
-
             var thumbnail = new ImageView();
-            editVenueView = new EditVenueView(userInfo, venue, thumbnail, venueChangeCallback);
-            uploadVenueView = new UploadVenueView(userInfo, venue, thumbnail);
+            editVenueView = new EditVenueView(userInfo, thumbnail, venueChangeCallback);
+            uploadVenueView = new UploadVenueView(userInfo, thumbnail, venueChangeCallback);
         }
 
-        public void AddView(VisualElement parent)
+        public void SetVenue(Venue venue)
         {
-            var editVenueTab = editVenueView.CreateView();
-            var uploadVenueTab = uploadVenueView.CreateView();
-            parent.Add(editVenueTab);
-            parent.Add(uploadVenueTab);
+            Assert.IsNotNull(venue);
+            editVenueView.SetVenue(venue);
+            uploadVenueView.SetVenue(venue);
+        }
+
+        public VisualElement CreateView()
+        {
+            var view = new VisualElement();
+            view.Add(editVenueView.CreateView());
+            view.Add(uploadVenueView.CreateView());
+            return view;
         }
 
         public void Dispose()

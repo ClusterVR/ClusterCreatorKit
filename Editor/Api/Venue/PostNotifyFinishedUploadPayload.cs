@@ -10,10 +10,12 @@ namespace ClusterVR.CreatorKit.Editor.Api.Venue
     public sealed class PostNotifyFinishedUploadPayload
     {
         [SerializeField] string worldDescriptor;
+        [SerializeField] bool isPreview;
 
-        public PostNotifyFinishedUploadPayload(WorldDescriptor worldDescriptor)
+        public PostNotifyFinishedUploadPayload(WorldDescriptor worldDescriptor, bool isPreview)
         {
             this.worldDescriptor = worldDescriptor.ToByteArray().ToSafeBase64();
+            this.isPreview = isPreview;
         }
     }
 }

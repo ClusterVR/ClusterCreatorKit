@@ -17,9 +17,9 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         }
 
         public async Task<VenueUploadRequestCompletionResponse> PostNotifyFinishedUploadAsync(VenueID venueId,
-            UploadRequestID uploadRequestId, WorldDescriptor worldDescriptor, CancellationToken cancellationToken)
+            UploadRequestID uploadRequestId, WorldDescriptor worldDescriptor, bool isPreview, CancellationToken cancellationToken)
         {
-            var payload = new PostNotifyFinishedUploadPayload(worldDescriptor);
+            var payload = new PostNotifyFinishedUploadPayload(worldDescriptor, isPreview);
             return await APIServiceClient.PostNotifyFinishedUpload(venueId, uploadRequestId, payload, accessToken, cancellationToken);
         }
     }

@@ -12,13 +12,13 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
-    public enum UploadState
+    public enum UploadPhase
     {
         PreProcess,
         Windows,
         Mac,
-        Android,
         IOS,
+        Android,
         PostProcess
     }
 
@@ -32,12 +32,15 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         readonly Action<VenueUploadRequestCompletionResponse> onSuccess;
 
-        readonly Dictionary<UploadState, bool> uploadStatus;
-        public IDictionary<UploadState, bool> UploadStatus => uploadStatus;
+        readonly Dictionary<UploadPhase, bool> uploadStatus;
+        public IDictionary<UploadPhase, bool> UploadStatus => uploadStatus;
         readonly Venue.Venue venue;
 
         readonly WorldDescriptor worldDescriptor;
         readonly bool isBeta;
+        readonly bool isPreview;
+
+        readonly ExportedAssetInfo exportedAssetInfo;
 
         VenueUploadRequestCompletionResponse completionResponse;
 
@@ -48,6 +51,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             Venue.Venue venue,
             WorldDescriptor worldDescriptor,
             bool isBeta,
+            bool isPreview,
+            ExportedAssetInfo exportedAssetInfo,
             Action<VenueUploadRequestCompletionResponse> onSuccess = null,
             Action<Exception> onError = null
         )
@@ -56,117 +61,108 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             this.venue = venue;
             this.worldDescriptor = worldDescriptor;
             this.isBeta = isBeta;
+            this.isPreview = isPreview;
             this.onSuccess = onSuccess;
             this.onError = onError;
+            this.exportedAssetInfo = exportedAssetInfo;
 
-            uploadStatus = new Dictionary<UploadState, bool>
-            {
-                { UploadState.PreProcess, false },
-                { UploadState.Windows, false },
-                { UploadState.Mac, false },
-                { UploadState.Android, false },
-                { UploadState.IOS, false },
-                { UploadState.PostProcess, false }
-            };
+            uploadStatus = BuildUploadStatus();
         }
+
+        Dictionary<UploadPhase, bool> BuildUploadStatus()
+        {
+            var uploadStatus = new Dictionary<UploadPhase, bool>(6)
+            {
+                { UploadPhase.PreProcess, false },
+                { UploadPhase.PostProcess, false }
+            };
+
+            foreach (var platformInfo in exportedAssetInfo.PlatformInfos)
+            {
+                uploadStatus[BuildTargetToPhase(platformInfo.BuildTarget)] = false;
+            }
+            return uploadStatus;
+        }
+
+        static UploadPhase BuildTargetToPhase(BuildTarget target) =>
+            target switch
+            {
+                BuildTarget.StandaloneWindows => UploadPhase.Windows,
+                BuildTarget.StandaloneOSX => UploadPhase.Mac,
+                BuildTarget.iOS => UploadPhase.IOS,
+                BuildTarget.Android => UploadPhase.Android,
+                _ => throw new NotImplementedException(),
+            };
 
         public void Run(CancellationToken cancellationToken)
         {
-            if (!ValidatePlatformVenue(BuildTarget.StandaloneWindows))
+            foreach (var platformInfo in exportedAssetInfo.PlatformInfos)
             {
-                return;
-            }
-
-            if (!ValidatePlatformVenue(BuildTarget.StandaloneOSX))
-            {
-                return;
-            }
-
-            if (!ValidatePlatformVenue(BuildTarget.Android))
-            {
-                return;
-            }
-
-            if (!ValidatePlatformVenue(BuildTarget.iOS))
-            {
-                return;
+                if (!ValidatePlatformVenue(platformInfo))
+                {
+                    return;
+                }
             }
 
             _ = UploadVenueAsync(cancellationToken);
         }
 
-        bool ValidatePlatformVenue(BuildTarget target)
+        bool ValidatePlatformVenue(ExportedPlatformAssetInfo platformAssetInfo)
         {
-            return ValidateMainSceneAssetBundle(target) && ValidateSubSceneAssetBundles(target) && ValidateVenueAssetBundles(target);
-        }
-
-        bool ValidateMainSceneAssetBundle(BuildTarget target)
-        {
-            var assetBundlePath = BuiltAssetBundlePaths.instance.FindMainScene(target);
-            if (!File.Exists(assetBundlePath?.Path))
             {
-                onError?.Invoke(new FileNotFoundException($"{target.DisplayName()} Main Scene Build"));
-                return false;
-            }
-
-            if (!ValidateAssetDependsOn(target, assetBundlePath))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        bool ValidateSubSceneAssetBundles(BuildTarget target)
-        {
-            var assetBundlePaths = BuiltAssetBundlePaths.instance.SelectBuildTargetAssetBundlePaths(target)
-                .Where(x => x.SceneType == AssetSceneType.Sub);
-            foreach (var assetBundlePath in assetBundlePaths)
-            {
-                if (!File.Exists(assetBundlePath.Path))
-                {
-                    onError?.Invoke(
-                        new FileNotFoundException($"{target.DisplayName()} Sub Scene Build: ${assetBundlePath.Path}"));
-                    return false;
-                }
-
-                if (!ValidateAssetDependsOn(target, assetBundlePath))
+                if (!ValidateSceneAssetBundle(platformAssetInfo.MainSceneInfo, true, platformAssetInfo.VenueAssetInfos, platformAssetInfo.BuildTarget))
                 {
                     return false;
                 }
             }
-
+            foreach (var subSceneInfo in platformAssetInfo.SubSceneInfos)
+            {
+                if (!ValidateSceneAssetBundle(subSceneInfo, false, platformAssetInfo.VenueAssetInfos, platformAssetInfo.BuildTarget))
+                {
+                    return false;
+                }
+            }
+            foreach (var venueAssetInfo in platformAssetInfo.VenueAssetInfos)
+            {
+                if (!ValidateVenueAssetBundle(venueAssetInfo, platformAssetInfo.BuildTarget))
+                {
+                    return false;
+                }
+            }
             return true;
         }
 
-        bool ValidateAssetDependsOn(BuildTarget target, AssetBundlePath assetBundlePath)
+        bool ValidateSceneAssetBundle(ExportedSceneInfo sceneInfo, bool isMainScene, IReadOnlyList<ExportedVenueAssetInfo> venueAssetInfos, BuildTarget target)
         {
-            var assetIdsDependsOn = assetBundlePath.AssetIdsDependsOn;
-            if (assetIdsDependsOn == null)
+            var assetBundlePath = sceneInfo.BuiltAssetBundlePath;
+            if (!File.Exists(assetBundlePath))
             {
-                return true;
+                var message = isMainScene ?
+                    $"{target.DisplayName()} Main Scene Build" :
+                    $"{target.DisplayName()} Sub Scene Build: ${assetBundlePath}";
+                onError?.Invoke(new FileNotFoundException(message));
+                return false;
             }
-            foreach (var assetIdDependsOn in assetIdsDependsOn)
+
+            foreach (var assetIdDependsOn in sceneInfo.AssetIdsDependsOn)
             {
-                if (!BuiltAssetBundlePaths.instance.SelectBuildTargetVenueAssetPaths(target).Any(asset => asset.Path.EndsWith(assetIdDependsOn, StringComparison.Ordinal)))
+                if (!venueAssetInfos.Select(i => i.Id).Contains(assetIdDependsOn))
                 {
                     onError?.Invoke(new Exception($"{target.DisplayName()} Venue Asset is missing: ${assetIdDependsOn}"));
                     return false;
                 }
             }
+
             return true;
         }
 
-        bool ValidateVenueAssetBundles(BuildTarget target)
+        bool ValidateVenueAssetBundle(ExportedVenueAssetInfo venueAssetInfo, BuildTarget target)
         {
-            var venueAssetPaths = BuiltAssetBundlePaths.instance.SelectBuildTargetVenueAssetPaths(target);
-            foreach (var venueAssetPath in venueAssetPaths)
+            var assetBundlePath = venueAssetInfo.BuiltAssetBundlePath;
+            if (!File.Exists(assetBundlePath))
             {
-                if (!File.Exists(venueAssetPath.Path))
-                {
-                    onError?.Invoke(new FileNotFoundException($"{target.DisplayName()} Venue Asset Build: ${venueAssetPath.Path}"));
-                    return false;
-                }
+                onError?.Invoke(new FileNotFoundException($"{target.DisplayName()} Venue Asset Build: ${assetBundlePath}"));
+                return false;
             }
             return true;
         }
@@ -181,23 +177,18 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 var uploadRequestRespose = await uploadRequest.PostUploadRequestAsync(venue.VenueId, cancellationToken);
                 Debug.Log($"make new upload request, Request ID : {uploadRequestRespose.UploadRequestId}");
                 uploadRequestId = uploadRequestRespose.UploadRequestId;
-                uploadStatus[UploadState.PreProcess] = true;
+                uploadStatus[UploadPhase.PreProcess] = true;
 
-                await Task.WhenAll(new[]
-                {
-                    UploadAssetBundlesAsync(BuildTarget.StandaloneWindows, UploadState.Windows, cancellationToken),
-                    UploadAssetBundlesAsync(BuildTarget.StandaloneOSX, UploadState.Mac, cancellationToken),
-                    UploadAssetBundlesAsync(BuildTarget.Android, UploadState.Android, cancellationToken),
-                    UploadAssetBundlesAsync(BuildTarget.iOS, UploadState.IOS, cancellationToken)
-                });
+                await Task.WhenAll(
+                    exportedAssetInfo.PlatformInfos.Select(platformInfo => UploadAssetBundlesAsync(platformInfo, cancellationToken)));
 
                 var notifyFinishedRequest = new PostNotifyFinishedUploadService(accessToken);
                 completionResponse = await notifyFinishedRequest.PostNotifyFinishedUploadAsync(
-                    venue.VenueId, uploadRequestId, worldDescriptor, cancellationToken);
+                    venue.VenueId, uploadRequestId, worldDescriptor, isPreview, cancellationToken);
 
                 Debug.Log($"notify finished upload request, Request ID : {completionResponse.UploadRequestId}");
                 uploadRequestId = null;
-                uploadStatus[UploadState.PostProcess] = true;
+                uploadStatus[UploadPhase.PostProcess] = true;
 
                 onSuccess?.Invoke(completionResponse);
             }
@@ -211,21 +202,26 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             }
         }
 
-        async Task UploadAssetBundlesAsync(BuildTarget target, UploadState state, CancellationToken cancellationToken)
+        async Task UploadAssetBundlesAsync(ExportedPlatformAssetInfo platformAssetInfo, CancellationToken cancellationToken)
         {
+            var target = platformAssetInfo.BuildTarget;
             var buildTargetName = target.DisplayName();
             var assetUploadService = new UploadAssetService(accessToken);
-            foreach (var assetBundlePath in BuiltAssetBundlePaths.instance.SelectBuildTargetAssetBundlePaths(target))
             {
-                var policy = await assetUploadService.UploadAsync(assetBundlePath, uploadRequestId, cancellationToken);
-                Debug.Log($"success {buildTargetName} {assetBundlePath.SceneType} scene asset upload, uploaded url : {policy.uploadUrl}");
+                var policy = await assetUploadService.UploadAsync(platformAssetInfo.MainSceneInfo, target, true, uploadRequestId, cancellationToken);
+                Debug.Log($"success {buildTargetName} main scene asset upload, uploaded url : {policy.uploadUrl}");
             }
-            foreach (var venueAssetPath in BuiltAssetBundlePaths.instance.SelectBuildTargetVenueAssetPaths(target))
+            foreach (var subSceneInfo in platformAssetInfo.SubSceneInfos)
             {
-                var policy = await assetUploadService.UploadAsync(venueAssetPath, uploadRequestId, cancellationToken);
+                var policy = await assetUploadService.UploadAsync(subSceneInfo, target, false, uploadRequestId, cancellationToken);
+                Debug.Log($"success {buildTargetName} sub scene asset upload, uploaded url : {policy.uploadUrl}");
+            }
+            foreach (var venueAssetInfo in platformAssetInfo.VenueAssetInfos)
+            {
+                var policy = await assetUploadService.UploadAsync(venueAssetInfo, target, uploadRequestId, cancellationToken);
                 Debug.Log($"success {buildTargetName} venue asset upload, uploaded url : {policy.uploadUrl}");
             }
-            uploadStatus[state] = true;
+            uploadStatus[BuildTargetToPhase(target)] = true;
         }
 
         void HandleError(Exception e)

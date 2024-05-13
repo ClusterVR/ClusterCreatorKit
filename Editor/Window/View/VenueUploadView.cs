@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using ClusterVR.CreatorKit.Editor.Api.User;
+using ClusterVR.CreatorKit.Editor.Api.Venue;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,6 +12,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
     {
         readonly List<IDisposable> disposables = new List<IDisposable>();
         CancellationTokenSource cancellationTokenSource;
+        VenueID currentVenueId;
+        EditAndUploadVenueView currentEditAndUploadVenueView;
 
         public VisualElement LoginAndCreateView(UserInfo userInfo)
         {
@@ -56,22 +59,32 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             var mainPaneDisposable = ReactiveBinder.Bind(sideMenu.reactiveCurrentVenue, currentVenue =>
             {
-                mainPane.Clear();
-                if (currentVenue != null)
+                if (currentVenue == null)
                 {
+                    mainPane.Clear();
+                    currentEditAndUploadVenueView?.Dispose();
+                    currentEditAndUploadVenueView = null;
+                    currentVenueId = null;
+                    return;
+                }
+
+                if (currentVenue.VenueId != currentVenueId)
+                {
+                    mainPane.Clear();
+                    currentEditAndUploadVenueView?.Dispose();
+                    currentEditAndUploadVenueView = null;
+
                     var venueContent = new ScrollView(ScrollViewMode.Vertical)
                     {
                         style = { flexGrow = 1 }
                     };
-                    var editAndUploadVenueView = new EditAndUploadVenueView(userInfo, currentVenue,
-                        () =>
-                        {
-                            sideMenu.RefetchVenueWithoutChangingSelection();
-                        });
-                    editAndUploadVenueView.AddView(venueContent);
-                    disposables.Add(editAndUploadVenueView);
+                    currentEditAndUploadVenueView = new EditAndUploadVenueView(userInfo, sideMenu.RefetchVenueWithoutChangingSelection);
+                    venueContent.Add(currentEditAndUploadVenueView.CreateView());
                     mainPane.Add(venueContent);
+                    currentVenueId = currentVenue.VenueId;
                 }
+
+                currentEditAndUploadVenueView.SetVenue(currentVenue);
             });
             disposables.Add(mainPaneDisposable);
 
@@ -85,6 +98,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 disposable.Dispose();
             }
             disposables.Clear();
+            currentEditAndUploadVenueView?.Dispose();
+            currentEditAndUploadVenueView = null;
+            currentVenueId = null;
             cancellationTokenSource?.Cancel();
             cancellationTokenSource?.Dispose();
             cancellationTokenSource = null;

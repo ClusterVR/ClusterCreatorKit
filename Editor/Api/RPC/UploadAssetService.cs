@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -7,6 +6,7 @@ using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Editor.Builder;
 using Newtonsoft.Json;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -21,27 +21,26 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             this.accessToken = accessToken;
         }
 
-        public async Task<AssetUploadPolicy> UploadAsync(AssetBundlePath assetBundlePath, UploadRequestID uploadRequestId, CancellationToken cancellationToken)
+        public async Task<AssetUploadPolicy> UploadAsync(ExportedSceneInfo exportedSceneInfo, BuildTarget target, bool isMainScene, UploadRequestID uploadRequestId, CancellationToken cancellationToken)
         {
-            var fileInfo = new FileInfo(assetBundlePath.Path);
-            var payload = new PostUploadAssetPolicyPayload(assetBundlePath.AssetIdsDependsOn, assetBundlePath.FileType, fileInfo.Name, fileInfo.Length,
-                assetBundlePath.SceneType);
+            var fileInfo = new FileInfo(exportedSceneInfo.BuiltAssetBundlePath);
+            var payload = new PostUploadAssetPolicyPayload(exportedSceneInfo.AssetIdsDependsOn, target.GetFileType(), fileInfo.Name, fileInfo.Length, isMainScene ? "main" : "sub");
             var policy = await APIServiceClient.PostUploadAssetPolicy(uploadRequestId, payload, accessToken,
                 JsonConvert.DeserializeObject<AssetUploadPolicy>, cancellationToken);
 
-            await UploadAsync(assetBundlePath.Path, policy, cancellationToken);
+            await UploadAsync(exportedSceneInfo.BuiltAssetBundlePath, policy, cancellationToken);
 
             return policy;
         }
 
-        public async Task<AssetUploadPolicy> UploadAsync(VenueAssetPath venueAssetPath, UploadRequestID uploadRequestId, CancellationToken cancellationToken)
+        public async Task<AssetUploadPolicy> UploadAsync(ExportedVenueAssetInfo venueAssetPath, BuildTarget target, UploadRequestID uploadRequestId, CancellationToken cancellationToken)
         {
-            var fileInfo = new FileInfo(venueAssetPath.Path);
-            var payload = new PostUploadVenueAssetPoliciesPayload(venueAssetPath.FileType, fileInfo.Name, fileInfo.Length);
+            var fileInfo = new FileInfo(venueAssetPath.BuiltAssetBundlePath);
+            var payload = new PostUploadVenueAssetPoliciesPayload(target.GetFileType(), fileInfo.Name, fileInfo.Length);
             var policy = await APIServiceClient.PostUploadVenueAssetPolicies(uploadRequestId, payload, accessToken,
                 JsonConvert.DeserializeObject<AssetUploadPolicy>, cancellationToken);
 
-            await UploadAsync(venueAssetPath.Path, policy, cancellationToken);
+            await UploadAsync(venueAssetPath.BuiltAssetBundlePath, policy, cancellationToken);
 
             return policy;
         }
