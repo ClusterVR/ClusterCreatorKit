@@ -3,6 +3,7 @@ using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Extensions;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.ProductUgc;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.Item
@@ -40,7 +41,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Item
 
         void OnInvoked(IProductDisplayItem productDisplayItem)
         {
-            Debug.Log($"商品Idが{productDisplayItem.ProductId.Value}である商品の詳細ページが開かれます");
+            Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_product_detail_page_open, productDisplayItem.ProductId.Value));
         }
 
         void OnCreate(IItem item)
@@ -54,7 +55,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Item
 
         static GameObject CreateProductSample(ProductId productId)
         {
-            var rootObject = new GameObject($"ProductSample : {productId.Value}");
+            var rootObject = new GameObject(TranslationUtility.GetMessage(TranslationTable.cck_product_sample, productId.Value));
             var model = GameObject.CreatePrimitive(PrimitiveType.Cube);
             model.transform.SetParent(rootObject.transform);
             model.transform.localPosition = new Vector3(0f, 0.5f, 0f);

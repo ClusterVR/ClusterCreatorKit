@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Editor.Builder;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,7 +23,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.RoomState
 
             if (string.IsNullOrEmpty(sceneGuid))
             {
-                Debug.LogWarning("プレビューでセーブ機能を利用するにはシーンを保存する必要があります。今回のプレビューではセーブ機能は利用されません。");
+                Debug.LogWarning(TranslationTable.cck_save_feature_need_scene_save);
                 return null;
             }
 

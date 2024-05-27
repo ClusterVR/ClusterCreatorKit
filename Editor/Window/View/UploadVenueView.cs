@@ -10,6 +10,7 @@ using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Editor.Enquete;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using ClusterVR.CreatorKit.Editor.Validator;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -83,7 +84,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
                 if (!VenueValidator.ValidateVenue(isBeta, out errorMessage, out var invalidObjects))
                 {
-                    EditorUtility.DisplayDialog("Cluster Creator Kit", errorMessage, "閉じる");
+                    EditorUtility.DisplayDialog("Cluster Creator Kit", errorMessage, TranslationTable.cck_close);
                     if (invalidObjects.Any())
                     {
                         foreach (var invalidObject in invalidObjects)
@@ -130,7 +131,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 catch (Exception e)
                 {
                     DeleteTempAssetsDirectory();
-                    errorMessage = "ワールドのビルドに失敗しました。";
+                    errorMessage = TranslationTable.cck_world_build_failed;
                     Debug.LogError(e);
                     return;
                 }
@@ -145,11 +146,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                         errorMessage = "";
                         if (isPreviewUpload)
                         {
-                            EditorUtility.DisplayDialog("テスト用のアップロードが完了しました", "入室後「デベロッパーツール」>「テスト用のスペースをはじめる」から利用可能です。", "閉じる");
+                            EditorUtility.DisplayDialog("テスト用のアップロードが完了しました",
+                                "入室後「デベロッパーツール」>「テスト用のスペースをはじめる」から利用可能です。", "閉じる");
                         }
                         else
                         {
-                            var openWorldManagementUrl = EditorUtility.DisplayDialog("アップロードが完了しました", "アップロードが完了しました", "ワールド管理ページを開く", "閉じる");
+                            var openWorldManagementUrl = EditorUtility.DisplayDialog(
+                                TranslationTable.cck_upload_complete, TranslationTable.cck_upload_complete,
+                                TranslationTable.cck_open_world_management_page, TranslationTable.cck_close);
                             if (openWorldManagementUrl)
                             {
                                 Application.OpenURL(worldManagementUrl);
@@ -163,9 +167,10 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                         EditorWindow.GetWindow<VenueUploadWindow>().Repaint();
                         if (exception is FileNotFoundException)
                         {
-                            errorMessage = $"ワールドのアップロードに失敗しました。必要なBuild Supportが全てインストールされているか確認してください。";
-                            var ok = EditorUtility.DisplayDialog("ビルドに失敗しました",
-                                "必要なBuild Supportが全てインストールされているか確認してください。", "詳細を開く", "閉じる");
+                            errorMessage = TranslationTable.cck_world_upload_failed_build_support_check;
+                            var ok = EditorUtility.DisplayDialog(TranslationTable.cck_build_failed,
+                                TranslationTable.cck_build_support_installation_check,
+                                TranslationTable.cck_details_open, TranslationTable.cck_close);
                             if (ok)
                             {
                                 Application.OpenURL(
@@ -174,7 +179,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                         }
                         else
                         {
-                            errorMessage = $"ワールドのアップロードに失敗しました。時間をあけてリトライしてみてください。";
+                            errorMessage = TranslationTable.cck_world_upload_failed_retry_later;
                         }
                     });
                 currentUploadService.Run(cancellationTokenSource.Token);
@@ -185,7 +190,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         void DrawUI()
         {
             EditorGUILayout.Space();
-            EditorGUILayout.HelpBox("アップロードするシーンを開いておいてください。", MessageType.Info);
+            EditorGUILayout.HelpBox(TranslationTable.cck_keep_scene_open_for_upload, MessageType.Info);
 
             var isVenueUploadSettingValid = IsVenueUploadSettingValid(out var uploadSettingErrorMessage);
             if (!isVenueUploadSettingValid)
@@ -196,7 +201,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             var betaSettingValid = venue.IsBeta == ClusterCreatorKitSettings.instance.IsBeta;
             if (!betaSettingValid)
             {
-                var message = venue.IsBeta ? "ベータ機能を有効にしたワールドには、ベータ機能を有効にする設定が ON になっていないとアップロードできません" : "ベータ機能が無効なワールドには、ベータ機能を有効にする設定が OFF になっていないとアップロードできません";
+                var message = venue.IsBeta
+                    ? TranslationTable.cck_beta_feature_world_upload_condition
+                    : TranslationTable.cck_nonbeta_feature_world_upload_condition;
                 EditorGUILayout.HelpBox(message, MessageType.Error);
             }
 
@@ -204,17 +211,19 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             using (new EditorGUI.DisabledScope(!canUpload))
             {
-                var uploadButton = GUILayout.Button($"{(venue.IsBeta ? "ベータ機能が有効な " : "")}'{venue.Name}' としてアップロードする");
+                var uploadButton = GUILayout.Button(
+                    TranslationUtility.GetMessage(TranslationTable.cck_upload_as_named_venue, (venue.IsBeta ? "ベータ機能が有効な " : ""), venue.Name));
                 if (uploadButton)
                 {
-                    executeUpload = EditorUtility.DisplayDialog("ワールドをアップロードする", $"'{venue.Name}'としてアップロードします。よろしいですか？",
-                        "アップロード", "キャンセル");
+                    executeUpload = EditorUtility.DisplayDialog(TranslationTable.cck_upload_world,
+                        TranslationUtility.GetMessage(TranslationTable.cck_confirm_upload_named_venue, venue.Name),
+                        TranslationTable.cck_upload, TranslationTable.cck_cancel);
                     isPreviewUpload = false;
                     isBeta = ClusterCreatorKitSettings.instance.IsBeta;
                 }
             }
 
-            if (GUILayout.Button("ワールド管理ページを開く"))
+            if (GUILayout.Button(TranslationTable.cck_open_world_management_page))
             {
                 Application.OpenURL(worldManagementUrl);
             }
@@ -284,8 +293,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 var previewUploadButton = GUILayout.Button("テスト用にアップロードする");
                 if (previewUploadButton)
                 {
-                    executeUpload = EditorUtility.DisplayDialog("ワールドをアップロードする", $"'{venue.Name}'としてアップロードします。よろしいですか？",
-                        "アップロード", "キャンセル");
+                    executeUpload = EditorUtility.DisplayDialog(TranslationTable.cck_upload_world,
+                        TranslationUtility.GetMessage(TranslationTable.cck_confirm_upload_named_venue, venue.Name),
+                        TranslationTable.cck_upload, TranslationTable.cck_cancel);
                     isPreviewUpload = true;
                     isBeta = ClusterCreatorKitSettings.instance.IsBeta;
                 }
@@ -313,7 +323,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 var succeeded = true;
                 foreach (var status in currentUploadService.UploadStatus.OrderBy(x => x.Key))
                 {
-                    var text = status.Value ? "Success" : "Failed";
+                    var text = status.Value ? TranslationTable.cck_success : TranslationTable.cck_failed;
                     succeeded &= status.Value;
                     EditorGUILayout.LabelField(status.Key.ToString(), text);
                 }
@@ -328,14 +338,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 var statesValue = currentUploadService.UploadStatus.Values.ToList();
                 var finishedProcessCount = statesValue.Count(x => x);
                 var allProcessCount = statesValue.Count;
-                EditorUtility.DisplayProgressBar("Venue Upload",
-                    $"upload processing {finishedProcessCount} of {allProcessCount}",
+                EditorUtility.DisplayProgressBar(TranslationTable.cck_venue_upload,
+                    TranslationUtility.GetMessage(TranslationTable.cck_upload_progress, finishedProcessCount, allProcessCount),
                     (float) finishedProcessCount / allProcessCount);
             }
 
             if (!currentUploadService.IsProcessing && currentUploadService.UploadStatus.Values.Any(x => !x))
             {
-                if (GUILayout.Button("アップロードリトライ"))
+                if (GUILayout.Button(TranslationTable.cck_upload_retry))
                 {
                     currentUploadService.Run(cancellationTokenSource.Token);
                     errorMessage = null;
@@ -354,13 +364,13 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         {
             if (thumbnail.IsEmpty)
             {
-                uploadSettingErrorMessage = "サムネイル画像を設定してください。";
+                uploadSettingErrorMessage = TranslationTable.cck_set_thumbnail_image;
                 return false;
             }
 
             if (EditorApplication.isPlaying)
             {
-                uploadSettingErrorMessage = "エディターの再生を停止してください。";
+                uploadSettingErrorMessage = TranslationTable.cck_stop_editor_playback;
                 return false;
             }
 

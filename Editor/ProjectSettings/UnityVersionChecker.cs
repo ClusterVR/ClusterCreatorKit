@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.ProjectSettings
@@ -9,9 +10,9 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
         {
             if (!Package.PackageInfo.IsRecommendedUnityEditorVersion())
             {
-                EditorUtility.DisplayDialog("注意",
-                    $"この Unity バージョンで作成したワールドは正常に動作しない可能性があります。Cluster Creator Kit の推奨 Unity バージョンは {Package.PackageInfo.RecommendedUnityEditorVersion} です。",
-                    "閉じる");
+                EditorUtility.DisplayDialog(TranslationTable.cck_attention,
+                    TranslationUtility.GetMessage(TranslationTable.cck_unity_version_warning, Package.PackageInfo.RecommendedUnityEditorVersion),
+                    TranslationTable.cck_close);
             }
         }
     }

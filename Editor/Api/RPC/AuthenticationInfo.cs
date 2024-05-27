@@ -1,3 +1,5 @@
+using ClusterVR.CreatorKit.Translation;
+
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
     public sealed class AuthenticationInfo
@@ -35,7 +37,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             }
             if (token.Length != 64)
             {
-                errorMessage = "不正なアクセストークンです";
+                errorMessage = TranslationTable.cck_invalid_access_token;
                 return false;
             }
 

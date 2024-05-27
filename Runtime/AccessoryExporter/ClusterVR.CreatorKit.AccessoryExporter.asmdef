@@ -9,7 +9,8 @@
     "ClusterVR.CreatorKit",
     "ClusterVR.CreatorKit.GltfExtensions",
     "ClusterVR.CreatorKit.Item",
-    "ClusterVR.CreatorKit.ItemExporter"
+    "ClusterVR.CreatorKit.ItemExporter",
+    "ClusterVR.CreatorKit.Translation"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

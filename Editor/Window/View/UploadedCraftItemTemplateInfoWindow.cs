@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,12 +10,12 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         readonly UploadedCraftItemTemplateInfoView infoView = new();
         RequireTokenAuthView tokenAuthView;
 
-        [MenuItem("Cluster/クラフトアイテムの情報取得", priority = 304)]
+        [MenuItem(TranslationTable.cck_cluster_craftitem_info_fetch, priority = 304)]
         public static void Open()
         {
             var window = GetWindow<UploadedCraftItemTemplateInfoWindow>();
             window.minSize = new Vector2(640, 530);
-            window.titleContent = new GUIContent("クラフトアイテムの情報取得");
+            window.titleContent = new GUIContent(TranslationTable.cck_craftitem_info_fetch);
         }
 
         void OnEnable()

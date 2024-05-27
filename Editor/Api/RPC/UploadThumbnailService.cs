@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
+using ClusterVR.CreatorKit.Translation;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -94,7 +95,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             }
             else
             {
-                Debug.Log("Success Upload Thumbnail");
+                Debug.Log(TranslationTable.cck_success_upload_thumbnail);
                 onSuccess?.Invoke(policy);
             }
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Operation;
 using ClusterVR.CreatorKit.Operation.Implements;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -118,7 +119,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 var moveUpButton = new Button(() => MoveArrayElement(i, i - 1))
                 {
                     text = "▲",
-                    tooltip = "Move Up"
+                    tooltip = TranslationTable.cck_move_up
                 };
                 moveUpButton.SetEnabled(i > 0);
                 listItemMenu.Add(moveUpButton);
@@ -133,7 +134,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 var moveDownButton = new Button(() => MoveArrayElement(i, i + 1))
                 {
                     text = "▼",
-                    tooltip = "Move Down"
+                    tooltip = TranslationTable.cck_move_down
                 };
                 moveDownButton.SetEnabled(i < property.arraySize - 1);
                 listItemMenu.Add(moveDownButton);

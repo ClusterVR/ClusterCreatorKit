@@ -6,8 +6,8 @@
             </ui:ScrollView>
         </ui:VisualElement>
         <ui:VisualElement name="footer" class="horizontal">
-            <ui:Button name="prev-button" text="&lt; 前へ" />
-            <ui:Button name="next-button" text="次へ &gt;" />
+            <ui:Button name="prev-button"/>
+            <ui:Button name="next-button"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

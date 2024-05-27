@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
@@ -16,7 +17,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             foreach (var missingInfo in missingComponentList)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{missingInfo.Key.name}に必要なコンポーネント{string.Join(", ", missingInfo.Value)}が設定されていません。",
+                    TranslationUtility.GetMessage(TranslationTable.cck_missing_required_components, missingInfo.Key.name, string.Join(", ", missingInfo.Value)),
                     ValidationMessage.MessageType.Error));
             }
 
@@ -29,9 +30,9 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 .Cast<RequireComponent>();
             foreach (var requireComponent in requireComponentAttributes)
             {
-               ValidateRequireComponent(component, requireComponent.m_Type0);
-               ValidateRequireComponent(component, requireComponent.m_Type1);
-               ValidateRequireComponent(component, requireComponent.m_Type2);
+                ValidateRequireComponent(component, requireComponent.m_Type0);
+                ValidateRequireComponent(component, requireComponent.m_Type1);
+                ValidateRequireComponent(component, requireComponent.m_Type2);
             }
         }
 
@@ -54,7 +55,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             }
             else
             {
-                missingComponentList.Add(gameObject, new HashSet<Type>{requireType});
+                missingComponentList.Add(gameObject, new HashSet<Type> { requireType });
             }
         }
     }

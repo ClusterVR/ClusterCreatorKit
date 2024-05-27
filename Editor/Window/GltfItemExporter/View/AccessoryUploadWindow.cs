@@ -4,6 +4,7 @@ using ClusterVR.CreatorKit.Editor.AccessoryExporter;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
 using ClusterVR.CreatorKit.Editor.Window.View;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -18,15 +19,15 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             new AccessoryValidator(),
             new AccessoryTemplateBuilder(),
             new UploadAccessoryTemplateService(),
-            "アクセサリー");
+            TranslationTable.cck_accessory);
         readonly List<IDisposable> disposables = new List<IDisposable>();
 
-        [MenuItem("Cluster/アクセサリーアップロード", priority = 303)]
+        [MenuItem(TranslationTable.cck_cluster_accessory_upload, priority = 303)]
         public static void Open()
         {
             var window = GetWindow<AccessoryUploadWindow>();
             window.minSize = new Vector2(640, 480);
-            window.titleContent = new GUIContent("アクセサリーアップロード");
+            window.titleContent = new GUIContent(TranslationTable.cck_accessory_upload);
         }
 
         void OnEnable()

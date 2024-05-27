@@ -20,6 +20,7 @@ using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Operation;
 using ClusterVR.CreatorKit.Preview.Common;
 using ClusterVR.CreatorKit.Preview.PlayerController;
+using ClusterVR.CreatorKit.Translation;
 using ClusterVR.CreatorKit.Trigger;
 using ClusterVR.CreatorKit.World;
 using ClusterVR.CreatorKit.World.Implements.DespawnHeights;
@@ -182,7 +183,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview
             var requiredComponentMessages = new List<string>();
             if (!hasSpawnPoint)
             {
-                requiredComponentMessages.Add($"{nameof(ISpawnPoint.SpawnType)} が {SpawnType.Entrance} である {nameof(SpawnPoint)}");
+                requiredComponentMessages.Add(TranslationUtility.GetMessage(TranslationTable.cck_spawnpoint_entrance_type, nameof(ISpawnPoint.SpawnType), SpawnType.Entrance, nameof(SpawnPoint)));
             }
 
             if (!hasDespawnHeight)
@@ -190,7 +191,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                 requiredComponentMessages.Add($"{nameof(DespawnHeight)}");
             }
 
-            message = $"ワールドをプレビューするためには以下のコンポーネントが必要です: {string.Join(", ", requiredComponentMessages)}";
+            message = TranslationUtility.GetMessage(TranslationTable.cck_required_components_for_preview, string.Join(", ", requiredComponentMessages));
             return false;
         }
 

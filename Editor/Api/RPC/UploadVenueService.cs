@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Proto;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 
@@ -138,8 +139,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             if (!File.Exists(assetBundlePath))
             {
                 var message = isMainScene ?
-                    $"{target.DisplayName()} Main Scene Build" :
-                    $"{target.DisplayName()} Sub Scene Build: ${assetBundlePath}";
+                    TranslationUtility.GetMessage(TranslationTable.cck_main_scene_build, target.DisplayName()) :
+                    TranslationUtility.GetMessage(TranslationTable.cck_sub_scene_build, target.DisplayName(), assetBundlePath);
                 onError?.Invoke(new FileNotFoundException(message));
                 return false;
             }
@@ -148,7 +149,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             {
                 if (!venueAssetInfos.Select(i => i.Id).Contains(assetIdDependsOn))
                 {
-                    onError?.Invoke(new Exception($"{target.DisplayName()} Venue Asset is missing: ${assetIdDependsOn}"));
+                    var message = TranslationUtility.GetMessage(TranslationTable.cck_venue_asset_missing, target.DisplayName(), assetIdDependsOn);
+                    onError?.Invoke(new Exception(message));
                     return false;
                 }
             }
@@ -161,7 +163,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             var assetBundlePath = venueAssetInfo.BuiltAssetBundlePath;
             if (!File.Exists(assetBundlePath))
             {
-                onError?.Invoke(new FileNotFoundException($"{target.DisplayName()} Venue Asset Build: ${assetBundlePath}"));
+                var message = TranslationUtility.GetMessage(TranslationTable.cck_venue_asset_build, target.DisplayName(), assetBundlePath);
+                onError?.Invoke(new FileNotFoundException(message));
                 return false;
             }
             return true;
@@ -175,7 +178,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             {
                 var uploadRequest = new PostUploadRequestService(accessToken, isBeta);
                 var uploadRequestRespose = await uploadRequest.PostUploadRequestAsync(venue.VenueId, cancellationToken);
-                Debug.Log($"make new upload request, Request ID : {uploadRequestRespose.UploadRequestId}");
+                Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_upload_request, uploadRequestRespose.UploadRequestId));
                 uploadRequestId = uploadRequestRespose.UploadRequestId;
                 uploadStatus[UploadPhase.PreProcess] = true;
 
@@ -186,7 +189,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 completionResponse = await notifyFinishedRequest.PostNotifyFinishedUploadAsync(
                     venue.VenueId, uploadRequestId, worldDescriptor, isPreview, cancellationToken);
 
-                Debug.Log($"notify finished upload request, Request ID : {completionResponse.UploadRequestId}");
+                Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_notify_upload_finished, completionResponse.UploadRequestId));
                 uploadRequestId = null;
                 uploadStatus[UploadPhase.PostProcess] = true;
 
@@ -209,17 +212,17 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             var assetUploadService = new UploadAssetService(accessToken);
             {
                 var policy = await assetUploadService.UploadAsync(platformAssetInfo.MainSceneInfo, target, true, uploadRequestId, cancellationToken);
-                Debug.Log($"success {buildTargetName} main scene asset upload, uploaded url : {policy.uploadUrl}");
+                Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_success_upload_scene_with_url, buildTargetName, "main", policy.uploadUrl));
             }
             foreach (var subSceneInfo in platformAssetInfo.SubSceneInfos)
             {
                 var policy = await assetUploadService.UploadAsync(subSceneInfo, target, false, uploadRequestId, cancellationToken);
-                Debug.Log($"success {buildTargetName} sub scene asset upload, uploaded url : {policy.uploadUrl}");
+                Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_success_upload_scene_with_url, buildTargetName, "sub", policy.uploadUrl));
             }
             foreach (var venueAssetInfo in platformAssetInfo.VenueAssetInfos)
             {
                 var policy = await assetUploadService.UploadAsync(venueAssetInfo, target, uploadRequestId, cancellationToken);
-                Debug.Log($"success {buildTargetName} venue asset upload, uploaded url : {policy.uploadUrl}");
+                Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_success_upload_venue_with_url, buildTargetName, policy.uploadUrl));
             }
             uploadStatus[BuildTargetToPhase(target)] = true;
         }

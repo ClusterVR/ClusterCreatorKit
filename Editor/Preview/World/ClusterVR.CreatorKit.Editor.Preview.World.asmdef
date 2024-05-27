@@ -5,7 +5,8 @@
         "ClusterVR.CreatorKit.World",
         "ClusterVR.CreatorKit.Constants",
         "ClusterVR.CreatorKit.Preview",
-        "Unity.Postprocessing.Runtime"
+        "Unity.Postprocessing.Runtime",
+        "ClusterVR.CreatorKit.Translation"
     ],
     "includePlatforms": [
         "Editor"

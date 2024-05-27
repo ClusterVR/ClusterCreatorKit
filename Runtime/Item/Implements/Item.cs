@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Extensions;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -11,8 +12,8 @@ namespace ClusterVR.CreatorKit.Item.Implements
     public sealed class Item : MonoBehaviour, IItem
     {
         [SerializeField, HideInInspector] ItemId id;
-        [SerializeField, Tooltip("アイテムの名前")] string itemName;
-        [SerializeField, Tooltip("アイテムの大きさ")] Vector3Int size;
+        [SerializeField, Tooltip(TranslationTable.cck_item_name)] string itemName;
+        [SerializeField, Tooltip(TranslationTable.cck_item_size)] Vector3Int size;
 
         const float DisbodiedAlpha = 0.5f;
         static readonly Color PlaceableColorMask = Color.green;

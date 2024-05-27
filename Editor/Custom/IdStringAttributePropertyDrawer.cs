@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.Assertions;
@@ -21,11 +22,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var propertyDisplayName = property.displayName;
 
             var characterTypeErrorBox = new IMGUIContainer(() =>
-                EditorGUILayout.HelpBox($"{propertyDisplayName} に使用できない文字が含まれています。{propertyDisplayName} には英数字とアポストロフィ・カンマ・ハイフン・ピリオド・アンダースコアのみが使用可能です。",
+                EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_invalid_characters, propertyDisplayName, propertyDisplayName),
                     MessageType.Error));
 
             var idLengthErrorBox = new IMGUIContainer(() =>
-                EditorGUILayout.HelpBox($"{propertyDisplayName} が長すぎます。 最大値: {Constants.Component.MaxIdLength}",
+                EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_id_too_long, propertyDisplayName, Constants.Component.MaxIdLength),
                     MessageType.Error));
             void SetErrorBoxVisibility(string id)
             {

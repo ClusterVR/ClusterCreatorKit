@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.Translation;
 
 namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 {
@@ -27,7 +28,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 {
                     if (!emptyIdReported)
                     {
-                        messages.Add(new ValidationMessage($"HumanoidAnimationListのIdが空です。有効なIdを設定してください。", ValidationMessage.MessageType.Error));
+                        messages.Add(new ValidationMessage(TranslationTable.cck_humanoidanimationlist_empty_id, ValidationMessage.MessageType.Error));
                         emptyIdReported = true;
                     }
                 }
@@ -37,12 +38,12 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                     {
                         if (!Constants.Component.ValidIdCharactersRegex.IsMatch(id))
                         {
-                            messages.Add(new ValidationMessage($"HumanoidAnimationListのIdに使用できない文字が含まれています。Idには英数字とアポストロフィ・カンマ・ハイフン・ピリオド・アンダースコアのみが使用可能です。 Id: {id}", ValidationMessage.MessageType.Error));
+                            messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_humanoidanimationlist_invalid_characters, id), ValidationMessage.MessageType.Error));
                         }
 
                         if (id.Length > Constants.Component.MaxIdLength)
                         {
-                            messages.Add(new ValidationMessage($"HumanoidAnimationListのIdが長すぎます。 Id: {id} 最大値: {Constants.Component.MaxIdLength}", ValidationMessage.MessageType.Error));
+                            messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_humanoidanimationlist_id_length, id, Constants.Component.MaxIdLength), ValidationMessage.MessageType.Error));
                         }
                     }
                     else
@@ -56,7 +57,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 {
                     if (emptyHumanoidAnimationReportedIds.Add(id))
                     {
-                        messages.Add(new ValidationMessage($"Animationがみつかりませんでした。HumanoidAnimationにAnimation Clipを設定してください。(Id: {id})", ValidationMessage.MessageType.Error));
+                        messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_animation_not_found, id), ValidationMessage.MessageType.Error));
                     }
                 }
                 else
@@ -67,17 +68,17 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 
             if (count > MaxCount)
             {
-                messages.Add(new ValidationMessage($"HumanoidAnimationの数が多すぎます。 現在値: {count} 最大値: {MaxCount}", ValidationMessage.MessageType.Error));
+                messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_too_many_humanoidanimations, count, MaxCount), ValidationMessage.MessageType.Error));
             }
 
             if (totalKeyFrames > MaxKeyFrames)
             {
-                messages.Add(new ValidationMessage($"HumanoidAnimationListのキーフレームが多すぎます。 現在値: {totalKeyFrames} 最大値: {MaxKeyFrames})", ValidationMessage.MessageType.Error));
+                messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_humanoidanimationlist_keyframes_limit, totalKeyFrames, MaxKeyFrames), ValidationMessage.MessageType.Error));
             }
 
             if (collidedIds.Count > 0)
             {
-                messages.Add(new ValidationMessage($"HumanoidAnimationListのIdが重複しています。 Id: {string.Join(", ", collidedIds)}", ValidationMessage.MessageType.Error));
+                messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_humanoidanimationlist_duplicate_id, string.Join(", ", collidedIds)), ValidationMessage.MessageType.Error));
             }
 
             return messages;

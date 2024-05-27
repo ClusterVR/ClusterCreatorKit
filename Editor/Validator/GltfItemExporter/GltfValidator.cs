@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 using VGltf;
 using VGltf.Types;
@@ -31,7 +32,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 {
                     if (count == 1)
                     {
-                        validationMessages.Add(new ValidationMessage($"Prefab内に同名GameObjectを含むことはできません。重複名:{go.name}",
+                        validationMessages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_duplicate_gameobject_names, go.name),
                             ValidationMessage.MessageType.Error));
                     }
                     nodeNameCountDict[go.name]++;
@@ -57,7 +58,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             if (gltf.Scenes == null || gltf.Scenes.Count == 0)
             {
                 validationMessages.Add(
-                    new ValidationMessage("少なくとも1つのSceneが必要です。", ValidationMessage.MessageType.Error));
+                    new ValidationMessage(TranslationTable.cck_scene_required, ValidationMessage.MessageType.Error));
             }
             else if (gltf.Scenes.Count > MaxScenesCount)
             {
@@ -72,7 +73,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             var gltf = gltfContainer.Gltf;
             if (gltf.Nodes.Count > MaxNodesCount)
             {
-                validationMessages.Add(CreateCountValidationMessage("prefabに含まれるGameObject", gltf.Nodes.Count,
+                validationMessages.Add(CreateCountValidationMessage(TranslationTable.cck_prefab_gameobjects, gltf.Nodes.Count,
                     MaxNodesCount));
             }
             return validationMessages;
@@ -88,7 +89,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 
             if (gltf.Meshes == null || gltf.Meshes.Count == 0)
             {
-                validationMessages.Add(new ValidationMessage("少なくとも1つのMeshが必要です。",
+                validationMessages.Add(new ValidationMessage(TranslationTable.cck_mesh_required_for_item,
                     ValidationMessage.MessageType.Error));
                 return validationMessages;
             }
@@ -109,13 +110,13 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             {
                 if (mesh.Primitives.Count > MaxSubMeshesCount)
                 {
-                    validationMessages.Add(CreateCountValidationMessage($"{mesh.Name}のSubMesh", mesh.Primitives.Count,
+                    validationMessages.Add(CreateCountValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_submesh, mesh.Name), mesh.Primitives.Count,
                         MaxSubMeshesCount));
                 }
 
                 if (IsSkinnedMesh(mesh))
                 {
-                    validationMessages.Add(new ValidationMessage($"SkinnedMeshは使用できません。対象: {mesh.Name}",
+                    validationMessages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_skinnedmesh_not_allowed, mesh.Name),
                         ValidationMessage.MessageType.Error));
                 }
 
@@ -124,7 +125,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                     if (primitive.Mode != VGltf.Types.Mesh.PrimitiveType.ModeEnum.TRIANGLES)
                     {
                         validationMessages.Add(new ValidationMessage(
-                            $"{mesh.Name}に{VGltf.Types.Mesh.PrimitiveType.ModeEnum.TRIANGLES.ToString()}以外のモードが設定されています。現在: {primitive.Mode.ToString()}",
+                            TranslationUtility.GetMessage(TranslationTable.cck_non_triangles_mode_set, mesh.Name, VGltf.Types.Mesh.PrimitiveType.ModeEnum.TRIANGLES.ToString(), primitive.Mode.ToString()),
                             ValidationMessage.MessageType.Error));
                         continue;
                     }
@@ -139,7 +140,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 
             if (triangleCount == 0)
             {
-                validationMessages.Add(new ValidationMessage("少なくとも1つのTriangleが必要です。",
+                validationMessages.Add(new ValidationMessage(TranslationTable.cck_triangle_required,
                     ValidationMessage.MessageType.Error));
             }
             else if (triangleCount > maxTrianglesCount)
@@ -214,13 +215,13 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 if (image.MimeType != Image.MimeTypeImageJpeg && image.MimeType != Image.MimeTypeImagePng)
                 {
                     validationMessages.Add(new ValidationMessage(
-                        $"{image.Name}が未対応の画像形式\"{image.MimeType}\"です。{Image.MimeTypeImagePng}, {Image.MimeTypeImageJpeg}が使用できます。",
+                        TranslationUtility.GetMessage(TranslationTable.cck_image_unsupported_format, image.Name, image.MimeType, Image.MimeTypeImagePng, Image.MimeTypeImageJpeg),
                         ValidationMessage.MessageType.Error));
                 }
 
                 if (image.Uri != null)
                 {
-                    validationMessages.Add(new ValidationMessage($"URI指定の画像は使用できません。 対象: {image.Name}",
+                    validationMessages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_image_uri_not_allowed, image.Name),
                         ValidationMessage.MessageType.Error));
                 }
 
@@ -228,7 +229,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 if (textureSize.x > MaxTextureSize || textureSize.y > MaxTextureSize)
                 {
                     validationMessages.Add(new ValidationMessage(
-                        $"{image.Name}の解像度が{textureSize.x}x{textureSize.y}です。画像の解像度は{MaxTextureSize}x{MaxTextureSize}以下にしてください",
+                        TranslationUtility.GetMessage(TranslationTable.cck_image_resolution_limit, image.Name, textureSize.x, textureSize.y, MaxTextureSize, MaxTextureSize),
                         ValidationMessage.MessageType.Error));
                 }
             }
@@ -288,7 +289,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
         static ValidationMessage CreateCountValidationMessage(string targetName, int count, int maxCount)
         {
             return new ValidationMessage(
-                $"{targetName}の数を {maxCount}以下にしてください。現在: {count}"
+                TranslationUtility.GetMessage(TranslationTable.cck_count_limit_exceeded, targetName, maxCount, count)
                 , ValidationMessage.MessageType.Error);
         }
     }

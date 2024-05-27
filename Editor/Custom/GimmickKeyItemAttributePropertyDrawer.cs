@@ -1,5 +1,6 @@
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -14,7 +15,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var container = new VisualElement();
             var helpBox = new IMGUIContainer(() =>
                 EditorGUILayout.HelpBox(
-                    $"{nameof(GimmickTarget)} を {nameof(GimmickTarget.Item)} にするには {nameof(Item)} を指定する必要があります。",
+                    TranslationUtility.GetMessage(TranslationTable.cck_gimmick_target_item_requires_item, nameof(GimmickTarget), nameof(GimmickTarget.Item), nameof(Item)),
                     MessageType.Warning));
             var itemField = new ObjectField(property.displayName)
             {

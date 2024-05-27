@@ -9,7 +9,8 @@
         "ClusterVR.CreatorKit.Item.Implements",
         "ClusterVR.CreatorKit.World",
         "ClusterVR.CreatorKit.World.Implements",
-        "ClusterVR.CreatorKit.Editor"
+        "ClusterVR.CreatorKit.Editor",
+        "ClusterVR.CreatorKit.Translation"
     ],
     "includePlatforms": [
         "Editor"

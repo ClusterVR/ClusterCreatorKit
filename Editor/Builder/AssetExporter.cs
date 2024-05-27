@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ClusterVR.CreatorKit.Translation;
 using ClusterVR.CreatorKit.World;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -119,7 +120,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                     }
                 }
 
-                Debug.Log($"Building to {exportDirPath}");
+                Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_building_to_directory, exportDirPath));
                 BuildPipeline.BuildAssetBundles(exportDirPath, assetBundleBuilds, BuildAssetBundleOptions.ForceRebuildAssetBundle, target);
 
                 ExportedSceneInfo exportedMainSceneInfo = null;
@@ -160,7 +161,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
             var tempPath = $"Assets/{assetBundleName}.unity";
             if (!AssetDatabase.CopyAsset(scenePath, tempPath))
             {
-                throw new Exception($"Fail copy asset, {scenePath} to {tempPath}");
+                throw new Exception(TranslationUtility.GetMessage(TranslationTable.cck_fail_copy_asset, scenePath, tempPath));
             }
 
             AssetBundleBuild assetBundleBuild;
@@ -270,7 +271,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 var subSceneAssetPath = AssetDatabase.GetAssetPath(unityScene);
                 if (string.IsNullOrEmpty(subSceneAssetPath))
                 {
-                    throw new Exception($"サブシーン({unityScene.name})が見つかりません");
+                    throw new Exception(TranslationUtility.GetMessage(TranslationTable.cck_subscene_not_found, unityScene.name));
                 }
 
                 subScenes.Add((subSceneAssetPath, sceneName));

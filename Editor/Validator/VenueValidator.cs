@@ -5,6 +5,7 @@ using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
+using ClusterVR.CreatorKit.Translation;
 using ClusterVR.CreatorKit.Trigger;
 using ClusterVR.CreatorKit.Trigger.Implements;
 using ClusterVR.CreatorKit.World;
@@ -44,7 +45,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 }
             }
 
-            Debug.Log("Venue Validation is Passed.");
+            Debug.Log(TranslationTable.cck_venue_validation_passed);
             errorMessage = default;
             invalidObjects = default;
             return true;
@@ -56,7 +57,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             if (despawnHeights.Count() != 1)
             {
                 errorMessage =
-                    $"{nameof(DespawnHeight)}はワールドに1つ配置されている必要があります。現在配置されている{nameof(DespawnHeight)}の数は {despawnHeights.Count()} です";
+                    TranslationUtility.GetMessage(TranslationTable.cck_despawnheight_single_instance, nameof(DespawnHeight), nameof(DespawnHeight), despawnHeights.Count());
                 invalidObjects = despawnHeights.Select(x => x.gameObject).ToArray();
                 return false;
             }
@@ -66,7 +67,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             if (!entrances.Any())
             {
                 errorMessage =
-                    $"ワールドには{nameof(SpawnPoint)}が「{nameof(SpawnType.Entrance)}」の{nameof(SpawnPoint)}が1つ以上配置されている必要があります";
+                    TranslationUtility.GetMessage(TranslationTable.cck_spawnpoint_entrance_required, nameof(SpawnPoint), nameof(SpawnType.Entrance), nameof(SpawnPoint));
                 invalidObjects = spawnPoints.Select(x => x.gameObject).ToArray();
                 return false;
             }
@@ -95,7 +96,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             if (nestedItems.Any())
             {
                 errorMessage =
-                    $"{nameof(Item.Implements.Item)}の子に{nameof(Item.Implements.Item)}は配置できません";
+                    TranslationUtility.GetMessage(TranslationTable.cck_item_child_of_item, nameof(Item.Implements.Item), nameof(Item.Implements.Item));
                 invalidObjects = nestedItems.Select(x => x.gameObject)
                     .Concat(nestedItems.Select(i =>
                         i.transform.parent.GetComponentsInParent<ClusterVR.CreatorKit.Item.Implements.Item>(true)
@@ -110,7 +111,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             var invalidScriptableItems = scriptableItems.Where(s => !s.IsValid(true)).ToArray();
             if (invalidScriptableItems.Any())
             {
-                errorMessage = $"{nameof(ScriptableItem)}のsource codeが長すぎます｡最大値: {Constants.Constants.ScriptableItemMaxSourceCodeByteCount}bytes";
+                errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_scriptableitem_source_code_too_long, nameof(ScriptableItem), Constants.Constants.ScriptableItemMaxSourceCodeByteCount);
                 invalidObjects = invalidScriptableItems.Select(x => x.gameObject).ToArray();
                 return false;
             }
@@ -131,7 +132,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             if (persistedKeys.Count > Constants.TriggerGimmick.PersistedPlayerStateKeysCount)
             {
                 errorMessage =
-                    $"{nameof(InitializePlayerTrigger)} の Key は {Constants.TriggerGimmick.PersistedPlayerStateKeysCount}種類以下である必要があります。";
+                    TranslationUtility.GetMessage(TranslationTable.cck_initializeplayertrigger_key_limit, nameof(InitializePlayerTrigger), Constants.TriggerGimmick.PersistedPlayerStateKeysCount);
                 invalidObjects = new GameObject[] { };
                 return false;
             }
@@ -139,7 +140,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             if (subScenes.Length > Constants.Constants.MaxSubSceneCount)
             {
                 errorMessage =
-                    $"ワールドに配置できる{nameof(SubScene)}は最大{Constants.Constants.MaxSubSceneCount}個です。現在配置されている{nameof(SubScene)}数は{subScenes.Count()}です。";
+                    TranslationUtility.GetMessage(TranslationTable.cck_subscene_max_count, nameof(SubScene), Constants.Constants.MaxSubSceneCount, nameof(SubScene), subScenes.Count());
                 invalidObjects = subScenes.Select(x => x.gameObject).ToArray();
                 return false;
             }
@@ -159,7 +160,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             if (substitutesItems.Any())
             {
                 errorMessage =
-                    $"{nameof(SubSceneSubstitutes)}自身もしくは子に{nameof(ClusterVR.CreatorKit.Item.Implements.Item)}は配置できません";
+                    TranslationUtility.GetMessage(TranslationTable.cck_subscenesubstitutes_no_item, nameof(SubSceneSubstitutes), nameof(ClusterVR.CreatorKit.Item.Implements.Item));
                 invalidObjects = substitutesItems.Select(i => i.gameObject).ToArray();
                 return false;
             }
@@ -169,14 +170,14 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             if (subSceneSubstitutesInItems.Any())
             {
                 errorMessage =
-                    $"{nameof(ClusterVR.CreatorKit.Item.Implements.Item)}の子に{nameof(SubSceneSubstitutes)}は配置できません";
+                    TranslationUtility.GetMessage(TranslationTable.cck_item_no_subscenesubstitutes_child, nameof(ClusterVR.CreatorKit.Item.Implements.Item), nameof(SubSceneSubstitutes));
                 invalidObjects = subSceneSubstitutesInItems.Select(x => x.gameObject).ToArray();
                 return false;
             }
 
             if (subSceneSubstitutes.Any(s => ((ISubSceneSubstitutes) s).SubScene == null))
             {
-                Debug.LogWarning($"Unity Sceneを指定していない{nameof(SubSceneSubstitutes)}があります");
+                Debug.LogWarning(TranslationUtility.GetMessage(TranslationTable.cck_subscenesubstitutes_no_unity_scene, nameof(SubSceneSubstitutes)));
             }
 
             foreach (var item in items)
@@ -198,7 +199,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
 
             if (unityScene == null)
             {
-                Debug.LogWarning($"Unity Sceneを指定していない{nameof(SubScene)}があります");
+                Debug.LogWarning(TranslationUtility.GetMessage(TranslationTable.cck_subscene_no_unity_scene, nameof(SubScene)));
 
                 errorMessage = default;
                 invalidObjects = default;
@@ -209,7 +210,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             if (duplication.Count() > 1)
             {
                 errorMessage =
-                    $"Unity Sceneは複数の{nameof(SubScene)}に指定できません。Scene: {unityScene.name}";
+                    TranslationUtility.GetMessage(TranslationTable.cck_subscene_unity_scene_multiple_assignment, nameof(SubScene), unityScene.name);
                 invalidObjects = duplication.Select(x => x.gameObject).ToArray();
                 return false;
             }
@@ -217,17 +218,17 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             var colliders = subScene.GetComponentsInChildren<Collider>(true).ToArray();
             if (colliders.Length <= 0)
             {
-                Debug.LogWarning($"{nameof(SubScene)}にCollierが設定されていません。Scene: {unityScene.name}");
+                Debug.LogWarning(TranslationUtility.GetMessage(TranslationTable.cck_subscene_no_collider, nameof(SubScene), unityScene.name));
             }
             else if (colliders.Any(c => !c.isTrigger))
             {
-                Debug.LogWarning($"isTriggerがonになっていない{nameof(Collider)}が{nameof(SubScene)}内にあります。Scene: {unityScene.name}");
+                Debug.LogWarning(TranslationUtility.GetMessage(TranslationTable.cck_subscene_trigger_not_on, nameof(Collider), nameof(SubScene), unityScene.name));
             }
 
             var assetPath = AssetDatabase.GetAssetPath(unityScene);
             if (string.IsNullOrEmpty(assetPath))
             {
-                errorMessage = $"{nameof(SubScene)}に指定されたUnity Sceneが見つかりません: {unityScene.name}";
+                errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_subscene_unity_scene_not_found, nameof(SubScene), unityScene.name);
                 invalidObjects = new GameObject[] { subScene.gameObject };
                 return false;
             }
@@ -278,7 +279,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 var components = sceneRootObjects.SelectMany(x => x.GetComponentsInChildren<T>(true));
                 if (components.Any())
                 {
-                    errorMessage = $"{nameof(SubScene)}に指定したUnity Sceneでは{name}を使用できません。Scene: {unitySceneName}";
+                    errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_subscene_invalid_unity_scene, nameof(SubScene), name, unitySceneName);
                     invalidObjects = components.OfType<Component>().Select(x => x.gameObject).ToArray();
                     return false;
                 }
@@ -326,7 +327,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 .Where(camera => camera.gameObject.CompareTag("MainCamera"));
             if (mainCameras.Any())
             {
-                errorMessage = $"ワールドにはTagが「MainCamera」の{nameof(Camera)}を配置できません";
+                errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_no_maincamera_tag_in_world, nameof(Camera));
                 invalidObjects = mainCameras.Select(x => x.gameObject).ToArray();
                 return false;
             }
@@ -334,7 +335,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             var eventSystems = allRootObjects.SelectMany(x => x.GetComponentsInChildren<EventSystem>(true));
             if (eventSystems.Any())
             {
-                errorMessage = $"ワールドには{nameof(EventSystem)}を配置できません";
+                errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_no_eventsystem_in_world, nameof(EventSystem));
                 invalidObjects = eventSystems.Select(x => x.gameObject).ToArray();
                 return false;
             }
@@ -342,7 +343,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             var missingPrefabs = GatherMissingPrefabs(allRootObjects);
             if (missingPrefabs.Any())
             {
-                errorMessage = $"Prefabを見つけられないGameObjectがあります。アセットを復元するかGameObjectを取り除くかをしてください";
+                errorMessage = TranslationTable.cck_prefab_not_found;
                 invalidObjects = missingPrefabs.ToArray();
                 return false;
             }
@@ -356,7 +357,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             if (unmanagedPlayerLocalUIs.Any())
             {
                 errorMessage =
-                    $"{nameof(RenderMode)}が ScreenSpace である {nameof(Canvas)} には {nameof(PlayerLocalUI)} を追加する必要があります";
+                    TranslationUtility.GetMessage(TranslationTable.cck_canvas_requires_playerlocalui, nameof(RenderMode), nameof(Canvas), nameof(PlayerLocalUI));
                 invalidObjects = unmanagedPlayerLocalUIs.Select(x => x.gameObject).ToArray();
                 return false;
             }
@@ -384,7 +385,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             if (invalidKeyLengthComponents.Any())
             {
                 const int vectorSuffixLength = 2;
-                errorMessage = $"Key は {Constants.TriggerGimmick.MaxKeyLength}文字以下({nameof(ParameterType)} が {nameof(ParameterType.Vector2)} もしくは {nameof(ParameterType.Vector3)} の場合は{Constants.TriggerGimmick.MaxKeyLength - vectorSuffixLength}文字)である必要があります。";
+                errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_key_length_limit, Constants.TriggerGimmick.MaxKeyLength, nameof(ParameterType), nameof(ParameterType.Vector2), nameof(ParameterType.Vector3), Constants.TriggerGimmick.MaxKeyLength - vectorSuffixLength);
                 invalidObjects = invalidKeyLengthComponents.Select(x => x.gameObject).ToArray();
                 return false;
             }
@@ -396,7 +397,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 .ToArray();
             if (invalidCharacterIdContainers.Any())
             {
-                errorMessage = $"Id には英数字とアポストロフィ・カンマ・ハイフン・ピリオド・アンダースコアのみが使用可能です。";
+                errorMessage = TranslationTable.cck_id_invalid_characters;
                 invalidObjects = invalidCharacterIdContainers.OfType<Component>().Select(x => x.gameObject).ToArray();
                 return false;
             }
@@ -406,7 +407,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 .ToArray();
             if (invalidLengthIdContainers.Any())
             {
-                errorMessage = $"Id は {Constants.Component.MaxIdLength}文字以下である必要があります。";
+                errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_id_length_limit, Constants.Component.MaxIdLength);
                 invalidObjects = invalidLengthIdContainers.OfType<Component>().Select(x => x.gameObject).ToArray();
                 return false;
             }

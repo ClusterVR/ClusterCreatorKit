@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Translation;
 using ClusterVR.CreatorKit.World.Implements.PlayerLocalUI;
 using UnityEditor;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             {
                 if (!canvas.isRootCanvas)
                 {
-                    EditorGUILayout.HelpBox($"{nameof(PlayerLocalUI)} は {nameof(Canvas)} の子ではないところに配置してください。",
+                    EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_player_local_ui_not_child_of_canvas, nameof(PlayerLocalUI), nameof(Canvas)),
                         MessageType.Warning);
                 }
             });

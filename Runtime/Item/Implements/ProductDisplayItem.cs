@@ -2,6 +2,7 @@
 using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Extensions;
 using ClusterVR.CreatorKit.ProductUgc;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Item.Implements
@@ -10,8 +11,8 @@ namespace ClusterVR.CreatorKit.Item.Implements
     public sealed class ProductDisplayItem : ContactableItem, IProductDisplayItem
     {
         [SerializeField, HideInInspector] Item item;
-        [SerializeField, Tooltip("商品Id")] ProductId productId;
-        [SerializeField, Tooltip("商品を表示する位置（任意）")] Transform productDisplayRoot;
+        [SerializeField, Tooltip(TranslationTable.cck_product_id)] ProductId productId;
+        [SerializeField, Tooltip(TranslationTable.cck_product_display_position_optional)] Transform productDisplayRoot;
 
         public override IItem Item
         {

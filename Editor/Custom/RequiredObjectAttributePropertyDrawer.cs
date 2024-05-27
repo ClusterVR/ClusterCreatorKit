@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -12,7 +13,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var container = new VisualElement();
 
             var helpBox = new IMGUIContainer(() =>
-                EditorGUILayout.HelpBox($"{property.displayName} を指定する必要があります。", MessageType.Warning));
+                EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_need_property_specification, property.displayName), MessageType.Warning));
             var objectField = new ObjectField(property.displayName)
             {
                 objectType = ((RequiredObjectAttribute) attribute).PropertyType,

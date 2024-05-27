@@ -15,7 +15,6 @@
 
     <engine:VisualElement class="border" />
 
-    <engine:Label text="Creator Kit 改善のため統計情報を送信しています。
-        統計情報の送信に関する設定はいつでも以下から変更することができます。" />
-    <engine:Button name="open-settings-window" text="設定を開く" />
+    <engine:Label name="send_statistical_info" />
+    <engine:Button name="open-settings-window" />
 </engine:UXML>

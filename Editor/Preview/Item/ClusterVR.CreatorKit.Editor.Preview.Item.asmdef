@@ -9,7 +9,8 @@
         "ClusterVR.CreatorKit.Item",
         "ClusterVR.CreatorKit.Gimmick",
         "ClusterVR.CreatorKit.Preview",
-        "ClusterVR.CreatorKit.ProductUgc"
+        "ClusterVR.CreatorKit.ProductUgc",
+        "ClusterVR.CreatorKit.Translation"
     ],
     "includePlatforms": [
         "Editor"

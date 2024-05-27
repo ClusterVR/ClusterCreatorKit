@@ -5,6 +5,7 @@ using System.Text;
 using ClusterVR.CreatorKit.Editor.Utils;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
+using ClusterVR.CreatorKit.Translation;
 using ClusterVR.CreatorKit.World;
 using ClusterVR.CreatorKit.World.Implements.MainScreenViews;
 using ClusterVR.CreatorKit.World.Implements.Mirror;
@@ -77,7 +78,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             if (transformScale.x <= 0 || transformScale.y <= 0 || transformScale.z <= 0)
             {
                 return new[] { new ValidationMessage(
-                    $"{gameObject.name}のScaleは0より大きい値を入力してください。現在：{transformScale}",
+                    TranslationUtility.GetMessage(TranslationTable.cck_gameobject_scale_positive, gameObject.name, transformScale),
                     ValidationMessage.MessageType.Error) };
             }
 
@@ -91,20 +92,20 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             var item = gameObject.GetComponent<IItem>();
             if (item == null)
             {
-                validationMessages.Add(new ValidationMessage($"{gameObject.name}にItemコンポーネントが設定されていません。",
+                validationMessages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_item_component_not_set, gameObject.name),
                     ValidationMessage.MessageType.Error));
                 return validationMessages;
             }
 
             if (string.IsNullOrWhiteSpace(item.ItemName))
             {
-                validationMessages.Add(new ValidationMessage($"{gameObject.name}のItemNameを入力してください。",
+                validationMessages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_itemname_input_required, gameObject.name),
                     ValidationMessage.MessageType.Error));
             }
             else if (item.ItemName.Length > ItemNameLengthLimit)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{gameObject.name}のItemNameが長すぎます。現在値：{item.ItemName.Length}, 最大値：{ItemNameLengthLimit}",
+                    TranslationUtility.GetMessage(TranslationTable.cck_itemname_too_long, gameObject.name, item.ItemName.Length, ItemNameLengthLimit),
                     ValidationMessage.MessageType.Error));
             }
 
@@ -113,21 +114,21 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             if (size.x > itemSizeLimit.x || size.y > itemSizeLimit.y || size.z > itemSizeLimit.z)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{gameObject.name}のItemSizeが規定値以上です。現在：{size}, 規定値：{itemSizeLimit}",
+                    TranslationUtility.GetMessage(TranslationTable.cck_itemsize_exceeds_limit, gameObject.name, size, itemSizeLimit),
                     ValidationMessage.MessageType.Error));
             }
 
             if (size.x < 0 || size.y < 0 || size.z < 0)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{gameObject.name}のItemSizeは0以上の値を入力してください。現在：{size}",
+                    TranslationUtility.GetMessage(TranslationTable.cck_itemsize_positive, gameObject.name, size),
                     ValidationMessage.MessageType.Error));
             }
 
             if (!allowZeroSize && size == Vector3Int.zero)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{gameObject.name}のItemSizeの少なくとも1つの値は1以上にしてください。現在：{size}",
+                    TranslationUtility.GetMessage(TranslationTable.cck_itemsize_minimum_value, gameObject.name, size),
                     ValidationMessage.MessageType.Error));
             }
 
@@ -144,7 +145,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                     {
                         var defaultSize = new Vector3Int(Mathf.RoundToInt(boundSize.x), Mathf.RoundToInt(boundSize.y), Mathf.RoundToInt(boundSize.z));
                         validationMessages.Add(new ValidationMessage(
-                            $"{gameObject.name}のItemSizeが見た目の大きさと大きく異なります。現在：{size}, 自動計算値：{defaultSize}",
+                            TranslationUtility.GetMessage(TranslationTable.cck_itemsize_visual_mismatch, gameObject.name, size, defaultSize),
                             ValidationMessage.MessageType.Warning));
                     }
                 }
@@ -168,7 +169,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 
             if (movableItem.IsDynamic)
             {
-                var message = $"現在、ベータ機能を有効にせずにアップロードしたアイテムは物理挙動しません。";
+                var message = TranslationTable.cck_beta_feature_physics_warning;
                 return new[] { new ValidationMessage(message, ValidationMessage.MessageType.Warning) };
             }
             return Enumerable.Empty<ValidationMessage>();
@@ -184,7 +185,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 
             return scriptableItem.IsValid(true)
                 ? Enumerable.Empty<ValidationMessage>()
-                : new[] { new ValidationMessage($"{gameObject.name}のScriptableItemのsource codeが長すぎます｡現在：{scriptableItem.GetByteCount(true)}bytes, 最大値：{Constants.Constants.ScriptableItemMaxSourceCodeByteCount}bytes", ValidationMessage.MessageType.Error) };
+                : new[] { new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_scriptableitem_source_code_length, gameObject.name, scriptableItem.GetByteCount(true), Constants.Constants.ScriptableItemMaxSourceCodeByteCount), ValidationMessage.MessageType.Error) };
         }
 
         internal static IEnumerable<ValidationMessage> ValidateAttachableItem(GameObject gameObject, Vector3 offsetPositionLimit)
@@ -193,7 +194,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 
             if (!gameObject.TryGetComponent<IAccessoryItem>(out var accessoryItem))
             {
-                validationMessages.Add(new ValidationMessage($"{gameObject.name}に{nameof(AccessoryItem)}コンポーネントが設定されていません。",
+                validationMessages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_accessoryitem_component_not_set, gameObject.name, nameof(AccessoryItem)),
                     ValidationMessage.MessageType.Error));
                 return validationMessages;
             }
@@ -204,8 +205,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 offsetPos.z < -(offsetPositionLimit.z) || offsetPos.z > (offsetPositionLimit.z))
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"Offset Positionが規定範囲外です。{offsetPos.ToString("0.0")}、" +
-                    $"規定範囲: max: {(offsetPositionLimit.ToString("0.0"))},min: {(-offsetPositionLimit).ToString("0.0")}",
+                    TranslationUtility.GetMessage(TranslationTable.cck_offset_position_out_of_range, offsetPos.ToString("0.0")) +
+                    TranslationUtility.GetMessage(TranslationTable.cck_offset_range_min_max, (offsetPositionLimit.ToString("0.0")), (-offsetPositionLimit).ToString("0.0")),
                     ValidationMessage.MessageType.Error));
             }
 
@@ -218,7 +219,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 
             if (gameObject.GetComponentInChildren<MeshRenderer>(false) == null)
             {
-                validationMessages.Add(new ValidationMessage("少なくとも1つのMeshが有効である必要があります", ValidationMessage.MessageType.Error));
+                validationMessages.Add(new ValidationMessage(TranslationTable.cck_mesh_required, ValidationMessage.MessageType.Error));
             }
 
             return validationMessages;
@@ -236,7 +237,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             if (isInvalidComponent)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{component.gameObject.name}の{componentType}は対応していないため正しく動作しません。",
+                    TranslationUtility.GetMessage(TranslationTable.cck_component_type_not_supported, component.gameObject.name, componentType),
                     ValidationMessage.MessageType.Warning));
                 return validationMessages;
             }
@@ -247,7 +248,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             if (isChildItemComponent)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{component.gameObject.name}の{componentType}は無効化されます。RootのGameObjectに設定してください。",
+                    TranslationUtility.GetMessage(TranslationTable.cck_component_type_root_required, component.gameObject.name, componentType),
                     ValidationMessage.MessageType.Warning));
                 return validationMessages;
             }
@@ -258,8 +259,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 {
                     var isSingular = requireComponents.Length == 1;
                     var message = isSingular ?
-                        $"{component.gameObject.name}の{componentType}は無効化されます。{requireComponents[0]}をGameObjectに設定してください。" :
-                        $"{component.gameObject.name}の{componentType}は無効化されます。{string.Join(", ", requireComponents.Select(c => c.ToString()))}のいずれかをGameObjectに設定してください。";
+                        TranslationUtility.GetMessage(TranslationTable.cck_component_type_disabled_require_component, component.gameObject.name, componentType, requireComponents[0]) :
+                        TranslationUtility.GetMessage(TranslationTable.cck_component_type_disabled_require_component_list, component.gameObject.name, componentType, string.Join(", ", requireComponents.Select(c => c.ToString())));
                     validationMessages.Add(new ValidationMessage(message, ValidationMessage.MessageType.Warning));
                     return validationMessages;
                 }
@@ -278,7 +279,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             if (isInvalidComponent)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{component.gameObject.name}の{component.GetType()}は対応していません。",
+                    TranslationUtility.GetMessage(TranslationTable.cck_component_gettype_not_supported, component.gameObject.name, component.GetType()),
                     ValidationMessage.MessageType.Error));
                 return validationMessages;
             }
@@ -289,7 +290,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             if (isChildAccessoryComponent)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{component.gameObject.name}の{component.GetType()}は無効化されます。RootのGameObjectに設定してください。",
+                    TranslationUtility.GetMessage(TranslationTable.cck_component_gettype_root_required, component.gameObject.name, component.GetType()),
                     ValidationMessage.MessageType.Warning));
                 return validationMessages;
             }
@@ -313,14 +314,14 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                     if (fallbackToStandard)
                     {
                         validationMessages.Add(new ValidationMessage(
-                            $"マテリアル\"{material.name}\"のShader \"{shader.name}\" は未対応です。Standard Shaderに変換されます。",
+                            TranslationUtility.GetMessage(TranslationTable.cck_shader_unsupported, material.name, shader.name),
                             ValidationMessage.MessageType.Warning));
                     }
                     else
                     {
                         var supportShaderListStr = string.Join(", ", shaderNameWhiteList);
                         validationMessages.Add(new ValidationMessage(
-                            $"マテリアル\"{material.name}\"のShader \"{shader.name}\" は未対応です。対応Shader: {supportShaderListStr}",
+                            TranslationUtility.GetMessage(TranslationTable.cck_shader_unsupported_list, material.name, shader.name, supportShaderListStr),
                             ValidationMessage.MessageType.Error));
                     }
                 }
@@ -352,7 +353,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             if (!maxBounds.Contains(bounds.max) || !maxBounds.Contains(bounds.min))
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{name}のBoundsが推奨範囲外です。現在: max: {bounds.max},min: {bounds.min}, 推奨: max: {maxBounds.max},min {maxBounds.min}",
+                    TranslationUtility.GetMessage(TranslationTable.cck_bounds_out_of_recommended_range, name, bounds.max, bounds.min, maxBounds.max, maxBounds.min),
                     ValidationMessage.MessageType.Warning));
             }
         }
@@ -363,7 +364,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             if (size.x > boundsSizeLimit.x || size.y > boundsSizeLimit.y || size.z > boundsSizeLimit.z)
             {
                 validationMessages.Add(new ValidationMessage(
-                    $"{name}のBoundsSizeが規定値以上です。現在：{size}, 規定値：{boundsSizeLimit}",
+                    TranslationUtility.GetMessage(TranslationTable.cck_boundssize_exceeds_limit, name, size, boundsSizeLimit),
                     ValidationMessage.MessageType.Error));
             }
         }
@@ -390,7 +391,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 
             return new List<ValidationMessage>()
             {
-                new($"Mirrorの数が多すぎます。現在：{count}, 最大値：{maxMirrorCount}", ValidationMessage.MessageType.Error)
+                new(TranslationUtility.GetMessage(TranslationTable.cck_too_many_mirrors, count, maxMirrorCount), ValidationMessage.MessageType.Error)
             };
         }
 
@@ -403,7 +404,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 if (collider.GetComponent<IShape>() == null && collider.isTrigger)
                 {
                     validationMessages.Add(new ValidationMessage(
-                        $"Collider\"{collider.name}\"は、isTriggerがonかつShapeがついていないため無効化されます。isTriggerをoffにするか{nameof(OverlapSourceShape)}, {nameof(OverlapDetectorShape)}, {nameof(InteractableShape)}, {nameof(ItemSelectShape)}のいずれかを追加してください。",
+                        TranslationUtility.GetMessage(TranslationTable.cck_collider_istrigger_shape_required, collider.name, nameof(OverlapSourceShape), nameof(OverlapDetectorShape), nameof(InteractableShape), nameof(ItemSelectShape)),
                         ValidationMessage.MessageType.Warning));
                 }
             }
@@ -457,7 +458,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 if (textByteCount > maxTextByteCount)
                 {
                     validationMessages.Add(new(
-                        $"{nameof(World.Implements.TextView)} の {nameof(TextView.Text)} のサイズが大きすぎます。現在：{textByteCount}, 最大値：{maxTextByteCount}",
+                        TranslationUtility.GetMessage(TranslationTable.cck_textview_text_size_limit, nameof(World.Implements.TextView), nameof(TextView.Text), textByteCount, maxTextByteCount),
                         ValidationMessage.MessageType.Error));
                 }
             }

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +18,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         [SerializeField] GlobalGimmickKey globalGimmickKey;
         [SerializeField, ParameterTypeField(ParameterType.Signal, ParameterType.Bool, ParameterType.Float, ParameterType.Integer, ParameterType.Vector2, ParameterType.Vector3)]
         ParameterType parameterType = SelectableTypes[0];
-        [SerializeField, Tooltip("Textに設定するフォーマット"), Multiline] string format = DefaultFormat;
+        [SerializeField, Tooltip(TranslationTable.cck_text_format), Multiline] string format = DefaultFormat;
 
         const string DefaultFormat = "{0}";
         ItemId IGimmick.ItemId => globalGimmickKey.ItemId;

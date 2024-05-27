@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ClusterVR.CreatorKit.Translation;
 using ClusterVR.CreatorKit.World;
 using UnityEngine;
 
@@ -20,9 +21,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             {
                 return;
             }
-            var readableKey = string.IsNullOrEmpty(e.Key) ? "空" : e.Key;
+            var readableKey = string.IsNullOrEmpty(e.Key) ? TranslationTable.cck_empty_world_gate_key : e.Key;
             var message =
-                $"ワールドをアップロードすると以下のIdのワールドまたはイベントに移動します。\n{e.WorldOrEventId}\n移動先のSpawnPointにTypeが{SpawnType.WorldGateDestination}でWorldGateKeyが{readableKey}のものがあればそこに出現します。";
+                TranslationUtility.GetMessage(TranslationTable.cck_upload_world_move_to_id, e.WorldOrEventId, SpawnType.WorldGateDestination, readableKey);
             Debug.Log(message);
         }
     }

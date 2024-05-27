@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -11,7 +12,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
     [CustomEditor(typeof(AccessoryItem)), CanEditMultipleObjects]
     public sealed class AccessoryItemEditor : VisualElementEditor
     {
-        const string SetUsableShaderText = "アクセサリーに使えるシェーダーに変更する";
+        const string SetUsableShaderText = TranslationTable.cck_change_to_supported_shader_for_accessory;
         const string MToonShaderName = "VRM/MToon";
 
         Button setUsableShaderButton;
@@ -68,7 +69,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var targetShader = Shader.Find(MToonShaderName);
             if (targetShader == null)
             {
-                EditorUtility.DisplayDialog(SetUsableShaderText, $"{MToonShaderName} Shaderが見つかりませんでした。Creator Kitが正しく導入されているか確認してください", "OK");
+                EditorUtility.DisplayDialog(SetUsableShaderText, TranslationUtility.GetMessage(TranslationTable.cck_mtoon_shader_not_found, MToonShaderName), TranslationTable.cck_ok);
                 return;
             }
 
@@ -76,7 +77,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             if (targetMaterials.Count == 0)
             {
-                EditorUtility.DisplayDialog(SetUsableShaderText, $"全てのShaderは利用可能です", "OK");
+                EditorUtility.DisplayDialog(SetUsableShaderText, TranslationTable.cck_all_shaders_available, TranslationTable.cck_ok);
                 return;
             }
 
@@ -99,7 +100,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                     {
                         while (true)
                         {
-                            folderToSave = EditorUtility.OpenFolderPanel("マテリアルを保存するフォルダーを選んで下さい", "Assets", "");
+                            folderToSave = EditorUtility.OpenFolderPanel(TranslationTable.cck_select_folder_for_saving_material, "Assets", "");
                             if (folderToSave == null)
                             {
                                 saveCanceled = true;
@@ -109,7 +110,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                             folderToSave = Path.GetRelativePath(Directory.GetCurrentDirectory(), folderToSave);
                             if (!folderToSave.StartsWith("Assets"))
                             {
-                                EditorUtility.DisplayDialog(SetUsableShaderText, $"Assets内のフォルダーを選択してください", "OK");
+                                EditorUtility.DisplayDialog(SetUsableShaderText, TranslationTable.cck_select_folder_within_assets, TranslationTable.cck_ok);
                                 continue;
                             }
 
@@ -139,11 +140,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             }
             if (changed)
             {
-                EditorUtility.DisplayDialog(SetUsableShaderText, $"RendererのMaterialのShaderを{MToonShaderName}に変更しました", "OK");
+                EditorUtility.DisplayDialog(SetUsableShaderText, TranslationUtility.GetMessage(TranslationTable.cck_shader_changed_to_mtoon, MToonShaderName), TranslationTable.cck_ok);
             }
             else
             {
-                EditorUtility.DisplayDialog(SetUsableShaderText, $"Shaderの変更はキャンセルされました", "OK");
+                EditorUtility.DisplayDialog(SetUsableShaderText, TranslationTable.cck_shader_change_cancelled, TranslationTable.cck_ok);
             }
             UpdateSetUsableShaderButtonVisibility();
         }

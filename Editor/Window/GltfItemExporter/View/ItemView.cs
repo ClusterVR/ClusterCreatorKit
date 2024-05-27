@@ -10,6 +10,7 @@ using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
 using ClusterVR.CreatorKit.ItemExporter;
 using ClusterVR.CreatorKit.ItemExporter.ExporterHooks;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -80,7 +81,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             catch (Exception e)
             {
                 Clear();
-                validationMessages.Add(new ValidationMessage("prefab読み込み時に例外が発生しました。詳細はConsoleを確認してください。",
+                validationMessages.Add(new ValidationMessage(TranslationTable.cck_prefab_load_exception,
                     ValidationMessage.MessageType.Error));
                 Debug.LogException(e);
             }
@@ -209,7 +210,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 
             if (validationMessages.Count == 0)
             {
-                validationMessages.Add(new ValidationMessage("正常なアイテムです。", ValidationMessage.MessageType.Info));
+                validationMessages.Add(new ValidationMessage(TranslationTable.cck_item_valid, ValidationMessage.MessageType.Info));
             }
             validationMessages.Sort((a, b) => a.Type.CompareTo(b.Type));
             IsValid = validationMessages.All(message => message.Type != ValidationMessage.MessageType.Error);
@@ -222,13 +223,13 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             switch (exception)
             {
                 case MissingAudioClipException e:
-                    message = $"AudioClipがみつかりませんでした。ItemAudioSetにAudioClipを設定してください。(Id: {e.Id})";
+                    message = TranslationUtility.GetMessage(TranslationTable.cck_audioclip_not_found_exception, e.Id);
                     return true;
                 case MissingHumanoidAnimationException e:
-                    message = $"Animationがみつかりませんでした。HumanoidAnimationにAnimation Clipを設定してください。(Id: {e.Id})";
+                    message = TranslationUtility.GetMessage(TranslationTable.cck_animation_not_found_exception, e.Id);
                     return true;
                 case ExtractAudioDataFailedException e:
-                    message = $"AudioClipの情報の取得に失敗しました。(Id: {e.Id})";
+                    message = TranslationUtility.GetMessage(TranslationTable.cck_audioclip_info_fetch_failed, e.Id);
                     return true;
                 default:
                     message = default;

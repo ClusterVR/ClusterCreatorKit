@@ -8,6 +8,7 @@ using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
 using ClusterVR.CreatorKit.Editor.Window.View;
 using ClusterVR.CreatorKit.ItemExporter;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -88,17 +89,21 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             itemCountLabel = view.Q<Label>("item-count-label");
 
             var addItemButton = view.Q<Button>("add-item-button");
-            addItemButton.text = $"{editorTypeName}の追加";
+            addItemButton.text = TranslationUtility.GetMessage(TranslationTable.cck_editor_type_addition, editorTypeName);
+            var addItemButtonLabel = view.Q<Label>("select-prefab-to-upload");
+            addItemButtonLabel.text = TranslationTable.cck_select_prefab_to_upload;
             addItemButton.clicked += () =>
             {
                 EditorGUIUtility.ShowObjectPicker<GameObject>(null, false, "", 0);
             };
 
             clearItemViewsButton = view.Q<Button>("clear-item-list-button");
+            clearItemViewsButton.text = TranslationTable.cck_delete_all;
             clearItemViewsButton.clicked += () =>
             {
-                var result = EditorUtility.DisplayDialog("複数アイテムの削除", "アイテムをすべて削除しますか？",
-                    "はい", "いいえ");
+                var result = EditorUtility.DisplayDialog(TranslationTable.cck_delete_multiple_items,
+                    TranslationTable.cck_confirm_delete_all_items,
+                    TranslationTable.cck_yes, TranslationTable.cck_no);
                 if (result)
                 {
                     ClearItemViews();
@@ -107,7 +112,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 
             uploadItemsButton = view.Q<Button>("upload-button");
             uploadItemsButton.clicked += () => UploadItems(ClusterCreatorKitSettings.instance.IsBeta);
-            uploadItemsButton.text = uploadService.ApplyBeta && ClusterCreatorKitSettings.instance.IsBeta ? "ベータ機能利用アイテムとしてアップロード" : "アップロード";
+            uploadItemsButton.text = uploadService.ApplyBeta && ClusterCreatorKitSettings.instance.IsBeta
+                ? TranslationTable.cck_upload_as_beta_feature_item
+                : TranslationTable.cck_upload;
 
             Func<VisualElement> makeItemView = () =>
             {
@@ -131,7 +138,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             itemContainer = view.Q<VisualElement>("item-list-view-container");
             helpViewContainer = view.Q<VisualElement>("help-view-container");
             dragAreaPanel = view.Q<VisualElement>("drag-area-panel");
-
+            var dragAreaLabel = view.Q<Label>("drag-and-drop-prefab");
+            dragAreaLabel.text = TranslationTable.cck_drag_and_drop_prefab;
             var itemListPanel = view.Q<VisualElement>("item-list-panel");
 
             itemListPanel.RegisterCallback<DragEnterEvent>(OnDragEnter);
@@ -327,7 +335,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             }
             if (itemCountLabel != null)
             {
-                itemCountLabel.text = $"アイテム数： {itemViews.Count}";
+                itemCountLabel.text = TranslationUtility.GetMessage(TranslationTable.cck_item_count, itemViews.Count);
             }
 
             var hasItem = itemViews.Count > 0;
@@ -369,11 +377,11 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             }
             catch (OperationCanceledException)
             {
-                Debug.LogWarning("アップロード処理が中断されました");
+                Debug.LogWarning(TranslationTable.cck_upload_interrupted);
             }
             catch (Exception e)
             {
-                Debug.LogError($"アイテムのアップロードに失敗しました: {e.Message}");
+                Debug.LogError(TranslationUtility.GetMessage(TranslationTable.cck_item_upload_failed, e.Message));
                 reactiveItemUploadStatus.Val = ItemUploadProgressWindow.ItemUploadStatus.Standby;
                 throw;
             }

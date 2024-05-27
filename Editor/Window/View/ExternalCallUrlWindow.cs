@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,11 +10,11 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         readonly ExternalCallUrlView externalCallUrlView = new();
         RequireTokenAuthView tokenAuthView;
 
-        [MenuItem("Cluster/外部通信(callExternal)接続先URL", priority = 305)]
+        [MenuItem(TranslationTable.cck_cluster_external_communication_url, priority = 305)]
         public static void Open()
         {
             var window = GetWindow<ExternalCallUrlWindow>();
-            window.titleContent = new GUIContent("外部通信(callExternal)接続先URL");
+            window.titleContent = new GUIContent(TranslationTable.cck_external_communication_url);
         }
 
         void OnEnable()

@@ -1,6 +1,7 @@
 ﻿using System;
 using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Extensions;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Item.Implements
@@ -9,12 +10,12 @@ namespace ClusterVR.CreatorKit.Item.Implements
     public sealed class RidableItem : ContactableItem, IRidableItem
     {
         [SerializeField, HideInInspector] Item item;
-        [SerializeField, Tooltip("座る位置")] Transform seat;
-        [SerializeField, Tooltip("降りる位置（任意）")] Transform exitTransform;
+        [SerializeField, Tooltip(TranslationTable.cck_sitting_position)] Transform seat;
+        [SerializeField, Tooltip(TranslationTable.cck_dismount_position_optional)] Transform exitTransform;
 
-        [SerializeField, Tooltip("座っているアバターの左手の位置（任意）")] Transform leftGrip;
-        [SerializeField, Tooltip("座っているアバターの右手の位置（任意）")] Transform rightGrip;
-        [SerializeField, Tooltip("座っているアバターのアニメーション（任意）")] AnimationClip avatarOverrideAnimation;
+        [SerializeField, Tooltip(TranslationTable.cck_avatar_left_hand_position_optional)] Transform leftGrip;
+        [SerializeField, Tooltip(TranslationTable.cck_avatar_right_hand_position_optional)] Transform rightGrip;
+        [SerializeField, Tooltip(TranslationTable.cck_avatar_animation_optional)] AnimationClip avatarOverrideAnimation;
 
         public override IItem Item
         {

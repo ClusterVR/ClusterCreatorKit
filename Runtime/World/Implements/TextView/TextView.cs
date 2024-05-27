@@ -1,5 +1,6 @@
 ﻿using System;
 using ClusterVR.CreatorKit.Extensions;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -231,14 +232,14 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
             }
             else
             {
-                var message = $"{nameof(TextView)} は他の {nameof(Renderer)} を持つGameObjectには追加できません";
+                var message = TranslationUtility.GetMessage(TranslationTable.cck_textview_add_to_renderer_object, nameof(TextView), nameof(Renderer));
                 if (Application.isPlaying)
                 {
                     Debug.LogError(message);
                 }
                 else
                 {
-                    UnityEditor.EditorUtility.DisplayDialog($"{nameof(TextView)} を追加できません", message, "Cancel");
+                    UnityEditor.EditorUtility.DisplayDialog(TranslationUtility.GetMessage(TranslationTable.cck_textview_addition_failed, nameof(TextView)), message, TranslationTable.cck_cancel);
                 }
 
                 DestroyImmediate(this);

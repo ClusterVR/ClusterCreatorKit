@@ -3,6 +3,7 @@ using System.Reflection;
 using ClusterVR.CreatorKit.Editor.Custom;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
+using ClusterVR.CreatorKit.Translation;
 using ClusterVR.CreatorKit.World;
 using ClusterVR.CreatorKit.World.Implements.PlayerLocalUI;
 using UnityEngine;
@@ -62,6 +63,6 @@ namespace ClusterVR.CreatorKit.Editor.Validator
         }
 
         public static readonly string ErrorMessage =
-            $"{nameof(GimmickTarget)} を {GlobalGimmickKeyPropertyDrawer.FormatTarget(GimmickTarget.Player)} にできるのは {nameof(PlayerLocalUI)} の中だけです。";
+            TranslationUtility.GetMessage(TranslationTable.cck_gimmicktarget_playerlocalui_only, nameof(GimmickTarget), GlobalGimmickKeyPropertyDrawer.FormatTarget(GimmickTarget.Player), nameof(PlayerLocalUI));
     }
 }

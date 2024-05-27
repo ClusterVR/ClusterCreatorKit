@@ -1,4 +1,5 @@
 ﻿using ClusterVR.CreatorKit.Operation;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine.UIElements;
 
@@ -15,7 +16,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 {
                     if (!targetlogic.Logic.IsValid())
                     {
-                        EditorGUILayout.HelpBox($"エラーがあるためこの{target.GetType().Name}は実行されません。\nkeyが入力されており、{nameof(ParameterType)}の組み合わせが正しいかを確認してください。",
+                        EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_gimmick_execution_error, target.GetType().Name, nameof(ParameterType)),
                             MessageType.Error);
                     }
                 });

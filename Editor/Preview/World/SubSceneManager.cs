@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Preview.Common;
+using ClusterVR.CreatorKit.Translation;
 using ClusterVR.CreatorKit.World;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -39,7 +40,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 
             if (e.SubScene.UnityScene == null)
             {
-                Debug.LogWarning($"SubSceneにSceneが設定されていません");
+                Debug.LogWarning(TranslationTable.cck_subscene_no_scene_set);
                 return;
             }
 
@@ -66,7 +67,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             var subSceneAssetPath = AssetDatabase.GetAssetPath(subScene.UnityScene);
             if (string.IsNullOrEmpty(subSceneAssetPath))
             {
-                Debug.LogWarning($"サブシーン({subScene.UnityScene.name})が見つかりません");
+                Debug.LogWarning(TranslationUtility.GetMessage(TranslationTable.cck_subscene_not_found_by_name, subScene.UnityScene.name));
                 UpdateSubSceneLoadState(subScene, SubSceneLoadState.Error);
                 yield break;
             }
@@ -78,7 +79,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
                 new LoadSceneParameters(LoadSceneMode.Additive)
             );
 
-            Debug.Log($"Load scene: {subScene.UnityScene.name}");
+            Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_load_scene, subScene.UnityScene.name));
 
             if (subSceneStatus[subScene] == SubSceneLoadState.WaitingToUnload)
             {
@@ -98,7 +99,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 
             if (e.SubScene.UnityScene == null)
             {
-                Debug.LogWarning($"SubSceneにSceneが設定されていません");
+                Debug.LogWarning(TranslationTable.cck_subscene_no_scene_set);
                 return;
             }
 
@@ -127,7 +128,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             yield return SceneManager.UnloadSceneAsync(subScene.UnityScene.name);
             UpdateSubSceneLoadState(subScene, SubSceneLoadState.NotLoaded);
             Resources.UnloadUnusedAssets();
-            Debug.Log($"Unload scene: {subScene.UnityScene.name}");
+            Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_unload_scene, subScene.UnityScene.name));
         }
 
         void UpdateSubSceneLoadState(ISubScene subScene, SubSceneLoadState state)

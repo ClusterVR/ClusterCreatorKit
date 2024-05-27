@@ -1,4 +1,5 @@
-﻿using ClusterVR.CreatorKit.World.Implements.RankingScreenViews;
+﻿using ClusterVR.CreatorKit.Translation;
+using ClusterVR.CreatorKit.World.Implements.RankingScreenViews;
 using UnityEditor;
 using UnityEngine.UIElements;
 
@@ -15,7 +16,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             {
                 if (rankingScreenView.HasInvalidCell())
                 {
-                    EditorGUILayout.HelpBox($"{nameof(RankingScreenCell)}が設定されていないBoardCellsが存在します", MessageType.Warning);
+                    EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_boardcells_missing_rankingscreencell, nameof(RankingScreenCell)), MessageType.Warning);
                 }
             });
             container.Insert(0, warningBox);

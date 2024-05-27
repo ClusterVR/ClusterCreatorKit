@@ -1,4 +1,5 @@
 using ClusterVR.CreatorKit.Editor.Utils;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
     [CustomEditor(typeof(CreatorKit.Item.Implements.Item)), CanEditMultipleObjects]
     public sealed class ItemEditor : UnityEditor.Editor
     {
-        const string SetDefaultSizeText = "Set Default Size";
+        const string SetDefaultSizeText = TranslationTable.cck_set_default_size;
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -28,8 +29,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             };
             setDefaultSizeButton.clicked += () =>
             {
-                if (!EditorUtility.DisplayDialog(SetDefaultSizeText, "GameObjectのBoundsからItemのSizeを自動設定します",
-                        "OK", "Cancel"))
+                if (!EditorUtility.DisplayDialog(SetDefaultSizeText, TranslationTable.cck_auto_set_item_size_from_gameobject_bounds,
+                        TranslationTable.cck_ok, TranslationTable.cck_cancel))
                 {
                     return;
                 }
@@ -43,7 +44,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 }
                 else
                 {
-                    EditorUtility.DisplayDialog(SetDefaultSizeText, "ItemのSizeを自動設定するにはRendererが必要です", "OK");
+                    EditorUtility.DisplayDialog(SetDefaultSizeText, TranslationTable.cck_renderer_needed_for_auto_setting_item_size, TranslationTable.cck_ok);
                 }
             };
 

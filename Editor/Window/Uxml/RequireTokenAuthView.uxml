@@ -7,7 +7,7 @@
 >
     <engine:VisualElement name="base-container">
         <engine:VisualElement name="main-view-header">
-            <engine:Button name="logout-button" text="アカウント切り替え"/>
+            <engine:Button name="logout-button"/>
             <engine:Label name="user-name-label"/>
             <engine:Image name="login-user-icon"/>
         </engine:VisualElement>

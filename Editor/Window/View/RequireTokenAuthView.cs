@@ -5,6 +5,7 @@ using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Editor.Custom;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -58,6 +59,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             mainViewHeader = view.Q<VisualElement>("main-view-header");
             var logoutButton = mainViewHeader.Q<Button>("logout-button");
+            logoutButton.text = TranslationTable.cck_switch_account;
             logoutButton.clicked += Logout;
             mainViewHeader.SetVisibility(false);
 
@@ -88,8 +90,13 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             var openTokenPageButton = view.Q<Button>("open-token-page-button");
             var useTokenButton = view.Q<Button>("use-token-button");
+            openTokenPageButton.text = TranslationTable.cck_web_token_issue;
+            useTokenButton.text = TranslationTable.cck_use_this_token;
             openTokenPageButton.clicked += () => Application.OpenURL(Api.RPC.Constants.WebBaseUrl + "/account/tokens");
             useTokenButton.clicked += () => _ = Login(new AuthenticationInfo(tokenInputField.value), loginErrorLabel);
+
+            var pasteAccessTokenLabel = view.Q<Label>("paste-access-token-label");
+            pasteAccessTokenLabel.text = TranslationTable.cck_paste_access_token;
 
             tokenInputField.RegisterValueChangedCallback(ev =>
             {
@@ -119,7 +126,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
                 if (string.IsNullOrEmpty(user.Username))
                 {
-                    errorLabel.text = "認証に失敗しました";
+                    errorLabel.text = TranslationTable.cck_auth_failed;
                     errorLabel.SetVisibility(true);
                     return;
                 }
@@ -135,7 +142,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             }
             finally
             {
-                errorLabel.text = "認証に失敗しました";
+                errorLabel.text = TranslationTable.cck_auth_failed;
                 errorLabel.SetVisibility(true);
                 isLoggingIn = false;
             }

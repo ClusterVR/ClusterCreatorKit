@@ -1,4 +1,5 @@
 using System.Linq;
+using ClusterVR.CreatorKit.Translation;
 using ClusterVR.CreatorKit.World.Implements.PlayerLocalUI;
 using UnityEditor;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
     [CustomEditor(typeof(SafeArea)), CanEditMultipleObjects]
     public sealed class SafeAreaEditor : VisualElementEditor
     {
-        const string AutoAnchorActionName = "Anchor自動設定";
+        const string AutoAnchorActionName = TranslationTable.cck_auto_set_anchor;
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -18,7 +19,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             {
                 if (!IsChildOfPlayerLocalUI((SafeArea) target))
                 {
-                    EditorGUILayout.HelpBox($"{nameof(SafeArea)} が正しく動作するためには {nameof(PlayerLocalUI)} の子である必要があります。",
+                    EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_safe_area_requires_player_local_ui_child, nameof(SafeArea), nameof(PlayerLocalUI)),
                         MessageType.Warning);
                 }
             });
@@ -30,8 +31,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
         void AutoAnchor()
         {
-            if (!EditorUtility.DisplayDialog(AutoAnchorActionName, "Anchorを自動設定します。子オブジェクトが端や中央のうち最も近い場所に追従するようになります",
-                "OK", "Cancel"))
+            if (!EditorUtility.DisplayDialog(AutoAnchorActionName, TranslationTable.cck_auto_set_anchor_description,
+                TranslationTable.cck_ok, TranslationTable.cck_cancel))
             {
                 return;
             }
@@ -55,7 +56,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 child.localPosition = pos;
             }
 
-            EditorUtility.DisplayDialog(AutoAnchorActionName, "Anchorの設定が完了しました", "OK");
+            EditorUtility.DisplayDialog(AutoAnchorActionName, TranslationTable.cck_anchor_setting_completed, TranslationTable.cck_ok);
         }
 
         static bool IsChildOfPlayerLocalUI(SafeArea safeArea)

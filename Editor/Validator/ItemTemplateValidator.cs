@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.Translation;
 using ClusterVR.CreatorKit.World.Implements.CommentScreenViews;
 using ClusterVR.CreatorKit.World.Implements.DespawnHeights;
 using ClusterVR.CreatorKit.World.Implements.MainScreenViews;
@@ -76,7 +77,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             var objects = itemTemplate.gameObject.GetComponentsInChildren<T>(true);
             if (objects.Any())
             {
-                error.Add(new Result.Factor($"Item Template には {typeof(T).Name} が含まれていてはいけません", objects));
+                error.Add(new Result.Factor(TranslationUtility.GetMessage(TranslationTable.cck_item_template_contains_type, typeof(T).Name), objects));
             }
         }
 
@@ -85,7 +86,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             var objects = itemTemplate.gameObject.GetComponentsInChildren<T>(true);
             if (objects.Any())
             {
-                warnings.Add(new Result.Factor($"Item Template の {typeof(T).Name} は動作しません", objects));
+                warnings.Add(new Result.Factor(TranslationUtility.GetMessage(TranslationTable.cck_item_template_type_not_working, typeof(T).Name), objects));
             }
         }
 

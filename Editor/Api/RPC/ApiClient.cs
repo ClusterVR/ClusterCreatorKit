@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -126,7 +127,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
             if (webRequest.GetResponseHeader("x-cluster-is-banned") != null)
             {
-                throw new Exception("アカウントが停止されているため、使える機能が制限されています");
+                throw new Exception(TranslationTable.cck_account_suspended);
             }
 
             if (webRequest.result == UnityWebRequest.Result.ProtocolError)

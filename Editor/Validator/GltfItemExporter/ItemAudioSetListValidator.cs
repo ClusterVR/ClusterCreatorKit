@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
@@ -30,7 +31,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 {
                     if (!emptyIdReported)
                     {
-                        messages.Add(new ValidationMessage($"ItemAudioSetListのIdが空です。有効なIdを設定してください。", ValidationMessage.MessageType.Error));
+                        messages.Add(new ValidationMessage(TranslationTable.cck_itemaudiosetlist_empty_id, ValidationMessage.MessageType.Error));
                         emptyIdReported = true;
                     }
                     continue;
@@ -40,12 +41,12 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 {
                     if (!Constants.Component.ValidIdCharactersRegex.IsMatch(id))
                     {
-                        messages.Add(new ValidationMessage($"ItemAudioSetListのIdに使用できない文字が含まれています。Idには英数字とアポストロフィ・カンマ・ハイフン・ピリオド・アンダースコアのみが使用可能です。 Id: {id}", ValidationMessage.MessageType.Error));
+                        messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_itemaudiosetlist_invalid_characters, id), ValidationMessage.MessageType.Error));
                     }
 
                     if (id.Length > Constants.Component.MaxIdLength)
                     {
-                        messages.Add(new ValidationMessage($"ItemAudioSetListのIdが長すぎます。 Id: {id} 最大値: {Constants.Component.MaxIdLength}", ValidationMessage.MessageType.Error));
+                        messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_itemaudiosetlist_id_length, id, Constants.Component.MaxIdLength), ValidationMessage.MessageType.Error));
                     }
                 }
                 else
@@ -58,36 +59,36 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 {
                     if (emptyAudioReportedIds.Add(id))
                     {
-                        messages.Add(new ValidationMessage($"AudioClipがみつかりませんでした。ItemAudioSetにAudioClipを設定してください。(Id: {id})", ValidationMessage.MessageType.Error));
+                        messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_audioclip_not_found, id), ValidationMessage.MessageType.Error));
                     }
                 }
                 else if (audios.Add(audio))
                 {
                     if (audio.channels > MaxChannels)
                     {
-                        messages.Add(new ValidationMessage($"AudioClipのChannelが多すぎます。 現在値: {audio.channels} 最大値: {MaxChannels} (Name: {audio.name})", ValidationMessage.MessageType.Error));
+                        messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_audioclip_channels_limit, audio.channels, MaxChannels, audio.name), ValidationMessage.MessageType.Error));
                     }
 
                     if (audio.frequency > MaxSampleRates)
                     {
-                        messages.Add(new ValidationMessage($"AudioClipのSample Rateが高すぎます。 現在値: {audio.frequency} 最大値: {MaxSampleRates} (Name: {audio.name}) (Sample RateはAudio ClipのImport SettingsのSample Rate SettingをOverride Sample Rateにすることで変更が可能です。)", ValidationMessage.MessageType.Error));
+                        messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_audioclip_samplerate_high, audio.frequency, MaxSampleRates, audio.name), ValidationMessage.MessageType.Error));
                     }
 
                     if (audio.length > MaxLength)
                     {
-                        messages.Add(new ValidationMessage($"AudioClipが長すぎます。 現在値: {audio.length: 0.00}秒 最大値: {MaxLength}秒 (Name: {audio.name})", ValidationMessage.MessageType.Error));
+                        messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_audioclip_length_limit, audio.length, MaxLength, audio.name), ValidationMessage.MessageType.Error));
                     }
                 }
             }
 
             if (count > MaxCount)
             {
-                messages.Add(new ValidationMessage($"ItemAudioSetの数が多すぎます。 現在値: {count} 最大値: {MaxCount}", ValidationMessage.MessageType.Error));
+                messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_too_many_itemaudiosets, count, MaxCount), ValidationMessage.MessageType.Error));
             }
 
             if (collidedIds.Count > 0)
             {
-                messages.Add(new ValidationMessage($"ItemAudioSetListのIdが重複しています。 Id: {string.Join(", ", collidedIds)}", ValidationMessage.MessageType.Error));
+                messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_itemaudiosetlist_duplicate_id, string.Join(", ", collidedIds)), ValidationMessage.MessageType.Error));
             }
 
             return messages;

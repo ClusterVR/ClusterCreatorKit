@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
 
             if (File.GetLastWriteTimeUtc(lastBuildReportPath) == lastWriteTime)
             {
-                throw new Exception($"{lastBuildReportPath} has not been updated");
+                throw new Exception(TranslationUtility.GetMessage(TranslationTable.cck_last_build_report_not_updated, lastBuildReportPath));
             }
 
             var copiedBuildReportPath = AssetDatabase.GenerateUniqueAssetPath($"Assets/LastBuild.buildreport");

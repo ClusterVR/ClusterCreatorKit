@@ -1,5 +1,6 @@
 ﻿using System;
 using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,8 +16,8 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         [SerializeField, ParameterTypeField(ParameterType.Integer, ParameterType.Float)]
         ParameterType parameterType = ParameterType.Float;
 
-        [SerializeField, Tooltip("FillAmountが0となるときの値")] float minValue = 0f;
-        [SerializeField, Tooltip("FillAmountが1となるときの値")] float maxValue = 1f;
+        [SerializeField, Tooltip(TranslationTable.cck_fillamount_zero_value)] float minValue = 0f;
+        [SerializeField, Tooltip(TranslationTable.cck_fillamount_one_value)] float maxValue = 1f;
 
         ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;

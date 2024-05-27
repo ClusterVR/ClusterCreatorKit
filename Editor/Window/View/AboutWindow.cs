@@ -1,4 +1,5 @@
 using ClusterVR.CreatorKit.Editor.Builder;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -18,11 +19,11 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             EditorPrefsUtils.HasAlreadyShownAboutWindow = true;
         }
 
-        [MenuItem("Cluster/About", priority = 310)]
+        [MenuItem(TranslationTable.cck_cluster_about_menu, priority = 310)]
         public static void ShowWindow()
         {
             var wnd = GetWindow<AboutWindow>();
-            wnd.titleContent = new GUIContent("About");
+            wnd.titleContent = new GUIContent(TranslationTable.cck_about);
         }
 
         void OnEnable()
@@ -58,7 +59,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 b.clickable.clicked += () => Application.OpenURL("https://docs.cluster.mu/creatorkit/"));
             view.Query<Button>("open-creators-guide").ForEach(b =>
                 b.clickable.clicked += () => Application.OpenURL("https://creator.cluster.mu/"));
-            view.Query<Button>("open-settings-window").ForEach(b => b.clickable.clicked += SettingsWindow.ShowWindow);
+            var statisticalInfoLabel = view.Q<Label>("send_statistical_info");
+            statisticalInfoLabel.text = TranslationTable.cck_send_statistical_info;
+            var settingButton = view.Query<Button>("open-settings-window");
+            settingButton.ForEach(b =>
+            {
+                b.text = TranslationTable.cck_open_settings;
+                b.clickable.clicked += SettingsWindow.ShowWindow;
+            });
 
             return view;
         }

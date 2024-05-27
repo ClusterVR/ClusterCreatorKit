@@ -1,4 +1,5 @@
 ﻿using ClusterVR.CreatorKit.ProductUgc;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -14,7 +15,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var valueProperty = property.FindPropertyRelative("value");
             var valueField = new PropertyField(valueProperty, property.displayName);
             var valueHelpBox = new IMGUIContainer(() =>
-                EditorGUILayout.HelpBox($"{valueField.label} に商品Idを指定する必要があります。", MessageType.Warning));
+                EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_product_id_specification_required, valueField.label), MessageType.Warning));
 
             void SwitchDisplayHelp(string value)
             {

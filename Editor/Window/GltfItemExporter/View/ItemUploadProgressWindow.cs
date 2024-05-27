@@ -2,6 +2,7 @@ using System;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Editor.Custom;
 using ClusterVR.CreatorKit.Editor.Enquete;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -41,7 +42,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 
         void SetUploadLabelStr(string editorTypeName)
         {
-            uploadItemLabel.text = $"{editorTypeName}のアップロード中";
+            uploadItemLabel.text = TranslationUtility.GetMessage(TranslationTable.cck_upload_in_progress, editorTypeName);
         }
 
         public void SetStatus(ItemUploadStatus status)
@@ -76,14 +77,20 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
                 "Packages/mu.cluster.cluster-creator-kit/Editor/Window/GltfItemExporter/Uss/ItemUploaderProgressWindow.uss");
             view.styleSheets.Add(styleSheet);
 
+            var uploadCompleteLabel = view.Q<Label>("upload-complete");
+            uploadCompleteLabel.text = TranslationTable.cck_upload_complete;
+
             var closeButton = view.Q<Button>("close-button");
+            closeButton.text = TranslationTable.cck_close;
             closeButton.clicked += Close;
 
             var enqueteButton = view.Q<Button>("enquete-button");
+            enqueteButton.text = TranslationTable.cck_survey_answer;
             enqueteButton.clicked += EnqueteService.OpenEnqueteLink;
             enqueteButton.clicked += Close;
 
             var enqueteCloseButton = view.Q<Button>("enquete-close-button");
+            enqueteCloseButton.text = TranslationTable.cck_close;
             enqueteCloseButton.clicked += Close;
             enqueteCloseButton.clicked += EnqueteService.CancelEnquete;
 
@@ -91,8 +98,13 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             progressBar = view.Q<ProgressBar>("upload-progress-bar");
 
             uploadItemLabel = view.Q<Label>("upload-item-label");
+            uploadItemLabel.text = TranslationTable.cck_item_upload_in_progress;
 
             var shouldShowEnquete = EnqueteService.ShouldShowEnqueteRequest();
+            var openWebLabel = view.Q<Label>("open-web-upload-completed");
+            var surveyLabel = view.Q<Label>("upload-complete-survey-prompt");
+            openWebLabel.text = TranslationTable.cck_upload_complete_webpage_open;
+            surveyLabel.text = TranslationTable.cck_upload_complete_survey_prompt;
 
             var normalButtonContainer = view.Q<VisualElement>("normal-complete-container");
             var enqueteButtonContainer = view.Q<VisualElement>("enquete-complete-container");

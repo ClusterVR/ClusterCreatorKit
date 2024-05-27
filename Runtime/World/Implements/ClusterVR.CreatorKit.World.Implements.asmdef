@@ -4,7 +4,8 @@
         "ClusterVR.CreatorKit.World",
         "ClusterVR.CreatorKit.Extensions",
         "ClusterVR.CreatorKit",
-        "ClusterVR.CreatorKit.Validator"
+        "ClusterVR.CreatorKit.Validator",
+        "ClusterVR.CreatorKit.Translation"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

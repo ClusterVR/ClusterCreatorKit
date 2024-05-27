@@ -1,6 +1,7 @@
 ﻿using System;
 using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Extensions;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Item.Implements
@@ -9,7 +10,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
     public sealed class GrabbableItem : ContactableItem, IGrabbableItem
     {
         [SerializeField, HideInInspector] MovableItem movableItem;
-        [SerializeField, Tooltip("持ち手（任意）")] Transform grip;
+        [SerializeField, Tooltip(TranslationTable.cck_handle_optional)] Transform grip;
 
         public override IItem Item => MovableItem != null ? MovableItem.Item : null;
 

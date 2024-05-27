@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
@@ -13,7 +14,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 return new[]
                 {
                     new ValidationMessage(
-                        $"{rootGameObject.name}はActiveである必要があります",
+                        TranslationUtility.GetMessage(TranslationTable.cck_rootgameobject_active_required, rootGameObject.name),
                         ValidationMessage.MessageType.Error)
                 };
             }

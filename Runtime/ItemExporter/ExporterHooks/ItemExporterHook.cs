@@ -4,6 +4,7 @@ using System.Linq;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.ItemExporter.Utils;
 using ClusterVR.CreatorKit.Proto;
+using ClusterVR.CreatorKit.Translation;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using UnityEngine;
@@ -88,11 +89,11 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
 
             if (ridableItemComponent != null && grabbableItemComponent != null)
             {
-                throw new Exception("can not contains multiple ContactableItem components");
+                throw new Exception(TranslationTable.cck_contactableitem_multiple_components);
             }
             if (movableItemComponent == null && grabbableItemComponent != null)
             {
-                throw new MissingComponentException("GrabbableItem require MovableItem");
+                throw new MissingComponentException(TranslationTable.cck_grabbableitem_requires_movableitem);
             }
             if (ridableItemComponent != null || grabbableItemComponent != null)
             {
@@ -102,7 +103,7 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 if (!wouldHavePhysicalShape && !haveInteractableShape)
                 {
                     throw new MissingComponentException(
-                        "GrabbableItem and RidableItem require PhysicalShape or InteractableShape");
+                        TranslationTable.cck_grabbableitem_ridableitem_require_shapes);
                 }
             }
         }

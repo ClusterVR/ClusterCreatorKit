@@ -4,6 +4,7 @@ using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
 using ClusterVR.CreatorKit.Editor.Window.View;
 using ClusterVR.CreatorKit.ItemExporter;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -18,15 +19,15 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             new CraftItemValidator(),
             new CraftItemTemplateBuilder(),
             new UploadCraftItemTemplateService(),
-            "アイテム");
+            TranslationTable.cck_common_item);
         readonly List<IDisposable> disposables = new List<IDisposable>();
 
-        [MenuItem("Cluster/クラフトアイテムアップロード", priority = 302)]
+        [MenuItem(TranslationTable.cck_cluster_craftitem_upload, priority = 302)]
         public static void Open()
         {
             var window = GetWindow<CraftItemUploadWindow>();
             window.minSize = new Vector2(640, 480);
-            window.titleContent = new GUIContent("クラフトアイテムアップロード");
+            window.titleContent = new GUIContent(TranslationTable.cck_craftitem_upload);
         }
 
         void OnEnable()

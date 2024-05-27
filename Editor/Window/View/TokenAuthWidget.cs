@@ -5,6 +5,7 @@ using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Editor.Custom;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -23,11 +24,11 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             container.Add(
                 new Button(() => Application.OpenURL(Api.RPC.Constants.WebBaseUrl + "/account/tokens"))
                 {
-                    text = "Webでトークンを発行"
+                    text = TranslationTable.cck_web_token_issue
                 });
 
             container.Add(UiUtils.Separator());
-            container.Add(new Label { text = "アクセストークンを貼り付けてください" });
+            container.Add(new Label { text = TranslationTable.cck_paste_access_token });
 
             var accessToken = new TextField();
             container.Add(accessToken);
@@ -42,7 +43,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             var useTokenButton = new Button(() => _ = Login(new AuthenticationInfo(accessToken.value), loginErrorLabel))
             {
-                text = "このトークンを使用"
+                text = TranslationTable.cck_use_this_token
             };
             container.Add(useTokenButton);
 
@@ -84,7 +85,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
                 if (string.IsNullOrEmpty(user.Username))
                 {
-                    errorLabel.text = "認証に失敗しました";
+                    errorLabel.text = TranslationTable.cck_auth_failed;
                     errorLabel.SetVisibility(true);
                     return;
                 }
@@ -100,7 +101,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             }
             finally
             {
-                errorLabel.text = "認証に失敗しました";
+                errorLabel.text = TranslationTable.cck_auth_failed;
                 errorLabel.SetVisibility(true);
                 isLoggingIn = false;
             }

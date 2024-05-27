@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using ClusterVR.CreatorKit.Editor.Api.User;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -16,11 +17,11 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
         TokenAuthWidget tokenAuthWidget;
 
-        [MenuItem("Cluster/ワールドアップロード", priority = 301)]
+        [MenuItem(TranslationTable.cck_cluster_world_upload, priority = 301)]
         public static void Open()
         {
             var window = GetWindow<VenueUploadWindow>();
-            window.titleContent = new GUIContent("ワールドアップロード");
+            window.titleContent = new GUIContent(TranslationTable.cck_world_upload);
         }
 
         void OnEnable()

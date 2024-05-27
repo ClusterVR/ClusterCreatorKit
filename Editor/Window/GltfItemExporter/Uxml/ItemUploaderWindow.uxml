@@ -8,10 +8,10 @@
     <engine:VisualElement name="main-container" class="main-container">
         <engine:VisualElement class="menu-container">
             <engine:VisualElement name="HorizontalLayout" class="horizontal">
-                <engine:Button name="add-item-button" text="アイテムの追加" class="default-button"/>
-                <engine:Label text="アップロードするprefabを選択してください"/>
+                <engine:Button name="add-item-button" class="default-button"/>
+                <engine:Label name="select-prefab-to-upload"/>
                 <engine:VisualElement class="buffer"/>
-                <engine:Button name="clear-item-list-button" text="すべて削除" class="default-button"/>
+                <engine:Button name="clear-item-list-button" class="default-button"/>
             </engine:VisualElement>
         </engine:VisualElement>
 
@@ -25,7 +25,7 @@
             </engine:ScrollView>
             <engine:VisualElement name="help-view-container" class="help-view-container">
                 <engine:Image class="drag-area-icon"/>
-                <engine:Label text="prefabをここにドラッグして追加"/>
+                <engine:Label name="drag-and-drop-prefab"/>
             </engine:VisualElement>
             <engine:VisualElement name="drag-area-panel" class="drag-area-panel"/>
         </engine:VisualElement>

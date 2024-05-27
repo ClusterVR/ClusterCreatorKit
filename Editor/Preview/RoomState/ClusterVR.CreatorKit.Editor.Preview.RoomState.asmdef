@@ -2,7 +2,8 @@
     "name": "ClusterVR.CreatorKit.Editor.Preview.RoomState",
     "references": [
         "ClusterVR.CreatorKit",
-        "ClusterVR.CreatorKit.Editor"
+        "ClusterVR.CreatorKit.Editor",
+        "ClusterVR.CreatorKit.Translation"
     ],
     "includePlatforms": [
         "Editor"

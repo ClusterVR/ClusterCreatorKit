@@ -4,6 +4,7 @@ using System.Threading;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -69,23 +70,23 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     {
                         newThumbnailPath =
                             EditorUtility.OpenFilePanelWithFilters(
-                                "画像を選択",
+                                TranslationTable.cck_select_image,
                                 "",
-                                new[] { "Image files", "png,jpg,jpeg", "All files", "*" }
+                                new[] { TranslationTable.cck_image_files, "png,jpg,jpeg", "All files", "*" }
                             );
                         thumbnailView.SetImagePath(newThumbnailPath);
                         UpdateVenue();
                     }
                 })
                 {
-                    text = "画像の選択",
+                    text = TranslationTable.cck_image_selection,
                     style =
                     {
                         marginTop = 4
                     }
                 };
                 thumbnailSection.Add(changeImageButton);
-                thumbnailSection.Add(new Label() { text = "※推奨サイズ：1920×1080px" });
+                thumbnailSection.Add(new Label() { text = TranslationTable.cck_recommended_image_size });
 
                 topSection.Add(thumbnailSection);
             }
@@ -94,19 +95,19 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 var editSection = new VisualElement() { style = { flexGrow = 1, marginLeft = 8 } };
 
                 var venueIdSection = new VisualElement() { style = { flexDirection = FlexDirection.Row } };
-                venueIdSection.Add(new Label($"ワールドID {venue.VenueId.Value}")
+                venueIdSection.Add(new Label(TranslationUtility.GetMessage(TranslationTable.cck_venue_id, venue.VenueId.Value))
                 {
                     style = { color = new StyleColor(Color.gray) }
                 });
                 venueIdSection.Add(new Button(() => EditorGUIUtility.systemCopyBuffer = venue.VenueId.Value)
                 {
-                    text = "copy",
+                    text = TranslationTable.cck_copy,
                     style = { height = 16 }
                 });
 
                 editSection.Add(venueIdSection);
 
-                editSection.Add(new Label("ワールド名")
+                editSection.Add(new Label(TranslationTable.cck_world_name)
                 {
                     style = { marginTop = 4 }
                 });
@@ -119,7 +120,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 });
                 editSection.Add(venueName);
 
-                editSection.Add(new Label("ワールドの説明") { style = { marginTop = 4 } });
+                editSection.Add(new Label(TranslationTable.cck_world_description) { style = { marginTop = 4 } });
                 var venueDesc = new TextField
                 {
                     multiline = true,
@@ -143,7 +144,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 editSection.Add(venueDesc);
                 editSection.Add(new Label
                 {
-                    text = "※255文字以内で入力してください"
+                    text = TranslationTable.cck_description_limit
                 });
 
                 var buttons = new VisualElement
@@ -161,7 +162,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     }
                 })
                 {
-                    text = "変更を保存"
+                    text = TranslationTable.cck_save_change
                 };
                 var cancelEdit = new Button(() =>
                 {
@@ -170,7 +171,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     reactiveEdited.Val = false;
                 })
                 {
-                    text = "キャンセル"
+                    text = TranslationTable.cck_cancel
                 };
                 buttons.Add(applyEdit);
                 buttons.Add(cancelEdit);
@@ -211,7 +212,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 exception =>
                 {
                     updatingVenue = false;
-                    errorMessage = $"ワールド情報の保存に失敗しました。{exception.Message}";
+                    errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_world_info_save_failed, exception.Message);
                 });
             patchVenueService.Run(cancellationTokenSource.Token);
             errorMessage = null;

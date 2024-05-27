@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.ExternalCall;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -31,8 +32,20 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             currentUrlLabel = mainView.Q<Label>("current-url-label");
             updateUrlTextField = mainView.Q<TextField>("update-url-field");
 
+            var titleLabel = mainView.Q<Label>("current-url-title-label");
+            var urlLabel = mainView.Q<Label>("update-url-title-label");
+            titleLabel.text = TranslationTable.cck_registered_url;
+            urlLabel.text = TranslationTable.cck_url_registration;
+
+            var tokenViewLabel = mainView.Q<Label>("verify-token");
+            var tokenNoticeLabel = mainView.Q<Label>("token-notice");
+            tokenViewLabel.text = TranslationTable.cck_token_for_verify;
+            tokenNoticeLabel.text = TranslationTable.cck_verify_token_notice;
+
             updateButton = mainView.Q<Button>("update-button");
             deleteButton = mainView.Q<Button>("delete-button");
+            updateButton.text = TranslationTable.cck_register;
+            deleteButton.text = TranslationTable.cck_delete;
 
             tokenView = mainView.Q<VisualElement>("token-view");
             tokenField = mainView.Q<TextField>("token-field");
@@ -46,7 +59,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
         void OnUpdateClicked()
         {
-            if (EditorUtility.DisplayDialog("確認", "URLを更新しますか？", "OK", "キャンセル"))
+            if (EditorUtility.DisplayDialog(TranslationTable.cck_confirm, TranslationTable.cck_update_url_confirm, TranslationTable.cck_ok, TranslationTable.cck_cancel))
             {
                 _ = UpdateWebRPCUrlAsync(cancellationTokenSource.Token);
             }
@@ -54,7 +67,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
         void OnDeleteClicked()
         {
-            if (EditorUtility.DisplayDialog("確認", "URLを削除しますか？", "OK", "キャンセル"))
+            if (EditorUtility.DisplayDialog(TranslationTable.cck_confirm, TranslationTable.cck_delete_url_confirm, TranslationTable.cck_ok, TranslationTable.cck_cancel))
             {
                 _ = DeleteWebRPCUrlAsync(cancellationTokenSource.Token);
             }
@@ -71,7 +84,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         {
             if (string.IsNullOrEmpty(url))
             {
-                currentUrlLabel.text = "未登録";
+                currentUrlLabel.text = TranslationTable.cck_unregistered;
                 deleteButton.SetEnabled(false);
             }
             else
@@ -113,7 +126,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             }
             catch (Failure e) when (e.StatusCode == 400)
             {
-                EditorUtility.DisplayDialog("エラー", e.Error.Detail, "OK");
+                EditorUtility.DisplayDialog(TranslationTable.cck_error, e.Error.Detail, TranslationTable.cck_ok);
                 throw;
             }
             catch (Exception e) when (e is not OperationCanceledException)

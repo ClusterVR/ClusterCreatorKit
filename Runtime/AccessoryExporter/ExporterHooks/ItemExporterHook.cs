@@ -2,6 +2,7 @@ using System;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.ItemExporter.Utils;
 using ClusterVR.CreatorKit.Proto;
+using ClusterVR.CreatorKit.Translation;
 using Google.Protobuf;
 using UnityEngine;
 using VGltf.Types.Extensions;
@@ -62,7 +63,7 @@ namespace ClusterVR.CreatorKit.AccessoryExporter.ExporterHooks
 
             if (movableItemComponent != null || ridableItemComponent != null || grabbableItemComponent != null || scriptableItemComponent != null)
             {
-                throw new Exception("can not contains multiple Item components");
+                throw new Exception(TranslationTable.cck_item_multiple_components);
             }
         }
 

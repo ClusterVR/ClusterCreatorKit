@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
@@ -16,7 +17,7 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
         [SerializeField] GlobalGimmickKey globalGimmickKey;
         [SerializeField, ParameterTypeField(ParameterType.Signal, ParameterType.Bool, ParameterType.Float, ParameterType.Integer)]
         ParameterType parameterType = SelectableTypes[0];
-        [SerializeField, Tooltip("AnimatorのParameter名")] string animatorParameterName;
+        [SerializeField, Tooltip(TranslationTable.cck_animator_parameter_name)] string animatorParameterName;
 
         ItemId IGimmick.ItemId => globalGimmickKey.ItemId;
         GimmickTarget IGimmick.Target => globalGimmickKey.Key.Target;

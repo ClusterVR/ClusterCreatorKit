@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -199,7 +200,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 {
                     if (!File.Exists(scriptLogFilePath))
                     {
-                        EditorUtility.DisplayDialog("error", "Log file is not found.", "OK");
+                        EditorUtility.DisplayDialog("error", "Log file is not found.", TranslationTable.cck_ok);
                         return;
                     }
 

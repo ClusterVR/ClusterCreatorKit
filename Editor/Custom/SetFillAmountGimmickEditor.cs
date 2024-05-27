@@ -1,4 +1,5 @@
 ﻿using ClusterVR.CreatorKit.Gimmick.Implements;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,11 +18,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             {
                 if (image.sprite == null)
                 {
-                    EditorGUILayout.HelpBox($"{nameof(Image)}のSource Imageを指定する必要があります。", MessageType.Warning);
+                    EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_image_source_image_required, nameof(Image)), MessageType.Warning);
                 }
                 else if (image.type != Image.Type.Filled)
                 {
-                    EditorGUILayout.HelpBox($"{nameof(Image)}のImage Typeを{nameof(Image.Type.Filled)}に指定する必要があります。",
+                    EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_image_type_filled_required, nameof(Image), nameof(Image.Type.Filled)),
                         MessageType.Warning);
                 }
             });

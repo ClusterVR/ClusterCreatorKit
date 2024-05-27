@@ -1,4 +1,5 @@
 ﻿using ClusterVR.CreatorKit.Gimmick.Implements;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -17,9 +18,9 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var itemTemplateProperty = serializedObject.FindProperty("itemTemplate");
             var itemTemplateIsNoneHelpBox = new IMGUIContainer(() =>
-                EditorGUILayout.HelpBox($"{itemTemplateProperty.displayName} を指定する必要があります。", MessageType.Warning));
+                EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_need_item_template_property_specification, itemTemplateProperty.displayName), MessageType.Warning));
             var itemTemplateIsNotPrefabHelpBox = new IMGUIContainer(() =>
-                EditorGUILayout.HelpBox($"{itemTemplateProperty.displayName} には Prefab の指定を推奨しています。",
+                EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_recommend_prefab_for_item_template_property, itemTemplateProperty.displayName),
                     MessageType.Warning));
 
             void SwitchDisplayHelp(UnityEngine.Object obj)
@@ -34,7 +35,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var itemTemplateField = new ObjectField(itemTemplateProperty.displayName)
             {
-                tooltip = "生成するアイテムのprefab",
+                tooltip = TranslationTable.cck_prefab_for_generated_item,
                 objectType = typeof(Item.Implements.Item),
                 value = itemTemplateProperty.objectReferenceValue
             };
@@ -50,7 +51,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var spawnPointField = new PropertyField(serializedObject.FindProperty("spawnPoint"))
             {
-                tooltip = "生成位置(任意)"
+                tooltip = TranslationTable.cck_optional_generation_position
             };
             container.Add(spawnPointField);
 

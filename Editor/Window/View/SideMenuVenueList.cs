@@ -7,6 +7,7 @@ using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -70,7 +71,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         async Task RefreshVenueSelectorAsync(GroupID groupId, VenueID venueIdToSelect, CancellationToken cancellationToken)
         {
             venueSelector.Clear();
-            venueSelector.Add(new Label() { text = "loading..." });
+            venueSelector.Add(new Label() { text = TranslationTable.cck_loading });
 
             try
             {
@@ -88,7 +89,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             catch (Exception e)
             {
                 venueSelector.Clear();
-                venueSelector.Add(new IMGUIContainer(() => EditorGUILayout.HelpBox($"会場情報の取得に失敗しました", MessageType.Error)));
+                venueSelector.Add(new IMGUIContainer(() => EditorGUILayout.HelpBox(TranslationTable.cck_venue_info_fetch_failed, MessageType.Error)));
             }
         }
 
@@ -108,16 +109,16 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             loadedVenues.Clear();
 
             groupSelector.Clear();
-            groupSelector.Add(new Label() { text = "loading..." });
+            groupSelector.Add(new Label() { text = TranslationTable.cck_loading });
 
             try
             {
                 var groups = await APIServiceClient.GetGroups(userInfo.VerifiedToken, cancellationToken);
                 groupSelector.Clear();
-                groupSelector.Add(new Label("所属チーム"));
+                groupSelector.Add(new Label(TranslationTable.cck_affiliated_team));
                 if (groups.List.Count == 0)
                 {
-                    groupSelector.Add(new Label() { text = "読み込みに失敗しました" });
+                    groupSelector.Add(new Label() { text = TranslationTable.cck_load_failed });
                 }
                 else
                 {
@@ -133,7 +134,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
                 groupSelector.Add(UiUtils.Separator());
 
-                groupSelector.Add(new Label() { text = "ワールド" });
+                groupSelector.Add(new Label() { text = TranslationTable.cck_world });
                 groupSelector.Add(venueSelector);
             }
             catch (OperationCanceledException)
@@ -143,8 +144,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             {
                 Debug.LogException(e);
                 groupSelector.Clear();
-                groupSelector.Add(new Label("所属チーム"));
-                groupSelector.Add(new Label() { text = "読み込みに失敗しました" });
+                groupSelector.Add(new Label(TranslationTable.cck_affiliated_team));
+                groupSelector.Add(new Label() { text = TranslationTable.cck_load_failed });
             }
         }
 
@@ -158,8 +159,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 CreateNewVenue(groupId, isBeta, cancellationToken);
             }
 
-            venuePicker.Add(new Button(OnNewVenueClicked) { text = "新規作成" });
-            venuePicker.Add(new Label() { text = "作成済みワールドから選ぶ", style = { marginTop = 12 } });
+            venuePicker.Add(new Button(OnNewVenueClicked) { text = TranslationTable.cck_create_new });
+            venuePicker.Add(new Label() { text = TranslationTable.cck_select_from_existing_worlds, style = { marginTop = 12 } });
             venuePicker.Add(CreateVenueList(venues, venueIdToSelect));
             return venuePicker;
         }
@@ -191,7 +192,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             var postVenueService =
                 new PostRegisterNewVenueService(
                     userInfo.VerifiedToken,
-                    new PostNewVenuePayload("New World", "説明未設定", groupId.Value, isBeta),
+                    new PostNewVenuePayload(TranslationTable.cck_new_world_default_name, TranslationTable.cck_description_not_set, groupId.Value, isBeta),
                     venue =>
                     {
                         RefreshGroupSelector(groupId, venue.VenueId);
@@ -201,7 +202,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     {
                         Debug.LogException(exception);
                         groupSelector.Add(new IMGUIContainer(() =>
-                            EditorGUILayout.HelpBox($"新規会場の登録ができませんでした。{exception.Message}", MessageType.Error)));
+                            EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_venue_registration_failed, exception.Message), MessageType.Error)));
                     });
             postVenueService.Run(cancellationToken);
         }

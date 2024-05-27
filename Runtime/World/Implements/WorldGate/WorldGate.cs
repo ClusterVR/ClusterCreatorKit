@@ -1,4 +1,5 @@
-﻿using ClusterVR.CreatorKit.Validator;
+﻿using ClusterVR.CreatorKit.Translation;
+using ClusterVR.CreatorKit.Validator;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.World.Implements.WorldGate
@@ -7,9 +8,9 @@ namespace ClusterVR.CreatorKit.World.Implements.WorldGate
     [RequireIsTriggerSettings]
     public sealed class WorldGate : MonoBehaviour, IWorldGate
     {
-        [SerializeField, Tooltip("ワールドまたはイベントのId")] string worldOrEventId;
-        [SerializeField, Tooltip("ワープ先のSpawnPointのKey(任意)")] string key;
-        [SerializeField, Tooltip("移動前に確認UIを表示するか")] bool confirmTransition;
+        [SerializeField, Tooltip(TranslationTable.cck_world_event_id)] string worldOrEventId;
+        [SerializeField, Tooltip(TranslationTable.cck_warp_spawnpoint_key_optional)] string key;
+        [SerializeField, Tooltip(TranslationTable.cck_confirm_ui_before_move)] bool confirmTransition;
 
         public event OnEnterWorldGateEventHandler OnEnterWorldGateEvent;
         public event OnExitWorldGateEventHandler OnExitWorldGateEvent;

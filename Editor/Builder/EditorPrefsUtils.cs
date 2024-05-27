@@ -10,6 +10,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
         const string TmpUserIdKey = "ClusterTmpUserId";
         const string EnableSendingAnalyticsDataKey = "ClusterEnableSendingAnalyticsData";
         const string NextEnqueteAskTimeKey = "NextEnqueteAskTime";
+        const string SavedLanguageSettingKey = "ClusterCreatorKitSavedLanguageSetting";
 
         public static bool HasAlreadyShownAboutWindow
         {
@@ -39,6 +40,12 @@ namespace ClusterVR.CreatorKit.Editor.Builder
         {
             get => EditorPrefs.GetInt(NextEnqueteAskTimeKey, 0);
             set => EditorPrefs.SetInt(NextEnqueteAskTimeKey, value);
+        }
+
+        public static string LanguageSetting
+        {
+            get => EditorPrefs.GetString(SavedLanguageSettingKey, "");
+            set => EditorPrefs.SetString(SavedLanguageSettingKey, value);
         }
     }
 }

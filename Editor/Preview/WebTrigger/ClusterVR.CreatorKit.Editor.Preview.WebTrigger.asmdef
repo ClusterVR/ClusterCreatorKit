@@ -8,7 +8,8 @@
         "ClusterVR.CreatorKit.Editor.Preview.RoomState",
         "ClusterVR.CreatorKit.Editor.Preview.Trigger",
         "ClusterVR.CreatorKit.Gimmick",
-        "ClusterVR.CreatorKit.Trigger"
+        "ClusterVR.CreatorKit.Trigger",
+        "ClusterVR.CreatorKit.Translation"
     ],
     "includePlatforms": [
         "Editor"

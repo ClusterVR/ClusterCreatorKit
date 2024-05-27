@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -52,11 +53,11 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
             if (request.Status == StatusCode.Failure)
             {
                 status = StatusCode.Failure;
-                Debug.LogError("package一覧の取得に失敗しました");
+                Debug.LogError(TranslationTable.cck_package_list_fetch_failed);
                 throw new Exception();
             }
 
-            Debug.Log("package一覧の取得に成功しました");
+            Debug.Log(TranslationTable.cck_package_list_fetch_success);
             status = StatusCode.Success;
             SavePackageList(request.Result);
             PlayerPrefs.SetFloat(jsonLastUpdateTimeKey, (float) EditorApplication.timeSinceStartup);
@@ -86,7 +87,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
         {
             if (status == StatusCode.Failure)
             {
-                throw new Exception("package一覧の取得に失敗しています");
+                throw new Exception(TranslationTable.cck_package_list_fetch_error);
             }
 
             return LoadPackageList().Any(x => x.packageId.Contains(packageName));

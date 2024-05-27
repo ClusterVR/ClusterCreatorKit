@@ -1,5 +1,6 @@
 using ClusterVR.CreatorKit.Editor.Preview.World;
 using ClusterVR.CreatorKit.Editor.Window.View;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,13 +9,13 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
 {
     public sealed class PreviewControlWindow : EditorWindow
     {
-        const string messageWhenNotPlayMode = "プレビューオプションは実行中のみ使用可能です";
+        const string messageWhenNotPlayMode = TranslationTable.cck_preview_option_runtime_only;
 
         [MenuItem("Cluster/Preview/ControlWindow", priority = 113)]
         public static void ShowWindow()
         {
             var window = GetWindow<PreviewControlWindow>();
-            window.titleContent = new GUIContent("Preview Control Window");
+            window.titleContent = new GUIContent(TranslationTable.cck_preview_control_window);
         }
 
         public void OnEnable()
@@ -62,16 +63,16 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
         static VisualElement GenerateCommentSection()
         {
             var commentSection = EditorUIGenerator.GenerateSection();
-            commentSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h1, "コメント"));
-            commentSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h2, "表示名"));
+            commentSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h1, TranslationTable.cck_comment));
+            commentSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h2, TranslationTable.cck_display_name));
             var displayNameField = new TextField();
             commentSection.Add(displayNameField);
 
-            commentSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h2, "ユーザー名"));
+            commentSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h2, TranslationTable.cck_username));
             var userNameField = new TextField();
             commentSection.Add(userNameField);
 
-            commentSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h2, "コメント内容"));
+            commentSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h2, TranslationTable.cck_comment_content));
 
             var commentContentField = new TextField();
             commentContentField.style.unityTextAlign = TextAnchor.UpperLeft;
@@ -90,7 +91,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
                 displayNameField.value = "";
                 userNameField.value = "";
                 commentContentField.value = "";
-            }) { text = "コメントを送信" };
+            });
+            commentSendButton.text = TranslationTable.cck_send_comment;
             commentSection.Add(commentSendButton);
             return commentSection;
         }
@@ -98,8 +100,9 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
         static VisualElement GenerateMainScreenSection()
         {
             var mainScreenSection = EditorUIGenerator.GenerateSection();
-            mainScreenSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h1, "メインスクリーン"));
-            var sampleImageSendButton = new Button(ShowMainScreenPicture) { text = "サンプル画像を投影" };
+            mainScreenSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h1, TranslationTable.cck_main_screen));
+            var sampleImageSendButton = new Button(ShowMainScreenPicture);
+            sampleImageSendButton.text = TranslationTable.cck_project_sample_image;
             mainScreenSection.Add(sampleImageSendButton);
             return mainScreenSection;
         }
@@ -107,9 +110,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
         static VisualElement GenerateUserDataSection()
         {
             var userDataSection = EditorUIGenerator.GenerateSection();
-            userDataSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h1, "プレイヤー情報"));
-            userDataSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h2, "権限"));
-            var currentPermission = EditorUIGenerator.GenerateLabel(LabelType.h2, "現在の権限:参加者");
+            userDataSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h1, TranslationTable.cck_player_info));
+            userDataSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h2, TranslationTable.cck_authority));
+            var currentPermission =
+                EditorUIGenerator.GenerateLabel(LabelType.h2, TranslationTable.cck_current_authority_participant);
             var permissionChangeButton = new Button(() =>
             {
                 if (!Bootstrap.IsInPlayMode)
@@ -121,19 +125,21 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
                 if (Bootstrap.PlayerPresenter.PermissionType == PermissionType.Audience)
                 {
                     Bootstrap.PlayerPresenter.ChangePermissionType(PermissionType.Performer);
-                    currentPermission.text = "現在の権限:パフォーマー";
+                    currentPermission.text = TranslationTable.cck_current_authority_performer;
                 }
                 else
                 {
                     Bootstrap.PlayerPresenter.ChangePermissionType(PermissionType.Audience);
-                    currentPermission.text = "現在の権限:参加者";
+                    currentPermission.text = TranslationTable.cck_current_authority_participant;
                 }
-            }) { text = "権限変更" };
+            });
+            permissionChangeButton.text = TranslationTable.cck_change_authority;
             userDataSection.Add(currentPermission);
             userDataSection.Add(permissionChangeButton);
 
-            userDataSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h2, "リスポーン"));
-            var respawnButton = new Button(() => { Bootstrap.PlayerPresenter.Respawn(); }) { text = "リスポーンする" };
+            userDataSection.Add(EditorUIGenerator.GenerateLabel(LabelType.h2, TranslationTable.cck_respawn));
+            var respawnButton = new Button(() => { Bootstrap.PlayerPresenter.Respawn(); });
+            respawnButton.text = TranslationTable.cck_respawn_action;
             userDataSection.Add(respawnButton);
             return userDataSection;
         }

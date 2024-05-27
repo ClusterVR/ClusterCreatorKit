@@ -1,4 +1,5 @@
 using System;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Builder
@@ -18,7 +19,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 case BuildTarget.iOS:
                     return "iOS";
                 default:
-                    throw new Exception($"{target} はサポート外のビルドターゲットです");
+                    throw new Exception(TranslationUtility.GetMessage(TranslationTable.cck_unsupported_build_target, target));
             }
         }
 
@@ -35,7 +36,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 case BuildTarget.iOS:
                     return "assetbundle/ios";
                 default:
-                    throw new Exception($"{target} はサポート外のビルドターゲットです");
+                    throw new Exception(TranslationUtility.GetMessage(TranslationTable.cck_unsupported_build_target, target));
             }
         }
     }

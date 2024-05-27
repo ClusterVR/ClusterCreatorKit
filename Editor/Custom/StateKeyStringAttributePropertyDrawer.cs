@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.Assertions;
@@ -20,7 +21,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var propertyDisplayName = property.displayName;
             var keyLengthErrorBox = new IMGUIContainer(() =>
-                EditorGUILayout.HelpBox($"{propertyDisplayName} が長すぎます。",
+                EditorGUILayout.HelpBox(TranslationUtility.GetMessage(TranslationTable.cck_property_display_name_too_long, propertyDisplayName),
                     MessageType.Error));
 
             void SetKeyLengthErrorBoxVisibility(string key)

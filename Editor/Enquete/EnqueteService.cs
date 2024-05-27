@@ -1,5 +1,6 @@
 using System;
 using ClusterVR.CreatorKit.Editor.Builder;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,10 +20,10 @@ namespace ClusterVR.CreatorKit.Editor.Enquete
         public static void ShowEnqueteDialog()
         {
             var ok = EditorUtility.DisplayDialog(
-                "アンケートにご協力ください",
-                "Creator Kit の品質を向上するためのアンケートにご協力いただけると助かります。\nアンケートへの回答は Cluster > Settings メニューからも始められます。",
-                "回答する",
-                "あとで");
+                TranslationTable.cck_survey_request,
+                TranslationTable.cck_quality_improvement_survey_invitation,
+                TranslationTable.cck_answer,
+                TranslationTable.cck_later);
 
             if (ok)
             {

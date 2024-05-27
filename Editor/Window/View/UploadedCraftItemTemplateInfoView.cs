@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.ItemTemplate;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -48,6 +49,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             prevButton = mainView.Q<Button>("prev-button");
             nextButton = mainView.Q<Button>("next-button");
+            prevButton.text = TranslationTable.cck_previous;
+            nextButton.text = TranslationTable.cck_next;
 
             prevButton.clicked += OnPrevClicked;
             nextButton.clicked += OnNextClicked;
@@ -85,7 +88,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             }
             catch (Exception e) when (e is not OperationCanceledException)
             {
-                textField.value = "情報の取得に失敗しました";
+                textField.value = TranslationTable.cck_information_fetch_failed;
                 Debug.LogException(e);
             }
             finally
@@ -125,7 +128,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             }
             else
             {
-                return "アップロード済みアイテムの情報はありません";
+                return TranslationTable.cck_no_uploaded_item_info;
             }
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using ClusterVR.CreatorKit.Editor.Preview.EditorUI;
 using ClusterVR.CreatorKit.Editor.Preview.RoomState;
 using ClusterVR.CreatorKit.Editor.Window.View;
+using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -13,13 +14,13 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
 {
     public sealed class WebTriggerWindow : EditorWindow
     {
-        const string messageWhenNotPlayMode = "ウェブトリガーは実行中のみ使用可能です";
+        const string messageWhenNotPlayMode = TranslationTable.cck_webtrigger_runtime_only;
 
         [MenuItem("Cluster/Preview/WebTriggerWindow", priority = 111)]
         public static void ShowWindow()
         {
             var window = GetWindow<WebTriggerWindow>();
-            window.titleContent = new GUIContent("Preview Web Trigger Window");
+            window.titleContent = new GUIContent(TranslationTable.cck_webtrigger_window);
         }
 
         [SerializeField] WebTrigger trigger;
@@ -53,7 +54,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
         VisualElement GenerateControlSection()
         {
             var controlSection = EditorUIGenerator.GenerateSection();
-            var loadJsonButton = new Button(LoadJsonTrigger) { text = "JSONを読み込む" };
+            var loadJsonButton = new Button(LoadJsonTrigger) { text = TranslationTable.cck_read_json };
             controlSection.Add(loadJsonButton);
 
             return controlSection;
@@ -61,7 +62,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
 
         void LoadJsonTrigger()
         {
-            var filePath = EditorUtility.OpenFilePanel("JSONを読み込む", "", "json");
+            var filePath = EditorUtility.OpenFilePanel(TranslationTable.cck_read_json, "", "json");
             if (string.IsNullOrEmpty(filePath))
             {
                 return;
@@ -112,7 +113,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
                 {
                     if (!TryGetStateValue(state.type, state.value, default, out _))
                     {
-                        Debug.LogError($"{trigger.displayName}の{state.key}のValueのパースに失敗しました");
+                        Debug.LogError(TranslationUtility.GetMessage(TranslationTable.cck_trigger_value_parse_failed, trigger.displayName, state.key));
                         valid = false;
                     }
                 }
@@ -155,10 +156,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
 
             if (trigger.showConfirmDialog)
             {
-                var ok = EditorUtility.DisplayDialog($"{trigger.displayName}を実行します。よろしいですか？",
-                    $"Category: {trigger.category}",
-                    "トリガーを実行する",
-                    "キャンセル");
+                var ok = EditorUtility.DisplayDialog(TranslationUtility.GetMessage(TranslationTable.cck_trigger_execution_confirm, trigger.displayName),
+                    TranslationUtility.GetMessage(TranslationTable.cck_trigger_category, trigger.category),
+                    TranslationTable.cck_execute_trigger,
+                    TranslationTable.cck_cancel);
                 if (!ok)
                 {
                     return;
@@ -175,7 +176,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
                 Assert.IsTrue(hasValue);
                 var key = GetStateKey(state.key);
                 Bootstrap.RoomStateRepository.Update(key, stateValue);
-                Debug.Log($"{state.key}を更新しました");
+                Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_state_key_updated, state.key));
             }
 
             Bootstrap.GimmickManager.OnStateUpdated(trigger.state.Select(s => s.key).Select(GetStateKey));
