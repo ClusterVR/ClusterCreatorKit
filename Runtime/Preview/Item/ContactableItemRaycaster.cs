@@ -16,7 +16,7 @@ namespace ClusterVR.CreatorKit.Preview.Item
 
         void Start()
         {
-            raycastLayerMask = ~LayerName.PostProcessingMask;
+            raycastLayerMask = ~(LayerName.PostProcessingMask | LayerName.CameraOnlyMask);
         }
 
         public bool RaycastItem(Vector2 raycastPoint, out IContactableItem item, out Vector3 hitPoint)

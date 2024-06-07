@@ -26,25 +26,28 @@ namespace ClusterVR.CreatorKit.World.Implements.RankingScreenViews
             userName.text = user.UserName;
 
             ranker.SetActive(true);
-            if (background)
+            if (background != null)
             {
                 background.SetActive(true);
             }
 
-            if (outLine == null)
+            if (outLine != null)
             {
-                return;
+                outLine.SetActive(isSelf);
             }
-
-            outLine.SetActive(isSelf);
         }
 
         public void Hide()
         {
             ranker.SetActive(false);
-            if (background)
+            if (background != null)
             {
                 background.SetActive(false);
+            }
+
+            if (outLine != null)
+            {
+                outLine.SetActive(false);
             }
         }
     }
