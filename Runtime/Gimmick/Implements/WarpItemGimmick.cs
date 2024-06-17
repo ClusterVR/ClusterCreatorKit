@@ -59,5 +59,21 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
                 movableItem = GetComponent<MovableItemBase>();
             }
         }
+
+#if UNITY_EDITOR
+        void OnDrawGizmosSelected()
+        {
+            if (targetTransform != null)
+            {
+                Gizmos.matrix = Matrix4x4.TRS(targetTransform.position, targetTransform.rotation, Vector3.one);
+                Gizmos.color = new Color(1, 0, 0, 1);
+                Gizmos.DrawLine(Vector3.zero, new Vector3(1, 0, 0));
+                Gizmos.color = new Color(0, 1, 0, 1);
+                Gizmos.DrawLine(Vector3.zero, new Vector3(0, 1, 0));
+                Gizmos.color = new Color(0, 0, 1, 1);
+                Gizmos.DrawLine(Vector3.zero, new Vector3(0, 0, 1));
+            }
+        }
+#endif
     }
 }

@@ -35,6 +35,9 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 UpdateMovingPlatformDetailSettingVisibility(ev.changedProperty.boolValue)
                 );
 
+            var useMantlingField = FindPropertyField(container, "useMantling");
+            useMantlingField.label = "Use Clambering";
+
             var uploadNoticeText = new TextElement()
             {
                 text = "*このコンポーネントの指定値はclusterアプリでのみ反映されます。\nワールドをアップロードして挙動を確認してください。",

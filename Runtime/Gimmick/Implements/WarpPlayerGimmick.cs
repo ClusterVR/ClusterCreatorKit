@@ -41,5 +41,19 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
             }
             OnRun?.Invoke(this);
         }
+
+#if UNITY_EDITOR
+        void OnDrawGizmosSelected()
+        {
+            if (targetTransform != null)
+            {
+                Gizmos.matrix = Matrix4x4.TRS(targetTransform.position, Quaternion.Euler(0, targetTransform.rotation.eulerAngles.y, 0), Vector3.one);
+                Gizmos.color = new Color(1, 0, 0, 1);
+                Gizmos.DrawLine(new Vector3(0, 0.75f, 0), new Vector3(0, 0.75f, 1));
+                Gizmos.color = new Color(0, 0, 1, 0.5f);
+                Gizmos.DrawSphere(new Vector3(0, 0.75f, 0), 0.75f);
+            }
+        }
+#endif
     }
 }

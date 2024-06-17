@@ -110,5 +110,47 @@ namespace ClusterVR.CreatorKit.Item.Implements
                 seat = transform;
             }
         }
+
+#if UNITY_EDITOR
+        void OnDrawGizmosSelected()
+        {
+            if (seat != null)
+            {
+                Gizmos.matrix = Matrix4x4.TRS(seat.position, seat.rotation, Vector3.one);
+                Gizmos.color = new Color(1, 1, 0, 1);
+                Gizmos.DrawLine(new Vector3(0, 0, 0), new Vector3(0, 0, 0.5f));
+            }
+
+            if (leftGrip != null)
+            {
+                Gizmos.matrix = Matrix4x4.TRS(leftGrip.position, leftGrip.rotation, Vector3.one);
+                Gizmos.color = new Color(0, 0, 1, 1);
+                Gizmos.DrawLine(new Vector3(0, 0, 0), new Vector3(0, 0, 0.2f));
+                Gizmos.color = new Color(0, 0, 1, 0.5f);
+                Gizmos.DrawCube(new Vector3(0, 0, 0), new Vector3(0.05f, 0.05f, 0.05f));
+                UnityEditor.Handles.Label(leftGrip.position, "Left Grip");
+            }
+
+            if (rightGrip != null)
+            {
+                Gizmos.matrix = Matrix4x4.TRS(rightGrip.position, rightGrip.rotation, Vector3.one);
+                Gizmos.color = new Color(1, 0, 0, 1);
+                Gizmos.DrawLine(new Vector3(0, 0, 0), new Vector3(0, 0, 0.2f));
+                Gizmos.color = new Color(1, 0, 0, 0.5f);
+                Gizmos.DrawCube(new Vector3(0, 0, 0), new Vector3(0.05f, 0.05f, 0.05f));
+                UnityEditor.Handles.Label(rightGrip.position, "Right Grip");
+            }
+
+            if (exitTransform != null)
+            {
+                Gizmos.matrix = Matrix4x4.TRS(exitTransform.position, Quaternion.Euler(0, exitTransform.rotation.eulerAngles.y, 0), Vector3.one);
+                Gizmos.color = new Color(1, 0, 0, 1);
+                Gizmos.DrawLine(new Vector3(0, 0.25f, 0), new Vector3(0, 0.25f, 0.3f));
+                Gizmos.color = new Color(0, 0, 1, 0.5f);
+                Gizmos.DrawSphere(new Vector3(0, 0.25f, 0), 0.25f);
+                UnityEditor.Handles.Label(exitTransform.position, "Exit");
+            }
+        }
+#endif
     }
 }
