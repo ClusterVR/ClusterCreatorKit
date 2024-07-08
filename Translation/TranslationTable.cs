@@ -204,6 +204,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_paste_access_token = "アクセストークンを貼り付けてください";
         public const string cck_player_info = "プレイヤー情報";
         public const string cck_player_local_ui_not_child_of_canvas = "{0} は {1} の子ではないところに配置してください。";
+        public const string cck_playerscript_source_code_length = "{0}のPlayerScriptのsource codeが長すぎます｡現在：{1}bytes, 最大値：{2}bytes";
         public const string cck_prefab_for_generated_item = "生成するアイテムのprefab";
         public const string cck_prefab_gameobjects = "prefabに含まれるGameObject";
         public const string cck_prefab_load_exception = "prefab読み込み時に例外が発生しました。詳細はConsoleを確認してください。";
@@ -550,6 +551,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_paste_access_token = "Please paste the Access Token";
         public const string cck_player_info = "Player Information";
         public const string cck_player_local_ui_not_child_of_canvas = "Please place {0} somewhere other than as a child of {1}.";
+        public const string cck_playerscript_source_code_length = "The source code of {0}'s PlayerScript is too long. Currently: {1} bytes, Maximum Value: {2} bytes";
         public const string cck_prefab_for_generated_item = "Prefab of the created item";
         public const string cck_prefab_gameobjects = "The GameObject included in the prefab";
         public const string cck_prefab_load_exception = "An exception has occurred while loading the prefab. For details, please check the Console.";
@@ -585,7 +587,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_save_feature = "Save Feature";
         public const string cck_save_feature_need_scene_save = "To use the Save feature in Preview, you must save the scene. The Save feature will not be used in this preview.";
         public const string cck_scene_required = "There must be at least one Scene.";
-        public const string cck_scriptableitem_source_code_length = "The source code of {0}'s ScriptableItem is too long. Currently: {1}bytes, Maximum Value: Constants.Constants.ScriptableItemMaxSourceCodeByteCount}bytes";
+        public const string cck_scriptableitem_source_code_length = "The source code of {0}'s ScriptableItem is too long. Currently: {1} bytes, Maximum Value: {2} bytes";
         public const string cck_scriptableitem_source_code_too_long = "The source code of {0} is too long. Maximum Value: {1}bytes";
         public const string cck_select_folder_for_saving_material = "Please select the folder to save the material";
         public const string cck_select_folder_within_assets = "Select a folder in Assets";

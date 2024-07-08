@@ -28,6 +28,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             typeof(ItemAudioSetList),
             typeof(HumanoidAnimationList),
             typeof(ItemMaterialSetList),
+            typeof(PlayerScript)
         };
 
         static readonly Type[] ItemComponentWhiteList =
@@ -64,7 +65,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
         {
             { typeof(ItemAudioSetList), new[] { typeof(ScriptableItem) } },
             { typeof(HumanoidAnimationList), new[] { typeof(ScriptableItem) } },
-            { typeof(ItemMaterialSetList), new[] { typeof(ScriptableItem) } }
+            { typeof(ItemMaterialSetList), new[] { typeof(ScriptableItem) } },
+            { typeof(PlayerScript), new[] { typeof(ScriptableItem) } },
         };
 
         static bool Contains(IEnumerable<Type> list, Type target)
@@ -211,6 +213,20 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             }
 
             return validationMessages;
+        }
+
+        internal static IEnumerable<ValidationMessage> ValidatePlayerScript(GameObject gameObject)
+        {
+            var playerScript = gameObject.GetComponent<PlayerScript>();
+            if (playerScript == null)
+            {
+                return Enumerable.Empty<ValidationMessage>();
+            }
+
+            return playerScript.IsValid(true)
+                ? Enumerable.Empty<ValidationMessage>()
+                : new[] { new ValidationMessage(
+                    TranslationUtility.GetMessage(TranslationTable.cck_playerscript_source_code_length, gameObject.name, playerScript.GetByteCount(true), Constants.Constants.PlayerScriptMaxSourceCodeByteCount), ValidationMessage.MessageType.Error) };
         }
 
         internal static IEnumerable<ValidationMessage> ValidateRenderers(GameObject gameObject)

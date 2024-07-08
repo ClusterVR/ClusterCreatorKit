@@ -22,6 +22,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 worldRuntimeSetting.UseMovingPlatformVerticalInertia = setting.MovingPlatformVerticalInertia;
                 worldRuntimeSetting.UseMantling = setting.UseMantling;
                 worldRuntimeSetting.UseWorldShadow = setting.UseWorldShadow;
+                worldRuntimeSetting.HudType = setting.UseHUDType;
             }
             else
             {
@@ -30,6 +31,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 worldRuntimeSetting.UseMovingPlatformVerticalInertia = DefaultValues.MovingPlatformVerticalInertia;
                 worldRuntimeSetting.UseMantling = DefaultValues.UseMantling;
                 worldRuntimeSetting.UseWorldShadow = DefaultValues.UseWorldShadow;
+                worldRuntimeSetting.HudType = DefaultValues.HUDType;
             }
             descriptor.WorldRuntimeSetting = worldRuntimeSetting;
 

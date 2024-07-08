@@ -27,6 +27,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             validationMessages.AddRange(ComponentValidator.ValidateMovableItem(gameObject, isBeta));
             validationMessages.AddRange(ComponentValidator.ValidateScriptableItem(gameObject));
             validationMessages.AddRange(ComponentValidator.ValidateRenderers(gameObject));
+            validationMessages.AddRange(ComponentValidator.ValidatePlayerScript(gameObject));
 
             var requireComponentValidator = new RequireComponentValidator();
             foreach (var component in gameObject.GetComponentsInChildren<Component>(true))

@@ -68,7 +68,8 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 ScriptableItem = ExtractScriptableItemProto(go),
                 ItemAudioSetList = { ExtractItemAudioSetListProto(go) },
                 HumanoidAnimationList = { ExportAndExtractHumanoidAnimations(exporter, go) },
-                ItemMaterialSetList = { ExtractItemMaterialSetListProto(exporter, go) }
+                ItemMaterialSetList = { ExtractItemMaterialSetListProto(exporter, go) },
+                PlayerScript = ExtractPlayerScriptProto(go),
             };
 
             var extension = new GltfExtensions.ClusterItem
@@ -370,6 +371,19 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
             {
                 Id = source.Id,
                 MaterialIndex = index,
+            };
+        }
+
+        Proto.PlayerScript ExtractPlayerScriptProto(GameObject go)
+        {
+            var playerScriptComponent = go.GetComponent<IPlayerScript>();
+            if (playerScriptComponent == null)
+            {
+                return null;
+            }
+            return new Proto.PlayerScript
+            {
+                SourceCode = playerScriptComponent.GetSourceCode(true)
             };
         }
     }
