@@ -177,7 +177,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             return Enumerable.Empty<ValidationMessage>();
         }
 
-        internal static IEnumerable<ValidationMessage> ValidateScriptableItem(GameObject gameObject)
+        internal static IEnumerable<ValidationMessage> ValidateScriptableCraftItem(GameObject gameObject)
         {
             var scriptableItem = gameObject.GetComponent<ScriptableItem>();
             if (scriptableItem == null)
@@ -185,9 +185,14 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 return Enumerable.Empty<ValidationMessage>();
             }
 
-            return scriptableItem.IsValid(true)
-                ? Enumerable.Empty<ValidationMessage>()
-                : new[] { new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_scriptableitem_source_code_length, gameObject.name, scriptableItem.GetByteCount(true), Constants.Constants.ScriptableItemMaxSourceCodeByteCount), ValidationMessage.MessageType.Error) };
+            var sourceCodeByteCount = scriptableItem.GetSourceCodeByteCount(true);
+            if (sourceCodeByteCount > Constants.Constants.CraftItemScriptableItemMaxSourceCodeByteCount)
+            {
+                var message = TranslationUtility.GetMessage(TranslationTable.cck_scriptableitem_source_code_length, gameObject.name, sourceCodeByteCount, Constants.Constants.CraftItemScriptableItemMaxSourceCodeByteCount);
+                return new[] { new ValidationMessage(message, ValidationMessage.MessageType.Error) };
+            }
+
+            return Enumerable.Empty<ValidationMessage>();
         }
 
         internal static IEnumerable<ValidationMessage> ValidateAttachableItem(GameObject gameObject, Vector3 offsetPositionLimit)
@@ -215,7 +220,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             return validationMessages;
         }
 
-        internal static IEnumerable<ValidationMessage> ValidatePlayerScript(GameObject gameObject)
+        internal static IEnumerable<ValidationMessage> ValidateCraftItemPlayerScript(GameObject gameObject)
         {
             var playerScript = gameObject.GetComponent<PlayerScript>();
             if (playerScript == null)
@@ -223,10 +228,14 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 return Enumerable.Empty<ValidationMessage>();
             }
 
-            return playerScript.IsValid(true)
-                ? Enumerable.Empty<ValidationMessage>()
-                : new[] { new ValidationMessage(
-                    TranslationUtility.GetMessage(TranslationTable.cck_playerscript_source_code_length, gameObject.name, playerScript.GetByteCount(true), Constants.Constants.PlayerScriptMaxSourceCodeByteCount), ValidationMessage.MessageType.Error) };
+            var scriptByteCount = playerScript.GetByteCount(true);
+            if (scriptByteCount > Constants.Constants.CraftItemPlayerScriptMaxSourceCodeByteCount)
+            {
+                var message = TranslationUtility.GetMessage(TranslationTable.cck_playerscript_source_code_length, gameObject.name, scriptByteCount, Constants.Constants.CraftItemPlayerScriptMaxSourceCodeByteCount); 
+                return new[] { new ValidationMessage(message, ValidationMessage.MessageType.Error) };
+            }
+
+            return Enumerable.Empty<ValidationMessage>();
         }
 
         internal static IEnumerable<ValidationMessage> ValidateRenderers(GameObject gameObject)

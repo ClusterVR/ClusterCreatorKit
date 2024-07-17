@@ -1,7 +1,7 @@
 {
   "author": "Cluster, Inc.",
   "name": "mu.cluster.cluster-creator-kit",
-  "version": "2.18.0",
+  "version": "2.19.0",
   "displayName": "Cluster Creator Kit",
   "unity": "2021.3",
   "description": "Cluster Creator Kit is a tool for creating your own Worlds, Craft Items and Accessories experienced in Cluster.",

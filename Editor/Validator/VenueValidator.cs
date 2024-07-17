@@ -106,16 +106,6 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 return false;
             }
 
-            var scriptableItems = allRootObjects.SelectMany(x =>
-                x.GetComponentsInChildren<ClusterVR.CreatorKit.Item.Implements.ScriptableItem>(true));
-            var invalidScriptableItems = scriptableItems.Where(s => !s.IsValid(true)).ToArray();
-            if (invalidScriptableItems.Any())
-            {
-                errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_scriptableitem_source_code_too_long, nameof(ScriptableItem), Constants.Constants.ScriptableItemMaxSourceCodeByteCount);
-                invalidObjects = invalidScriptableItems.Select(x => x.gameObject).ToArray();
-                return false;
-            }
-
             foreach (var itemTemplate in itemTemplates)
             {
                 var result = ItemTemplateValidator.Validate(isBeta, itemTemplate, true);

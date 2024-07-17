@@ -6,6 +6,5 @@ namespace ClusterVR.CreatorKit.Item
 
         void Construct(string sourceCode);
         string GetSourceCode(bool refresh = false);
-        bool IsValid(bool refresh = false);
     }
 }

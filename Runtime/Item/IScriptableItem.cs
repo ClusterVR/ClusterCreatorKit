@@ -11,6 +11,6 @@ namespace ClusterVR.CreatorKit.Item
         void Construct(string sourceCode);
         string GetSourceCode(bool refresh = false);
         void SetSourceCode(string sourceCode);
-        bool IsValid(bool refresh = false);
+        int GetSourceCodeByteCount(bool refresh = false);
     }
 }

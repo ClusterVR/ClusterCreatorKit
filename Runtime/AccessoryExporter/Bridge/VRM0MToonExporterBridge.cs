@@ -23,8 +23,10 @@ namespace ClusterVR.CreatorKit.AccessoryExporter.Bridge
 
         VGltf.Ext.Vrm0.Types.Material CreateMaterialPropForMToon(IExporterContext context, Material mat)
         {
+            var normalMapAsGltfFormat = true;
             var vrmMat = new VGltf.Ext.Vrm0.Types.Material
             {
+                NormalMapAsGltfFormat = normalMapAsGltfFormat,
                 Name = mat.name,
                 Shader = MToonUtilsShaderName,
                 RenderQueue = mat.renderQueue
@@ -70,9 +72,19 @@ namespace ClusterVR.CreatorKit.AccessoryExporter.Bridge
                                 continue;
                             }
 
-                            var vRes = context.Exporters.Textures.Export(v);
-                            vrmMat.TextureProperties.Add(prop.Key, vRes.Index);
-                            break;
+                            if (normalMapAsGltfFormat && prop.Key == "_BumpMap")
+                            {
+                                var exporter = new NormalTextureExporter(context, "Hidden/VGltfUnity/UnityDXT5nmNormalTexToGltf");
+                                var vRes = exporter.Export(v);
+                                vrmMat.TextureProperties.Add(prop.Key, vRes.Index);
+                                break;
+                            }
+                            else
+                            {
+                                var vRes = context.Exporters.Textures.Export(v);
+                                vrmMat.TextureProperties.Add(prop.Key, vRes.Index);
+                                break;
+                            }
                         }
                 }
             }

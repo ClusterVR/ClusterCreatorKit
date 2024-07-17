@@ -16,6 +16,12 @@ namespace VGltf.Ext.Vrm0.Types
                 Id = "vrm.material.schema.json"/* TODO: Fix usage of Id */)]
     public class Material
     {
+        // trueの場合、ノーマルマップ用のテクスチャをgltfのフォーマット(rgba=((x+1)/2, (y+1)/2, (z+1)/2, 1), isLinear: trueで保存する。
+        // falseの場合は未定義で、現状は環境依存 (GraphicsSettings.HasShaderDefine(BuiltinShaderDefine.UNITY_NO_DXT5nm)による) かつ isLinear: false
+        // ノーマルマップ以外は(OcculusionMap等でも)変換無し、isLinear: false
+        [JsonField(Name = "normalMapAsGltfFormat")]
+        public bool NormalMapAsGltfFormat = false;
+
         [JsonField(Name = "name")]
         public string Name;
 

@@ -64,12 +64,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
             isSourceCodeInitialized = true;
         }
 
-        public bool IsValid(bool refresh = false)
-        {
-            return GetByteCount(refresh) <= Constants.Constants.ScriptableItemMaxSourceCodeByteCount;
-        }
-
-        public int GetByteCount(bool refresh)
+        public int GetSourceCodeByteCount(bool refresh)
         {
             return Encoding.UTF8.GetByteCount(GetSourceCode(refresh));
         }
