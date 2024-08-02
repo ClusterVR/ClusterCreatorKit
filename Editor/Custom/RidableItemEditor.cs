@@ -3,8 +3,8 @@ using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(RidableItem)), CanEditMultipleObjects]
-    public sealed class RidableItemEditor : UnityEditor.Editor
+    [CustomEditor(typeof(RidableItem), isFallback = true), CanEditMultipleObjects]
+    public class RidableItemEditor : UnityEditor.Editor
     {
         void OnSceneGUI()
         {

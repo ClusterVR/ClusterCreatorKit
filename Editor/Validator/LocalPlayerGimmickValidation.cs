@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Reflection;
-using ClusterVR.CreatorKit.Editor.Custom;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.Translation;
@@ -63,6 +62,17 @@ namespace ClusterVR.CreatorKit.Editor.Validator
         }
 
         public static readonly string ErrorMessage =
-            TranslationUtility.GetMessage(TranslationTable.cck_gimmicktarget_playerlocalui_only, nameof(GimmickTarget), GlobalGimmickKeyPropertyDrawer.FormatTarget(GimmickTarget.Player), nameof(PlayerLocalUI));
+            TranslationUtility.GetMessage(TranslationTable.cck_gimmicktarget_playerlocalui_only, nameof(GimmickTarget), FormatTarget(GimmickTarget.Player), nameof(PlayerLocalUI));
+
+        static string FormatTarget(GimmickTarget target)
+        {
+            switch (target)
+            {
+                case GimmickTarget.Player:
+                    return "LocalPlayer";
+                default:
+                    return target.ToString();
+            }
+        }
     }
 }

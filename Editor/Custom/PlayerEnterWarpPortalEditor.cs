@@ -3,8 +3,8 @@ using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(PlayerEnterWarpPortal)), CanEditMultipleObjects]
-    public sealed class PlayerEnterWarpPortalEditor : VisualElementEditor
+    [CustomEditor(typeof(PlayerEnterWarpPortal), isFallback = true), CanEditMultipleObjects]
+    public class PlayerEnterWarpPortalEditor : VisualElementEditor
     {
     }
 }

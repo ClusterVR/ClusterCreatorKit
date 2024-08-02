@@ -7,8 +7,8 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(SafeArea)), CanEditMultipleObjects]
-    public sealed class SafeAreaEditor : VisualElementEditor
+    [CustomEditor(typeof(SafeArea), isFallback = true), CanEditMultipleObjects]
+    public class SafeAreaEditor : VisualElementEditor
     {
         const string AutoAnchorActionName = TranslationTable.cck_auto_set_anchor;
 

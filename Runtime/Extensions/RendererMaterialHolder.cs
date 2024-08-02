@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Extensions
 {
     [RequireComponent(typeof(Renderer))]
+    [AddComponentMenu("")]
     public sealed class RendererMaterialHolder : MonoBehaviour
     {
         Renderer renderer;
@@ -13,25 +15,34 @@ namespace ClusterVR.CreatorKit.Extensions
 
         void Awake()
         {
-            CacheRendererAndMaterialsOnce();
+            TryCacheRendererAndMaterialsOnce();
         }
 
         public Material[] GetSharedMaterials()
         {
-            CacheRendererAndMaterialsOnce();
+            if (!TryCacheRendererAndMaterialsOnce())
+            {
+                throw new InvalidOperationException();
+            }
             return sharedMaterials;
         }
 
         public void SetSharedMaterials(Material[] materials)
         {
-            CacheRendererAndMaterialsOnce();
+            if (!TryCacheRendererAndMaterialsOnce())
+            {
+                throw new InvalidOperationException();
+            }
             sharedMaterials = materials;
             renderer.sharedMaterials = materials;
         }
 
         public void SetMaterials(Material[] materials)
         {
-            CacheRendererAndMaterialsOnce();
+            if (!TryCacheRendererAndMaterialsOnce())
+            {
+                throw new InvalidOperationException();
+            }
             this.materials = materials;
             if (overrideMaterials == null)
             {
@@ -41,31 +52,44 @@ namespace ClusterVR.CreatorKit.Extensions
 
         public void ClearMaterials()
         {
-            CacheRendererAndMaterialsOnce();
+            if (!TryCacheRendererAndMaterialsOnce())
+            {
+                throw new InvalidOperationException();
+            }
             materials = null;
             renderer.materials = overrideMaterials ?? sharedMaterials;
         }
 
         public void SetOverrideMaterials(Material[] materials)
         {
-            CacheRendererAndMaterialsOnce();
+            if (!TryCacheRendererAndMaterialsOnce())
+            {
+                throw new InvalidOperationException();
+            }
             overrideMaterials = materials;
             renderer.materials = overrideMaterials;
         }
 
         public void ClearOverrideMaterials()
         {
-            CacheRendererAndMaterialsOnce();
+            if (!TryCacheRendererAndMaterialsOnce())
+            {
+                throw new InvalidOperationException();
+            }
             overrideMaterials = null;
             renderer.materials = materials ?? sharedMaterials;
         }
 
-        void CacheRendererAndMaterialsOnce()
+        bool TryCacheRendererAndMaterialsOnce()
         {
-            if (isCached) return;
-            renderer = GetComponent<Renderer>();
+            if (isCached) return true;
+            if (!TryGetComponent(out renderer))
+            {
+                return false;
+            }
             sharedMaterials = renderer.sharedMaterials;
             isCached = true;
+            return true;
         }
     }
 }

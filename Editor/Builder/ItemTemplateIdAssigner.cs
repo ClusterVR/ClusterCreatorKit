@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.Item;
 using UnityEditor;
@@ -12,49 +13,59 @@ namespace ClusterVR.CreatorKit.Editor.Builder
     {
         public static void Execute()
         {
-            var templateIdItems = new Dictionary<ItemTemplateId, IItem>();
+            var scene = SceneManager.GetActiveScene();
+            var itemTemplateContainers = ItemTemplateGatherer.GatherItemTemplateContainers(scene).ToArray();
 
-            ItemTemplateId GetOrCreateTemplateId(IItem item, IEnumerable<CreateItemGimmick> createItemGimmicks)
+            var itemTemplates = new Dictionary<IItem, ItemTemplateId>();
+            var itemTemplateIds = new HashSet<ItemTemplateId>();
+            foreach (var container in itemTemplateContainers)
             {
-                ItemTemplateId templateId;
-                foreach (var createItemGimmick in createItemGimmicks)
+                foreach (var template in container.ItemTemplates())
                 {
-                    templateId = createItemGimmick.ItemTemplateId;
-                    if (templateId.Value == 0 || templateIdItems.ContainsKey(templateId))
+                    if (itemTemplates.TryGetValue(template.Item, out var id) && id.IsValid())
                     {
                         continue;
                     }
-                    templateIdItems.Add(templateId, item);
-                    return templateId;
-                }
 
+                    if (template.Id.IsValid() && itemTemplateIds.Add(template.Id))
+                    {
+                        itemTemplates[template.Item] = template.Id;
+                    }
+                    else
+                    {
+                        itemTemplates[template.Item] = default;
+                    }
+                }
+            }
+
+            foreach (var item in itemTemplates.Where(x => !x.Value.IsValid()).ToArray())
+            {
+                ItemTemplateId templateId;
                 do
                 {
                     templateId = ItemTemplateId.Create();
-                } while (templateId.Value == 0 || templateIdItems.ContainsKey(templateId));
+                } while (!templateId.IsValid() || !itemTemplateIds.Add(templateId));
 
-                templateIdItems.Add(templateId, item);
-                return templateId;
+                itemTemplates[item.Key] = templateId;
             }
 
-            var scene = SceneManager.GetActiveScene();
-            var createItemGimmickGroup = ItemTemplateGatherer.GatherCreateItemGimmicksForItemTemplates(scene);
-
-            foreach (var gimmicks in createItemGimmickGroup)
+            foreach (var container in itemTemplateContainers)
             {
-                var item = gimmicks.Key;
-                var templateId = GetOrCreateTemplateId(item, gimmicks);
-                foreach (var gimmick in gimmicks)
+                var objectChanged = false;
+
+                foreach (var template in container.ItemTemplates())
                 {
-                    if (gimmick.ItemTemplateId.Equals(templateId))
+                    var id = itemTemplates[template.Item];
+                    if (!template.Id.Equals(id))
                     {
-                        continue;
+                        container.SetItemTemplateId(template.Item, id);
+                        objectChanged = true;
                     }
-                    gimmick.ItemTemplateId = templateId;
-                    if (!Application.isPlaying)
-                    {
-                        EditorUtility.SetDirty(gimmick);
-                    }
+                }
+
+                if (objectChanged && !Application.isPlaying)
+                {
+                    container.MarkObjectDirty();
                 }
             }
 

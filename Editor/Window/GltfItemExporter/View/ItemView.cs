@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Builder;
-using ClusterVR.CreatorKit.Editor.Custom;
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Editor.ItemExporter;
 using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
 using ClusterVR.CreatorKit.Item;

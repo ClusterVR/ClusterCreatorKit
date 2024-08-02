@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using ClusterVR.CreatorKit.Item;
+using UnityEditor;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Gimmick.Implements
 {
     [RequireComponent(typeof(Item.Implements.Item))]
-    public sealed class CreateItemGimmick : MonoBehaviour, IItemGimmick, ICreateItemGimmick
+    public sealed class CreateItemGimmick : MonoBehaviour, IItemGimmick, ICreateItemGimmick, IItemTemplateContainer
     {
         [SerializeField, HideInInspector] Item.Implements.Item item;
         [SerializeField, ItemGimmickKey] GimmickKey key = new GimmickKey(GimmickTarget.Item);
@@ -85,5 +87,25 @@ namespace ClusterVR.CreatorKit.Gimmick.Implements
                 spawnPoint = transform;
             }
         }
+
+        public IEnumerable<ItemTemplateIdAndItem> ItemTemplates() =>
+            this.IsValid()
+                ? new ItemTemplateIdAndItem[] { new(itemTemplateId, itemTemplate) }
+                : new ItemTemplateIdAndItem[]{};
+
+#if UNITY_EDITOR
+        public void SetItemTemplateId(IItem item, ItemTemplateId id)
+        {
+            if (itemTemplate.Equals(item))
+            {
+                itemTemplateId = id;
+            }
+        }
+
+        public void MarkObjectDirty()
+        {
+            EditorUtility.SetDirty(this);
+        }
+#endif
     }
 }

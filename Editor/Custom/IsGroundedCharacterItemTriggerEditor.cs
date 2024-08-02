@@ -3,8 +3,8 @@ using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(IsGroundedCharacterItemTrigger)), CanEditMultipleObjects]
-    public sealed class IsGroundedCharacterItemTriggerEditor : TriggerEditor
+    [CustomEditor(typeof(IsGroundedCharacterItemTrigger), isFallback = true), CanEditMultipleObjects]
+    public class IsGroundedCharacterItemTriggerEditor : TriggerEditor
     {
     }
 }

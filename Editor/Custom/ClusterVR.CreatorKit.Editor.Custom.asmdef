@@ -1,0 +1,37 @@
+{
+  "name": "ClusterVR.CreatorKit.Editor.Custom",
+  "rootNamespace": "ClusterVR.CreatorKit.Editor.Custom",
+  "references": [
+    "ClusterVR.CreatorKit",
+    "ClusterVR.CreatorKit.Constants",
+    "ClusterVR.CreatorKit.Editor",
+    "ClusterVR.CreatorKit.Editor.Utils",
+    "ClusterVR.CreatorKit.Extensions",
+    "ClusterVR.CreatorKit.Gimmick",
+    "ClusterVR.CreatorKit.Gimmick.Implements",
+    "ClusterVR.CreatorKit.Item",
+    "ClusterVR.CreatorKit.Item.Implements",
+    "ClusterVR.CreatorKit.Operation",
+    "ClusterVR.CreatorKit.Operation.Implements",
+    "ClusterVR.CreatorKit.ProductUgc",
+    "ClusterVR.CreatorKit.Trigger",
+    "ClusterVR.CreatorKit.Trigger.Implements",
+    "ClusterVR.CreatorKit.World",
+    "ClusterVR.CreatorKit.World.Implements",
+    "Unity.net.yutopp.vjson",
+    "MToon",
+    "ClusterVR.CreatorKit.Validator",
+    "ClusterVR.CreatorKit.Translation"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

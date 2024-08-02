@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -7,7 +8,7 @@ using UnityEngine.UIElements;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomPropertyDrawer(typeof(StateKeyStringAttribute), true)]
-    public sealed class StateKeyStringAttributePropertyDrawer : PropertyDrawer
+    public class StateKeyStringAttributePropertyDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {

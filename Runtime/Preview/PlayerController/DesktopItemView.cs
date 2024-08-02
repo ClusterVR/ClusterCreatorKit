@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
+    [AddComponentMenu("")]
     public sealed class DesktopItemView : MonoBehaviour
     {
         [SerializeField] Text itemLabelText;

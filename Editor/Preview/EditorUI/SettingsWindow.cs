@@ -1,5 +1,5 @@
 using System.Linq;
-using ClusterVR.CreatorKit.Editor.Custom;
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Editor.Preview.RoomState;
 using ClusterVR.CreatorKit.Editor.Preview.World;
 using ClusterVR.CreatorKit.Editor.Window.View;

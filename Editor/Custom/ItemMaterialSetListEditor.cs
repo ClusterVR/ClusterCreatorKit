@@ -3,8 +3,8 @@ using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(ItemMaterialSetList)), CanEditMultipleObjects]
-    public sealed class ItemMaterialSetListEditor : VisualElementEditor
+    [CustomEditor(typeof(ItemMaterialSetList), isFallback = true), CanEditMultipleObjects]
+    public class ItemMaterialSetListEditor : VisualElementEditor
     {
     }
 }

@@ -22,7 +22,7 @@ namespace ClusterVR.CreatorKit.Proto {
             "dGVyLmNyZWF0b3JraXQifgoPV29ybGREZXNjcmlwdG9yEiMKG3BlcnNpc3Rl",
             "ZF9wbGF5ZXJfc3RhdGVfa2V5cxgBIAMoCRJGChV3b3JsZF9ydW50aW1lX3Nl",
             "dHRpbmcYAiABKAsyJy5jbHVzdGVyLmNyZWF0b3JraXQuV29ybGRSdW50aW1l",
-            "U2V0dGluZyKqAwoTV29ybGRSdW50aW1lU2V0dGluZxIbChN1c2VfbW92aW5n",
+            "U2V0dGluZyLNAwoTV29ybGRSdW50aW1lU2V0dGluZxIbChN1c2VfbW92aW5n",
             "X3BsYXRmb3JtGAEgASgIEi4KJnVzZV9tb3ZpbmdfcGxhdGZvcm1faG9yaXpv",
             "bnRhbF9pbmVydGlhGAIgASgIEiwKJHVzZV9tb3ZpbmdfcGxhdGZvcm1fdmVy",
             "dGljYWxfaW5lcnRpYRgDIAEoCBIYChB1c2Vfd29ybGRfc2hhZG93GAQgASgI",
@@ -30,14 +30,15 @@ namespace ClusterVR.CreatorKit.Proto {
             "dXN0ZXIuY3JlYXRvcmtpdC5Xb3JsZFJ1bnRpbWVTZXR0aW5nLkhVRFR5cGUS",
             "GgoSZW5hYmxlX2Nyb3VjaF93YWxrGAcgASgIEiIKGnVzZV9jdXN0b21fY2xp",
             "cHBpbmdfcGxhbmVzGAggASgIEhIKCm5lYXJfcGxhbmUYCSABKAISEQoJZmFy",
-            "X3BsYW5lGAogASgCIj4KB0hVRFR5cGUSDwoLVU5LTk9XTl9IVUQQABIOCgpM",
-            "RUdBQ1lfSFVEEAESEgoOQ0xVU1RFUl9IVURfVjIQAkItWg5jbHVzdGVyLm11",
-            "L3JwY6oCGkNsdXN0ZXJWUi5DcmVhdG9yS2l0LlByb3RvYgZwcm90bzM="));
+            "X3BsYW5lGAogASgCEiEKGWRpc3BsYXlfYXZhdGFyX3NpbGhvdWV0dGUYCyAB",
+            "KAgiPgoHSFVEVHlwZRIPCgtVTktOT1dOX0hVRBAAEg4KCkxFR0FDWV9IVUQQ",
+            "ARISCg5DTFVTVEVSX0hVRF9WMhACQi1aDmNsdXN0ZXIubXUvcnBjqgIaQ2x1",
+            "c3RlclZSLkNyZWF0b3JLaXQuUHJvdG9iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.WorldDescriptor), global::ClusterVR.CreatorKit.Proto.WorldDescriptor.Parser, new[]{ "PersistedPlayerStateKeys", "WorldRuntimeSetting" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting), global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Parser, new[]{ "UseMovingPlatform", "UseMovingPlatformHorizontalInertia", "UseMovingPlatformVerticalInertia", "UseWorldShadow", "UseMantling", "HudType", "EnableCrouchWalk", "UseCustomClippingPlanes", "NearPlane", "FarPlane" }, null, new[]{ typeof(global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Types.HUDType) }, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting), global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Parser, new[]{ "UseMovingPlatform", "UseMovingPlatformHorizontalInertia", "UseMovingPlatformVerticalInertia", "UseWorldShadow", "UseMantling", "HudType", "EnableCrouchWalk", "UseCustomClippingPlanes", "NearPlane", "FarPlane", "DisplayAvatarSilhouette" }, null, new[]{ typeof(global::ClusterVR.CreatorKit.Proto.WorldRuntimeSetting.Types.HUDType) }, null, null)
           }));
     }
     #endregion
@@ -310,6 +311,7 @@ namespace ClusterVR.CreatorKit.Proto {
       useCustomClippingPlanes_ = other.useCustomClippingPlanes_;
       nearPlane_ = other.nearPlane_;
       farPlane_ = other.farPlane_;
+      displayAvatarSilhouette_ = other.displayAvatarSilhouette_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -429,6 +431,17 @@ namespace ClusterVR.CreatorKit.Proto {
       }
     }
 
+    public const int DisplayAvatarSilhouetteFieldNumber = 11;
+    private bool displayAvatarSilhouette_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool DisplayAvatarSilhouette {
+      get { return displayAvatarSilhouette_; }
+      set {
+        displayAvatarSilhouette_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -454,6 +467,7 @@ namespace ClusterVR.CreatorKit.Proto {
       if (UseCustomClippingPlanes != other.UseCustomClippingPlanes) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(NearPlane, other.NearPlane)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(FarPlane, other.FarPlane)) return false;
+      if (DisplayAvatarSilhouette != other.DisplayAvatarSilhouette) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -471,6 +485,7 @@ namespace ClusterVR.CreatorKit.Proto {
       if (UseCustomClippingPlanes != false) hash ^= UseCustomClippingPlanes.GetHashCode();
       if (NearPlane != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(NearPlane);
       if (FarPlane != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(FarPlane);
+      if (DisplayAvatarSilhouette != false) hash ^= DisplayAvatarSilhouette.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -529,6 +544,10 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteRawTag(85);
         output.WriteFloat(FarPlane);
       }
+      if (DisplayAvatarSilhouette != false) {
+        output.WriteRawTag(88);
+        output.WriteBool(DisplayAvatarSilhouette);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -579,6 +598,10 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteRawTag(85);
         output.WriteFloat(FarPlane);
       }
+      if (DisplayAvatarSilhouette != false) {
+        output.WriteRawTag(88);
+        output.WriteBool(DisplayAvatarSilhouette);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -618,6 +641,9 @@ namespace ClusterVR.CreatorKit.Proto {
       }
       if (FarPlane != 0F) {
         size += 1 + 4;
+      }
+      if (DisplayAvatarSilhouette != false) {
+        size += 1 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -660,6 +686,9 @@ namespace ClusterVR.CreatorKit.Proto {
       }
       if (other.FarPlane != 0F) {
         FarPlane = other.FarPlane;
+      }
+      if (other.DisplayAvatarSilhouette != false) {
+        DisplayAvatarSilhouette = other.DisplayAvatarSilhouette;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -716,6 +745,10 @@ namespace ClusterVR.CreatorKit.Proto {
             FarPlane = input.ReadFloat();
             break;
           }
+          case 88: {
+            DisplayAvatarSilhouette = input.ReadBool();
+            break;
+          }
         }
       }
     #endif
@@ -769,6 +802,10 @@ namespace ClusterVR.CreatorKit.Proto {
           }
           case 85: {
             FarPlane = input.ReadFloat();
+            break;
+          }
+          case 88: {
+            DisplayAvatarSilhouette = input.ReadBool();
             break;
           }
         }

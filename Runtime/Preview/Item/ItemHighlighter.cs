@@ -5,6 +5,7 @@ using UnityEngine.Rendering;
 
 namespace ClusterVR.CreatorKit.Preview.Item
 {
+    [AddComponentMenu("")]
     public sealed class ItemHighlighter : MonoBehaviour
     {
         [SerializeField] Camera targetCamera;

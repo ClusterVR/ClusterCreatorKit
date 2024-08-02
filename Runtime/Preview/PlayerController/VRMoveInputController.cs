@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
+    [AddComponentMenu("")]
     public sealed class VRMoveInputController : MonoBehaviour, IMoveInputController
     {
         public Vector2 MoveDirection

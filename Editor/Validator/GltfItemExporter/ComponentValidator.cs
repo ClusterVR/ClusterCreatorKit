@@ -231,7 +231,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             var scriptByteCount = playerScript.GetByteCount(true);
             if (scriptByteCount > Constants.Constants.CraftItemPlayerScriptMaxSourceCodeByteCount)
             {
-                var message = TranslationUtility.GetMessage(TranslationTable.cck_playerscript_source_code_length, gameObject.name, scriptByteCount, Constants.Constants.CraftItemPlayerScriptMaxSourceCodeByteCount); 
+                var message = TranslationUtility.GetMessage(TranslationTable.cck_playerscript_source_code_length, gameObject.name, scriptByteCount, Constants.Constants.CraftItemPlayerScriptMaxSourceCodeByteCount);
                 return new[] { new ValidationMessage(message, ValidationMessage.MessageType.Error) };
             }
 

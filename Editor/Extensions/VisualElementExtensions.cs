@@ -1,6 +1,6 @@
 using UnityEngine.UIElements;
 
-namespace ClusterVR.CreatorKit.Editor.Custom
+namespace ClusterVR.CreatorKit.Editor.Extensions
 {
     public static class VisualElementExtensions
     {

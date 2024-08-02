@@ -45,6 +45,7 @@ namespace ClusterVR.CreatorKit.Extensions
             if (!renderer.TryGetComponent<RendererMaterialHolder>(out var holder))
             {
                 holder = renderer.gameObject.AddComponent<RendererMaterialHolder>();
+                holder.hideFlags = HideFlags.HideInInspector | HideFlags.DontSave;
             }
             return holder;
         }

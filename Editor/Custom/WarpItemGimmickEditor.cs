@@ -3,8 +3,8 @@ using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(WarpItemGimmick)), CanEditMultipleObjects]
-    public sealed class WarpItemGimmickEditor : VisualElementEditor
+    [CustomEditor(typeof(WarpItemGimmick), isFallback = true), CanEditMultipleObjects]
+    public class WarpItemGimmickEditor : VisualElementEditor
     {
         void OnSceneGUI()
         {

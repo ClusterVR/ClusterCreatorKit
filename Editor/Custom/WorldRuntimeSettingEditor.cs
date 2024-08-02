@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.World.Implements.WorldRuntimeSetting;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -6,8 +7,8 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(WorldRuntimeSetting))]
-    public sealed class WorldRuntimeSettingEditor : VisualElementEditor
+    [CustomEditor(typeof(WorldRuntimeSetting), isFallback = true)]
+    public class WorldRuntimeSettingEditor : VisualElementEditor
     {
         public override VisualElement CreateInspectorGUI()
         {

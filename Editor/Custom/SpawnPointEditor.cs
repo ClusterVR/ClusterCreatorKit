@@ -1,4 +1,5 @@
 using System;
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.World;
 using ClusterVR.CreatorKit.World.Implements.SpawnPoints;
@@ -9,8 +10,8 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(SpawnPoint)), CanEditMultipleObjects]
-    public sealed class SpawnPointEditor : UnityEditor.Editor
+    [CustomEditor(typeof(SpawnPoint), isFallback = true), CanEditMultipleObjects]
+    public class SpawnPointEditor : UnityEditor.Editor
     {
         public override VisualElement CreateInspectorGUI()
         {

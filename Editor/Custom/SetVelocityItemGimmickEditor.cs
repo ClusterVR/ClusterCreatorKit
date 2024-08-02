@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -5,8 +6,8 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(SetVelocityItemGimmick)), CanEditMultipleObjects]
-    public sealed class SetVelocityItemGimmickEditor : UnityEditor.Editor
+    [CustomEditor(typeof(SetVelocityItemGimmick), isFallback = true), CanEditMultipleObjects]
+    public class SetVelocityItemGimmickEditor : UnityEditor.Editor
     {
         public override VisualElement CreateInspectorGUI()
         {

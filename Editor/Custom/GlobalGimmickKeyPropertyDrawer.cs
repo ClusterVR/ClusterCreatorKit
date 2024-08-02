@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Editor.Validator;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;
@@ -11,7 +12,7 @@ using UnityEngine.UIElements;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomPropertyDrawer(typeof(GlobalGimmickKey), true)]
-    public sealed class GlobalGimmickKeyPropertyDrawer : PropertyDrawer
+    public class GlobalGimmickKeyPropertyDrawer : PropertyDrawer
     {
         static readonly List<GimmickTarget> LocalizableSelectables = new List<GimmickTarget>
         {

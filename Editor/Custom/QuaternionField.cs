@@ -62,9 +62,6 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 var newValue = Quaternion.Euler(e.newValue);
 
                 UpdateProperty(newValue);
-#if !UNITY_2019_3_OR_NEWER
-                onValueChanged?.Invoke(newValue);
-#endif
                 visibleField.SetValueWithoutNotify(newValue.eulerAngles);
             });
             container.Add(visibleField);

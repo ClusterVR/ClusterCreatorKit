@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Preview.Common
 {
+    [AddComponentMenu("")]
     public sealed class CoroutineGenerator : MonoBehaviour
     {
         static CoroutineGenerator instance;

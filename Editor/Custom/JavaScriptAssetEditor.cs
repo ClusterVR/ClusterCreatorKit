@@ -4,8 +4,8 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(JavaScriptAsset)), CanEditMultipleObjects]
-    public sealed class JavaScriptAssetEditor : UnityEditor.Editor
+    [CustomEditor(typeof(JavaScriptAsset), isFallback = true), CanEditMultipleObjects]
+    public class JavaScriptAssetEditor : UnityEditor.Editor
     {
         public override VisualElement CreateInspectorGUI()
         {

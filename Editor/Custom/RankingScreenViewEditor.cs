@@ -5,8 +5,8 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(RankingScreenView))]
-    public sealed class RankingScreenViewEditor : VisualElementEditor
+    [CustomEditor(typeof(RankingScreenView), isFallback = true)]
+    public class RankingScreenViewEditor : VisualElementEditor
     {
         public override VisualElement CreateInspectorGUI()
         {

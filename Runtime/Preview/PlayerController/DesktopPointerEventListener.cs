@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
+    [AddComponentMenu("")]
     public sealed class DesktopPointerEventListener : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         IEndDragHandler, IDragHandler
     {

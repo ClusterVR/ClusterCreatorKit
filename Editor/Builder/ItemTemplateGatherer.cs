@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using ClusterVR.CreatorKit.Gimmick;
-using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.Item;
 using UnityEngine.SceneManagement;
 
@@ -9,48 +7,38 @@ namespace ClusterVR.CreatorKit.Editor.Builder
 {
     public static class ItemTemplateGatherer
     {
-        public static IEnumerable<IGrouping<IItem, CreateItemGimmick>> GatherCreateItemGimmicksForItemTemplates(
-            Scene scene)
-        {
-            return GatherValidCreateItemGimmicks(scene)
-                .GroupBy(x => x.ItemTemplate);
-        }
-
         public static IEnumerable<IItem> GatherItemTemplates(Scene scene)
         {
-            return GatherValidCreateItemGimmicks(scene)
-                .Select(x => x.ItemTemplate)
+            return GatherItemTemplateContainers(scene)
+                .SelectMany(x => x.ItemTemplates())
+                .Select(x => x.Item)
                 .Distinct();
         }
 
-        static IEnumerable<CreateItemGimmick> GatherValidCreateItemGimmicks(Scene scene)
+        public static IEnumerable<IItemTemplateContainer> GatherItemTemplateContainers(Scene scene)
         {
-            var createItemGimmicks = new HashSet<CreateItemGimmick>();
+            var itemTemplateContainers = new HashSet<IItemTemplateContainer>();
 
-            void AddCreateItemGimmick(CreateItemGimmick createItemGimmick)
+            foreach (var itemTemplateContainer in scene.GetRootGameObjects()
+                         .SelectMany(o => o.GetComponentsInChildren<IItemTemplateContainer>(true)))
             {
-                if (!createItemGimmick.IsValid())
+                AddItemTemplateContainer(itemTemplateContainer);
+            }
+
+            return itemTemplateContainers;
+
+            void AddItemTemplateContainer(IItemTemplateContainer itemTemplateContainer)
+            {
+                if (!itemTemplateContainers.Add(itemTemplateContainer))
                 {
                     return;
                 }
-                if (!createItemGimmicks.Add(createItemGimmick))
+                foreach (var innerItemTemplateContainer in itemTemplateContainer.ItemTemplates()
+                             .SelectMany(i => i.Item.gameObject.GetComponents<IItemTemplateContainer>()))
                 {
-                    return;
-                }
-                foreach (var innerCreateItemGimmick in createItemGimmick.ItemTemplate.gameObject
-                    .GetComponents<CreateItemGimmick>())
-                {
-                    AddCreateItemGimmick(innerCreateItemGimmick);
+                    AddItemTemplateContainer(innerItemTemplateContainer);
                 }
             }
-
-            foreach (var createItemGimmickItem in scene.GetRootGameObjects()
-                .SelectMany(o => o.GetComponentsInChildren<CreateItemGimmick>(true)))
-            {
-                AddCreateItemGimmick(createItemGimmickItem);
-            }
-
-            return createItemGimmicks;
         }
     }
 }

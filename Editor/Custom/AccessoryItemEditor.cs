@@ -1,5 +1,6 @@
 using System.IO;
 using System.Linq;
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
 using ClusterVR.CreatorKit.Translation;
@@ -9,8 +10,8 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(AccessoryItem)), CanEditMultipleObjects]
-    public sealed class AccessoryItemEditor : VisualElementEditor
+    [CustomEditor(typeof(AccessoryItem), isFallback = true), CanEditMultipleObjects]
+    public class AccessoryItemEditor : VisualElementEditor
     {
         const string SetUsableShaderText = TranslationTable.cck_change_to_supported_shader_for_accessory;
         const string MToonShaderName = "VRM/MToon";

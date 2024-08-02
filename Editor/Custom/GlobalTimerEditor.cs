@@ -3,8 +3,8 @@ using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(GlobalTimer)), CanEditMultipleObjects]
-    public sealed class GlobalTimerEditor : TriggerEditor
+    [CustomEditor(typeof(GlobalTimer), isFallback = true), CanEditMultipleObjects]
+    public class GlobalTimerEditor : TriggerEditor
     {
     }
 }

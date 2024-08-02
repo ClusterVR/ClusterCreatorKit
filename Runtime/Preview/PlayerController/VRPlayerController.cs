@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
+    [AddComponentMenu("")]
     public sealed class VRPlayerController : MonoBehaviour, IPlayerController
     {
         [SerializeField] CharacterController characterController;

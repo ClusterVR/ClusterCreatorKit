@@ -3,8 +3,8 @@ using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(SetGameObjectActiveGimmick)), CanEditMultipleObjects]
-    public sealed class SetGameObjectActiveGimmickEditor : VisualElementEditor
+    [CustomEditor(typeof(SetGameObjectActiveGimmick), isFallback = true), CanEditMultipleObjects]
+    public class SetGameObjectActiveGimmickEditor : VisualElementEditor
     {
     }
 }

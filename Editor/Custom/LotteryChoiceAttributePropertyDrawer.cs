@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomPropertyDrawer(typeof(LotteryChoiceAttribute), true)]
-    public sealed class LotteryChoiceAttributePropertyDrawer : PropertyDrawer
+    public class LotteryChoiceAttributePropertyDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {

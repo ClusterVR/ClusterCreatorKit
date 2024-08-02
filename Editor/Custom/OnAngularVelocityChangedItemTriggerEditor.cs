@@ -3,8 +3,8 @@ using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(OnAngularVelocityChangedItemTrigger)), CanEditMultipleObjects]
-    public sealed class OnAngularVelocityChangedItemTriggerEditor : TriggerEditor
+    [CustomEditor(typeof(OnAngularVelocityChangedItemTrigger), isFallback = true), CanEditMultipleObjects]
+    public class OnAngularVelocityChangedItemTriggerEditor : TriggerEditor
     {
     }
 }

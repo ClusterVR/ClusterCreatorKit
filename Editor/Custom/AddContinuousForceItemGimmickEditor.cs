@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -5,8 +6,8 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(AddContinuousForceItemGimmick)), CanEditMultipleObjects]
-    public sealed class AddContinuousForceItemGimmickEditor : UnityEditor.Editor
+    [CustomEditor(typeof(AddContinuousForceItemGimmick), isFallback = true), CanEditMultipleObjects]
+    public class AddContinuousForceItemGimmickEditor : UnityEditor.Editor
     {
         public override VisualElement CreateInspectorGUI()
         {

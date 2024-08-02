@@ -1,7 +1,6 @@
 using System;
-using ClusterVR.CreatorKit.Editor.Builder;
-using ClusterVR.CreatorKit.Editor.Custom;
 using ClusterVR.CreatorKit.Editor.Enquete;
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;

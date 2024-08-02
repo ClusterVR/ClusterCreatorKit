@@ -1,4 +1,5 @@
-﻿using ClusterVR.CreatorKit.ProductUgc;
+﻿using ClusterVR.CreatorKit.Editor.Extensions;
+using ClusterVR.CreatorKit.ProductUgc;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -7,7 +8,7 @@ using UnityEngine.UIElements;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomPropertyDrawer(typeof(ProductId)), CanEditMultipleObjects]
-    public sealed class ProductIdPropertyDrawer : PropertyDrawer
+    public class ProductIdPropertyDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {

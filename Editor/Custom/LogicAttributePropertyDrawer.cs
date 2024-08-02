@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Operation;
 using ClusterVR.CreatorKit.Operation.Implements;
@@ -15,7 +16,7 @@ using ValueType = ClusterVR.CreatorKit.Operation.ValueType;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomPropertyDrawer(typeof(LogicAttribute), true)]
-    public sealed class LogicAttributePropertyDrawer : PropertyDrawer
+    public class LogicAttributePropertyDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
@@ -89,11 +90,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                     {
                         flexDirection = new StyleEnum<FlexDirection>(FlexDirection.Row),
                         borderTopWidth = new StyleFloat(1),
-#if UNITY_2019_3_OR_NEWER
                         borderTopColor = new StyleColor(Color.gray),
-#else
-                        borderColor = new StyleColor(Color.gray),
-#endif
                         paddingTop = new StyleLength(5),
                         paddingBottom = new StyleLength(5)
                     }
@@ -108,11 +105,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                     style =
                     {
                         borderLeftWidth = new StyleFloat(1),
-#if UNITY_2019_3_OR_NEWER
                         borderLeftColor = new StyleColor(Color.gray),
-#else
-                        borderColor = new StyleColor(Color.gray),
-#endif
                     }
                 };
                 listItem.Add(listItemMenu);
@@ -291,18 +284,12 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                             CopyValueProperty(valueProperty, operandsFirstProperty.FindPropertyRelative("value"));
                             break;
                     }
-#if !UNITY_2019_3_OR_NEWER
-                    OnTypeChanged(type);
-#endif
                 }
 
                 if (type == ExpressionType.OperatorExpression && operatorProperty.intValue != e.newValue)
                 {
                     operatorProperty.intValue = e.newValue;
                     operatorProperty.serializedObject.ApplyModifiedProperties();
-#if !UNITY_2019_3_OR_NEWER
-                    OnOperatorChanged((Operator) e.newValue);
-#endif
                 }
             });
             container.Insert(0, typeOperatorField);

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Operation.Implements
 {
+    [AddComponentMenu("")]
     public sealed class Scheduler : MonoBehaviour
     {
         static Scheduler instance;
@@ -14,8 +15,10 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             {
                 if (instance == null)
                 {
-                    instance = new GameObject("Scheduler").AddComponent<Scheduler>();
-                    DontDestroyOnLoad(instance.gameObject);
+                    var gameObject = new GameObject("Scheduler");
+                    gameObject.hideFlags = HideFlags.HideAndDontSave;
+                    instance = gameObject.AddComponent<Scheduler>();
+                    DontDestroyOnLoad(gameObject);
                 }
 
                 return instance;

@@ -32,6 +32,11 @@ namespace ClusterVR.CreatorKit.Item
             return obj is ItemTemplateId other && Equals(other);
         }
 
+        public readonly bool IsValid()
+        {
+            return value != default;
+        }
+
         public override int GetHashCode()
         {
             return Value.GetHashCode();

@@ -3,8 +3,8 @@ using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(LocalizationTexts)), CanEditMultipleObjects]
-    public sealed class LocalizationTextsEditor : VisualElementEditor
+    [CustomEditor(typeof(LocalizationTexts), isFallback = true), CanEditMultipleObjects]
+    public class LocalizationTextsEditor : VisualElementEditor
     {
     }
 }

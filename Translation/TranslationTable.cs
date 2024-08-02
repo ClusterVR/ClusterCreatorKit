@@ -344,10 +344,13 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_world_description = "ワールドの説明";
         public const string cck_world_event_id = "ワールドまたはイベントのId";
         public const string cck_world_info_save_failed = "ワールド情報の保存に失敗しました。{0}";
+        public const string cck_world_item_template_list_not_prefab_asset = "WorldItemTemplateにはprefab asset以外を指定することはできません";
+        public const string cck_world_item_template_set_none_by_system = "既知の不具合を避けるため、prefab 自身を参照している箇所を None に変更しました。 \n アセットの prefab を設定しなおしてください。 \n （シーンに配置した prefab インスタンスを参照しても正常に動作しません）";
         public const string cck_world_name = "ワールド名";
         public const string cck_world_upload = "ワールドアップロード";
         public const string cck_world_upload_failed_build_support_check = "ワールドのアップロードに失敗しました。必要なBuild Supportが全てインストールされているか確認してください。";
         public const string cck_world_upload_failed_retry_later = "ワールドのアップロードに失敗しました。時間をあけてリトライしてみてください。";
+        public const string cck_worlditemreferencelist_scene_items_only = "WorldItemReferenceListのItemにはシーン上のアイテムを指定する必要があります。 (Id: {0})";
         public const string cck_yes = "はい";
 #else
         public const string cck_about = "About";
@@ -691,10 +694,13 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_world_description = "World Description";
         public const string cck_world_event_id = "World or Event ID";
         public const string cck_world_info_save_failed = "Failed to save world information. {0}";
+        public const string cck_world_item_template_list_not_prefab_asset = "WorldItemTemplate cannot refer to anything other than prefab asset";
+        public const string cck_world_item_template_set_none_by_system = "To avoid known issues, Creator Kit has changed the references to the prefab itself to None. \n Please reassign the prefab from the assets. \n (Referencing a prefab instance placed in the scene will not work properly)";
         public const string cck_world_name = "World Name";
         public const string cck_world_upload = "Upload World";
         public const string cck_world_upload_failed_build_support_check = "Failed to upload world. Please check whether all the necessary Build Support is installed.";
         public const string cck_world_upload_failed_retry_later = "Failed to upload world. Please retry after some time.";
+        public const string cck_worlditemreferencelist_scene_items_only = "Only Items in scene can be specified in World Item Reference List. (Id: {0})";
         public const string cck_yes = "Yes";
 #endif
     }

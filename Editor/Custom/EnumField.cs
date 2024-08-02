@@ -81,9 +81,6 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             popupField.RegisterValueChangedCallback(e =>
             {
                 UpdateProperty(e.newValue);
-#if !UNITY_2019_3_OR_NEWER
-                onValueChanged?.Invoke(e.newValue);
-#endif
             });
             popupField.SetEnabled(choices.Count > 1);
             container.Add(popupField);
@@ -145,7 +142,6 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             where TEnum : struct, Enum
         {
             Assert.AreEqual(property.propertyType, SerializedPropertyType.Enum);
-#if UNITY_2019_3_OR_NEWER
             var enumField = new UnityEditor.UIElements.EnumField
             {
                 bindingPath = property.propertyPath
@@ -159,17 +155,6 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             });
             enumField.Bind(property.serializedObject);
             return enumField;
-#else
-            var enumField = new PopupField<string>
-            {
-                bindingPath = property.propertyPath
-            };
-            enumField.RegisterValueChangedCallback(_ =>
-            {
-                onValueChanged?.Invoke((TEnum) (object) enumField.index);
-            });
-            return enumField;
-#endif
         }
     }
 }

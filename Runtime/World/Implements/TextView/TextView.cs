@@ -178,22 +178,16 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
             }
             else
             {
-                if (meshRenderer != null)
-                {
-                    meshRenderer.enabled = false;
-                }
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.delayCall += DelayedDestroy(textMesh);
+                UnityEditor.EditorApplication.delayCall += DelayedDestroy(meshRenderer);
+#endif
             }
 
             if (fontMaterial != null)
             {
                 DestroySafe(fontMaterial);
             }
-        }
-
-        public void DestroyRenderers()
-        {
-            DestroyImmediate(textMesh);
-            DestroyImmediate(meshRenderer);
         }
 
         void DestroySafe(Object obj)
@@ -209,6 +203,12 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
         }
 
 #if UNITY_EDITOR
+
+        UnityEditor.EditorApplication.CallbackFunction DelayedDestroy(Component component)
+        {
+            return () => DestroyImmediate(component);
+        }
+
         void Reset()
         {
             ValidateInternal();

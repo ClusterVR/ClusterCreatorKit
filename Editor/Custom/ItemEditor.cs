@@ -7,8 +7,8 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(CreatorKit.Item.Implements.Item)), CanEditMultipleObjects]
-    public sealed class ItemEditor : UnityEditor.Editor
+    [CustomEditor(typeof(CreatorKit.Item.Implements.Item), isFallback = true), CanEditMultipleObjects]
+    public class ItemEditor : UnityEditor.Editor
     {
         const string SetDefaultSizeText = TranslationTable.cck_set_default_size;
 

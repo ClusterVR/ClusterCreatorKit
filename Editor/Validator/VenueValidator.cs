@@ -176,6 +176,14 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 {
                     return false;
                 }
+                if (!ValidateWorldItemReferenceList(item, out errorMessage, out invalidObjects))
+                {
+                    return false;
+                }
+                if (!ValidateWorldItemTemplateList(isBeta, item, out errorMessage, out invalidObjects))
+                {
+                    return false;
+                }
             }
 
             errorMessage = default;
@@ -437,6 +445,63 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             errorMessage = default;
             invalidObjects = default;
             return true;
+        }
+
+        static bool ValidateWorldItemReferenceList(IItem item, out string errorMessage, out GameObject[] invalidObjects)
+        {
+            var gameObject = item.gameObject;
+            var worldItemReferenceList = gameObject.GetComponent<IWorldItemReferenceList>();
+            if (worldItemReferenceList != null)
+            {
+                var invalidWorldItemReferences = worldItemReferenceList.WorldItemReferences
+                    .Where(entry => entry.Item != null && EditorUtility.IsPersistent(entry.Item.gameObject))
+                    .ToArray();
+                if (invalidWorldItemReferences.Any())
+                {
+                    var invalidIds = string.Join(", ", invalidWorldItemReferences.Select(entry => entry.Id));
+                    errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_worlditemreferencelist_scene_items_only, invalidIds);
+                    invalidObjects = new[] { gameObject };
+                    return false;
+                }
+            }
+            errorMessage = default;
+            invalidObjects = default;
+            return true;
+        }
+
+        static bool ValidateWorldItemTemplateList(bool isBeta, IItem item, out string errorMessage,
+            out GameObject[] invalidObjects)
+        {
+            var gameObject = item.gameObject;
+
+            var worldItemTemplateList = gameObject.GetComponent<IWorldItemTemplateList>();
+            if (worldItemTemplateList != null)
+            {
+                if (!isBeta)
+                {
+                    errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_textview_beta_feature_required, "WorldItemTemplateList");
+                    invalidObjects = new[] { gameObject };
+                    return false;
+                }
+
+                foreach (var entry in worldItemTemplateList.WorldItemTemplates)
+                {
+                    if (entry.WorldItemTemplate != null && entry.WorldItemTemplate.gameObject != null && !IsPrefabAsset(entry.WorldItemTemplate.gameObject))
+                    {
+                        errorMessage = TranslationTable.cck_world_item_template_list_not_prefab_asset;
+                        invalidObjects = new[] { gameObject };
+                        return false;
+                    }
+                }
+            }
+            errorMessage = default;
+            invalidObjects = default;
+            return true;
+        }
+
+        static bool IsPrefabAsset(GameObject go)
+        {
+            return EditorUtility.IsPersistent(go);
         }
 
         static IEnumerable<GameObject> GatherMissingPrefabs(IEnumerable<GameObject> rootObjects)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Trigger;
 using ClusterVR.CreatorKit.Trigger.Implements;
 using UnityEditor;
@@ -12,7 +13,7 @@ using UnityEngine.UIElements;
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
     [CustomPropertyDrawer(typeof(TriggerParamAttribute), true)]
-    public sealed class TriggerParamAttributePropertyDrawer : PropertyDrawer
+    public class TriggerParamAttributePropertyDrawer : PropertyDrawer
     {
         static readonly List<ParameterType> SelectableParameterTypes = new List<ParameterType>(6)
         {

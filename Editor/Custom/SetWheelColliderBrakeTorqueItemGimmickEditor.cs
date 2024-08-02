@@ -3,8 +3,8 @@ using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(SetWheelColliderBrakeTorqueItemGimmick)), CanEditMultipleObjects]
-    public sealed class SetWheelColliderBrakeTorqueItemGimmickEditor : VisualElementEditor
+    [CustomEditor(typeof(SetWheelColliderBrakeTorqueItemGimmick), isFallback = true), CanEditMultipleObjects]
+    public class SetWheelColliderBrakeTorqueItemGimmickEditor : VisualElementEditor
     {
     }
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Preview.Item
 {
+    [AddComponentMenu("")]
     public sealed class ContactableItemFinder : MonoBehaviour
     {
         [SerializeField] Transform center;

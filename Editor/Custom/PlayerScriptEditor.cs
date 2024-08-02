@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Item.Implements;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -6,8 +7,8 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(PlayerScript)), CanEditMultipleObjects]
-    public sealed class PlayerScriptEditor : UnityEditor.Editor
+    [CustomEditor(typeof(PlayerScript), isFallback = true), CanEditMultipleObjects]
+    public class PlayerScriptEditor : UnityEditor.Editor
     {
         public override VisualElement CreateInspectorGUI()
         {

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
+    [AddComponentMenu("")]
     public sealed class DesktopPlayerController : MonoBehaviour, IPlayerController
     {
         const float MaxHeadPitch = 80f;

@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Preview.Item
 {
+    [AddComponentMenu("")]
     public sealed class ContactableItemRaycaster : MonoBehaviour
     {
         [SerializeField] Camera targetCamera;

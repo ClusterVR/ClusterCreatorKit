@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Preview.PlayerController
 {
+    [AddComponentMenu("")]
     public sealed class DesktopItemController : MonoBehaviour, IItemController
     {
         [SerializeField] DesktopPointerEventListener desktopPointerEventListener;
