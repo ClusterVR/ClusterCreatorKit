@@ -23,6 +23,9 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 worldRuntimeSetting.UseMantling = setting.UseMantling;
                 worldRuntimeSetting.UseWorldShadow = setting.UseWorldShadow;
                 worldRuntimeSetting.HudType = setting.UseHUDType;
+                worldRuntimeSetting.UseCustomClippingPlanes = setting.UseCustomClippingPlanes;
+                worldRuntimeSetting.NearPlane = setting.NearPlane;
+                worldRuntimeSetting.FarPlane = setting.FarPlane;
             }
             else
             {
@@ -32,6 +35,9 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 worldRuntimeSetting.UseMantling = DefaultValues.UseMantling;
                 worldRuntimeSetting.UseWorldShadow = DefaultValues.UseWorldShadow;
                 worldRuntimeSetting.HudType = DefaultValues.HUDType;
+                worldRuntimeSetting.UseCustomClippingPlanes = DefaultValues.UseCustomClippingPlanes;
+                worldRuntimeSetting.NearPlane = DefaultValues.NearPlane;
+                worldRuntimeSetting.FarPlane = DefaultValues.FarPlane;
             }
             descriptor.WorldRuntimeSetting = worldRuntimeSetting;
 

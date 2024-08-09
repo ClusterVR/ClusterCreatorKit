@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.World.Implements.WorldRuntimeSetting;
 using UnityEditor;
@@ -64,6 +65,50 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 UpdateHudTypeCheckbox(ev.newValue)
                 );
 
+            var useCustomClippingPlanesField = FindPropertyField(container, "useCustomClippingPlanes");
+            VisualElement ResettableClippingPlaneField(string propertyName, string label, float defaultValue)
+            {
+                var clippingPlaneField = new VisualElement();
+                clippingPlaneField.style.flexDirection = FlexDirection.Row;
+                clippingPlaneField.style.marginLeft = 10;
+
+                var distanceField = FindPropertyField(container, propertyName);
+                distanceField.style.flexGrow = 1;
+                distanceField.label = label;
+
+                var resetButton = new Button();
+                resetButton.text = "Reset";
+                resetButton.clicked += () =>
+                {
+                    serializedObject.FindProperty(propertyName).floatValue = defaultValue;
+                    serializedObject.ApplyModifiedProperties();
+                };
+
+                clippingPlaneField.Add(distanceField);
+                clippingPlaneField.Add(resetButton);
+                return clippingPlaneField;
+            }
+
+            var nearPlaneLabel = $"Near Plane  ({CameraClippingPlanes.NearPlaneMin} - {CameraClippingPlanes.NearPlaneMax})";
+            var farPlaneLabel = $"Far Plane  (>= {CameraClippingPlanes.FarPlaneMin})";
+
+            var nearPlaneField = ResettableClippingPlaneField("nearPlane", nearPlaneLabel, WorldRuntimeSetting.DefaultValues.NearPlane);
+            var farPlaneField = ResettableClippingPlaneField("farPlane", farPlaneLabel, WorldRuntimeSetting.DefaultValues.FarPlane);
+
+            var initialCustomClippingPlanes = serializedObject.FindProperty("useCustomClippingPlanes").boolValue;
+            nearPlaneField.SetVisibility(initialCustomClippingPlanes);
+            farPlaneField.SetVisibility(initialCustomClippingPlanes);
+
+            useCustomClippingPlanesField.RegisterValueChangeCallback(ev =>
+            {
+                var isEnabled = ev.changedProperty.boolValue;
+                nearPlaneField.SetVisibility(isEnabled);
+                farPlaneField.SetVisibility(isEnabled);
+            });
+
+            container.Add(useCustomClippingPlanesField);
+            container.Add(nearPlaneField);
+            container.Add(farPlaneField);
 
             var uploadNoticeText = new TextElement()
             {

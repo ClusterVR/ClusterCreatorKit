@@ -7,14 +7,17 @@ namespace ClusterVR.CreatorKit.Preview.Common
     public sealed class TickGenerator : MonoBehaviour
     {
         static TickGenerator instance;
+
         public static TickGenerator Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    var gameObject = new GameObject(nameof(TickGenerator));
-                    gameObject.hideFlags = HideFlags.HideAndDontSave;
+                    var gameObject = new GameObject(nameof(TickGenerator))
+                    {
+                        hideFlags = HideFlags.HideAndDontSave & ~HideFlags.DontSaveInEditor,
+                    };
                     instance = gameObject.AddComponent<TickGenerator>();
                 }
                 return instance;

@@ -15,10 +15,11 @@ namespace ClusterVR.CreatorKit.Operation.Implements
             {
                 if (instance == null)
                 {
-                    var gameObject = new GameObject("Scheduler");
-                    gameObject.hideFlags = HideFlags.HideAndDontSave;
+                    var gameObject = new GameObject("Scheduler")
+                    {
+                        hideFlags = HideFlags.HideAndDontSave & ~HideFlags.DontSaveInEditor,
+                    };
                     instance = gameObject.AddComponent<Scheduler>();
-                    DontDestroyOnLoad(gameObject);
                 }
 
                 return instance;

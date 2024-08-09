@@ -31,6 +31,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         ExportedAssetInfo exportedAssetInfo;
         UploadVenueService currentUploadService;
         string errorMessage;
+        string tempAssetsDirPath;
 
         bool previewUploadSelected;
         bool previewUploadWindowsSelected;
@@ -102,39 +103,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     return;
                 }
 
-                var tempAssetsDirName = venue.VenueId.Value;
-                var guid = AssetDatabase.CreateFolder("Assets", tempAssetsDirName);
-                var tempAssetsDirPath = AssetDatabase.GUIDToAssetPath(guid);
-
-                void DeleteTempAssetsDirectory()
-                {
-                    if (!string.IsNullOrEmpty(tempAssetsDirPath))
-                    {
-                        AssetDatabase.DeleteAsset(tempAssetsDirPath);
-                    }
-                }
-
-                ItemIdAssigner.AssignItemId();
-                ItemTemplateIdAssigner.Execute();
-                HumanoidAnimationAssigner.Execute(tempAssetsDirPath);
-                LayerCorrector.CorrectLayer();
-                SubSceneNameAssigner.Execute();
-
-                var useWindows = !isPreviewUpload || previewUploadWindowsSelected;
-                var useMac = !isPreviewUpload || previewUploadMacSelected;
-                var useIOS = !isPreviewUpload || previewUploadIOSSelected;
-                var useAndroid = !isPreviewUpload || previewUploadAndroidSelected;
-                try
-                {
-                    exportedAssetInfo = AssetExporter.ExportCurrentSceneResource(venue.VenueId.Value, useWindows, useMac, useIOS, useAndroid);
-                }
-                catch (Exception e)
-                {
-                    DeleteTempAssetsDirectory();
-                    errorMessage = TranslationTable.cck_world_build_failed;
-                    Debug.LogError(e);
-                    return;
-                }
+                if (!TryExportAssets(venue, out exportedAssetInfo)) return;
 
                 currentUploadService = new UploadVenueService(userInfo.VerifiedToken, venue,
                     WorldDescriptorCreator.Create(SceneManager.GetActiveScene()),
@@ -184,6 +153,45 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     });
                 currentUploadService.Run(cancellationTokenSource.Token);
                 errorMessage = null;
+            }
+        }
+
+        bool TryExportAssets(Venue venue, out ExportedAssetInfo exportedAssetInfo)
+        {
+            exportedAssetInfo = null;
+            var tempAssetsDirName = venue.VenueId.Value;
+            var guid = AssetDatabase.CreateFolder("Assets", tempAssetsDirName);
+            tempAssetsDirPath = AssetDatabase.GUIDToAssetPath(guid);
+
+            ItemIdAssigner.AssignItemId();
+            ItemTemplateIdAssigner.Execute();
+            HumanoidAnimationAssigner.Execute(tempAssetsDirPath);
+            LayerCorrector.CorrectLayer();
+            SubSceneNameAssigner.Execute();
+
+            var useWindows = !isPreviewUpload || previewUploadWindowsSelected;
+            var useMac = !isPreviewUpload || previewUploadMacSelected;
+            var useIOS = !isPreviewUpload || previewUploadIOSSelected;
+            var useAndroid = !isPreviewUpload || previewUploadAndroidSelected;
+            try
+            {
+                exportedAssetInfo = AssetExporter.ExportCurrentSceneResource(venue.VenueId.Value, useWindows, useMac, useIOS, useAndroid);
+            }
+            catch (Exception e)
+            {
+                DeleteTempAssetsDirectory();
+                errorMessage = TranslationTable.cck_world_build_failed;
+                Debug.LogError(e);
+                return false;
+            }
+            return true;
+        }
+
+        void DeleteTempAssetsDirectory()
+        {
+            if (!string.IsNullOrEmpty(tempAssetsDirPath))
+            {
+                AssetDatabase.DeleteAsset(tempAssetsDirPath);
             }
         }
 

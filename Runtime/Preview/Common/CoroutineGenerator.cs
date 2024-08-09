@@ -17,7 +17,7 @@ namespace ClusterVR.CreatorKit.Preview.Common
                 {
                     var gameObject = new GameObject(nameof(CoroutineGenerator))
                     {
-                        hideFlags = HideFlags.HideAndDontSave
+                        hideFlags = HideFlags.HideAndDontSave & ~HideFlags.DontSaveInEditor,
                     };
                     instance = gameObject.AddComponent<CoroutineGenerator>();
                 }
