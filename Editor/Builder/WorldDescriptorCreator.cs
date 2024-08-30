@@ -26,6 +26,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 worldRuntimeSetting.UseCustomClippingPlanes = setting.UseCustomClippingPlanes;
                 worldRuntimeSetting.NearPlane = setting.NearPlane;
                 worldRuntimeSetting.FarPlane = setting.FarPlane;
+                worldRuntimeSetting.EnableCrouchWalk = setting.EnableCrouchWalk;
             }
             else
             {
@@ -38,6 +39,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 worldRuntimeSetting.UseCustomClippingPlanes = DefaultValues.UseCustomClippingPlanes;
                 worldRuntimeSetting.NearPlane = DefaultValues.NearPlane;
                 worldRuntimeSetting.FarPlane = DefaultValues.FarPlane;
+                worldRuntimeSetting.EnableCrouchWalk = DefaultValues.EnableCrouchWalk;
             }
             descriptor.WorldRuntimeSetting = worldRuntimeSetting;
 

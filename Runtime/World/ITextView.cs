@@ -11,6 +11,7 @@ namespace ClusterVR.CreatorKit.World
         void SetTextAnchor(TextAnchor textAnchor);
         void SetTextAlignment(TextAlignment textAlignment);
         void SetColor(Color color);
+        void SetVisible(bool visible);
 
         string Text { get; }
         float Size { get; }

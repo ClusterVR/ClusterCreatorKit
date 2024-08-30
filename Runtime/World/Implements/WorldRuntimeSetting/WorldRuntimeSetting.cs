@@ -17,6 +17,7 @@ namespace ClusterVR.CreatorKit.World.Implements.WorldRuntimeSetting
             public const bool UseCustomClippingPlanes = false;
             public const float NearPlane = 0.01f;
             public const float FarPlane = 1000f;
+            public const bool EnableCrouchWalk = true;
         }
 
         [SerializeField] bool useMovingPlatform = DefaultValues.UseMovingPlatform;
@@ -28,6 +29,7 @@ namespace ClusterVR.CreatorKit.World.Implements.WorldRuntimeSetting
         [SerializeField] bool useCustomClippingPlanes = DefaultValues.UseCustomClippingPlanes;
         [SerializeField, Min(CameraClippingPlanes.NearPlaneMin)] float nearPlane = DefaultValues.NearPlane;
         [SerializeField, Min(CameraClippingPlanes.FarPlaneMin)] float farPlane = DefaultValues.FarPlane;
+        [SerializeField] bool enableCrouchWalk = DefaultValues.EnableCrouchWalk;
 
         public bool UseMovingPlatform => useMovingPlatform;
         public bool MovingPlatformHorizontalInertia => movingPlatformHorizontalInertia;
@@ -48,6 +50,7 @@ namespace ClusterVR.CreatorKit.World.Implements.WorldRuntimeSetting
         public bool UseCustomClippingPlanes => useCustomClippingPlanes;
         public float NearPlane => nearPlane;
         public float FarPlane => farPlane;
+        public bool EnableCrouchWalk => enableCrouchWalk;
 
         public static bool HUDTypeToBool(Proto.WorldRuntimeSetting.Types.HUDType hudType)
         {

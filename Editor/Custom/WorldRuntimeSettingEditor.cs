@@ -41,7 +41,6 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 UpdateMovingPlatformDetailSettingVisibility(ev.changedProperty.boolValue)
                 );
 
-
             var useMantlingField = FindPropertyField(container, "useMantling");
             useMantlingField.label = "Use Clambering";
             hudTypeField.SetVisibility(false);
@@ -55,9 +54,14 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             hudTypeCheckbox.value = WorldRuntimeSetting.HUDTypeToBool(wrts.UseHUDType);
             container.Add(hudTypeCheckbox);
 
+            var enableCrouchWalkField = FindPropertyField(container, "enableCrouchWalk");
+            enableCrouchWalkField.style.marginLeft = 10;
+            container.Add(enableCrouchWalkField);
+
             void UpdateHudTypeCheckbox(bool useClusterHudV2)
             {
                 wrts.UseHUDType = WorldRuntimeSetting.BoolToHUDType(useClusterHudV2);
+                enableCrouchWalkField.SetVisibility(useClusterHudV2);
             }
 
             UpdateHudTypeCheckbox(hudTypeCheckbox.value);
@@ -66,6 +70,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                 );
 
             var useCustomClippingPlanesField = FindPropertyField(container, "useCustomClippingPlanes");
+
             VisualElement ResettableClippingPlaneField(string propertyName, string label, float defaultValue)
             {
                 var clippingPlaneField = new VisualElement();

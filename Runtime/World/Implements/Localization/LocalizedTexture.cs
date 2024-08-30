@@ -1,4 +1,3 @@
-using ClusterVR.CreatorKit.World;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.World.Implements.Localization
@@ -12,6 +11,10 @@ namespace ClusterVR.CreatorKit.World.Implements.Localization
 
         void ILocalizedAsset.SetLangCode(string langCode)
         {
+            if (localizationTextures == null)
+            {
+                return;
+            }
             if (target == null)
             {
                 target = GetComponent<Renderer>();

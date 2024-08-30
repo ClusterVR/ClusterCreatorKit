@@ -15,8 +15,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         readonly List<IDisposable> disposables = new List<IDisposable>();
         readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-        TokenAuthWidget tokenAuthWidget;
-
         [MenuItem(TranslationTable.cck_cluster_world_upload, priority = 301)]
         public static void Open()
         {
@@ -38,7 +36,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 disposable.Dispose();
             }
             disposables.Clear();
-            tokenAuthWidget?.Dispose();
             venueUploadView?.Dispose();
             cancellationTokenSource.Cancel();
             cancellationTokenSource.Dispose();

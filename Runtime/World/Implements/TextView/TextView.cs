@@ -27,6 +27,7 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
         Font font;
         Shader shader;
         Material fontMaterial;
+        bool visible = true;
 
         public string Text => text;
         public float Size => size;
@@ -71,6 +72,14 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
             }
         }
 
+        void UpdateRendererVisible()
+        {
+            if (meshRenderer != null)
+            {
+                meshRenderer.enabled = visible && enabled;
+            }
+        }
+
         public void SetText(string text)
         {
             this.text = text;
@@ -96,6 +105,12 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
             this.color = color;
         }
 
+        public void SetVisible(bool visible)
+        {
+            this.visible = visible;
+            UpdateRendererVisible();
+        }
+
         void Awake()
         {
 #if UNITY_EDITOR
@@ -119,7 +134,7 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
             textMesh.richText = false;
             meshRenderer = GetComponent<MeshRenderer>();
             meshRenderer.hideFlags = RendererHideFlags;
-            meshRenderer.enabled = enabled;
+            UpdateRendererVisible();
             if (isFontSetAndShaderSet)
             {
                 UpdateFontAndShader(font, shader);
@@ -139,10 +154,7 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
 
         void OnEnable()
         {
-            if (meshRenderer != null)
-            {
-                meshRenderer.enabled = true;
-            }
+            UpdateRendererVisible();
         }
 
         void Update()
@@ -152,10 +164,7 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
 
         void OnDisable()
         {
-            if (meshRenderer != null)
-            {
-                meshRenderer.enabled = false;
-            }
+            UpdateRendererVisible();
         }
 
         void UpdateRenderer()
