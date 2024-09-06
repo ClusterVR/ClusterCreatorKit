@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Editor.Analytics;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace ClusterVR.CreatorKit.Editor.MenuItems
         static void Create()
         {
             ProjectWindowUtil.CreateAssetWithContent("ClusterScript.js", "", (Texture2D) EditorGUIUtility.IconContent("d_ScriptableObject Icon").image);
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.Assets_ClusterScript);
         }
     }
 }

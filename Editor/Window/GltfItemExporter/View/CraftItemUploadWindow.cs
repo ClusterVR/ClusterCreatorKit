@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
 using ClusterVR.CreatorKit.Editor.Window.View;
@@ -28,6 +29,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             var window = GetWindow<CraftItemUploadWindow>();
             window.minSize = new Vector2(640, 480);
             window.titleContent = new GUIContent(TranslationTable.cck_craftitem_upload);
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.Cluster_UploadCraftItem);
         }
 
         void OnEnable()

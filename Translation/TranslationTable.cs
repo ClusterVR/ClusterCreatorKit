@@ -80,6 +80,9 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_create_new = "新規作成";
         public const string cck_current_authority_participant = "現在の権限:参加者";
         public const string cck_current_authority_performer = "現在の権限:パフォーマー";
+        public const string cck_data_collection_policy = "データ収集ポリシー";
+        public const string cck_data_collection_policy_notice = "クラスター株式会社は、サービス改善のため、Cluster Creator Kitの利用状況を収集します。収集されたデータは、当社のプライバシーポリシーに従って適切に管理・処理されます。\n{0}";
+        public const string cck_data_collection_policy_notice_short = "クラスター株式会社は、サービス改善のため、当社のプライバシーポリシーに従ってCluster Creator Kitの利用状況を収集します。";
         public const string cck_delete = "削除";
         public const string cck_delete_action = "削除する";
         public const string cck_delete_all = "すべて削除";
@@ -121,6 +124,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_humanoidanimationlist_id_length = "HumanoidAnimationListのIdが長すぎます。 Id: {0} 最大値: {1}";
         public const string cck_humanoidanimationlist_invalid_characters = "HumanoidAnimationListのIdに使用できない文字が含まれています。Idには英数字とアポストロフィ・カンマ・ハイフン・ピリオド・アンダースコアのみが使用可能です。 Id: {0}";
         public const string cck_humanoidanimationlist_keyframes_limit = "HumanoidAnimationListのキーフレームが多すぎます。 現在値: {0} 最大値: {1})";
+        public const string cck_id_empty = "{0} のIdが空です。有効なIdを設定してください。";
         public const string cck_id_invalid_characters = "Id には英数字とアポストロフィ・カンマ・ハイフン・ピリオド・アンダースコアのみが使用可能です。";
         public const string cck_id_length_limit = "Id は {0}文字以下である必要があります。";
         public const string cck_id_too_long = "{0} が長すぎます。 最大値: {1}";
@@ -193,6 +197,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_offset_position_out_of_range = "Offset Positionが規定範囲外です。{0}、";
         public const string cck_offset_range_min_max = "規定範囲: max: {0},min: {1}";
         public const string cck_ok = "OK";
+        public const string cck_open_privacy_policy = "プライバシーポリシーを開く";
         public const string cck_open_settings = "設定を開く";
         public const string cck_open_world_management_page = "ワールド管理ページを開く";
         public const string cck_open_world_management_page_after_upload = "アップロード後にワールド管理ページを開く";
@@ -203,6 +208,9 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_package_list_fetch_success = "package一覧の取得に成功しました";
         public const string cck_paste_access_token = "アクセストークンを貼り付けてください";
         public const string cck_player_info = "プレイヤー情報";
+        public const string cck_player_local_obj_ref_list_error_invalid_hierarchy = "PlayerLocalObjectReferenceListのオブジェクトは、Player Local UIとその子要素のみが指定できます。 Id: {0}";
+        public const string cck_player_local_obj_ref_list_error_obj_empty = "PlayerLocalObjectReferenceListにオブジェクトが設定されていません。 Id: {0}";
+        public const string cck_player_local_obj_ref_list_error_obj_prefab = "PlayerLocalObjectReferenceListにPrefabが指定されています。シーン上のオブジェクトを設定してください。 Id: {0}";
         public const string cck_player_local_ui_not_child_of_canvas = "{0} は {1} の子ではないところに配置してください。";
         public const string cck_playerscript_source_code_length = "{0}のPlayerScriptのsource codeが長すぎます｡現在：{1}bytes, 最大値：{2}bytes";
         public const string cck_prefab_for_generated_item = "生成するアイテムのprefab";
@@ -430,6 +438,9 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_create_new = "Create New";
         public const string cck_current_authority_participant = "Current Privileges: Participant";
         public const string cck_current_authority_performer = "Current Privileges: Performer";
+        public const string cck_data_collection_policy = "Data Collection Policy";
+        public const string cck_data_collection_policy_notice = "Cluster Inc. collects usage data of Cluster Creator Kit to provide improved service experience. Collected data is managed and handled properly according to our privacy policy.\n{0}";
+        public const string cck_data_collection_policy_notice_short = "Cluster Inc. collects usage data of Cluster Creator Kit to provide improved service experience, according to our privacy policy.";
         public const string cck_delete = "Delete";
         public const string cck_delete_action = "Delete";
         public const string cck_delete_all = "Delete All";
@@ -471,6 +482,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_humanoidanimationlist_id_length = "The ID of HumanoidAnimationList is too long. Id: {0} Maximum Value: {1}";
         public const string cck_humanoidanimationlist_invalid_characters = "The ID of HumanoidAnimationList has characters you cannot use. Only the Latin alphabet, numbers, apostrophe, comma, hyphen, period, and underscore are allowed for the Id. Id: {0}";
         public const string cck_humanoidanimationlist_keyframes_limit = "Too many keyframes in HumanoidAnimationList. Current Value: {0} Maximum Value: {1})";
+        public const string cck_id_empty = "The ID in {0} is empty.";
         public const string cck_id_invalid_characters = "Only the Latin alphabet, numbers, apostrophe, comma, hyphen, period, and underscore are allowed for the ID.";
         public const string cck_id_length_limit = "The ID must be under {0} letters.";
         public const string cck_id_too_long = "{0} is too long. Maximum Value: {1}";
@@ -543,6 +555,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_offset_position_out_of_range = "Offset Position is outside the specified range. {0},";
         public const string cck_offset_range_min_max = "Specified Range: max: {0},min: {1}";
         public const string cck_ok = "OK";
+        public const string cck_open_privacy_policy = "Open Privacy Policy";
         public const string cck_open_settings = "Open Settings";
         public const string cck_open_world_management_page = "Open the My Contents – World page";
         public const string cck_open_world_management_page_after_upload = "Open My Contents — World page after uploading";
@@ -553,6 +566,9 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_package_list_fetch_success = "Successfully acquired package list";
         public const string cck_paste_access_token = "Please paste the Access Token";
         public const string cck_player_info = "Player Information";
+        public const string cck_player_local_obj_ref_list_error_invalid_hierarchy = "PlayerLocalObjectReferenceList object must be Player Local UI or its children. ID: {0}";
+        public const string cck_player_local_obj_ref_list_error_obj_empty = "No object is set in PlayerLocalObjectReferenceList. ID: {0}";
+        public const string cck_player_local_obj_ref_list_error_obj_prefab = "Prefab is specified in PlayerLocalObjectReferenceList. Set the object on the scene. ID: {0}";
         public const string cck_player_local_ui_not_child_of_canvas = "Please place {0} somewhere other than as a child of {1}.";
         public const string cck_playerscript_source_code_length = "The source code of {0}'s PlayerScript is too long. Currently: {1} bytes, Maximum Value: {2} bytes";
         public const string cck_prefab_for_generated_item = "Prefab of the created item";

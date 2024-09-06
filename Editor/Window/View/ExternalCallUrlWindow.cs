@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         {
             var window = GetWindow<ExternalCallUrlWindow>();
             window.titleContent = new GUIContent(TranslationTable.cck_external_communication_url);
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.Cluster_ExternalCallURL);
         }
 
         void OnEnable()

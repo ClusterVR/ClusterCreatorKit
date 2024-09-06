@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using ClusterVR.CreatorKit.Editor.Analytics;
+using UnityEditor;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
@@ -12,6 +13,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
         public static void EnableVRMenu()
         {
             PlayerPrefs.SetInt(UseVRKey, 1);
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.ClusterPreview_EnableVR);
         }
 
         [MenuItem("Cluster/Preview/UseVR/EnableVR", true, 1)]
@@ -24,6 +26,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
         public static void DisableVRMenu()
         {
             PlayerPrefs.SetInt(UseVRKey, 0);
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.ClusterPreview_DisableVR);
         }
 
         [MenuItem("Cluster/Preview/UseVR/DisableVR", true, 2)]

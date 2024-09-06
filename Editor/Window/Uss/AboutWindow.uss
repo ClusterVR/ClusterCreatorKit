@@ -8,7 +8,7 @@ Label {
     margin: 0 8px 4px 8px;
 }
 
-#open-settings-window {
+#open-privacy-policy {
     margin: 0 4px 8px 4px;
     padding: 2px 0;
 }

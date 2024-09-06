@@ -1,4 +1,5 @@
-﻿using ClusterVR.CreatorKit.Editor.Preview.EditorUI;
+﻿using ClusterVR.CreatorKit.Editor.Analytics;
+using ClusterVR.CreatorKit.Editor.Preview.EditorUI;
 using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
@@ -9,6 +10,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
         static void Initialize()
         {
             AsyncInitialize();
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.ClusterPreview_PackageInstaller);
         }
 
         static async void AsyncInitialize()

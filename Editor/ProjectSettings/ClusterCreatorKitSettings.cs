@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using ClusterVR.CreatorKit.Editor.Analytics;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.ProjectSettings
@@ -15,6 +16,7 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
             => internalInstance == null ? internalInstance = Load() : internalInstance;
 
         [SerializeField] bool m_isBeta;
+        [SerializeField] string m_cckVersion;
 
         public bool IsBeta
         {
@@ -26,11 +28,24 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
             }
         }
 
+        public string CckVersion
+        {
+            get => m_cckVersion;
+            set
+            {
+                m_cckVersion = value;
+                Save();
+            }
+        }
+
         static ClusterCreatorKitSettings Load()
         {
             if (!File.Exists(Path))
             {
-                return new ClusterCreatorKitSettings();
+                var settings = new ClusterCreatorKitSettings();
+                settings.Save();
+                PanamaLogger.LogCckNewInstall();
+                return settings;
             }
 
             try

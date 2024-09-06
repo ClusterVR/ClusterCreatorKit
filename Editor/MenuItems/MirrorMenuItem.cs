@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Editor.Analytics;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace ClusterVR.CreatorKit.Editor.MenuItems
             var mirror = Object.Instantiate(mirrorPrefab, MenuItemUtilities.GetActiveContentsRoot());
             mirror.name = mirrorPrefab.name;
             Selection.activeGameObject = mirror;
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.GameObject_Mirror);
         }
     }
 }

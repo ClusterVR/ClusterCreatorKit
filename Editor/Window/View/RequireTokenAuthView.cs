@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Builder;
@@ -92,7 +93,12 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             var useTokenButton = view.Q<Button>("use-token-button");
             openTokenPageButton.text = TranslationTable.cck_web_token_issue;
             useTokenButton.text = TranslationTable.cck_use_this_token;
-            openTokenPageButton.clicked += () => Application.OpenURL(Api.RPC.Constants.WebBaseUrl + "/account/tokens");
+            openTokenPageButton.clicked += () =>
+            {
+                var url = Api.RPC.Constants.WebBaseUrl + "/account/tokens";
+                Application.OpenURL(url);
+                PanamaLogger.LogCckOpenLink(url, "RequireTokenAuthView_OpenTokenPage");
+            };
             useTokenButton.clicked += () => _ = Login(new AuthenticationInfo(tokenInputField.value), loginErrorLabel);
 
             var pasteAccessTokenLabel = view.Q<Label>("paste-access-token-label");
@@ -135,6 +141,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 errorLabel.SetVisibility(false);
 
                 EditorPrefsUtils.SavedAccessToken = authInfo;
+                EditorPrefsUtils.SavedUserId = user.UserId;
             }
             catch (Exception e)
             {
@@ -152,6 +159,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         {
             reactiveUserInfo.Val = null;
             EditorPrefsUtils.SavedAccessToken = null;
+            EditorPrefsUtils.SavedUserId = null;
         }
 
         void OnUserInfoChanged(UserInfo? userInfo)

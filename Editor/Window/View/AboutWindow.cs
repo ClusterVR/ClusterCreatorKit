@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
@@ -8,6 +9,15 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 {
     public sealed class AboutWindow : EditorWindow
     {
+        const string CreatorKitDocumentUrl = "https://docs.cluster.mu/creatorkit/";
+        const string CreatorsGuideUrl = "https://creator.cluster.mu/";
+
+#if cck_ja
+        const string PrivacyPolicyUrl = "https://help.cluster.mu/hc/ja-jp/articles/20264222848153-Privacy-Policy";
+#else
+        const string PrivacyPolicyUrl = "https://help.cluster.mu/hc/en-us/articles/20264222848153-Privacy-Policy";
+#endif
+
         [InitializeOnLoadMethod]
         static void ShowWindowOnlyOnce()
         {
@@ -24,6 +34,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         {
             var wnd = GetWindow<AboutWindow>();
             wnd.titleContent = new GUIContent(TranslationTable.cck_about);
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.Cluster_About);
         }
 
         void OnEnable()
@@ -56,16 +67,28 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             view.styleSheets.Add(styleSheet);
 
             view.Query<Button>("open-document").ForEach(b =>
-                b.clickable.clicked += () => Application.OpenURL("https://docs.cluster.mu/creatorkit/"));
+                b.clickable.clicked += () =>
+                {
+                    Application.OpenURL(CreatorKitDocumentUrl);
+                    PanamaLogger.LogCckOpenLink(CreatorKitDocumentUrl, "AboutWindow_OpenDocument");
+                });
             view.Query<Button>("open-creators-guide").ForEach(b =>
-                b.clickable.clicked += () => Application.OpenURL("https://creator.cluster.mu/"));
-            var statisticalInfoLabel = view.Q<Label>("send_statistical_info");
-            statisticalInfoLabel.text = TranslationTable.cck_send_statistical_info;
-            var settingButton = view.Query<Button>("open-settings-window");
-            settingButton.ForEach(b =>
+                b.clickable.clicked += () =>
+                {
+                    Application.OpenURL(CreatorsGuideUrl);
+                    PanamaLogger.LogCckOpenLink(CreatorsGuideUrl, "AboutWindow_OpenCreatorsGuide");
+                });
+            var dataCollectionPolicyLabel = view.Q<Label>("data-collection-policy");
+            dataCollectionPolicyLabel.text = TranslationTable.cck_data_collection_policy_notice_short;
+            var openPrivacyPolicyButton = view.Query<Button>("open-privacy-policy");
+            openPrivacyPolicyButton.ForEach(b =>
             {
-                b.text = TranslationTable.cck_open_settings;
-                b.clickable.clicked += SettingsWindow.ShowWindow;
+                b.text = TranslationTable.cck_open_privacy_policy;
+                b.clickable.clicked += () =>
+                {
+                    Application.OpenURL(PrivacyPolicyUrl);
+                    PanamaLogger.LogCckOpenLink(PrivacyPolicyUrl, "SettingsWindow_PrivacyPolicy");
+                };
             });
 
             return view;

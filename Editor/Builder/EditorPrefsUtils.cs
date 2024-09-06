@@ -8,7 +8,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
         const string AlreadyShownAboutWindowKey = "ClusterAlreadyShownAboutWindow";
         const string AccessTokenSaveKey = "cluster_sdk_access_token";
         const string TmpUserIdKey = "ClusterTmpUserId";
-        const string EnableSendingAnalyticsDataKey = "ClusterEnableSendingAnalyticsData";
+        const string SavedUserIdKey = "ClusterSavedUserId";
         const string NextEnqueteAskTimeKey = "NextEnqueteAskTime";
         const string SavedLanguageSettingKey = "ClusterCreatorKitSavedLanguageSetting";
 
@@ -30,10 +30,10 @@ namespace ClusterVR.CreatorKit.Editor.Builder
             set => EditorPrefs.SetString(TmpUserIdKey, value);
         }
 
-        public static bool EnableSendingAnalyticsData
+        public static string SavedUserId
         {
-            get => EditorPrefs.GetBool(EnableSendingAnalyticsDataKey, true);
-            set => EditorPrefs.SetBool(EnableSendingAnalyticsDataKey, value);
+            get => EditorPrefs.GetString(SavedUserIdKey, "");
+            set => EditorPrefs.SetString(SavedUserIdKey, value);
         }
 
         public static int NextEnqueteAskTime

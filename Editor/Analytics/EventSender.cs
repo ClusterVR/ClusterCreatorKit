@@ -48,11 +48,6 @@ namespace ClusterVR.CreatorKit.Editor.Analytics
 
         static void Update()
         {
-            if (!EditorPrefsUtils.EnableSendingAnalyticsData)
-            {
-                return;
-            }
-
             var now = EditorApplication.timeSinceStartup;
             if (now - SessionInfo.instance.LastSentAt < IntervalSec)
             {
@@ -69,6 +64,7 @@ namespace ClusterVR.CreatorKit.Editor.Analytics
 
             _ = APIServiceClient.PostAnalyticsEvent(new EventPayload(payload), EditorPrefsUtils.SavedAccessToken.Token,
                 default);
+            PanamaLogger.LogCckPing(Convert(payload));
 
             SessionInfo.instance.LastSentAt = now;
         }
@@ -121,6 +117,42 @@ namespace ClusterVR.CreatorKit.Editor.Analytics
             var xrDisplaySubsystems = new List<XRDisplaySubsystem>();
             SubsystemManager.GetInstances(xrDisplaySubsystems);
             return xrDisplaySubsystems.Any(xrDisplay => xrDisplay.running);
+        }
+
+        static CckPing Convert(CreatorKitEventPayload payload)
+        {
+            var environment = payload.Environment;
+            return new CckPing
+            {
+                SessionId = payload.SessionId,
+                Environment = new CckPing.Types.CckPingCreatorKitEnvironment
+                {
+                    BatteryStatus = environment.BatteryStatus,
+                    DeviceModel = environment.DeviceModel,
+                    DeviceType = environment.DeviceType,
+                    DeviceUniqueIdentifier = environment.DeviceUniqueIdentifier,
+                    GraphicsDeviceName = environment.GraphicsDeviceName,
+                    GraphicsDeviceType = environment.GraphicsDeviceType,
+                    GraphicsDeviceVendor = environment.GraphicsDeviceVendor,
+                    GraphicsDeviceVersion = environment.GraphicsDeviceVersion,
+                    GraphicsMemorySize = environment.GraphicsMemorySize,
+                    GraphicsMultiThreaded = environment.GraphicsMultiThreaded,
+                    GraphicsShaderLevel = environment.GraphicsShaderLevel,
+                    OperatingSystem = environment.OperatingSystem,
+                    OperatingSystemFamily = environment.OperatingSystemFamily,
+                    ProcessorCount = environment.ProcessorCount,
+                    ProcessorFrequency = environment.ProcessorFrequency,
+                    ProcessorType = environment.ProcessorType,
+                    SystemMemorySize = environment.SystemMemorySize,
+                    IsFocused = environment.IsFocused,
+                    IsPlaying = environment.IsPlaying,
+                    Platform = environment.Platform,
+                    SystemLanguage = environment.SystemLanguage,
+                    UnityVersion = environment.UnityVersion,
+                    XrDeviceIsPresent = environment.XrDeviceIsPresent,
+                    XrDeviceModel = environment.XrDeviceModel
+                }
+            };
         }
     }
 }

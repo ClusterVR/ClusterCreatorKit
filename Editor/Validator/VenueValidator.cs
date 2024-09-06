@@ -184,6 +184,10 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 {
                     return false;
                 }
+                if (!ValidatePlayerLocalObjectReferenceList(isBeta, item, out errorMessage, out invalidObjects))
+                {
+                    return false;
+                }
             }
 
             errorMessage = default;
@@ -464,6 +468,32 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                     return false;
                 }
             }
+            errorMessage = default;
+            invalidObjects = default;
+            return true;
+        }
+
+        static bool ValidatePlayerLocalObjectReferenceList(bool isBeta, IItem item, out string errorMessage, out GameObject[] invalidObjects)
+        {
+            var gameObject = item.gameObject;
+            var referenceList = gameObject.GetComponent<IPlayerLocalObjectReferenceList>();
+            if (referenceList == null)
+            {
+                errorMessage = default;
+                invalidObjects = default;
+                return true;
+            }
+
+            var errorMessages = PlayerLocalObjectReferenceListValidator
+                .Validate(isBeta, referenceList)
+                .ToArray();
+            if (errorMessages.Any())
+            {
+                errorMessage = string.Join('\n', errorMessages);
+                invalidObjects = new[] { gameObject };
+                return false;
+            }
+
             errorMessage = default;
             invalidObjects = default;
             return true;

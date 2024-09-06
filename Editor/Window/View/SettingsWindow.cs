@@ -1,4 +1,5 @@
 using System.Linq;
+using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Editor.Enquete;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
@@ -15,11 +16,18 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 {
     public sealed class SettingsWindow : EditorWindow
     {
+#if cck_ja
+        const string PrivacyPolicyUrl = "https://help.cluster.mu/hc/ja-jp/articles/20264222848153-Privacy-Policy";
+#else
+        const string PrivacyPolicyUrl = "https://help.cluster.mu/hc/en-us/articles/20264222848153-Privacy-Policy";
+#endif
+
         [MenuItem(TranslationTable.cck_cluster_settings_menu, priority = 305)]
         public static void ShowWindow()
         {
             var window = GetWindow<SettingsWindow>();
             window.titleContent = new GUIContent(TranslationTable.cck_settings);
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.Cluster_Settings);
         }
 
         void OnEnable()
@@ -33,33 +41,13 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         static VisualElement CreateView()
         {
             var container = new VisualElement();
-            container.Add(CreatePrivacySettings());
-            container.Add(UiUtils.Separator());
             container.Add(CreateLanguageSettings());
             container.Add(UiUtils.Separator());
             container.Add(CreateBetaSettings());
             container.Add(UiUtils.Separator());
             container.Add(CreateEnqueteRequestView());
-
-            return container;
-        }
-
-        static VisualElement CreatePrivacySettings()
-        {
-            var container = new VisualElement();
-
-            var heading = new Label(TranslationTable.cck_privacy_settings);
-            heading.EnableInClassList("h1", true);
-            container.Add(heading);
-
-            var sendingAnalyticsDataToggle = new Toggle(TranslationTable.cck_send_statistics)
-            {
-                value = EditorPrefsUtils.EnableSendingAnalyticsData
-            };
-            sendingAnalyticsDataToggle.EnableInClassList("h2", true);
-            sendingAnalyticsDataToggle.RegisterValueChangedCallback(ev =>
-                EditorPrefsUtils.EnableSendingAnalyticsData = ev.newValue);
-            container.Add(sendingAnalyticsDataToggle);
+            container.Add(UiUtils.Separator());
+            container.Add(CreateDataCollectionPolicy());
 
             return container;
         }
@@ -129,6 +117,37 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 new Button(EnqueteService.OpenEnqueteLink)
                 {
                     text = TranslationTable.cck_answer
+                }
+            );
+
+            return container;
+        }
+
+        static VisualElement CreateDataCollectionPolicy()
+        {
+            var container = new VisualElement();
+
+            var heading = new Label(TranslationTable.cck_data_collection_policy);
+            heading.EnableInClassList("h1", true);
+            container.Add(heading);
+
+            var dataCollectionPolicyLabel = new Label(TranslationUtility.GetMessage(TranslationTable.cck_data_collection_policy_notice, PrivacyPolicyUrl))
+            {
+                style =
+                {
+                    whiteSpace = WhiteSpace.Normal
+                }
+            };
+            container.Add(dataCollectionPolicyLabel);
+
+            container.Add(
+                new Button(() =>
+                {
+                    Application.OpenURL(PrivacyPolicyUrl);
+                    PanamaLogger.LogCckOpenLink(PrivacyPolicyUrl, "SettingsWindow_PrivacyPolicy");
+                })
+                {
+                    text = TranslationTable.cck_open_privacy_policy
                 }
             );
 

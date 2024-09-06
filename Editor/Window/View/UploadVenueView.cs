@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
@@ -10,6 +10,7 @@ using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Editor.Enquete;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using ClusterVR.CreatorKit.Editor.Validator;
+using ClusterVR.CreatorKit.Proto;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
@@ -21,6 +22,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 {
     public sealed class UploadVenueView : IDisposable
     {
+        const string InstallUnityUrl = "https://docs.cluster.mu/creatorkit/installation/install-unity/";
+
         readonly ImageView thumbnail;
         readonly UserInfo userInfo;
         readonly string worldManagementUrl;
@@ -29,6 +32,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
         Venue venue;
         ExportedAssetInfo exportedAssetInfo;
+        BuildSummary buildSummary;
         UploadVenueService currentUploadService;
         string errorMessage;
         string tempAssetsDirPath;
@@ -42,6 +46,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         bool executeUpload;
         bool isPreviewUpload;
         bool isBeta;
+
+        DateTime uploadStartAt;
 
         public UploadVenueView(UserInfo userInfo, ImageView thumbnail, Action venueChangeCallback)
         {
@@ -83,6 +89,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 executeUpload = false;
                 currentUploadService = null;
 
+                LogWorldUploadStart();
+
                 if (!VenueValidator.ValidateVenue(isBeta, out errorMessage, out var invalidObjects))
                 {
                     EditorUtility.DisplayDialog("Cluster Creator Kit", errorMessage, TranslationTable.cck_close);
@@ -100,10 +108,15 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     }
 
                     Selection.objects = invalidObjects.ToArray();
+                    LogWorldUploadFailed();
                     return;
                 }
 
-                if (!TryExportAssets(venue, out exportedAssetInfo)) return;
+                if (!TryExportAssets(venue, out exportedAssetInfo, out buildSummary))
+                {
+                    LogWorldUploadFailed();
+                    return;
+                }
 
                 currentUploadService = new UploadVenueService(userInfo.VerifiedToken, venue,
                     WorldDescriptorCreator.Create(SceneManager.GetActiveScene()),
@@ -113,6 +126,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     {
                         DeleteTempAssetsDirectory();
                         errorMessage = "";
+                        LogWorldUploadComplete(buildSummary);
                         if (isPreviewUpload)
                         {
                             EditorUtility.DisplayDialog("テスト用のアップロードが完了しました",
@@ -126,6 +140,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                             if (openWorldManagementUrl)
                             {
                                 Application.OpenURL(worldManagementUrl);
+                                PanamaLogger.LogCckOpenLink(worldManagementUrl, "UploadVenueView_UploadComplete");
                             }
                         }
                         venueChangeCallback?.Invoke();
@@ -134,6 +149,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                         DeleteTempAssetsDirectory();
                         Debug.LogException(exception);
                         EditorWindow.GetWindow<VenueUploadWindow>().Repaint();
+                        LogWorldUploadFailed();
                         if (exception is FileNotFoundException)
                         {
                             errorMessage = TranslationTable.cck_world_upload_failed_build_support_check;
@@ -142,8 +158,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                                 TranslationTable.cck_details_open, TranslationTable.cck_close);
                             if (ok)
                             {
-                                Application.OpenURL(
-                                    "https://docs.cluster.mu/creatorkit/installation/install-unity/");
+                                Application.OpenURL(InstallUnityUrl);
+                                PanamaLogger.LogCckOpenLink(InstallUnityUrl, "UploadVenueView_Error");
                             }
                         }
                         else
@@ -156,9 +172,10 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             }
         }
 
-        bool TryExportAssets(Venue venue, out ExportedAssetInfo exportedAssetInfo)
+        bool TryExportAssets(Venue venue, out ExportedAssetInfo exportedAssetInfo, out BuildSummary buildSummary)
         {
             exportedAssetInfo = null;
+            buildSummary = null;
             var tempAssetsDirName = venue.VenueId.Value;
             var guid = AssetDatabase.CreateFolder("Assets", tempAssetsDirName);
             tempAssetsDirPath = AssetDatabase.GUIDToAssetPath(guid);
@@ -176,6 +193,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             try
             {
                 exportedAssetInfo = AssetExporter.ExportCurrentSceneResource(venue.VenueId.Value, useWindows, useMac, useIOS, useAndroid);
+                buildSummary = BuildSummary.FromExportedAssetInfo(exportedAssetInfo);
             }
             catch (Exception e)
             {
@@ -234,6 +252,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             if (GUILayout.Button(TranslationTable.cck_open_world_management_page))
             {
                 Application.OpenURL(worldManagementUrl);
+                PanamaLogger.LogCckOpenLink(worldManagementUrl, "UploadVenueView_OpenWorldPage");
             }
 
             EditorGUILayout.Space();
@@ -362,9 +381,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             EditorGUILayout.Space();
 
-            foreach (var platformInfo in exportedAssetInfo.PlatformInfos)
+            foreach (var platformSummary in buildSummary.PlatformSummaries)
             {
-                ShowBuiltAssetBundleSize(platformInfo);
+                ShowBuiltAssetBundleSize(platformSummary);
             }
         }
 
@@ -386,54 +405,95 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             return true;
         }
 
-        void ShowBuiltAssetBundleSize(ExportedPlatformAssetInfo info)
+        void ShowBuiltAssetBundleSize(PlatformBuildSummary summary)
         {
-            var buildTargetName = info.BuildTarget.DisplayName();
+            var buildTargetName = summary.BuildTarget.DisplayName();
             {
-                if (TryGetSceneAndDependAssetTotalSize(info.MainSceneInfo, info.VenueAssetInfos, out var size))
-                {
-                    EditorGUILayout.LabelField($"{buildTargetName} メインシーン サイズ", $"{(double) size / (1024 * 1024):F2} MB"); // Byte => MByte
-                }
+                var size = summary.MainSceneSummary.TotalSize;
+                EditorGUILayout.LabelField($"{buildTargetName} メインシーン サイズ", $"{(double) size / (1024 * 1024):F2} MB"); // Byte => MByte
             }
             var subSceneIndex = 1;
-            foreach (var sceneInfo in info.SubSceneInfos)
+            foreach (var subSceneSummary in summary.SubSceneSummaries)
             {
-                if (TryGetFileSize(sceneInfo.BuiltAssetBundlePath, out var size))
-                {
-                    EditorGUILayout.LabelField($"{buildTargetName} サブシーン{subSceneIndex} サイズ", $"{(double) size / (1024 * 1024):F2} MB"); // Byte => MByte
-                    ++subSceneIndex;
-                }
+                var size = subSceneSummary.TotalSize;
+                EditorGUILayout.LabelField($"{buildTargetName} サブシーン{subSceneIndex} サイズ", $"{(double) size / (1024 * 1024):F2} MB"); // Byte => MByte
+                ++subSceneIndex;
             }
         }
 
-        bool TryGetFileSize(string path, out long size)
+        void LogWorldUploadStart()
         {
-            if (!File.Exists(path))
+            uploadStartAt = DateTime.Now;
+            PanamaLogger.LogCckWorldUploadStart(new CckWorldUploadStart
             {
-                size = default;
-                return false;
-            }
-            size = new FileInfo(path).Length;
-            return true;
+                IsBeta = isBeta,
+                IsPreview = isPreviewUpload,
+                PreviewWin = isPreviewUpload && previewUploadWindowsSelected,
+                PreviewMac = isPreviewUpload && previewUploadMacSelected,
+                PreviewAndroid = isPreviewUpload && previewUploadAndroidSelected,
+                PreviewIos = isPreviewUpload && previewUploadIOSSelected
+            });
         }
 
-        bool TryGetSceneAndDependAssetTotalSize(ExportedSceneInfo sceneInfo, IReadOnlyList<ExportedVenueAssetInfo> venueAssetInfos, out long size)
+        void LogWorldUploadComplete(BuildSummary buildSummary)
         {
-            if (!TryGetFileSize(sceneInfo.BuiltAssetBundlePath, out size))
+            PanamaLogger.LogCckWorldUploadComplete(new CckWorldUploadComplete
             {
-                return false;
-            }
-
-            foreach (var assetIdDependsOn in sceneInfo.AssetIdsDependsOn)
-            {
-                var asset = venueAssetInfos.FirstOrDefault(i => i.Id == assetIdDependsOn);
-                if (asset != null && TryGetFileSize(asset.BuiltAssetBundlePath, out var venueAssetSize))
+                IsBeta = isBeta,
+                IsPreview = isPreviewUpload,
+                PreviewWin = isPreviewUpload && previewUploadWindowsSelected,
+                PreviewMac = isPreviewUpload && previewUploadMacSelected,
+                PreviewAndroid = isPreviewUpload && previewUploadAndroidSelected,
+                PreviewIos = isPreviewUpload && previewUploadIOSSelected,
+                DurationMs = (ulong)(DateTime.Now - uploadStartAt).TotalMilliseconds,
+                BuildStats =
                 {
-                    size += venueAssetSize;
+                    buildSummary.PlatformSummaries.SelectMany(platformSummary =>
+                    {
+                        var platform = platformSummary.BuildTarget.DisplayName();
+                        return new[]
+                        {
+                            new CckWorldUploadComplete.Types.CckWorldBuildStatsValue
+                            {
+                                Platform = platform,
+                                SceneIndex = 0,
+                                BuildSize = (ulong) platformSummary.MainSceneSummary.TotalSize
+                            }
+                        }.Concat(platformSummary.SubSceneSummaries.Select((subSceneSummary, i) => new CckWorldUploadComplete.Types.CckWorldBuildStatsValue
+                        {
+                            Platform = platform,
+                            SceneIndex = i + 1,
+                            BuildSize = (ulong) subSceneSummary.TotalSize
+                        }));
+                    })
+                },
+                SceneStats = new CckWorldUploadComplete.Types.CckWorldSceneStatsValue
+                {
+                    Components =
+                    {
+                        ComponentUsageGatherer.GatherCreatorKitComponentUsage()
+                            .Select(usage => new CckWorldUploadComplete.Types.CckWorldSceneStatsValue.Types.CckWorldSceneStatsComponentsValue
+                            {
+                                Name = usage.Key,
+                                Count = (uint)usage.Value
+                            })
+                    }
                 }
-            }
+            });
+        }
 
-            return true;
+        void LogWorldUploadFailed()
+        {
+            PanamaLogger.LogCckWorldUploadFailed(new CckWorldUploadFailed
+            {
+                IsBeta = isBeta,
+                IsPreview = isPreviewUpload,
+                PreviewWin = isPreviewUpload && previewUploadWindowsSelected,
+                PreviewMac = isPreviewUpload && previewUploadMacSelected,
+                PreviewAndroid = isPreviewUpload && previewUploadAndroidSelected,
+                PreviewIos = isPreviewUpload && previewUploadIOSSelected,
+                DurationMs = (ulong)(DateTime.Now - uploadStartAt).TotalMilliseconds,
+            });
         }
 
         public void Dispose()

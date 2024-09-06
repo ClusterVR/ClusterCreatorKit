@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
@@ -374,6 +375,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 
                 reactiveItemUploadStatus.Val = ItemUploadProgressWindow.ItemUploadStatus.Finish;
                 Application.OpenURL(uploadService.UploadedItemsManagementUrl);
+                PanamaLogger.LogCckOpenLink(uploadService.UploadedItemsManagementUrl, "ItemUploadView_UploadComplete");
             }
             catch (OperationCanceledException)
             {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
@@ -20,6 +21,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         {
             var window = GetWindow<VenueUploadWindow>();
             window.titleContent = new GUIContent(TranslationTable.cck_world_upload);
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.Cluster_UploadWorld);
         }
 
         void OnEnable()

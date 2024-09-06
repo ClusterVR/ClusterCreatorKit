@@ -15,6 +15,6 @@
 
     <engine:VisualElement class="border" />
 
-    <engine:Label name="send_statistical_info" />
-    <engine:Button name="open-settings-window" />
+    <engine:Label name="data-collection-policy" />
+    <engine:Button name="open-privacy-policy" />
 </engine:UXML>

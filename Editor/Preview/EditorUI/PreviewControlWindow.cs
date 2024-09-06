@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Editor.Preview.World;
 using ClusterVR.CreatorKit.Editor.Window.View;
 using ClusterVR.CreatorKit.Translation;
@@ -16,6 +17,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.EditorUI
         {
             var window = GetWindow<PreviewControlWindow>();
             window.titleContent = new GUIContent(TranslationTable.cck_preview_control_window);
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.ClusterPreview_ControlWindow);
         }
 
         public void OnEnable()

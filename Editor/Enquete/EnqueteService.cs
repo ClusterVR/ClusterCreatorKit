@@ -1,4 +1,5 @@
 using System;
+using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
@@ -39,6 +40,7 @@ namespace ClusterVR.CreatorKit.Editor.Enquete
         {
             EditorPrefsUtils.NextEnqueteAskTime = GetCurrentTimeStamp() + SuggestIntervalOnOpen;
             Application.OpenURL(EnqueteUrl);
+            PanamaLogger.LogCckOpenLink(EnqueteUrl, "EnqueteService_OpenEnqueteLink");
         }
         public static void CancelEnquete()
         {

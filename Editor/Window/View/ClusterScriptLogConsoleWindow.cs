@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -18,6 +19,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         static void ShowWindow()
         {
             GetWindow<ClusterScriptLogConsoleWindow>("ClusterScript Log Console").Show();
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.Cluster_ScriptLogConsole);
         }
 
         const string ScriptLogFileName = "ClusterScriptLog.log";

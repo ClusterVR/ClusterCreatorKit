@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Editor.Preview.EditorUI;
 using ClusterVR.CreatorKit.Editor.Preview.RoomState;
 using ClusterVR.CreatorKit.Editor.Window.View;
@@ -21,6 +22,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.WebTrigger
         {
             var window = GetWindow<WebTriggerWindow>();
             window.titleContent = new GUIContent(TranslationTable.cck_webtrigger_window);
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.ClusterPreview_WebTriggerWindow);
         }
 
         [SerializeField] WebTrigger trigger;

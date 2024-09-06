@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.World.Implements.PlayerLocalUI;
 using UnityEditor;
 
@@ -11,6 +12,7 @@ namespace ClusterVR.CreatorKit.Editor.MenuItems
             var playerLocalUI = ObjectFactory.CreateGameObject(nameof(PlayerLocalUI), typeof(PlayerLocalUI));
             playerLocalUI.transform.SetParent(MenuItemUtilities.GetActiveContentsRoot());
             Selection.activeGameObject = playerLocalUI;
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.GameObject_PlayerLocalUI);
         }
     }
 }
