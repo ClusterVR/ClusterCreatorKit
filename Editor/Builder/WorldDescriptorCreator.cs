@@ -27,6 +27,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 worldRuntimeSetting.NearPlane = setting.NearPlane;
                 worldRuntimeSetting.FarPlane = setting.FarPlane;
                 worldRuntimeSetting.EnableCrouchWalk = setting.EnableCrouchWalk;
+                worldRuntimeSetting.DisplayAvatarSilhouette = setting.WriteOwnAvatarSilhouetteStencil;
             }
             else
             {
@@ -40,6 +41,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 worldRuntimeSetting.NearPlane = DefaultValues.NearPlane;
                 worldRuntimeSetting.FarPlane = DefaultValues.FarPlane;
                 worldRuntimeSetting.EnableCrouchWalk = DefaultValues.EnableCrouchWalk;
+                worldRuntimeSetting.DisplayAvatarSilhouette = DefaultValues.WriteOwnAvatarSilhouetteStencil;
             }
             descriptor.WorldRuntimeSetting = worldRuntimeSetting;
 

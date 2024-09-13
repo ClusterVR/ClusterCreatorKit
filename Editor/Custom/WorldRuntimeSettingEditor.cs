@@ -1,5 +1,6 @@
 using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Editor.Extensions;
+using ClusterVR.CreatorKit.Translation;
 using ClusterVR.CreatorKit.World.Implements.WorldRuntimeSetting;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -117,7 +118,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var uploadNoticeText = new TextElement()
             {
-                text = "*このコンポーネントの指定値はclusterアプリでのみ反映されます。\nワールドをアップロードして挙動を確認してください。",
+                text = TranslationTable.cck_component_only_in_cluster_app,
                 style =
                 {
                     marginTop = 10,

@@ -76,7 +76,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             if (worldRuntimeSettings.Length >= 2)
             {
                 errorMessage =
-                    $"ワールドに配置できる{nameof(WorldRuntimeSetting)}は最大1つです。現在配置されている{nameof(WorldRuntimeSetting)}の数は {worldRuntimeSettings.Length} です";
+                    TranslationUtility.GetMessage(TranslationTable.cck_max_world_runtime_setting, nameof(WorldRuntimeSetting), nameof(WorldRuntimeSetting), worldRuntimeSettings.Length);
                 invalidObjects = worldRuntimeSettings.Select(x => x.gameObject).ToArray();
                 return false;
             }

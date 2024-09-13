@@ -5,7 +5,6 @@ using ClusterVR.CreatorKit.Editor.Enquete;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using ClusterVR.CreatorKit.Editor.Window.Translation;
 using ClusterVR.CreatorKit.Translation;
-using ClusterVR.CreatorKit.World;
 using UnityEditor;
 using UnityEditor.Compilation;
 using UnityEditor.UIElements;
@@ -65,7 +64,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 TranslationSettings.SetLanguageSettingBySystemLanguage();
                 languageSettingKey = EditorPrefsUtils.LanguageSetting;
             }
-            var languageSelectionDropdown = new PopupField<string>("Selected Language", ServerLang.LangCodes.ToList(),
+            var languageSelectionDropdown = new PopupField<string>("Selected Language",
+                TranslationSettings.EditorLanguages.ToList(),
                 languageSettingKey.Replace("cck_", ""));
             languageSelectionDropdown.RegisterValueChangedCallback(ev =>
             {

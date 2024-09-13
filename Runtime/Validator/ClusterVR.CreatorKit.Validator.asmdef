@@ -1,6 +1,8 @@
 {
     "name": "ClusterVR.CreatorKit.Validator",
-    "references": [],
+    "references": [
+        "ClusterVR.CreatorKit.Translation"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

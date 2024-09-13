@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Linq;
+using ClusterVR.CreatorKit.Translation;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -22,7 +23,7 @@ namespace ClusterVR.CreatorKit.Validator
                 if (meshColliders.Any(collider => !collider.convex))
                 {
                     type = MessageType.Error;
-                    message = $"{target.GetType().Name}でMesh Colliderを利用する際はConvexとis TriggerをTrueにしないと動作しません。";
+                    message = TranslationUtility.GetMessage(TranslationTable.cck_mesh_collider_convex_trigger_true, target.GetType().Name);
                     return false;
                 }
             }

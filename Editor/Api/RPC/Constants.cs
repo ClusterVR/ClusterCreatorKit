@@ -4,8 +4,8 @@
     {
         const string host = "cluster.mu";
         static string overridingHost = "";
-        static string Host => IsOverridingHost ? host : overridingHost;
-        public static bool IsOverridingHost => string.IsNullOrEmpty(overridingHost);
+        static string Host => IsOverridingHost ? overridingHost : host;
+        public static bool IsOverridingHost => !string.IsNullOrEmpty(overridingHost);
 
         public static string ApiBaseUrl => $"https://api.{Host}";
 

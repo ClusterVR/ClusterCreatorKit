@@ -129,8 +129,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                         LogWorldUploadComplete(buildSummary);
                         if (isPreviewUpload)
                         {
-                            EditorUtility.DisplayDialog("テスト用のアップロードが完了しました",
-                                "入室後「デベロッパーツール」>「テスト用のスペースをはじめる」から利用可能です。", "閉じる");
+                            EditorUtility.DisplayDialog(TranslationTable.cck_test_upload_complete,
+                                TranslationTable.cck_start_test_space, TranslationTable.cck_close);
                         }
                         else
                         {
@@ -238,7 +238,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             using (new EditorGUI.DisabledScope(!canUpload))
             {
                 var uploadButton = GUILayout.Button(
-                    TranslationUtility.GetMessage(TranslationTable.cck_upload_as_named_venue, (venue.IsBeta ? "ベータ機能が有効な " : ""), venue.Name));
+                    TranslationUtility.GetMessage(TranslationTable.cck_upload_as_named_venue, (venue.IsBeta ? TranslationTable.cck_beta_features_enabled : ""), venue.Name));
                 if (uploadButton)
                 {
                     executeUpload = EditorUtility.DisplayDialog(TranslationTable.cck_upload_world,
@@ -264,13 +264,13 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 var previewSelectAreaStyle = new GUIStyle(EditorStyles.helpBox) { padding = { bottom = 6 } };
                 using (new GUILayout.VerticalScope(previewSelectAreaStyle))
                 {
-                    previewUploadSelected = GUILayout.Toggle(previewUploadSelected, "テスト用にアップロードする");
+                    previewUploadSelected = GUILayout.Toggle(previewUploadSelected, TranslationTable.cck_upload_for_testing);
                     using (new GUILayout.HorizontalScope())
                     {
                         EditorGUILayout.Space(10f, false);
                         using (new GUILayout.VerticalScope())
                         {
-                            var previewUploadDescription = "選択したデバイスでテスト用のスペースが利用できるようになります。";
+                            var previewUploadDescription = TranslationTable.cck_test_space_available_on_selected_device;
                             GUILayout.Label(previewUploadDescription);
                             if (previewUploadSelected)
                             {
@@ -289,7 +289,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             if (!alreadyUploaded)
             {
-                var previewDisabledDescription = "※テスト用にアップロードを行うには、一度アップロードすることが必要です";
+                var previewDisabledDescription = TranslationTable.cck_upload_required_for_testing;
                 GUILayout.Label(previewDisabledDescription);
             }
 
@@ -303,7 +303,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     EditorStyles.helpBox.fontSize = defaultSize + 1;
                     try
                     {
-                        EditorGUILayout.HelpBox("テストのはじめ方\n<b>入室後「デベロッパーメニュー」>「テスト用のスペースをはじめる」から利用可能です。</b>", MessageType.Info);
+                        EditorGUILayout.HelpBox(TranslationTable.cck_how_to_start_testing, MessageType.Info);
                     }
                     finally
                     {
@@ -317,7 +317,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             var canPreviewUpload = previewUploadSelected && anyPreviewPlatformSelected;
             using (new EditorGUI.DisabledScope(!canPreviewUpload))
             {
-                var previewUploadButton = GUILayout.Button("テスト用にアップロードする");
+                var previewUploadButton = GUILayout.Button(TranslationTable.cck_upload_for_testing);
                 if (previewUploadButton)
                 {
                     executeUpload = EditorUtility.DisplayDialog(TranslationTable.cck_upload_world,
@@ -410,13 +410,13 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             var buildTargetName = summary.BuildTarget.DisplayName();
             {
                 var size = summary.MainSceneSummary.TotalSize;
-                EditorGUILayout.LabelField($"{buildTargetName} メインシーン サイズ", $"{(double) size / (1024 * 1024):F2} MB"); // Byte => MByte
+                EditorGUILayout.LabelField(TranslationUtility.GetMessage(TranslationTable.cck_main_scene_size, buildTargetName), $"{(double) size / (1024 * 1024):F2} MB"); // Byte => MByte
             }
             var subSceneIndex = 1;
             foreach (var subSceneSummary in summary.SubSceneSummaries)
             {
                 var size = subSceneSummary.TotalSize;
-                EditorGUILayout.LabelField($"{buildTargetName} サブシーン{subSceneIndex} サイズ", $"{(double) size / (1024 * 1024):F2} MB"); // Byte => MByte
+                EditorGUILayout.LabelField(TranslationUtility.GetMessage(TranslationTable.cck_sub_scene_size, buildTargetName, subSceneIndex), $"{(double) size / (1024 * 1024):F2} MB"); // Byte => MByte
                 ++subSceneIndex;
             }
         }
@@ -445,7 +445,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 PreviewMac = isPreviewUpload && previewUploadMacSelected,
                 PreviewAndroid = isPreviewUpload && previewUploadAndroidSelected,
                 PreviewIos = isPreviewUpload && previewUploadIOSSelected,
-                DurationMs = (ulong)(DateTime.Now - uploadStartAt).TotalMilliseconds,
+                DurationMs = (ulong) (DateTime.Now - uploadStartAt).TotalMilliseconds,
                 BuildStats =
                 {
                     buildSummary.PlatformSummaries.SelectMany(platformSummary =>
@@ -475,7 +475,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                             .Select(usage => new CckWorldUploadComplete.Types.CckWorldSceneStatsValue.Types.CckWorldSceneStatsComponentsValue
                             {
                                 Name = usage.Key,
-                                Count = (uint)usage.Value
+                                Count = (uint) usage.Value
                             })
                     }
                 }
@@ -492,7 +492,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 PreviewMac = isPreviewUpload && previewUploadMacSelected,
                 PreviewAndroid = isPreviewUpload && previewUploadAndroidSelected,
                 PreviewIos = isPreviewUpload && previewUploadIOSSelected,
-                DurationMs = (ulong)(DateTime.Now - uploadStartAt).TotalMilliseconds,
+                DurationMs = (ulong) (DateTime.Now - uploadStartAt).TotalMilliseconds,
             });
         }
 

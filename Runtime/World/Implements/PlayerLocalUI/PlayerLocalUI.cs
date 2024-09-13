@@ -88,7 +88,15 @@ namespace ClusterVR.CreatorKit.World.Implements.PlayerLocalUI
             {
                 return;
             }
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+            canvas.renderMode = canvas.renderMode switch
+            {
+                RenderMode.ScreenSpaceOverlay => RenderMode.ScreenSpaceOverlay,
+                RenderMode.ScreenSpaceCamera => RenderMode.ScreenSpaceOverlay,
+                RenderMode.WorldSpace => RenderMode.WorldSpace,
+                _ => RenderMode.ScreenSpaceOverlay,
+            };
+
             LimitSortingOrder(canvas);
             foreach (var childCanvas in gameObject.GetComponentsInChildren<Canvas>(true))
             {
@@ -101,13 +109,20 @@ namespace ClusterVR.CreatorKit.World.Implements.PlayerLocalUI
 
         void LimitSortingOrder(Canvas canvas)
         {
-            if (canvas.sortingOrder > 100)
+            if (canvas.renderMode == RenderMode.WorldSpace)
             {
-                canvas.sortingOrder = 100;
+                canvas.sortingOrder = 0;
             }
-            else if (canvas.sortingOrder < -100)
+            else
             {
-                canvas.sortingOrder = -100;
+                if (canvas.sortingOrder > 100)
+                {
+                    canvas.sortingOrder = 100;
+                }
+                else if (canvas.sortingOrder < -100)
+                {
+                    canvas.sortingOrder = -100;
+                }
             }
         }
 

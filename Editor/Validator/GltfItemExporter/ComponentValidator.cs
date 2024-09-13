@@ -444,7 +444,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 {
                     if (!collider.isTrigger && !collider.convex)
                     {
-                        var message = $"{shape.GetType().Name}でMesh Colliderを利用する際はConvexとis TriggerをTrueにしないと動作しません。";
+                        var message = TranslationUtility.GetMessage(TranslationTable.cck_shape_mesh_collider_convex_trigger_true, shape.GetType().Name);
                         validationMessages.Add(new ValidationMessage(
                             $"Collider\"{collider.name}\" {message}",
                             ValidationMessage.MessageType.Error));

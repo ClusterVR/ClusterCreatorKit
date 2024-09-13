@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Editor.Builder;
-using ClusterVR.CreatorKit.World;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEngine;
@@ -10,6 +9,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.Translation
 {
     public static class TranslationSettings
     {
+        public static readonly string[] EditorLanguages = { "en", "ja" };
+
         [InitializeOnLoadMethod]
         public static void UpdateLanguageSettings()
         {
@@ -52,7 +53,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.Translation
 
         static List<string> ConvertToScriptingDefineSymbols(string to, List<string> symbolsList)
         {
-            var other = ServerLang.LangCodes.ToList().Where(l => GetLanguageSettingKey(l) != to)
+            var other = EditorLanguages.Where(l => GetLanguageSettingKey(l) != to)
                 .Select(GetLanguageSettingKey).ToList();
             symbolsList.RemoveAll(other.Contains);
 

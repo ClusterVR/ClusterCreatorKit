@@ -176,10 +176,10 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
             try
             {
-                var uploadRequest = new PostUploadRequestService(accessToken, isBeta);
-                var uploadRequestRespose = await uploadRequest.PostUploadRequestAsync(venue.VenueId, cancellationToken);
-                Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_upload_request, uploadRequestRespose.UploadRequestId));
-                uploadRequestId = uploadRequestRespose.UploadRequestId;
+                var uploadRequest = new PostUploadRequestService(accessToken, isBeta, isPreview);
+                var uploadRequestResponse = await uploadRequest.PostUploadRequestAsync(venue.VenueId, cancellationToken);
+                Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_upload_request, uploadRequestResponse.UploadRequestId));
+                uploadRequestId = uploadRequestResponse.UploadRequestId;
                 uploadStatus[UploadPhase.PreProcess] = true;
 
                 await Task.WhenAll(

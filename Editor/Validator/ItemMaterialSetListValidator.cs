@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.Translation;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Validator
@@ -13,7 +14,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
 
             if (!isBeta)
             {
-                return new[] { "ItemMaterialSetListはベータ機能です" };
+                return new[] { TranslationTable.cck_item_material_set_list_beta };
             }
 
             var renderers = itemRoot.GetComponentsInChildren<Renderer>(true);
@@ -35,13 +36,13 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             var collidedIds = GetDuplicatedIds(itemMaterialSetList);
             if (collidedIds.Count > 0)
             {
-                messages.Add($"ItemMaterialSetListのIdが重複しています。 Id: {string.Join(", ", collidedIds)}");
+                messages.Add(TranslationUtility.GetMessage(TranslationTable.cck_item_material_set_list_duplicate_ids, string.Join(", ", collidedIds)));
             }
 
             var collidedMaterials = GetDuplicatedMaterials(itemMaterialSetList);
             if (collidedMaterials.Count > 0)
             {
-                messages.Add($"ItemMaterialSetListのMaterialが重複しています。 Material: {string.Join(", ", collidedMaterials.Select(m => m.name))}");
+                messages.Add(TranslationUtility.GetMessage(TranslationTable.cck_item_material_set_list_duplicate_materials, string.Join(", ", collidedMaterials.Select(m => m.name))));
             }
         }
 
@@ -92,7 +93,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             var id = set.Id;
             if (string.IsNullOrEmpty(id))
             {
-                messages.Add($"ItemMaterialSetListのIdが空です。有効なIdを設定してください。");
+                messages.Add(TranslationTable.cck_item_material_set_list_empty_id);
                 return;
             }
 
@@ -114,13 +115,13 @@ namespace ClusterVR.CreatorKit.Editor.Validator
 
             if (material == null)
             {
-                messages.Add($"Materialがみつかりませんでした。ItemMaterialSetにMaterialを設定してください。");
+                messages.Add(TranslationTable.cck_item_material_set_material_not_found);
                 return;
             }
 
             if (!rendererMaterials.Contains(material))
             {
-                messages.Add($"MaterialはこのItem及び子孫要素のRendererに割り当てられている必要があります。 (Id: {id})");
+                messages.Add(TranslationUtility.GetMessage(TranslationTable.cck_material_not_assigned_to_renderer, id));
             }
         }
     }
