@@ -1,5 +1,6 @@
 {
     "name": "ClusterVR.CreatorKit.Editor",
+    "rootNamespace": "",
     "references": [
         "ClusterVR.CreatorKit",
         "ClusterVR.CreatorKit.Constants",
@@ -19,7 +20,8 @@
         "Unity.net.yutopp.vjson",
         "MToon",
         "ClusterVR.CreatorKit.Validator",
-        "ClusterVR.CreatorKit.Translation"
+        "ClusterVR.CreatorKit.Translation",
+        "ClusterVR.CreatorKit.Editor.EditorEvents"
     ],
     "includePlatforms": [
         "Editor"

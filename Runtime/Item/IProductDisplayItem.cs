@@ -9,6 +9,8 @@ namespace ClusterVR.CreatorKit.Item
         ProductId ProductId { get; }
         bool NeedsProductSample { get; }
         Transform ProductDisplayRoot { get; }
+        ProductDisplayAvatarFacialExpressionType ProductDisplayAvatarFacialExpressionType { get; }
+        AnimationClip ProductDisplayAvatarPose { get; }
         event Action OnInvoked;
         void SetSample(GameObject productSample);
         void SetInteractable(bool isInteractable);

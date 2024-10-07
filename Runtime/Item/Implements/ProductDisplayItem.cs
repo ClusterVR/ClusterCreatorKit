@@ -13,6 +13,8 @@ namespace ClusterVR.CreatorKit.Item.Implements
         [SerializeField, HideInInspector] Item item;
         [SerializeField, Tooltip(TranslationTable.cck_product_id)] ProductId productId;
         [SerializeField, Tooltip(TranslationTable.cck_product_display_position_optional)] Transform productDisplayRoot;
+        [SerializeField, Tooltip(TranslationTable.cck_product_display_avatar_facial_expression_tooltip)] ProductDisplayAvatarFacialExpressionType productDisplayAvatarFacialExpressionType;
+        [SerializeField, Tooltip(TranslationTable.cck_product_display_avatar_pose_tooltip)] AnimationClip productDisplayAvatarPose;
 
         public override IItem Item
         {
@@ -37,6 +39,8 @@ namespace ClusterVR.CreatorKit.Item.Implements
         bool IProductDisplayItem.NeedsProductSample => productDisplayRoot != null;
         public event Action OnInvoked;
         public Transform ProductDisplayRoot => productDisplayRoot;
+        ProductDisplayAvatarFacialExpressionType IProductDisplayItem.ProductDisplayAvatarFacialExpressionType => productDisplayAvatarFacialExpressionType;
+        AnimationClip IProductDisplayItem.ProductDisplayAvatarPose => productDisplayAvatarPose;
 
         void IProductDisplayItem.SetInteractable(bool isInteractable)
         {

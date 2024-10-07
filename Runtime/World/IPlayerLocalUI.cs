@@ -6,5 +6,6 @@ namespace ClusterVR.CreatorKit.World
     {
         void SetEnabled(bool enabled);
         RectTransform RectTransform { get; }
+        PlayerLocalUISortingOrder SortingOrder { get; }
     }
 }

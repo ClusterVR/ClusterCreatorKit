@@ -42,6 +42,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_bounds_out_of_recommended_range = "{0}のBoundsが推奨範囲外です。現在: max: {1},min: {2}, 推奨: max: {3},min {4}";
         public const string cck_boundssize_exceeds_limit = "{0}のBoundsSizeが規定値以上です。現在：{1}, 規定値：{2}";
         public const string cck_build_failed = "ビルドに失敗しました";
+        public const string cck_build_stopped_user_defined_callback_error = "ユーザー定義の処理でエラーが発生したため、ワールドのアップロードを中止しました。";
         public const string cck_build_support_installation_check = "必要なBuild Supportが全てインストールされているか確認してください。";
         public const string cck_building_to_directory = "{0}にビルドをします";
         public const string cck_buildtarget_scenetype_size = "{0} {1} サイズ";
@@ -217,6 +218,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_ok = "OK";
         public const string cck_open_privacy_policy = "プライバシーポリシーを開く";
         public const string cck_open_settings = "設定を開く";
+        public const string cck_open_world_detail_page = "ワールド詳細ページを開く";
         public const string cck_open_world_management_page = "ワールド管理ページを開く";
         public const string cck_open_world_management_page_after_upload = "アップロード後にワールド管理ページを開く";
         public const string cck_optional_generation_position = "生成位置(任意)";
@@ -229,6 +231,12 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_player_local_obj_ref_list_error_invalid_hierarchy = "PlayerLocalObjectReferenceListのオブジェクトは、Player Local UIとその子要素のみが指定できます。 Id: {0}";
         public const string cck_player_local_obj_ref_list_error_obj_empty = "PlayerLocalObjectReferenceListにオブジェクトが設定されていません。 Id: {0}";
         public const string cck_player_local_obj_ref_list_error_obj_prefab = "PlayerLocalObjectReferenceListにPrefabが指定されています。シーン上のオブジェクトを設定してください。 Id: {0}";
+        public const string cck_player_local_ui_collider_attach_log = "{0} に BoxCollider がアタッチされました";
+        public const string cck_player_local_ui_collider_resized_log = "{0} の BoxCollider のサイズが変更されました";
+        public const string cck_player_local_ui_graphic_raycaster_attach_log = "{0} に GraphicRaycaster がアタッチされました";
+        public const string cck_player_local_ui_graphic_raycaster_warning = "UI要素にインタラクトしたい場合には GraphicRaycaster コンポーネントをアタッチする必要があります。";
+        public const string cck_player_local_ui_interactable_button = "選択できるUIをセットアップ";
+        public const string cck_player_local_ui_interactable_hint = "UI要素へインタラクトするために必要なコンポーネントをアタッチします。 \nボタンを押すことでインタラクト可能なUI要素のサイズに合わせて BoxCollider のアタッチと、この GameObject に GraphicRaycaster をアタッチします。";
         public const string cck_player_local_ui_not_child_of_canvas = "{0} は {1} の子ではないところに配置してください。";
         public const string cck_playerscript_source_code_length = "{0}のPlayerScriptのsource codeが長すぎます｡現在：{1}bytes, 最大値：{2}bytes";
         public const string cck_prefab_for_generated_item = "生成するアイテムのprefab";
@@ -241,6 +249,12 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_previous = "前へ";
         public const string cck_privacy_settings = "プライバシー設定";
         public const string cck_product_detail_page_open = "商品Idが{0}である商品の詳細ページが開かれます";
+        public const string cck_product_display_avatar_facial_expression_label = "表情";
+        public const string cck_product_display_avatar_facial_expression_tooltip = "アバター商品に適用する表情を指定します。";
+        public const string cck_product_display_avatar_pose_anim_length_helpbox_text = "AnimationClipの先頭のフレームを使用します。";
+        public const string cck_product_display_avatar_pose_label = "ポーズ";
+        public const string cck_product_display_avatar_pose_tooltip = "アバター商品に適用するポーズを指定します。\nAnimationClipの先頭のフレームを使用します。";
+        public const string cck_product_display_avatar_section_text = "アバター商品向け設定";
         public const string cck_product_display_position_optional = "商品を表示する位置（任意）";
         public const string cck_product_id = "商品Id";
         public const string cck_product_id_specification_required = "{0} に商品Idを指定する必要があります。";
@@ -427,6 +441,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_bounds_out_of_recommended_range = "The Bounds of {0} is out of the recommended range. Currently: max: {1},min: {2}, Recommended: max: {3},min {4}";
         public const string cck_boundssize_exceeds_limit = "The BoundsSize of {0} is over the standard value. Currently: {1}, Standard Value: {2}";
         public const string cck_build_failed = "Failed to build";
+        public const string cck_build_stopped_user_defined_callback_error = "Upload was stopped because an error happened in user-defined callback.";
         public const string cck_build_support_installation_check = "Please check whether all the necessary Build Support is installed.";
         public const string cck_building_to_directory = "Build to {0}";
         public const string cck_buildtarget_scenetype_size = "{0} {1} size";
@@ -602,6 +617,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_ok = "OK";
         public const string cck_open_privacy_policy = "Open Privacy Policy";
         public const string cck_open_settings = "Open Settings";
+        public const string cck_open_world_detail_page = "Open the World page";
         public const string cck_open_world_management_page = "Open the My Contents – World page";
         public const string cck_open_world_management_page_after_upload = "Open My Contents — World page after uploading";
         public const string cck_optional_generation_position = "Generated Position (Optional)";
@@ -614,6 +630,12 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_player_local_obj_ref_list_error_invalid_hierarchy = "PlayerLocalObjectReferenceList object must be Player Local UI or its children. ID: {0}";
         public const string cck_player_local_obj_ref_list_error_obj_empty = "No object is set in PlayerLocalObjectReferenceList. ID: {0}";
         public const string cck_player_local_obj_ref_list_error_obj_prefab = "Prefab is specified in PlayerLocalObjectReferenceList. Set the object on the scene. ID: {0}";
+        public const string cck_player_local_ui_collider_attach_log = "BoxCollider is attached to {0}";
+        public const string cck_player_local_ui_collider_resized_log = "BoxCollider of {0} is resized";
+        public const string cck_player_local_ui_graphic_raycaster_attach_log = "GraphicRaycaster attached to {0}";
+        public const string cck_player_local_ui_graphic_raycaster_warning = "If you want to interact with UI elements you need to attach a GraphicRaycaster component.";
+        public const string cck_player_local_ui_interactable_button = "Make the selectable UI Interactable.";
+        public const string cck_player_local_ui_interactable_hint = "Attach the components needed to interact with the UI elements. \nAttach a BoxCollider according to the size of the UI element that can be interacted with by pressing the button, and attach a GraphicRaycaster to this GameObject.";
         public const string cck_player_local_ui_not_child_of_canvas = "Please place {0} somewhere other than as a child of {1}.";
         public const string cck_playerscript_source_code_length = "The source code of {0}'s PlayerScript is too long. Currently: {1} bytes, Maximum Value: {2} bytes";
         public const string cck_prefab_for_generated_item = "Prefab of the created item";
@@ -626,6 +648,12 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_previous = "Previous";
         public const string cck_privacy_settings = "Privacy Settings";
         public const string cck_product_detail_page_open = "The information page for the product with the Product ID, {0} will open";
+        public const string cck_product_display_avatar_facial_expression_label = "Facial Expression";
+        public const string cck_product_display_avatar_facial_expression_tooltip = "(Optional) Facial expression for avatar products";
+        public const string cck_product_display_avatar_pose_anim_length_helpbox_text = "Uses the first frame of AnimationClip.";
+        public const string cck_product_display_avatar_pose_label = "Pose";
+        public const string cck_product_display_avatar_pose_tooltip = "(Optional) AnimationClip asset to apply avatar products.\nThe first frame of AnimationClip is used.";
+        public const string cck_product_display_avatar_section_text = "For avatar products";
         public const string cck_product_display_position_optional = "Position to display product (Optional)";
         public const string cck_product_id = "Product ID";
         public const string cck_product_id_specification_required = "You must set a Product ID to {0}.";

@@ -11,6 +11,9 @@ namespace ClusterVR.CreatorKit.World.Implements.PlayerLocalUI
     {
         [SerializeField, HideInInspector] RectTransform rectTransform;
         [SerializeField, HideInInspector] Canvas canvas;
+        [SerializeField] PlayerLocalUISortingOrder sortingOrderType = PlayerLocalUISortingOrder.Default;
+
+        PlayerLocalUISortingOrder IPlayerLocalUI.SortingOrder => sortingOrderType;
 
         RectTransform IPlayerLocalUI.RectTransform
         {
@@ -77,6 +80,13 @@ namespace ClusterVR.CreatorKit.World.Implements.PlayerLocalUI
             if (canvas == null || canvas.gameObject != gameObject)
             {
                 canvas = GetComponent<Canvas>();
+            }
+
+            var selectables = GetComponentsInChildren<Selectable>(true);
+            foreach (var selectable in selectables)
+            {
+                var navigation = new Navigation { mode = Navigation.Mode.None };
+                selectable.navigation = navigation;
             }
 
             LimitSortingOrders();

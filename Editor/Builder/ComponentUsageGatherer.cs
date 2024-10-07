@@ -18,7 +18,8 @@ namespace ClusterVR.CreatorKit.Editor.Builder
 
         static IEnumerable<T> GatherComponents<T>()
         {
-            return GatherRootGameObjects().SelectMany(x => x.GetComponentsInChildren<T>(true));
+            return GatherRootGameObjects()
+                .SelectMany(x => x.GetComponentsInChildren<T>(true).Where(c => c != null));
         }
 
         static bool IsCreatorKitComponentType(Type type) => type.FullName?.StartsWith("ClusterVR.CreatorKit.") ?? false;

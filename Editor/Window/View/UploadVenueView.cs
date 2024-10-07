@@ -7,6 +7,7 @@ using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Editor.Builder;
+using ClusterVR.CreatorKit.Editor.EditorEvents;
 using ClusterVR.CreatorKit.Editor.Enquete;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using ClusterVR.CreatorKit.Editor.Validator;
@@ -91,6 +92,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
                 LogWorldUploadStart();
 
+                if (!WorldUploadEvents.InvokeOnWorldUploadStart(SceneManager.GetActiveScene()))
+                {
+                    Debug.LogError(TranslationTable.cck_build_stopped_user_defined_callback_error);
+                    LogWorldUploadFailed();
+                    WorldUploadEvents.InvokeOnWorldUploadEnd(false);
+                    return;
+                }
+
                 if (!VenueValidator.ValidateVenue(isBeta, out errorMessage, out var invalidObjects))
                 {
                     EditorUtility.DisplayDialog("Cluster Creator Kit", errorMessage, TranslationTable.cck_close);
@@ -109,12 +118,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
                     Selection.objects = invalidObjects.ToArray();
                     LogWorldUploadFailed();
+                    WorldUploadEvents.InvokeOnWorldUploadEnd(false);
                     return;
                 }
 
                 if (!TryExportAssets(venue, out exportedAssetInfo, out buildSummary))
                 {
                     LogWorldUploadFailed();
+                    WorldUploadEvents.InvokeOnWorldUploadEnd(false);
                     return;
                 }
 
@@ -144,6 +155,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                             }
                         }
                         venueChangeCallback?.Invoke();
+                        WorldUploadEvents.InvokeOnWorldUploadEnd(true);
                     }, exception =>
                     {
                         DeleteTempAssetsDirectory();
@@ -166,6 +178,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                         {
                             errorMessage = TranslationTable.cck_world_upload_failed_retry_later;
                         }
+                        WorldUploadEvents.InvokeOnWorldUploadEnd(false);
                     });
                 currentUploadService.Run(cancellationTokenSource.Token);
                 errorMessage = null;
