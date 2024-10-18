@@ -9,7 +9,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
     public sealed class ScriptableItem : MonoBehaviour, IScriptableItem
     {
         [SerializeField] JavaScriptAsset sourceCodeAsset;
-        [SerializeField, TextArea] string sourceCode;
+        [SerializeField, TextArea(5, 15)] string sourceCode;
 
         bool isSourceCodeInitialized;
         string usingSourceCode;

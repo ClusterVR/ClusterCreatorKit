@@ -180,7 +180,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 {
                     return false;
                 }
-                if (!ValidateWorldItemTemplateList(isBeta, item, out errorMessage, out invalidObjects))
+                if (!ValidateWorldItemTemplateList(item, out errorMessage, out invalidObjects))
                 {
                     return false;
                 }
@@ -499,7 +499,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             return true;
         }
 
-        static bool ValidateWorldItemTemplateList(bool isBeta, IItem item, out string errorMessage,
+        static bool ValidateWorldItemTemplateList(IItem item, out string errorMessage,
             out GameObject[] invalidObjects)
         {
             var gameObject = item.gameObject;
@@ -507,13 +507,6 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             var worldItemTemplateList = gameObject.GetComponent<IWorldItemTemplateList>();
             if (worldItemTemplateList != null)
             {
-                if (!isBeta)
-                {
-                    errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_textview_beta_feature_required, "WorldItemTemplateList");
-                    invalidObjects = new[] { gameObject };
-                    return false;
-                }
-
                 foreach (var entry in worldItemTemplateList.WorldItemTemplates)
                 {
                     if (entry.WorldItemTemplate != null && entry.WorldItemTemplate.gameObject != null && !IsPrefabAsset(entry.WorldItemTemplate.gameObject))
