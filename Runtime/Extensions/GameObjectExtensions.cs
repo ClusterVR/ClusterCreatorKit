@@ -12,5 +12,8 @@ namespace ClusterVR.CreatorKit.Extensions
                 SetLayerRecursively(t.gameObject, layer);
             }
         }
+
+        public static bool IsDecendantOrSelf(this GameObject target, Transform mayParent)
+            => target.transform.IsDecendantOrSelf(mayParent);
     }
 }

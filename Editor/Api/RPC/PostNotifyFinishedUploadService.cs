@@ -1,9 +1,8 @@
-using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Proto;
-using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
@@ -17,9 +16,13 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         }
 
         public async Task<VenueUploadRequestCompletionResponse> PostNotifyFinishedUploadAsync(VenueID venueId,
-            UploadRequestID uploadRequestId, WorldDescriptor worldDescriptor, bool isPreview, CancellationToken cancellationToken)
+            UploadRequestID uploadRequestId, WorldDescriptor worldDescriptor, bool isPreview, string[] productUgcIds,
+            CancellationToken cancellationToken)
         {
-            var payload = new PostNotifyFinishedUploadPayload(worldDescriptor, isPreview);
+            var payload = new PostNotifyFinishedUploadPayload(
+                productUgcIds.Select(x => new VenueRevisionDisplayItemType(x)).ToArray(),
+                worldDescriptor,
+                isPreview);
             return await APIServiceClient.PostNotifyFinishedUpload(venueId, uploadRequestId, payload, accessToken, cancellationToken);
         }
     }

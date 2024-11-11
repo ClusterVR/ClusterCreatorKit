@@ -70,6 +70,7 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 HumanoidAnimationList = { ExportAndExtractHumanoidAnimations(exporter, go) },
                 ItemMaterialSetList = { ExtractItemMaterialSetListProto(exporter, go) },
                 PlayerScript = ExtractPlayerScriptProto(go),
+                AttachTargetList = { ExportAttachTargetListProto(exporter, go) }
             };
 
             var extension = new GltfExtensions.ClusterItem
@@ -385,6 +386,24 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
             {
                 SourceCode = playerScriptComponent.GetSourceCode(true)
             };
+        }
+
+        IEnumerable<Proto.AttachTarget> ExportAttachTargetListProto(Exporter exporter, GameObject go)
+        {
+            var attachTargetList = go.GetComponent<IAttachTargetList>();
+            if (attachTargetList == null)
+            {
+                return Enumerable.Empty<Proto.AttachTarget>();
+            }
+            var result = new List<Proto.AttachTarget>();
+            foreach (var attachTarget in attachTargetList.AttachTargets)
+            {
+                if (TryGetNodeIndex(exporter, attachTarget.Node, out var index))
+                {
+                    result.Add(new Proto.AttachTarget { Id = attachTarget.Id, Node = index });
+                }
+            }
+            return result;
         }
     }
 }

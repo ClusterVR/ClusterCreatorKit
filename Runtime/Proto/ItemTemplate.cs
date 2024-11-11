@@ -19,7 +19,7 @@ namespace ClusterVR.CreatorKit.Proto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CiJhcGkvY3JlYXRvcmtpdC9pdGVtX3RlbXBsYXRlLnByb3RvEhJjbHVzdGVy",
-            "LmNyZWF0b3JraXQikAUKBEl0ZW0SKgoEbWV0YRgBIAEoCzIcLmNsdXN0ZXIu",
+            "LmNyZWF0b3JraXQizgUKBEl0ZW0SKgoEbWV0YRgBIAEoCzIcLmNsdXN0ZXIu",
             "Y3JlYXRvcmtpdC5JdGVtTWV0YRI1Cgxtb3ZhYmxlX2l0ZW0YAiABKAsyHy5j",
             "bHVzdGVyLmNyZWF0b3JraXQuTW92YWJsZUl0ZW0SNQoMcmlkYWJsZV9pdGVt",
             "GAMgASgLMh8uY2x1c3Rlci5jcmVhdG9ya2l0LlJpZGFibGVJdGVtEjkKDmdy",
@@ -33,38 +33,40 @@ namespace ClusterVR.CreatorKit.Proto {
             "bV9tYXRlcmlhbF9zZXRfbGlzdBgJIAMoCzIjLmNsdXN0ZXIuY3JlYXRvcmtp",
             "dC5JdGVtTWF0ZXJpYWxTZXQSNwoNcGxheWVyX3NjcmlwdBgKIAEoCzIgLmNs",
             "dXN0ZXIuY3JlYXRvcmtpdC5QbGF5ZXJTY3JpcHQSNgoPaWNvbl9hc3NldF9s",
-            "aXN0GAsgAygLMh0uY2x1c3Rlci5jcmVhdG9ya2l0Lkljb25Bc3NldCJJCghJ",
-            "dGVtTWV0YRIvCgRuYW1lGAEgAygLMiEuY2x1c3Rlci5jcmVhdG9ya2l0Lkxv",
-            "Y2FsaXplZFRleHQSDAoEc2l6ZRgCIAMoDSIwCg1Mb2NhbGl6ZWRUZXh0EhEK",
-            "CWxhbmdfY29kZRgBIAEoCRIMCgR0ZXh0GAIgASgJIkgKC01vdmFibGVJdGVt",
-            "EhIKCmlzX2R5bmFtaWMYASABKAgSDAoEbWFzcxgCIAEoAhIXCg9kaXNhYmxl",
-            "X2dyYXZpdHkYAyABKAgipQEKC1JpZGFibGVJdGVtEgwKBHNlYXQYASABKA0S",
-            "GgoSaGFzX2V4aXRfdHJhbnNmb3JtGAIgASgIEhYKDmV4aXRfdHJhbnNmb3Jt",
-            "GAMgASgNEhUKDWhhc19sZWZ0X2dyaXAYBCABKAgSEQoJbGVmdF9ncmlwGAUg",
-            "ASgNEhYKDmhhc19yaWdodF9ncmlwGAYgASgIEhIKCnJpZ2h0X2dyaXAYByAB",
-            "KA0iLwoNR3JhYmJhYmxlSXRlbRIQCghoYXNfZ3JpcBgBIAEoCBIMCgRncmlw",
-            "GAIgASgNIiUKDlNjcmlwdGFibGVJdGVtEhMKC3NvdXJjZV9jb2RlGAEgASgJ",
-            "IjUKD09mZnNldFRyYW5zZm9ybRIiChp0cmFuc2xhdGlvbl9yb3RhdGlvbl9z",
-            "Y2FsZRgBIAMoAiI6ChJBdHRhY2hDYXNlVG9BdmF0YXISJAocZGVmYXVsdF9o",
-            "dW1hbl9ib2R5X2JvbmVfbmFtZRgBIAEoCSKuAQoNQWNjZXNzb3J5SXRlbRJF",
-            "ChhkZWZhdWx0X29mZnNldF90cmFuc2Zvcm0YAyABKAsyIy5jbHVzdGVyLmNy",
-            "ZWF0b3JraXQuT2Zmc2V0VHJhbnNmb3JtEkcKFWF0dGFjaF9jYXNlX3RvX2F2",
-            "YXRhchgCIAEoCzImLmNsdXN0ZXIuY3JlYXRvcmtpdC5BdHRhY2hDYXNlVG9B",
-            "dmF0YXJIAEINCgthdHRhY2hfY2FzZSJSCgxJdGVtQXVkaW9TZXQSCgoCaWQY",
-            "ASABKAkSKAoFYXVkaW8YAiABKAsyGS5jbHVzdGVyLmNyZWF0b3JraXQuQXVk",
-            "aW8SDAoEbG9vcBgDIAEoCCI9CgVBdWRpbxImCgNwY20YASABKAsyFy5jbHVz",
-            "dGVyLmNyZWF0b3JraXQuUGNtSABCDAoKYXVkaW9fY2FzZSI6CgNQY20SEAoI",
-            "Y2hhbm5lbHMYASABKA0SEwoLc2FtcGxlX3JhdGUYAiABKA0SDAoEZGF0YRgD",
-            "IAMoAiIyChFIdW1hbm9pZEFuaW1hdGlvbhIKCgJpZBgBIAEoCRIRCglhbmlt",
-            "YXRpb24YAiABKA0iNQoPSXRlbU1hdGVyaWFsU2V0EgoKAmlkGAEgASgJEhYK",
-            "Dm1hdGVyaWFsX2luZGV4GAIgASgNIiMKDFBsYXllclNjcmlwdBITCgtzb3Vy",
-            "Y2VfY29kZRgBIAEoCSIsCglJY29uQXNzZXQSCgoCaWQYASABKAkSEwoLaW1h",
-            "Z2VfaW5kZXgYAiABKA1CLVoOY2x1c3Rlci5tdS9ycGOqAhpDbHVzdGVyVlIu",
-            "Q3JlYXRvcktpdC5Qcm90b2IGcHJvdG8z"));
+            "aXN0GAsgAygLMh0uY2x1c3Rlci5jcmVhdG9ya2l0Lkljb25Bc3NldBI8ChJh",
+            "dHRhY2hfdGFyZ2V0X2xpc3QYDCADKAsyIC5jbHVzdGVyLmNyZWF0b3JraXQu",
+            "QXR0YWNoVGFyZ2V0IkkKCEl0ZW1NZXRhEi8KBG5hbWUYASADKAsyIS5jbHVz",
+            "dGVyLmNyZWF0b3JraXQuTG9jYWxpemVkVGV4dBIMCgRzaXplGAIgAygNIjAK",
+            "DUxvY2FsaXplZFRleHQSEQoJbGFuZ19jb2RlGAEgASgJEgwKBHRleHQYAiAB",
+            "KAkiSAoLTW92YWJsZUl0ZW0SEgoKaXNfZHluYW1pYxgBIAEoCBIMCgRtYXNz",
+            "GAIgASgCEhcKD2Rpc2FibGVfZ3Jhdml0eRgDIAEoCCKlAQoLUmlkYWJsZUl0",
+            "ZW0SDAoEc2VhdBgBIAEoDRIaChJoYXNfZXhpdF90cmFuc2Zvcm0YAiABKAgS",
+            "FgoOZXhpdF90cmFuc2Zvcm0YAyABKA0SFQoNaGFzX2xlZnRfZ3JpcBgEIAEo",
+            "CBIRCglsZWZ0X2dyaXAYBSABKA0SFgoOaGFzX3JpZ2h0X2dyaXAYBiABKAgS",
+            "EgoKcmlnaHRfZ3JpcBgHIAEoDSIvCg1HcmFiYmFibGVJdGVtEhAKCGhhc19n",
+            "cmlwGAEgASgIEgwKBGdyaXAYAiABKA0iJQoOU2NyaXB0YWJsZUl0ZW0SEwoL",
+            "c291cmNlX2NvZGUYASABKAkiNQoPT2Zmc2V0VHJhbnNmb3JtEiIKGnRyYW5z",
+            "bGF0aW9uX3JvdGF0aW9uX3NjYWxlGAEgAygCIjoKEkF0dGFjaENhc2VUb0F2",
+            "YXRhchIkChxkZWZhdWx0X2h1bWFuX2JvZHlfYm9uZV9uYW1lGAEgASgJIq4B",
+            "Cg1BY2Nlc3NvcnlJdGVtEkUKGGRlZmF1bHRfb2Zmc2V0X3RyYW5zZm9ybRgD",
+            "IAEoCzIjLmNsdXN0ZXIuY3JlYXRvcmtpdC5PZmZzZXRUcmFuc2Zvcm0SRwoV",
+            "YXR0YWNoX2Nhc2VfdG9fYXZhdGFyGAIgASgLMiYuY2x1c3Rlci5jcmVhdG9y",
+            "a2l0LkF0dGFjaENhc2VUb0F2YXRhckgAQg0KC2F0dGFjaF9jYXNlIlIKDEl0",
+            "ZW1BdWRpb1NldBIKCgJpZBgBIAEoCRIoCgVhdWRpbxgCIAEoCzIZLmNsdXN0",
+            "ZXIuY3JlYXRvcmtpdC5BdWRpbxIMCgRsb29wGAMgASgIIj0KBUF1ZGlvEiYK",
+            "A3BjbRgBIAEoCzIXLmNsdXN0ZXIuY3JlYXRvcmtpdC5QY21IAEIMCgphdWRp",
+            "b19jYXNlIjoKA1BjbRIQCghjaGFubmVscxgBIAEoDRITCgtzYW1wbGVfcmF0",
+            "ZRgCIAEoDRIMCgRkYXRhGAMgAygCIjIKEUh1bWFub2lkQW5pbWF0aW9uEgoK",
+            "AmlkGAEgASgJEhEKCWFuaW1hdGlvbhgCIAEoDSI1Cg9JdGVtTWF0ZXJpYWxT",
+            "ZXQSCgoCaWQYASABKAkSFgoObWF0ZXJpYWxfaW5kZXgYAiABKA0iIwoMUGxh",
+            "eWVyU2NyaXB0EhMKC3NvdXJjZV9jb2RlGAEgASgJIiwKCUljb25Bc3NldBIK",
+            "CgJpZBgBIAEoCRITCgtpbWFnZV9pbmRleBgCIAEoDSIuCgxBdHRhY2hUYXJn",
+            "ZXQSCgoCaWQYASABKAkSDAoEbm9kZRgDIAEoDUoECAIQA0ItWg5jbHVzdGVy",
+            "Lm11L3JwY6oCGkNsdXN0ZXJWUi5DcmVhdG9yS2l0LlByb3RvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Item), global::ClusterVR.CreatorKit.Proto.Item.Parser, new[]{ "Meta", "MovableItem", "RidableItem", "GrabbableItem", "ScriptableItem", "AccessoryItem", "ItemAudioSetList", "HumanoidAnimationList", "ItemMaterialSetList", "PlayerScript", "IconAssetList" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.Item), global::ClusterVR.CreatorKit.Proto.Item.Parser, new[]{ "Meta", "MovableItem", "RidableItem", "GrabbableItem", "ScriptableItem", "AccessoryItem", "ItemAudioSetList", "HumanoidAnimationList", "ItemMaterialSetList", "PlayerScript", "IconAssetList", "AttachTargetList" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ItemMeta), global::ClusterVR.CreatorKit.Proto.ItemMeta.Parser, new[]{ "Name", "Size" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.LocalizedText), global::ClusterVR.CreatorKit.Proto.LocalizedText.Parser, new[]{ "LangCode", "Text" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.MovableItem), global::ClusterVR.CreatorKit.Proto.MovableItem.Parser, new[]{ "IsDynamic", "Mass", "DisableGravity" }, null, null, null, null),
@@ -80,7 +82,8 @@ namespace ClusterVR.CreatorKit.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.HumanoidAnimation), global::ClusterVR.CreatorKit.Proto.HumanoidAnimation.Parser, new[]{ "Id", "Animation" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.ItemMaterialSet), global::ClusterVR.CreatorKit.Proto.ItemMaterialSet.Parser, new[]{ "Id", "MaterialIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.PlayerScript), global::ClusterVR.CreatorKit.Proto.PlayerScript.Parser, new[]{ "SourceCode" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.IconAsset), global::ClusterVR.CreatorKit.Proto.IconAsset.Parser, new[]{ "Id", "ImageIndex" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.IconAsset), global::ClusterVR.CreatorKit.Proto.IconAsset.Parser, new[]{ "Id", "ImageIndex" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ClusterVR.CreatorKit.Proto.AttachTarget), global::ClusterVR.CreatorKit.Proto.AttachTarget.Parser, new[]{ "Id", "Node" }, null, null, null, null)
           }));
     }
     #endregion
@@ -132,6 +135,7 @@ namespace ClusterVR.CreatorKit.Proto {
       itemMaterialSetList_ = other.itemMaterialSetList_.Clone();
       playerScript_ = other.playerScript_ != null ? other.playerScript_.Clone() : null;
       iconAssetList_ = other.iconAssetList_.Clone();
+      attachTargetList_ = other.attachTargetList_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -258,6 +262,16 @@ namespace ClusterVR.CreatorKit.Proto {
       get { return iconAssetList_; }
     }
 
+    public const int AttachTargetListFieldNumber = 12;
+    private static readonly pb::FieldCodec<global::ClusterVR.CreatorKit.Proto.AttachTarget> _repeated_attachTargetList_codec
+        = pb::FieldCodec.ForMessage(98, global::ClusterVR.CreatorKit.Proto.AttachTarget.Parser);
+    private readonly pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.AttachTarget> attachTargetList_ = new pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.AttachTarget>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::ClusterVR.CreatorKit.Proto.AttachTarget> AttachTargetList {
+      get { return attachTargetList_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -284,6 +298,7 @@ namespace ClusterVR.CreatorKit.Proto {
       if(!itemMaterialSetList_.Equals(other.itemMaterialSetList_)) return false;
       if (!object.Equals(PlayerScript, other.PlayerScript)) return false;
       if(!iconAssetList_.Equals(other.iconAssetList_)) return false;
+      if(!attachTargetList_.Equals(other.attachTargetList_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -302,6 +317,7 @@ namespace ClusterVR.CreatorKit.Proto {
       hash ^= itemMaterialSetList_.GetHashCode();
       if (playerScript_ != null) hash ^= PlayerScript.GetHashCode();
       hash ^= iconAssetList_.GetHashCode();
+      hash ^= attachTargetList_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -352,6 +368,7 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteMessage(PlayerScript);
       }
       iconAssetList_.WriteTo(output, _repeated_iconAssetList_codec);
+      attachTargetList_.WriteTo(output, _repeated_attachTargetList_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -394,6 +411,7 @@ namespace ClusterVR.CreatorKit.Proto {
         output.WriteMessage(PlayerScript);
       }
       iconAssetList_.WriteTo(ref output, _repeated_iconAssetList_codec);
+      attachTargetList_.WriteTo(ref output, _repeated_attachTargetList_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -429,6 +447,7 @@ namespace ClusterVR.CreatorKit.Proto {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(PlayerScript);
       }
       size += iconAssetList_.CalculateSize(_repeated_iconAssetList_codec);
+      size += attachTargetList_.CalculateSize(_repeated_attachTargetList_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -487,6 +506,7 @@ namespace ClusterVR.CreatorKit.Proto {
         PlayerScript.MergeFrom(other.PlayerScript);
       }
       iconAssetList_.Add(other.iconAssetList_);
+      attachTargetList_.Add(other.attachTargetList_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -567,6 +587,10 @@ namespace ClusterVR.CreatorKit.Proto {
             iconAssetList_.AddEntriesFrom(input, _repeated_iconAssetList_codec);
             break;
           }
+          case 98: {
+            attachTargetList_.AddEntriesFrom(input, _repeated_attachTargetList_codec);
+            break;
+          }
         }
       }
     #endif
@@ -645,6 +669,10 @@ namespace ClusterVR.CreatorKit.Proto {
           }
           case 90: {
             iconAssetList_.AddEntriesFrom(ref input, _repeated_iconAssetList_codec);
+            break;
+          }
+          case 98: {
+            attachTargetList_.AddEntriesFrom(ref input, _repeated_attachTargetList_codec);
             break;
           }
         }
@@ -4401,6 +4429,230 @@ namespace ClusterVR.CreatorKit.Proto {
           }
           case 16: {
             ImageIndex = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class AttachTarget : pb::IMessage<AttachTarget>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<AttachTarget> _parser = new pb::MessageParser<AttachTarget>(() => new AttachTarget());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<AttachTarget> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ClusterVR.CreatorKit.Proto.ItemTemplateReflection.Descriptor.MessageTypes[17]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public AttachTarget() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public AttachTarget(AttachTarget other) : this() {
+      id_ = other.id_;
+      node_ = other.node_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public AttachTarget Clone() {
+      return new AttachTarget(this);
+    }
+
+    public const int IdFieldNumber = 1;
+    private string id_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Id {
+      get { return id_; }
+      set {
+        id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    public const int NodeFieldNumber = 3;
+    private uint node_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public uint Node {
+      get { return node_; }
+      set {
+        node_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as AttachTarget);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(AttachTarget other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Id != other.Id) return false;
+      if (Node != other.Node) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Id.Length != 0) hash ^= Id.GetHashCode();
+      if (Node != 0) hash ^= Node.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Id.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
+      if (Node != 0) {
+        output.WriteRawTag(24);
+        output.WriteUInt32(Node);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Id.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
+      if (Node != 0) {
+        output.WriteRawTag(24);
+        output.WriteUInt32(Node);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Id.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
+      }
+      if (Node != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Node);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(AttachTarget other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Id.Length != 0) {
+        Id = other.Id;
+      }
+      if (other.Node != 0) {
+        Node = other.Node;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
+          case 24: {
+            Node = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
+          case 24: {
+            Node = input.ReadUInt32();
             break;
           }
         }

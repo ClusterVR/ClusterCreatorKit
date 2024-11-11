@@ -46,6 +46,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             validationMessages.AddRange(ComponentValidator.ValidateHumanoidAnimationList(gameObject));
             validationMessages.AddRange(ComponentValidator.ValidateTextViews(gameObject, isBeta));
             validationMessages.AddRange(ComponentValidator.ValidateItemMaterialSetList(gameObject, isBeta));
+            validationMessages.AddRange(ComponentValidator.ValidateAttachTargetList(gameObject));
 
             return validationMessages;
         }

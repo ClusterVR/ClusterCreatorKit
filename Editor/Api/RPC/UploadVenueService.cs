@@ -40,6 +40,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         readonly WorldDescriptor worldDescriptor;
         readonly bool isBeta;
         readonly bool isPreview;
+        readonly string[] productUgcIds;
 
         readonly ExportedAssetInfo exportedAssetInfo;
 
@@ -53,6 +54,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             WorldDescriptor worldDescriptor,
             bool isBeta,
             bool isPreview,
+            string[] productUgcIds,
             ExportedAssetInfo exportedAssetInfo,
             Action<VenueUploadRequestCompletionResponse> onSuccess = null,
             Action<Exception> onError = null
@@ -63,6 +65,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             this.worldDescriptor = worldDescriptor;
             this.isBeta = isBeta;
             this.isPreview = isPreview;
+            this.productUgcIds = productUgcIds;
             this.onSuccess = onSuccess;
             this.onError = onError;
             this.exportedAssetInfo = exportedAssetInfo;
@@ -187,7 +190,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
                 var notifyFinishedRequest = new PostNotifyFinishedUploadService(accessToken);
                 completionResponse = await notifyFinishedRequest.PostNotifyFinishedUploadAsync(
-                    venue.VenueId, uploadRequestId, worldDescriptor, isPreview, cancellationToken);
+                    venue.VenueId, uploadRequestId, worldDescriptor, isPreview, productUgcIds, cancellationToken);
 
                 Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_notify_upload_finished, completionResponse.UploadRequestId));
                 uploadRequestId = null;

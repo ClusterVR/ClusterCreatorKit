@@ -18,6 +18,11 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_animator_parameter_name = "AnimatorのParameter名";
         public const string cck_answer = "回答する";
         public const string cck_attach_js_asset = "jsファイルにJavaScriptAssetをくっつける";
+        public const string cck_attachtargetlist_duplicate_id = "AttachTargetListのIdが重複しています。 Id: {0}";
+        public const string cck_attachtargetlist_empty_id = "AttachTargetListのIdが空です。有効なIdを設定してください。";
+        public const string cck_attachtargetlist_id_length = "AttachTargetListのIdが長すぎます。 Id: {0} 最大値: {1}";
+        public const string cck_attachtargetlist_invalid_characters = "AttachTargetListのIdに使用できない文字が含まれています。Idには英数字とアポストロフィ・カンマ・ハイフン・ピリオド・アンダースコアのみが使用可能です。 Id: {0}";
+        public const string cck_attachtargetlist_node_not_found = "Nodeが見つかりませんでした。AttachTargetsにNodeを設定してください。(Id: {0})";
         public const string cck_attention = "注意";
         public const string cck_audioclip_channels_limit = "AudioClipのChannelが多すぎます。 現在値: {0} 最大値: {1} (Name: {2})";
         public const string cck_audioclip_info_fetch_failed = "AudioClipの情報の取得に失敗しました。(Id: {0})";
@@ -417,6 +422,11 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_animator_parameter_name = "Animator's Parameter Name";
         public const string cck_answer = "Answer Survey";
         public const string cck_attach_js_asset = "Attach JavaScriptAsset to js file";
+        public const string cck_attachtargetlist_duplicate_id = "The ID of AttachTargetList is used more than once. ID: {0}";
+        public const string cck_attachtargetlist_empty_id = "The ID for AttachTargetList is empty. Please set a valid ID.";
+        public const string cck_attachtargetlist_id_length = "The ID of AttachTargetList is too long. ID: {0} Maximum Value: {1}";
+        public const string cck_attachtargetlist_invalid_characters = "The ID of AttachTargetList has characters you cannot use. Only the Latin alphabet, numbers, apostrophe, comma, hyphen, period, and underscore are allowed for the ID. ID: {0}";
+        public const string cck_attachtargetlist_node_not_found = "Node was not found. Please set Node to AttachTargets. (ID: {0})";
         public const string cck_attention = "CAUTION";
         public const string cck_audioclip_channels_limit = "Too many channels in AudioClip. Current Value: {0} Maximum Value: {1} (Name: {2})";
         public const string cck_audioclip_info_fetch_failed = "Failed to acquire AudioClip information. (ID: {0})";

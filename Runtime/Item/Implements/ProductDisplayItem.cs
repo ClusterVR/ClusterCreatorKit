@@ -73,18 +73,10 @@ namespace ClusterVR.CreatorKit.Item.Implements
                 item = GetComponent<Item>();
             }
 
-            if (productDisplayRoot != null && !IsSiblingOrSelf(productDisplayRoot, transform))
+            if (productDisplayRoot != null && !productDisplayRoot.IsDecendantOrSelf(transform))
             {
                 productDisplayRoot = null;
             }
-        }
-
-        static bool IsSiblingOrSelf(Transform target, Transform mayParent)
-        {
-            if (target == mayParent) return true;
-            var parent = target.parent;
-            if (parent == null) return false;
-            return IsSiblingOrSelf(parent, mayParent);
         }
     }
 }

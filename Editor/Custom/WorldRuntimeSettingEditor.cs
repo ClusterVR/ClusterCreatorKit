@@ -62,7 +62,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             void UpdateHudTypeCheckbox(bool useClusterHudV2)
             {
                 wrts.UseHUDType = WorldRuntimeSetting.BoolToHUDType(useClusterHudV2);
-                enableCrouchWalkField.SetVisibility(useClusterHudV2);
+                enableCrouchWalkField.SetEnabled(useClusterHudV2);
             }
 
             UpdateHudTypeCheckbox(hudTypeCheckbox.value);

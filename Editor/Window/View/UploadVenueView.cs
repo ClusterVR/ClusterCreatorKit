@@ -11,6 +11,7 @@ using ClusterVR.CreatorKit.Editor.EditorEvents;
 using ClusterVR.CreatorKit.Editor.Enquete;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using ClusterVR.CreatorKit.Editor.Validator;
+using ClusterVR.CreatorKit.Editor.VenueInfo;
 using ClusterVR.CreatorKit.Proto;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
@@ -129,9 +130,12 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     return;
                 }
 
+                var displayIds = VenueInfoConstructor.FindDisplayItemIds();
+
                 currentUploadService = new UploadVenueService(userInfo.VerifiedToken, venue,
                     WorldDescriptorCreator.Create(SceneManager.GetActiveScene()),
                     isBeta, isPreviewUpload,
+                    displayIds,
                     exportedAssetInfo,
                     completionResponse =>
                     {

@@ -28,7 +28,12 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             typeof(ItemAudioSetList),
             typeof(HumanoidAnimationList),
             typeof(ItemMaterialSetList),
-            typeof(PlayerScript)
+            typeof(PlayerScript),
+        };
+
+        static readonly Type[] RootInterfaceWhiteList =
+        {
+            typeof(IAttachTargetList),
         };
 
         static readonly Type[] ItemComponentWhiteList =
@@ -70,9 +75,10 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
         };
 
         static bool Contains(IEnumerable<Type> list, Type target)
-        {
-            return list.Any(typeInList => (target.IsSubclassOf(typeInList) || target == typeInList));
-        }
+            => list.Any(typeInList => target.IsSubclassOf(typeInList) || target == typeInList);
+
+        static bool ImplementsAnyInterface(IEnumerable<Type> list, Type target)
+            => target.GetInterfaces().Any(list.Contains);
 
         internal static IEnumerable<ValidationMessage> ValidateTransform(GameObject gameObject)
         {
@@ -255,10 +261,11 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             var validationMessages = new List<ValidationMessage>();
             var componentType = component.GetType();
 
-            var isInvalidComponent =
-                !Contains(ItemComponentWhiteList, componentType) &&
-                !RootComponentWhiteList.Contains(componentType);
+            var isValidComponent = Contains(ItemComponentWhiteList, componentType);
+            var isComponentOnlyForRoot = RootComponentWhiteList.Contains(componentType) ||
+                ImplementsAnyInterface(RootInterfaceWhiteList, componentType);
 
+            var isInvalidComponent = !isValidComponent && !isComponentOnlyForRoot;
             if (isInvalidComponent)
             {
                 validationMessages.Add(new ValidationMessage(
@@ -267,9 +274,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 return validationMessages;
             }
 
-            var isChildItemComponent =
-                !isRoot && RootComponentWhiteList.Contains(componentType);
-
+            var isChildItemComponent = !isRoot && isComponentOnlyForRoot;
             if (isChildItemComponent)
             {
                 validationMessages.Add(new ValidationMessage(
@@ -500,6 +505,17 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             }
 
             return ItemMaterialSetListValidator.Validate(isBeta, gameObject, itemMaterialSetList);
+        }
+
+        public static IEnumerable<ValidationMessage> ValidateAttachTargetList(GameObject gameObject)
+        {
+            var attachTargetList = gameObject.GetComponent<IAttachTargetList>();
+            if (attachTargetList == null)
+            {
+                return Enumerable.Empty<ValidationMessage>();
+            }
+
+            return AttachTargetListValidator.Validate(attachTargetList);
         }
     }
 }

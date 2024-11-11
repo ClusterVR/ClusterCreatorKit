@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Editor.Builder;
@@ -66,7 +67,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             }
             var languageSelectionDropdown = new PopupField<string>("Selected Language",
                 TranslationSettings.EditorLanguages.ToList(),
-                languageSettingKey.Replace("cck_", ""));
+                Array.IndexOf(TranslationSettings.EditorLanguages, languageSettingKey.Replace("cck_", "")));
             languageSelectionDropdown.RegisterValueChangedCallback(ev =>
             {
                 EditorPrefsUtils.LanguageSetting = TranslationSettings.GetLanguageSettingKey(ev.newValue);
