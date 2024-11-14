@@ -188,6 +188,14 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 {
                     return false;
                 }
+                if (!ValidateItemGroupHost(isBeta, item, out errorMessage, out invalidObjects))
+                {
+                    return false;
+                }
+                if (!ValidateItemGroupMember(isBeta, item, out errorMessage, out invalidObjects))
+                {
+                    return false;
+                }
             }
 
             errorMessage = default;
@@ -515,6 +523,45 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                         invalidObjects = new[] { gameObject };
                         return false;
                     }
+                }
+            }
+            errorMessage = default;
+            invalidObjects = default;
+            return true;
+        }
+
+        static bool ValidateItemGroupHost(bool isBeta, IItem item, out string errorMessage, out GameObject[] invalidObjects)
+        {
+            if (item.GetComponent<IItemGroupHost>() is not null)
+            {
+                if (!isBeta)
+                {
+                    errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_textview_beta_feature_required, nameof(ItemGroupHost));
+                    invalidObjects = new[] { item.gameObject };
+                    return false;
+                }
+            }
+            errorMessage = default;
+            invalidObjects = default;
+            return true;
+        }
+
+        static bool ValidateItemGroupMember(bool isBeta, IItem item, out string errorMessage, out GameObject[] invalidObjects)
+        {
+            if (item.GetComponent<IItemGroupMember>() is { } itemGroupMember)
+            {
+                if (!isBeta)
+                {
+                    errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_textview_beta_feature_required, nameof(ItemGroupMember));
+                    invalidObjects = new[] { item.gameObject };
+                    return false;
+                }
+
+                if (itemGroupMember.Host == null || IsPrefabAsset(itemGroupMember.Host.Item.gameObject))
+                {
+                    errorMessage = TranslationTable.cck_itemgroupmember_scene_items_only;
+                    invalidObjects = new[] { item.gameObject };
+                    return false;
                 }
             }
             errorMessage = default;

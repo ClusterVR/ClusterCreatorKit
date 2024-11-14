@@ -177,6 +177,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_itemaudiosetlist_empty_id = "ItemAudioSetListのIdが空です。有効なIdを設定してください。";
         public const string cck_itemaudiosetlist_id_length = "ItemAudioSetListのIdが長すぎます。 Id: {0} 最大値: {1}";
         public const string cck_itemaudiosetlist_invalid_characters = "ItemAudioSetListのIdに使用できない文字が含まれています。Idには英数字とアポストロフィ・カンマ・ハイフン・ピリオド・アンダースコアのみが使用可能です。 Id: {0}";
+        public const string cck_itemgroupmember_scene_items_only = "Item Group MemberのHostにはシーン上のアイテムを指定する必要があります。";
         public const string cck_itemname_input_required = "{0}のItemNameを入力してください。";
         public const string cck_itemname_too_long = "{0}のItemNameが長すぎます。現在値：{1}, 最大値：{2}";
         public const string cck_itemsize_exceeds_limit = "{0}のItemSizeが規定値以上です。現在：{1}, 規定値：{2}";
@@ -581,6 +582,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_itemaudiosetlist_empty_id = "The ID for ItemAudioSetList is empty. Please set a valid ID.";
         public const string cck_itemaudiosetlist_id_length = "The ID of ItemAudioSetList is too long. ID: {0} Maximum Value: {1}";
         public const string cck_itemaudiosetlist_invalid_characters = "The ID of ItemAudioSetList has characters you cannot use. Only the Latin alphabet, numbers, apostrophe, comma, hyphen, period, and underscore are allowed for the ID. ID: {0}";
+        public const string cck_itemgroupmember_scene_items_only = "Only Items in scene can be specified for Host of Item Group Member.";
         public const string cck_itemname_input_required = "Please enter an ItemName for {0}.";
         public const string cck_itemname_too_long = "The ItemName for {0} is too long. Current Value: {1}, Maximum Value: {2}";
         public const string cck_itemsize_exceeds_limit = "The ItemSize of {0} is over the limit. Currently: {1}, Limit: {2}";
