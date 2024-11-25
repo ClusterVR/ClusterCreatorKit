@@ -181,6 +181,10 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                         else
                         {
                             errorMessage = TranslationTable.cck_world_upload_failed_retry_later;
+                            if (exception is Failure failure && !string.IsNullOrEmpty(failure.Error.Detail))
+                            {
+                                errorMessage += $"\nerror: {failure.Error.Detail}";
+                            }
                         }
                         WorldUploadEvents.InvokeOnWorldUploadEnd(false);
                     });

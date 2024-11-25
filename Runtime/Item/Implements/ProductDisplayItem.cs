@@ -41,6 +41,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
         public Transform ProductDisplayRoot => productDisplayRoot;
         ProductDisplayAvatarFacialExpressionType IProductDisplayItem.ProductDisplayAvatarFacialExpressionType => productDisplayAvatarFacialExpressionType;
         AnimationClip IProductDisplayItem.ProductDisplayAvatarPose => productDisplayAvatarPose;
+        bool IProductDisplayItem.IsValid => productId.IsValid();
 
         void IProductDisplayItem.SetInteractable(bool isInteractable)
         {

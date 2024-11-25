@@ -86,6 +86,13 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 return false;
             }
 
+            if (!ProductDisplayItemValidator.IsValidAll(sceneRootObjects, out var invalidDisplays))
+            {
+                invalidObjects = invalidDisplays.Select(x => x.gameObject).ToArray();
+                errorMessage = TranslationUtility.GetMessage(TranslationTable.cck_product_display_invalid_id, string.Join(", ", invalidObjects.Select(item => item.name)));
+                return false;
+            }
+
             var items = allRootObjects.SelectMany(x =>
                 x.GetComponentsInChildren<ClusterVR.CreatorKit.Item.Implements.Item>(true));
             var nestedItems = items.Where(i =>

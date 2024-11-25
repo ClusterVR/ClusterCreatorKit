@@ -261,6 +261,8 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_product_display_avatar_pose_label = "ポーズ";
         public const string cck_product_display_avatar_pose_tooltip = "アバター商品に適用するポーズを指定します。\nAnimationClipの先頭のフレームを使用します。";
         public const string cck_product_display_avatar_section_text = "アバター商品向け設定";
+        public const string cck_product_display_invalid_id = "{0}に無効な商品IDが設定されています。";
+        public const string cck_product_display_invalid_id_error = "商品ディスプレイに無効な商品IDが設定されています。";
         public const string cck_product_display_position_optional = "商品を表示する位置（任意）";
         public const string cck_product_id = "商品Id";
         public const string cck_product_id_specification_required = "{0} に商品Idを指定する必要があります。";
@@ -666,6 +668,8 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_product_display_avatar_pose_label = "Pose";
         public const string cck_product_display_avatar_pose_tooltip = "(Optional) AnimationClip asset to apply avatar products.\nThe first frame of AnimationClip is used.";
         public const string cck_product_display_avatar_section_text = "For avatar products";
+        public const string cck_product_display_invalid_id = "Invalid product ID is set to {0}.";
+        public const string cck_product_display_invalid_id_error = "Invalid product ID is set to ProductDisplayItem.";
         public const string cck_product_display_position_optional = "Position to display product (Optional)";
         public const string cck_product_id = "Product ID";
         public const string cck_product_id_specification_required = "You must set a Product ID to {0}.";

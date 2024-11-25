@@ -11,6 +11,8 @@ namespace ClusterVR.CreatorKit.Item
         Transform ProductDisplayRoot { get; }
         ProductDisplayAvatarFacialExpressionType ProductDisplayAvatarFacialExpressionType { get; }
         AnimationClip ProductDisplayAvatarPose { get; }
+        bool IsValid { get; }
+
         event Action OnInvoked;
         void SetSample(GameObject productSample);
         void SetInteractable(bool isInteractable);

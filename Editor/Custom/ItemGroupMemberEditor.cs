@@ -49,7 +49,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             }
 
             var hostItem = itemGroupMember.Host;
-            if (hostItem == null)
+            if (hostItem == null || hostItem.Item == null)
             {
                 return false;
             }
