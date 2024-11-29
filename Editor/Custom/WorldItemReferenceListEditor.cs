@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
 using ClusterVR.CreatorKit.Translation;
@@ -20,13 +21,13 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var showWarning = ShowWarning(out var message);
             var helpBox = new HelpBox
             {
-                visible = showWarning,
                 text = message,
                 messageType = HelpBoxMessageType.Warning
             };
+            helpBox.SetVisibility(showWarning);
             helpBox.TrackSerializedObjectValue(serializedObject, _ =>
             {
-                helpBox.visible = ShowWarning(out var message);
+                helpBox.SetVisibility(ShowWarning(out var message));
                 helpBox.text = message;
             });
             container.Add(helpBox);

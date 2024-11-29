@@ -6,8 +6,9 @@
             </ui:ScrollView>
         </ui:VisualElement>
         <ui:VisualElement name="footer" class="horizontal">
-            <ui:Button name="prev-button"/>
-            <ui:Button name="next-button"/>
+            <ui:Button name="prev-button" />
+            <ui:Button name="next-button" />
+            <ui:Button name="refresh-button" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

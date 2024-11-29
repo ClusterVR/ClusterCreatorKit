@@ -273,6 +273,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_read_json = "JSONを読み込む";
         public const string cck_recommend_prefab_for_item_template_property = "{0} には Prefab の指定を推奨しています。";
         public const string cck_recommended_image_size = "※推奨サイズ：1920×1080px";
+        public const string cck_refresh = "更新";
         public const string cck_register = "登録";
         public const string cck_registered_url = "登録中のURL";
         public const string cck_renderer_needed_for_auto_setting_item_size = "ItemのSizeを自動設定するにはRendererが必要です";
@@ -680,6 +681,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_read_json = "Read JSON";
         public const string cck_recommend_prefab_for_item_template_property = "Setting a prefab to {0} is recommended.";
         public const string cck_recommended_image_size = "*Recommended Size: 1920×1080px";
+        public const string cck_refresh = "Refresh";
         public const string cck_register = "Register";
         public const string cck_registered_url = "Registered URL";
         public const string cck_renderer_needed_for_auto_setting_item_size = "Renderer is necessary to automatically set Item Size";

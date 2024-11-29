@@ -22,11 +22,13 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         TextField textField;
         Button prevButton;
         Button nextButton;
+        Button refreshButton;
 
         bool isCreated;
         UserInfo userInfo;
 
         bool isUpdating;
+        int currentPage;
         int prevPage;
         int nextPage;
 
@@ -49,16 +51,20 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             prevButton = mainView.Q<Button>("prev-button");
             nextButton = mainView.Q<Button>("next-button");
+            refreshButton = mainView.Q<Button>("refresh-button");
             prevButton.text = TranslationTable.cck_previous;
             nextButton.text = TranslationTable.cck_next;
+            refreshButton.text = TranslationTable.cck_refresh;
 
             prevButton.clicked += OnPrevClicked;
             nextButton.clicked += OnNextClicked;
+            refreshButton.clicked += () => RequestUpdatePage(currentPage);
 
+            currentPage = 1;
             prevPage = 0;
             nextPage = 0;
 
-            RequestUpdatePage(1);
+            RequestUpdatePage(currentPage);
 
             isCreated = true;
             return mainView;
@@ -81,6 +87,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 DisablePageButtons();
                 var result = await APIServiceClient.GetOwnItemTemplatesAsync(userInfo.VerifiedToken, 30, "not-hidden", page, cancellationToken);
                 var pageData = result.PageData;
+                currentPage = page;
                 prevPage = pageData.Prev;
                 nextPage = pageData.Next;
                 textField.value = AsHumanReadableText(result.OwnItemTemplates);

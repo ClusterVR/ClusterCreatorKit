@@ -9,19 +9,9 @@ namespace ClusterVR.CreatorKit.Editor.Validator
 {
     public static class PlayerLocalObjectReferenceListValidator
     {
-        public static IEnumerable<string> Validate(bool isBeta, IPlayerLocalObjectReferenceList referenceList)
+        public static IEnumerable<string> Validate(IPlayerLocalObjectReferenceList referenceList)
         {
             var messages = new List<string>();
-
-            if (!isBeta)
-            {
-                return new[]
-                {
-                    TranslationUtility.GetMessage(
-                        TranslationTable.cck_textview_beta_feature_required, nameof(PlayerLocalObjectReferenceList)
-                    )
-                };
-            }
 
             foreach (var entry in referenceList.PlayerLocalObjectReferences)
             {

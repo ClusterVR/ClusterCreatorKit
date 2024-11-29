@@ -500,7 +500,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             }
 
             var errorMessages = PlayerLocalObjectReferenceListValidator
-                .Validate(isBeta, referenceList)
+                .Validate(referenceList)
                 .ToArray();
             if (errorMessages.Any())
             {

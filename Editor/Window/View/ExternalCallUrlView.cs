@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.ExternalCall;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
+using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
@@ -75,7 +76,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
         async Task InitializeAsync(CancellationToken cancellationToken)
         {
-            tokenView.visible = false;
+            tokenView.SetVisibility(false);
             var currentUrl = await GetWebRPCUrlAsync(cancellationToken);
             SetCurrentURL(currentUrl);
         }
@@ -121,7 +122,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             {
                 var res = await APIServiceClient.RegisterWebRPCURLAsync(new RegisterWebRPCURLPayload(url), userInfo.VerifiedToken, cancellationToken);
                 SetCurrentURL(res.Url);
-                tokenView.visible = true;
+                tokenView.SetVisibility(true);
                 tokenField.value = res.VerifyToken;
             }
             catch (Failure e) when (e.StatusCode == 400)
@@ -142,7 +143,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             {
                 await APIServiceClient.DeleteUserWebRPCURLAsync(userInfo.VerifiedToken, cancellationToken);
                 SetCurrentURL(null);
-                tokenView.visible = false;
+                tokenView.SetVisibility(false);
                 tokenField.value = null;
             }
             catch (Exception e) when (e is not OperationCanceledException)
