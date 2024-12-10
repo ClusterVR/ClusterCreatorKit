@@ -162,27 +162,6 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             return validationMessages;
         }
 
-        internal static IEnumerable<ValidationMessage> ValidateMovableItem(GameObject gameObject, bool isBeta)
-        {
-            if (isBeta)
-            {
-                return Enumerable.Empty<ValidationMessage>();
-            }
-
-            var movableItem = gameObject.GetComponent<MovableItem>();
-            if (movableItem == null)
-            {
-                return Enumerable.Empty<ValidationMessage>();
-            }
-
-            if (movableItem.IsDynamic)
-            {
-                var message = TranslationTable.cck_beta_feature_physics_warning;
-                return new[] { new ValidationMessage(message, ValidationMessage.MessageType.Warning) };
-            }
-            return Enumerable.Empty<ValidationMessage>();
-        }
-
         internal static IEnumerable<ValidationMessage> ValidateScriptableCraftItem(GameObject gameObject)
         {
             var scriptableItem = gameObject.GetComponent<ScriptableItem>();
@@ -496,7 +475,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             return validationMessages;
         }
 
-        public static IEnumerable<ValidationMessage> ValidateItemMaterialSetList(GameObject gameObject, bool isBeta)
+        public static IEnumerable<ValidationMessage> ValidateItemMaterialSetList(GameObject gameObject)
         {
             var itemMaterialSetList = gameObject.GetComponent<IItemMaterialSetList>();
             if (itemMaterialSetList == null)
@@ -504,7 +483,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 return Enumerable.Empty<ValidationMessage>();
             }
 
-            return ItemMaterialSetListValidator.Validate(isBeta, gameObject, itemMaterialSetList);
+            return ItemMaterialSetListValidator.Validate(gameObject, itemMaterialSetList);
         }
 
         public static IEnumerable<ValidationMessage> ValidateAttachTargetList(GameObject gameObject)

@@ -8,14 +8,9 @@ namespace ClusterVR.CreatorKit.Editor.Validator
 {
     public static class ItemMaterialSetListValidator
     {
-        public static IEnumerable<string> Validate(bool isBeta, GameObject itemRoot, IItemMaterialSetList itemMaterialSetList)
+        public static IEnumerable<string> Validate(GameObject itemRoot, IItemMaterialSetList itemMaterialSetList)
         {
             var messages = new List<string>();
-
-            if (!isBeta)
-            {
-                return new[] { TranslationTable.cck_item_material_set_list_beta };
-            }
 
             var renderers = itemRoot.GetComponentsInChildren<Renderer>(true);
             var rendererMaterials = new HashSet<Material>(renderers.SelectMany(r => r.sharedMaterials));
@@ -24,7 +19,6 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 CheckId(messages, set);
                 CheckMaterial(messages, set, rendererMaterials);
             }
-
 
             CheckDuplicated(messages, itemMaterialSetList);
 

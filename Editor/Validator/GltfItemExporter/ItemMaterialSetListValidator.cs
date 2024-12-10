@@ -7,9 +7,9 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 {
     public static class ItemMaterialSetListValidator
     {
-        public static IEnumerable<ValidationMessage> Validate(bool isBeta, GameObject itemRoot, IItemMaterialSetList itemMaterialSetList)
+        public static IEnumerable<ValidationMessage> Validate(GameObject itemRoot, IItemMaterialSetList itemMaterialSetList)
         {
-            var messages = Validator.ItemMaterialSetListValidator.Validate(isBeta, itemRoot, itemMaterialSetList);
+            var messages = Validator.ItemMaterialSetListValidator.Validate(itemRoot, itemMaterialSetList);
             return messages.Select(message => new ValidationMessage(message, ValidationMessage.MessageType.Error));
         }
     }

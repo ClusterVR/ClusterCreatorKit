@@ -179,7 +179,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
 
             foreach (var item in items)
             {
-                if (!ValidateMaterialSetList(isBeta, item, out errorMessage, out invalidObjects))
+                if (!ValidateMaterialSetList(item, out errorMessage, out invalidObjects))
                 {
                     return false;
                 }
@@ -447,13 +447,13 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             return true;
         }
 
-        static bool ValidateMaterialSetList(bool isBeta, IItem item, out string errorMessage, out GameObject[] invalidObjects)
+        static bool ValidateMaterialSetList(IItem item, out string errorMessage, out GameObject[] invalidObjects)
         {
             var gameObject = item.gameObject;
             var itemMaterialSetList = gameObject.GetComponent<IItemMaterialSetList>();
             if (itemMaterialSetList != null)
             {
-                var errorMessages = ItemMaterialSetListValidator.Validate(isBeta, item.gameObject, itemMaterialSetList).ToArray();
+                var errorMessages = ItemMaterialSetListValidator.Validate(item.gameObject, itemMaterialSetList).ToArray();
                 if (errorMessages.Any())
                 {
                     errorMessage = string.Join('\n', errorMessages);

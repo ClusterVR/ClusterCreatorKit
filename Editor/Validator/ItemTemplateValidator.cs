@@ -52,7 +52,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
 
             AddUnacceptableError<PlayerLocalUI>(itemTemplate, errors);
 
-            AddMaterialError(isBeta, itemTemplate, errors);
+            AddMaterialError(itemTemplate, errors);
 
             return errors;
         }
@@ -90,7 +90,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
             }
         }
 
-        static void AddMaterialError(bool isBeta, IItem itemTemplate, List<Result.Factor> errors)
+        static void AddMaterialError(IItem itemTemplate, List<Result.Factor> errors)
         {
             var gameObject = itemTemplate.gameObject;
             var itemMaterialSetList = gameObject.GetComponent<IItemMaterialSetList>();
@@ -99,7 +99,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator
                 return;
             }
 
-            var errorMessages = ItemMaterialSetListValidator.Validate(isBeta, gameObject, itemMaterialSetList);
+            var errorMessages = ItemMaterialSetListValidator.Validate(gameObject, itemMaterialSetList);
             errors.AddRange(errorMessages.Select(msg => new Result.Factor(msg, new[] { gameObject })));
         }
     }

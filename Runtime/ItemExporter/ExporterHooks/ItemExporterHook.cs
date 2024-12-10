@@ -21,13 +21,6 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
     {
         const string LangCodeJa = "ja";
 
-        readonly bool useDynamic;
-
-        public ItemExporterHook(bool useDynamic)
-        {
-            this.useDynamic = useDynamic;
-        }
-
         public override void PostHook(Exporter exporter, GameObject go)
         {
             var item = go.GetComponent<IItem>();
@@ -117,19 +110,12 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
             {
                 return null;
             }
-            if (useDynamic)
-            {
-                return new MovableItem
-                {
-                    IsDynamic = movableItemComponent.IsDynamic,
-                    Mass = movableItemComponent.Mass,
-                    DisableGravity = movableItemComponent.IsDynamic && !movableItemComponent.UseGravity
-                };
-            }
+
             return new MovableItem
             {
-                IsDynamic = false,
-                Mass = movableItemComponent.Mass
+                IsDynamic = movableItemComponent.IsDynamic,
+                Mass = movableItemComponent.Mass,
+                DisableGravity = movableItemComponent.IsDynamic && !movableItemComponent.UseGravity
             };
         }
 

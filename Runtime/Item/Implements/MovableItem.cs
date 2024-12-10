@@ -41,6 +41,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
         }
 
         bool IMovableItem.IsDestroyed => this == null;
+        bool IMovableItem.IsRespawning => Time.frameCount == lastRespawnedFrameCount;
 
         public bool IsDynamic
         {
@@ -86,6 +87,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
         Quaternion currentRotation;
         float setAt;
         float interpolateDurationSeconds;
+        int lastRespawnedFrameCount = -1;
 
         void CacheInitialValue()
         {
@@ -185,6 +187,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         public void Respawn()
         {
+            lastRespawnedFrameCount = Time.frameCount;
             CacheInitialValue();
             WarpTo(initialPosition, initialRotation);
         }

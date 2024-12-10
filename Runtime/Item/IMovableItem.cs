@@ -6,6 +6,7 @@ namespace ClusterVR.CreatorKit.Item
     {
         IItem Item { get; }
         bool IsDestroyed { get; }
+        bool IsRespawning { get; }
         void Respawn();
         bool IsDynamic { get; }
         float Mass { get; }

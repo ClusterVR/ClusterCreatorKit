@@ -292,6 +292,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View.ConsoleWindow
             {
                 "ScriptLog_Dropped" => $"{type,-32} some logs have been dropped",
                 "ScriptLog_Information" or "ScriptLog_Warning" or "ScriptLog_Error" => $"[{TimestampDevice.LocalDateTime}] devid:{dvid} item:{origin.id} [{origin.name}] player:{player.id} [{player.userName}]\n{type,-32} {message}",
+                "RoomProfileLog_Information" or "RoomProfileLog_Warning" or "RoomProfileLog_Error" => $"[{TimestampDevice.LocalDateTime}]\\n{type,-32} {message}",
                 "Error" => $"{type,-32} {message}",
                 _ => $"{type,-32} unknown type",
             };

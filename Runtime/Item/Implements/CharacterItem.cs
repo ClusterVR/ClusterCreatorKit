@@ -13,6 +13,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         public override IItem Item => item != null ? item : item = GetComponent<Item>();
         bool IMovableItem.IsDestroyed => this == null;
+        bool IMovableItem.IsRespawning => Time.frameCount == lastRespawnedFrameCount;
         bool IMovableItem.IsDynamic => true;
         float IMovableItem.Mass => throw new NotImplementedException();
 
@@ -40,6 +41,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
         Quaternion initialRotation;
         Vector3 velocity;
         Vector3 angularVelocity;
+        int lastRespawnedFrameCount = -1;
 
         void CacheInitialValue()
         {
@@ -101,6 +103,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         void IMovableItem.Respawn()
         {
+            lastRespawnedFrameCount = Time.frameCount;
             WarpTo(initialPosition, initialRotation);
         }
 

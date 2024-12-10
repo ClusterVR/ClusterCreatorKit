@@ -24,7 +24,6 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
         {
             var validationMessages = new List<ValidationMessage>();
             validationMessages.AddRange(ComponentValidator.ValidateItem(gameObject, ItemSizeLimit, false, true));
-            validationMessages.AddRange(ComponentValidator.ValidateMovableItem(gameObject, isBeta));
             validationMessages.AddRange(ComponentValidator.ValidateScriptableCraftItem(gameObject));
             validationMessages.AddRange(ComponentValidator.ValidateRenderers(gameObject));
             validationMessages.AddRange(ComponentValidator.ValidateCraftItemPlayerScript(gameObject));
@@ -45,7 +44,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             validationMessages.AddRange(ComponentValidator.ValidateCollider(gameObject));
             validationMessages.AddRange(ComponentValidator.ValidateHumanoidAnimationList(gameObject));
             validationMessages.AddRange(ComponentValidator.ValidateTextViews(gameObject, isBeta));
-            validationMessages.AddRange(ComponentValidator.ValidateItemMaterialSetList(gameObject, isBeta));
+            validationMessages.AddRange(ComponentValidator.ValidateItemMaterialSetList(gameObject));
             validationMessages.AddRange(ComponentValidator.ValidateAttachTargetList(gameObject));
 
             return validationMessages;
