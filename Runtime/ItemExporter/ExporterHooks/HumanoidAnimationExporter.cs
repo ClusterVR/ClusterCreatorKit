@@ -217,6 +217,9 @@ namespace ClusterVR.CreatorKit.ItemExporter.ExporterHooks
                 Channels = channels,
                 Samplers = samplers,
             };
+            gltfAnim.AddExtension(
+                ClusterHumanoidAnimation.ExtensionName,
+                new ClusterHumanoidAnimation { IsLoop = humanoidAnimation.IsLoop });
             return context.Gltf.AddAnimation(gltfAnim);
         }
 

@@ -61,8 +61,9 @@ namespace ClusterVR.CreatorKit.Proto {
             "ZXQSCgoCaWQYASABKAkSFgoObWF0ZXJpYWxfaW5kZXgYAiABKA0iIwoMUGxh",
             "eWVyU2NyaXB0EhMKC3NvdXJjZV9jb2RlGAEgASgJIiwKCUljb25Bc3NldBIK",
             "CgJpZBgBIAEoCRITCgtpbWFnZV9pbmRleBgCIAEoDSIuCgxBdHRhY2hUYXJn",
-            "ZXQSCgoCaWQYASABKAkSDAoEbm9kZRgDIAEoDUoECAIQA0ItWg5jbHVzdGVy",
-            "Lm11L3JwY6oCGkNsdXN0ZXJWUi5DcmVhdG9yS2l0LlByb3RvYgZwcm90bzM="));
+            "ZXQSCgoCaWQYASABKAkSDAoEbm9kZRgDIAEoDUoECAIQA0I6Whtjb21tb24u",
+            "Y2x1c3Rlci5tdS9wcm90by9ycGOqAhpDbHVzdGVyVlIuQ3JlYXRvcktpdC5Q",
+            "cm90b2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
