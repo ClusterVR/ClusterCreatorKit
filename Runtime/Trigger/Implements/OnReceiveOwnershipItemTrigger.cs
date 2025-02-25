@@ -14,11 +14,11 @@ namespace ClusterVR.CreatorKit.Trigger.Implements
         [SerializeField, ItemConstantTriggerParam] ConstantTriggerParam[] triggers;
 
         [Flags]
-        enum EventType
+        public enum EventType
         {
+            Always = ~0,
             Voluntary = 1 << 0,
             Involuntary = 1 << 1,
-            Always = ~0
         }
 
         IItem IItemTrigger.Item => item != null ? item : item = GetComponent<Item.Implements.Item>();

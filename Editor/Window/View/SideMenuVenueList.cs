@@ -25,6 +25,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
         VisualElement groupSelector;
         VisualElement venueSelector;
+        VisualElement venueListView;
+        string filterText = "";
 
         CancellationTokenSource groupSelectCancellationTokenSource;
         CancellationTokenSource venueSelectCancellationTokenSource;
@@ -161,18 +163,37 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
             venuePicker.Add(new Button(OnNewVenueClicked) { text = TranslationTable.cck_create_new });
             venuePicker.Add(new Label() { text = TranslationTable.cck_select_from_existing_worlds, style = { marginTop = 12 } });
-            venuePicker.Add(CreateVenueList(venues, venueIdToSelect));
+            var filteredVenues = venues.List;
+            if (!string.IsNullOrEmpty(filterText))
+            {
+                filteredVenues = venues.List.Where(venue => venue.Name.ToLower().Contains(filterText.ToLower())).ToList();
+            }
+            var filterField = new TextField()
+            {
+                style = { marginTop = 8 },
+                label = TranslationTable.cck_search,
+                value = filterText,
+                isDelayed = true
+            };
+            filterField[0].style.minWidth = 50;
+            filterField.RegisterValueChangedCallback(ev =>
+            {
+                filterText = ev.newValue;
+                _ = RefreshVenueSelectorAsync(groupId, reactiveCurrentVenue.Val?.VenueId ?? venueIdToSelect, cancellationToken);
+            });
+            venuePicker.Add(filterField);
+            venuePicker.Add(CreateVenueList(filteredVenues, venueIdToSelect));
             return venuePicker;
         }
 
-        VisualElement CreateVenueList(Venues venues, VenueID venueIdToSelect)
+        VisualElement CreateVenueList(List<Venue> venues, VenueID venueIdToSelect)
         {
             var venueList = new ScrollView(ScrollViewMode.VerticalAndHorizontal)
             {
                 style = { marginTop = 8, flexGrow = 1 }
             };
 
-            foreach (var venue in venues.List.OrderBy(venue => venue.Name))
+            foreach (var venue in venues.OrderBy(venue => venue.Name))
             {
                 var venueButton = new Button(() => { reactiveCurrentVenue.Val = venue; })
                 {
@@ -182,8 +203,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 venueList.Add(venueButton);
             }
 
-            reactiveCurrentVenue.Val = venues.List.Find(venue => venue.VenueId == venueIdToSelect);
-
+            reactiveCurrentVenue.Val = venues.Find(venue => venue.VenueId == venueIdToSelect);
             return venueList;
         }
 

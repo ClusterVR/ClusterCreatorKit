@@ -3,7 +3,6 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _Metallic ("Metallic", Float) = 0.0
         _Smoothness ("Smoothness", Float) = 0.0
     }
     SubShader
@@ -40,7 +39,6 @@
             }
 
             sampler2D _MainTex;
-            fixed _Metallic;
             fixed _Smoothness;
 
             fixed smoothness_to_roughness(float glossiness)
@@ -66,7 +64,7 @@
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 c = tex2D(_MainTex, i.uv);
-                return fixed4(0.0f, smoothness_to_roughness(c.a * _Smoothness), c.r * _Metallic, 1.0f);
+                return fixed4(0.0f, smoothness_to_roughness(c.a * _Smoothness), c.r, 1.0f);
             }
 
             ENDCG

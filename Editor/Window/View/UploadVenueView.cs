@@ -151,10 +151,10 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                         {
                             var openWorldManagementUrl = EditorUtility.DisplayDialog(
                                 TranslationTable.cck_upload_complete, TranslationTable.cck_upload_complete,
-                                TranslationTable.cck_open_world_management_page, TranslationTable.cck_close);
+                                TranslationTable.cck_open_world_detail_page, TranslationTable.cck_close);
                             if (openWorldManagementUrl)
                             {
-                                Application.OpenURL(worldManagementUrl);
+                                Application.OpenURL(venue.WorldDetailUrl);
                                 PanamaLogger.LogCckOpenLink(worldManagementUrl, "UploadVenueView_UploadComplete");
                             }
                         }
@@ -270,9 +270,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 }
             }
 
-            if (GUILayout.Button(TranslationTable.cck_open_world_management_page))
+            if (GUILayout.Button(TranslationTable.cck_open_world_detail_page))
             {
-                Application.OpenURL(worldManagementUrl);
+                Application.OpenURL(venue.WorldDetailUrl);
                 PanamaLogger.LogCckOpenLink(worldManagementUrl, "UploadVenueView_OpenWorldPage");
             }
 
@@ -398,6 +398,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                     currentUploadService.Run(cancellationTokenSource.Token);
                     errorMessage = null;
                 }
+                var helpMessage = TranslationUtility.GetMessage(TranslationTable.cck_use_upload_button_after_scene_edit,
+                    (venue.IsBeta ? TranslationTable.cck_beta_features_enabled : ""), venue.Name);
+                EditorGUILayout.HelpBox(helpMessage, MessageType.Info);
             }
 
             EditorGUILayout.Space();

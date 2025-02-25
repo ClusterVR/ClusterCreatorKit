@@ -120,7 +120,7 @@ namespace VGltf.Unity
 
             mat.TryGetFloatOrDefault("_Metallic", 1.0f, out var metallic);
             mat.TryGetFloatOrDefault("_Glossiness", 0.0f, out var smoothness);
-            var metallicRoughnessTexIndex = ExportMetallicRoughnessTextureIfExist(mat, "_MetallicGlossMap", metallic, smoothness);
+            var metallicRoughnessTexIndex = ExportMetallicRoughnessTextureIfExist(mat, "_MetallicGlossMap", smoothness);
 
             var roughness = ValueConv.SmoothnessToRoughness(smoothness);
             if (metallicRoughnessTexIndex != null)
@@ -293,10 +293,9 @@ namespace VGltf.Unity
             }
         }
 
-        static readonly int MetallicProp = Shader.PropertyToID("_Metallic");
         static readonly int SmoothnessProp = Shader.PropertyToID("_Smoothness");
 
-        int? ExportMetallicRoughnessTextureIfExist(Material texMat, string name, float metallic, float smoothness)
+        int? ExportMetallicRoughnessTextureIfExist(Material texMat, string name, float smoothness)
         {
             var tex = FindTex(texMat, name);
             if (tex == null)
@@ -307,7 +306,6 @@ namespace VGltf.Unity
             // Linear
             using (var mat = new Utils.DestroyOnDispose<Material>(new Material(_convertingMetallicRoughnessTexShader)))
             {
-                mat.Value.SetFloat(MetallicProp, metallic);
                 mat.Value.SetFloat(SmoothnessProp, smoothness);
 
                 return Context.Exporters.Textures.RawExport(tex, true, mat.Value);

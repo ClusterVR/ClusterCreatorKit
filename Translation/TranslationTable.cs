@@ -58,6 +58,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_close = "閉じる";
         public const string cck_cluster_about_menu = "Cluster/クラスターについて";
         public const string cck_cluster_accessory_upload = "Cluster/アクセサリーアップロード";
+        public const string cck_cluster_community_package = "Cluster/コミュニティで開発されたパッケージ";
         public const string cck_cluster_craftitem_info_fetch = "Cluster/クラフトアイテムの情報取得";
         public const string cck_cluster_craftitem_upload = "Cluster/クラフトアイテムアップロード";
         public const string cck_cluster_external_communication_url = "Cluster/外部通信(callExternal)接続先URL";
@@ -68,6 +69,9 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_comment_content = "コメント内容";
         public const string cck_common_item = "アイテム";
         public const string cck_common_size = "サイズ";
+        public const string cck_community_package_description = "コミュニティで開発された、Creator Kitに関連するパッケージの事例です。\nインストール方法や使い方については、各リンク先の説明を確認してください。";
+        public const string cck_community_package_notice = "*Creator Kitやパッケージのバージョンアップによっては期待通りに動作しなくなる場合があり、パッケージの動作は保証していません。\nパッケージのインストールや更新を行う前に、必要に応じてプロジェクトのバックアップを作成してください。";
+        public const string cck_community_package_title = "コミュニティで開発されたパッケージ";
         public const string cck_component_gettype_not_supported = "{0}の{1}は対応していません。";
         public const string cck_component_gettype_root_required = "{0}の{1}は無効化されます。RootのGameObjectに設定してください。";
         public const string cck_component_id_too_long = "{0}のIdが長すぎます。 Id: {1} 最大値: {2}";
@@ -291,6 +295,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_scene_required = "少なくとも1つのSceneが必要です。";
         public const string cck_scriptableitem_source_code_length = "{0}のScriptableItemのsource codeが長すぎます｡現在：{1}bytes, 最大値：{2}bytes";
         public const string cck_scriptableitem_source_code_too_long = "{0}のsource codeが長すぎます｡最大値: {1}bytes";
+        public const string cck_search = "検索";
         public const string cck_select_folder_for_saving_material = "マテリアルを保存するフォルダーを選んで下さい";
         public const string cck_select_folder_within_assets = "Assets内のフォルダーを選択してください";
         public const string cck_select_from_existing_worlds = "作成済みワールドから選ぶ";
@@ -381,6 +386,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_upload_world_move_to_id = "ワールドをアップロードすると以下のIdのワールドまたはイベントに移動します。\n{0}\n移動先のSpawnPointにTypeが{1}でWorldGateKeyが{2}のものがあればそこに出現します。";
         public const string cck_url_registration = "URLの登録";
         public const string cck_use_this_token = "このトークンを使用";
+        public const string cck_use_upload_button_after_scene_edit = "エラー表示後にシーンの変更を加えた場合、「{0}`{1}`としてアップロードする」ボタンからやり直してください。";
         public const string cck_username = "ユーザー名";
         public const string cck_venue_asset_build = "{0} Venue アセットの Build: {1}";
         public const string cck_venue_asset_missing = "{0} Venueのアセットが見つかりません : {1}";
@@ -466,6 +472,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_close = "Close";
         public const string cck_cluster_about_menu = "Cluster/About";
         public const string cck_cluster_accessory_upload = "Cluster/UploadAccessory";
+        public const string cck_cluster_community_package = "Cluster/CommunityPackages";
         public const string cck_cluster_craftitem_info_fetch = "Cluster/FetchCraftItemIfo";
         public const string cck_cluster_craftitem_upload = "Cluster/UploadCraftItem";
         public const string cck_cluster_external_communication_url = "Cluster/ExternalCommunication(callExternal)ConnectionPointURL";
@@ -476,6 +483,9 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_comment_content = "Content of Text";
         public const string cck_common_item = "Item";
         public const string cck_common_size = "Size";
+        public const string cck_community_package_description = "There are several packages developed by Cluster Creator's community.\nPlease see detail at each packages' URL.";
+        public const string cck_community_package_notice = "*The upgrade of CreatorKit or installed packages might lead unexpected behavior, and we do not guarantee that the packages will work correctly.\nBefore installing or updating packages, please make a backup of the project as necessary.";
+        public const string cck_community_package_title = "Community Packages";
         public const string cck_component_gettype_not_supported = "The {0} of {1} is not supported.";
         public const string cck_component_gettype_root_required = "The {0} of {1} will be disabled. Please set it to the Root GameObject.";
         public const string cck_component_id_too_long = "The ID for {0} is too long. Id: {1} Max Value: {2}";
@@ -699,6 +709,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_scene_required = "There must be at least one Scene.";
         public const string cck_scriptableitem_source_code_length = "The source code of {0}'s ScriptableItem is too long. Currently: {1} bytes, Maximum Value: {2} bytes";
         public const string cck_scriptableitem_source_code_too_long = "The source code of {0} is too long. Maximum Value: {1}bytes";
+        public const string cck_search = "Search";
         public const string cck_select_folder_for_saving_material = "Please select the folder to save the material";
         public const string cck_select_folder_within_assets = "Select a folder in Assets";
         public const string cck_select_from_existing_worlds = "Select an already created world";
@@ -789,6 +800,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_upload_world_move_to_id = "You will move to the world or event with the following ID when you upload the world. \n {0}\n If there is a Type that is {1} and a WorldGateKey that is {2} in the SpawnPoint of the destination, you will appear there.";
         public const string cck_url_registration = "Register URL";
         public const string cck_use_this_token = "Use this Access Token";
+        public const string cck_use_upload_button_after_scene_edit = "If you make any changes to the scene after the error message, please start over from the “{0} Upload as '{1}'.`” button.";
         public const string cck_username = "User Name";
         public const string cck_venue_asset_build = "{0}: Building venue asset: {1}";
         public const string cck_venue_asset_missing = "{0}: Venue asset is missing: {1}";
