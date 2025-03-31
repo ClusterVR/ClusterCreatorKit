@@ -12,5 +12,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             StatusCode = statusCode;
             Error = error;
         }
+
+        public override string Message => ToString();
+        public override string ToString() => $"{nameof(StatusCode)}:{StatusCode}, {nameof(Error)}[{Error}]";
     }
 }

@@ -22,7 +22,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         const string PrivacyPolicyUrl = "https://help.cluster.mu/hc/en-us/articles/20264222848153-Privacy-Policy";
 #endif
 
-        [MenuItem(TranslationTable.cck_cluster_settings_menu, priority = 305)]
+        [MenuItem(TranslationTable.cck_cluster_settings_menu, priority = 320)]
         public static void ShowWindow()
         {
             var window = GetWindow<SettingsWindow>();

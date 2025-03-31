@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.AccessoryExporter
 {
-    public class AccessoryUploader
+    public static class AccessoryUploader
     {
         public static async Task<string> UploadAccessory(string accessoryTemplateId, GameObject gameObject)
         {

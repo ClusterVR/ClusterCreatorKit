@@ -155,6 +155,7 @@ namespace ClusterVR.CreatorKit.Editor.Analytics
             ClusterPreview_WebTriggerWindow,
             Cluster_About,
             Cluster_ExternalCallURL,
+            Cluster_ExternalEndpoint,
             Cluster_FetchCraftItemInfo,
             Cluster_ScriptLogConsole,
             Cluster_Settings,

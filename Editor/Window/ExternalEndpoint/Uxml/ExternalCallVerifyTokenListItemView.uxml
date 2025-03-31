@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="/UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement class="verify-token-item-container">
+        <ui:VisualElement class="fields">
+            <ui:TextField name="registered-at-field" class="label-field" readonly="true" />
+            <ui:VisualElement name="verify-token-container" style="display: none; margin-top: 10px;">
+                <ui:TextField name="verify-token-field" readonly="true" />
+                <ui:HelpBox name="verify-token-notice" style="white-space: normal;" message-type="Warning" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="actions">
+            <ui:Button name="delete-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

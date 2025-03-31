@@ -1,22 +1,23 @@
 using ClusterVR.CreatorKit.Editor.Analytics;
+using ClusterVR.CreatorKit.Editor.Window.View;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace ClusterVR.CreatorKit.Editor.Window.View
+namespace ClusterVR.CreatorKit.Editor.Window.ExternalEndpoint
 {
-    public sealed class ExternalCallUrlWindow : EditorWindow
+    public sealed class ExternalEndpointWindow : EditorWindow
     {
-        readonly ExternalCallUrlView externalCallUrlView = new();
+        readonly ExternalEndpointView externalEndpointView = new();
         RequireTokenAuthView tokenAuthView;
 
-        [MenuItem(TranslationTable.cck_cluster_external_communication_url, priority = 305)]
+        [MenuItem(TranslationTable.cck_cluster_external_communication_url, priority = 321)]
         public static void Open()
         {
-            var window = GetWindow<ExternalCallUrlWindow>();
+            var window = GetWindow<ExternalEndpointWindow>();
             window.titleContent = new GUIContent(TranslationTable.cck_external_communication_url);
-            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.Cluster_ExternalCallURL);
+            PanamaLogger.LogCckMenuItem(PanamaLogger.MenuItemType.Cluster_ExternalEndpoint);
         }
 
         void OnEnable()
@@ -37,12 +38,12 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
         void OnDestroy()
         {
-            externalCallUrlView.Dispose();
+            externalEndpointView.Dispose();
         }
 
         VisualElement CreateView()
         {
-            tokenAuthView = new RequireTokenAuthView(externalCallUrlView);
+            tokenAuthView = new RequireTokenAuthView(externalEndpointView);
             var authView = tokenAuthView.CreateView();
             authView.SetEnabled(true);
 

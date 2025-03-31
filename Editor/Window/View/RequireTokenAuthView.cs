@@ -6,6 +6,7 @@ using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Editor.Extensions;
+using ClusterVR.CreatorKit.Editor.Repository;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
@@ -24,9 +25,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         const string TokenAuthStylePath = "Packages/mu.cluster.cluster-creator-kit/Editor/Window/Uss/TokenAuthView.uss";
 
         readonly IRequireTokenAuthMainView requireTokenAuthMainView;
-        readonly Reactive<UserInfo?> reactiveUserInfo = new Reactive<UserInfo?>();
-
-        bool isLoggingIn;
 
         VisualElement mainViewContainer;
         VisualElement tokenAuthView;
@@ -35,7 +33,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
         IDisposable disposable;
 
-        readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        TokenAuthRepository TokenAuthRepository => TokenAuthRepository.Instance;
+
+        readonly CancellationTokenSource cancellationTokenSource = new();
 
         public RequireTokenAuthView(IRequireTokenAuthMainView requireTokenAuthMainView)
         {
@@ -64,14 +64,14 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             logoutButton.clicked += Logout;
             mainViewHeader.SetVisibility(false);
 
-            disposable = ReactiveBinder.Bind(reactiveUserInfo, OnUserInfoChanged);
+            disposable = ReactiveBinder.Bind(TokenAuthRepository.UserInfo, OnUserInfoChanged);
 
             var tokenInputField = tokenAuthView.Q<TextField>("token-input-field");
             var loginErrorLabel = tokenAuthView.Q<Label>("login-error-label");
             var savedAccessToken = EditorPrefsUtils.SavedAccessToken;
             tokenInputField.value = EditorPrefsUtils.SavedAccessToken.RawValue;
 
-            _ = Login(savedAccessToken, loginErrorLabel);
+            LoginAsync(savedAccessToken, loginErrorLabel).Forget();
 
             return view;
         }
@@ -99,7 +99,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
                 Application.OpenURL(url);
                 PanamaLogger.LogCckOpenLink(url, "RequireTokenAuthView_OpenTokenPage");
             };
-            useTokenButton.clicked += () => _ = Login(new AuthenticationInfo(tokenInputField.value), loginErrorLabel);
+            useTokenButton.clicked += () => LoginAsync(new AuthenticationInfo(tokenInputField.value), loginErrorLabel).Forget();
 
             var pasteAccessTokenLabel = view.Q<Label>("paste-access-token-label");
             pasteAccessTokenLabel.text = TranslationTable.cck_paste_access_token;
@@ -116,50 +116,39 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             return view;
         }
 
-        async Task Login(AuthenticationInfo authInfo, TextElement errorLabel)
+        async Task LoginAsync(AuthenticationInfo authInfo, TextElement errorLabel)
         {
-            if (!authInfo.IsValid || isLoggingIn)
+            if (!authInfo.IsValid)
             {
                 return;
             }
 
-            Api.RPC.Constants.OverrideHost(authInfo.Host);
-
-            isLoggingIn = true;
             try
             {
-                var user = await APIServiceClient.GetMyUser(authInfo.Token, cancellationTokenSource.Token);
-
-                if (string.IsNullOrEmpty(user.Username))
-                {
-                    errorLabel.text = TranslationTable.cck_auth_failed;
-                    errorLabel.SetVisibility(true);
-                    return;
-                }
-
-                reactiveUserInfo.Val = new UserInfo(user.Username, authInfo.Token);
+                await TokenAuthRepository.LoginAsync(authInfo, cancellationTokenSource.Token);
                 errorLabel.SetVisibility(false);
-
-                EditorPrefsUtils.SavedAccessToken = authInfo;
-                EditorPrefsUtils.SavedUserId = user.UserId;
             }
-            catch (Exception e)
+            catch (OperationCanceledException)
             {
-                Debug.LogError(e);
+                throw;
             }
-            finally
+            catch (TokenAuthFailedException)
             {
                 errorLabel.text = TranslationTable.cck_auth_failed;
                 errorLabel.SetVisibility(true);
-                isLoggingIn = false;
+                throw;
+            }
+            catch (Exception e)
+            {
+                errorLabel.text = $"{TranslationTable.cck_auth_failed}\n{e.Message}";
+                errorLabel.SetVisibility(true);
+                throw;
             }
         }
 
         void Logout()
         {
-            reactiveUserInfo.Val = null;
-            EditorPrefsUtils.SavedAccessToken = null;
-            EditorPrefsUtils.SavedUserId = null;
+            TokenAuthRepository.Logout();
         }
 
         void OnUserInfoChanged(UserInfo? userInfo)

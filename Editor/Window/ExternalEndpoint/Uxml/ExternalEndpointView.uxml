@@ -1,0 +1,29 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="/UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="base-container">
+        <ui:Box name="endpoints-panel" style="flex-grow: 1;">
+            <ui:Label name="endpoints-title-label" class="title-label" />
+            <ui:ListView name="endpoints-list" />
+            <ui:VisualElement name="new-endpoint-item" style="margin-top: 10px; flex-shrink: 0;">
+                <ui:Label name="new-endpoint-title-label" class="title-label" />
+                <ui:VisualElement class="endpoint-item-container">
+                    <ui:VisualElement class="fields">
+                        <ui:TextField name="url-field" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="actions">
+                        <ui:Button name="create-button" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:HelpBox name="create-notice" style="white-space: normal;" message-type="Warning" />
+            </ui:VisualElement>
+        </ui:Box>
+        <ui:VisualElement style="min-height: 20px;" />
+        <ui:Box name="verify-tokens-panel" style="flex-grow: 0; flex-shrink: 0;">
+            <ui:Label name="verify-tokens-title-label" class="title-label" />
+            <ui:ListView name="verify-tokens-list" />
+            <ui:VisualElement name="new-verify-token-item" style="margin-top: 10px;">
+                <ui:Button name="create-button" />
+                <ui:HelpBox name="create-notice" style="white-space: normal;" message-type="Warning" />
+            </ui:VisualElement>
+        </ui:Box>
+    </ui:VisualElement>
+</ui:UXML>

@@ -6,7 +6,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View.ConsoleWindow
 {
     public sealed class ClusterScriptLogConsoleWindow : EditorWindow
     {
-        [MenuItem("Cluster/ClusterScript Log Console", priority = 306)]
+        [MenuItem("Cluster/ClusterScript Log Console", priority = 340)]
         static void ShowWindow()
         {
             GetWindow<ClusterScriptLogConsoleWindow>("ClusterScript Log Console").Show();

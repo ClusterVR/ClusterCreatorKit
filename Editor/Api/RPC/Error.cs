@@ -19,5 +19,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         public string Title => title;
         public string Type => type;
         public string Detail => detail;
+
+        public override string ToString() => $"Code: {code}, Message: {message}, Detail: {detail}, Title: {title}, Type: {type}";
     }
 }

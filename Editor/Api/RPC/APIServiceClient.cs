@@ -3,7 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.AccessoryTemplate;
 using ClusterVR.CreatorKit.Editor.Api.Analytics;
-using ClusterVR.CreatorKit.Editor.Api.ExternalCall;
+using ClusterVR.CreatorKit.Editor.Api.Exceptions;
+using ClusterVR.CreatorKit.Editor.Api.ExternalEndpoint;
 using ClusterVR.CreatorKit.Editor.Api.ItemTemplate;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 
@@ -127,23 +128,72 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 $"{Constants.ApiBaseUrl}/v1/item_templates/own_for_creator?count={count}&filter={filter}&page={page}", cancellationToken);
         }
 
-        public static async Task<GetWebRPCURLResponse> GetWebRPCURLAsync(string accessToken, CancellationToken cancellationToken)
+        public static async Task<GetEndpointListResponse> GetEndpointListAsync(string accessToken, CancellationToken cancellationToken)
         {
-            return await ApiClient.Get<Empty, GetWebRPCURLResponse>(Empty.Value, accessToken, $"{Constants.ApiBaseUrl}/v1/user/web_rpc_url", cancellationToken);
+            return await ApiClient.Get<Empty, GetEndpointListResponse>(Empty.Value, accessToken,
+                $"{Constants.ApiBaseUrl}/v1/external_call/endpoints", cancellationToken);
         }
 
-        public static async Task<RegisterWebRPCURLResponse> RegisterWebRPCURLAsync(
-            RegisterWebRPCURLPayload payload,
-            string accessToken, CancellationToken cancellationToken)
+        public static async Task<RegisterEndpointResponse> RegisterEndpointAsync(string accessToken, string url, CancellationToken cancellationToken)
         {
-            return await ApiClient.Post<RegisterWebRPCURLPayload, RegisterWebRPCURLResponse>(payload,
-                accessToken, $"{Constants.ApiBaseUrl}/v1/user/web_rpc_url",
-                cancellationToken);
+            try
+            {
+                return await ApiClient.Post<RegisterEndpointPayload, RegisterEndpointResponse>(new RegisterEndpointPayload(url), accessToken,
+                    $"{Constants.ApiBaseUrl}/v1/external_call/endpoints", cancellationToken);
+            }
+            catch (Failure failure) when (failure.StatusCode == 400)
+            {
+                switch (failure.Error.Code)
+                {
+                    case "external_call_invalid_url":
+                        throw new ExternalCallInvalidUrlException(failure);
+                    case "external_call_url_already_exists":
+                        throw new ExternalCallUrlAlreadyExistsException(failure);
+                    case "external_call_endpoint_count_limit_exceeded":
+                        throw new ExternalCallEndpointCountLimitExceededException(failure);
+                    default:
+                        throw;
+                }
+            }
         }
 
-        public static async Task DeleteUserWebRPCURLAsync(string accessToken, CancellationToken cancellationToken)
+        public static async Task<Empty> DeleteEndpointAsync(string accessToken, string endpointId, CancellationToken cancellationToken)
         {
-            await ApiClient.Post<Empty, Empty>(Empty.Value, accessToken, $"{Constants.ApiBaseUrl}/v1/user/web_rpc_url/delete", cancellationToken);
+            return await ApiClient.Post<Empty, Empty>(Empty.Value, accessToken,
+                $"{Constants.ApiBaseUrl}/v1/external_call/endpoints/{endpointId}/delete", cancellationToken);
+        }
+
+        public static async Task<GetVerifyTokenListResponse> GetVerifyTokenListAsync(string accessToken, CancellationToken cancellationToken)
+        {
+            return await ApiClient.Get<Empty, GetVerifyTokenListResponse>(Empty.Value, accessToken,
+                $"{Constants.ApiBaseUrl}/v1/external_call/verify_tokens", cancellationToken);
+        }
+
+        public static async Task<RegisterVerifyTokenResponse> RegisterVerifyTokenAsync(string accessToken,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                return await ApiClient.Post<Empty, RegisterVerifyTokenResponse>(Empty.Value, accessToken,
+                    $"{Constants.ApiBaseUrl}/v1/external_call/verify_tokens", cancellationToken);
+            }
+            catch (Failure failure) when (failure.StatusCode == 400)
+            {
+                switch (failure.Error.Code)
+                {
+                    case "external_call_verify_token_count_limit_exceeded":
+                        throw new ExternalCallVerifyTokenCountLimitExceededException(failure);
+                    default:
+                        throw;
+                }
+            }
+
+        }
+
+        public static async Task<Empty> DeleteVerifyTokenAsync(string accessToken, string tokenId, CancellationToken cancellationToken)
+        {
+            return await ApiClient.Post<Empty, Empty>(Empty.Value, accessToken,
+                $"{Constants.ApiBaseUrl}/v1/external_call/verify_tokens/{tokenId}/delete", cancellationToken);
         }
     }
 }

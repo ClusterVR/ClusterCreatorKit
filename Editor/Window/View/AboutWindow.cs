@@ -29,7 +29,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             EditorPrefsUtils.HasAlreadyShownAboutWindow = true;
         }
 
-        [MenuItem(TranslationTable.cck_cluster_about_menu, priority = 310)]
+        [MenuItem(TranslationTable.cck_cluster_about_menu, priority = 400)]
         public static void ShowWindow()
         {
             var wnd = GetWindow<AboutWindow>();

@@ -1,0 +1,31 @@
+.title-label {
+    -unity-font-style: bold;
+}
+
+.endpoint-item-container,
+.verify-token-item-container {
+    flex-direction: row;
+    margin: 2px;
+}
+
+.fields {
+    flex-grow: 1;
+}
+
+.actions {
+    flex-direction: row;
+    min-width: 60px;
+}
+
+.actions Button {
+    flex-grow: 1;
+}
+
+.unity-base-field__input {
+    flex-shrink: 0;
+}
+
+.unity-base-field.label-field > .unity-base-field__input {
+    border-color: transparent;
+    background-color: transparent;
+}
