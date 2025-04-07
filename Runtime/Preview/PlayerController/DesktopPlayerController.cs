@@ -77,6 +77,9 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         void Start()
         {
             desktopPointerEventListener.OnMoved += Rotate;
+#if STEAMAUDIO_ENABLED
+            SteamAudio.SteamAudioManager.NotifyAudioListenerChanged();
+#endif
         }
 
         void Update()

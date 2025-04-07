@@ -46,6 +46,13 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         {
         }
 
+        void Start()
+        {
+#if STEAMAUDIO_ENABLED
+            SteamAudio.SteamAudioManager.NotifyAudioListenerChanged();
+#endif
+        }
+
         void Update()
         {
             var moveDirection = moveInputController.MoveDirection;

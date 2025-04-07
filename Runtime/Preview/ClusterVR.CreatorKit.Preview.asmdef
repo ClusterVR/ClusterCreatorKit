@@ -4,7 +4,8 @@
         "ClusterVR.CreatorKit.Item",
         "ClusterVR.CreatorKit.Trigger",
         "ClusterVR.CreatorKit.Constants",
-        "ClusterVR.CreatorKit.World"
+        "ClusterVR.CreatorKit.World",
+        "SteamAudioUnity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
