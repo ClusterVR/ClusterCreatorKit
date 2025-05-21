@@ -24,6 +24,7 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
 
         MeshRenderer meshRenderer;
         bool isFontSetAndShaderSet;
+        bool isTextMeshReady;
         Font font;
         Shader shader;
         Material fontMaterial;
@@ -69,6 +70,8 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
                         meshRenderer.sharedMaterial = fontMaterial;
                     }
                 }
+                isTextMeshReady = true;
+                UpdateRenderer();
             }
         }
 
@@ -139,7 +142,6 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
             {
                 UpdateFontAndShader(font, shader);
             }
-            UpdateRenderer();
         }
 
         T GetOrAddComponent<T>() where T : Component
@@ -159,7 +161,10 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
 
         void Update()
         {
-            UpdateRenderer();
+            if (isTextMeshReady)
+            {
+                UpdateRenderer();
+            }
         }
 
         void OnDisable()

@@ -39,6 +39,8 @@ namespace ClusterVR.CreatorKit.Item.Implements
         bool isInitialized;
         Vector3 initialPosition;
         Quaternion initialRotation;
+        Vector3 lastPosition;
+        Quaternion lastRotation;
         Vector3 velocity;
         Vector3 angularVelocity;
         int lastRespawnedFrameCount = -1;
@@ -53,8 +55,8 @@ namespace ClusterVR.CreatorKit.Item.Implements
             {
                 characterController = GetComponent<CharacterController>();
             }
-            initialPosition = transform.position;
-            initialRotation = transform.rotation;
+            initialPosition = lastPosition = transform.position;
+            initialRotation = lastRotation = transform.rotation;
             isInitialized = true;
         }
 
@@ -65,30 +67,42 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         void Update()
         {
-            if (!controlling)
+            if (controlling)
             {
-                return;
-            }
+                var isGrounded = characterController.isGrounded;
+                if (isGrounded && velocity.y < 0)
+                {
+                    velocity.y = 0f;
+                }
 
-            var isGrounded = characterController.isGrounded;
-            if (isGrounded && velocity.y < 0)
-            {
-                velocity.y = 0f;
+                if (useGravity)
+                {
+                    velocity.y += Gravity * Time.unscaledDeltaTime;
+                }
+                characterController.Move(velocity * Time.unscaledDeltaTime);
+                transform.Rotate(Vector3.up, angularVelocity.y * Mathf.Rad2Deg * Time.unscaledDeltaTime);
             }
-
-            if (useGravity)
+            else
             {
-                velocity.y += Gravity * Time.unscaledDeltaTime;
+                velocity = (lastPosition - transform.position) / Time.unscaledDeltaTime;
+                var angularVelocityY = Mathf.Deg2Rad * Mathf.DeltaAngle(0, (Quaternion.Inverse(lastRotation) * transform.rotation).eulerAngles.y) / Time.unscaledDeltaTime;
+                angularVelocity = new Vector3(0f, angularVelocityY, 0f);
             }
-            characterController.Move(velocity * Time.unscaledDeltaTime);
-            transform.Rotate(Vector3.up, angularVelocity.y * Mathf.Rad2Deg * Time.unscaledDeltaTime);
+            lastPosition = transform.position;
+            lastRotation = transform.rotation;
         }
 
         void IMovableItem.SetPositionAndRotation(Vector3 position, Quaternion rotation, bool isWarp)
         {
             CacheInitialValue();
-            transform.SetPositionAndRotation(position, rotation);
+            characterController.enableOverlapRecovery = false;
+            if (isWarp)
+            {
+                lastPosition = position;
+                lastRotation = rotation;
+            }
             controlling = false;
+            transform.SetPositionAndRotation(position, rotation);
         }
 
         void IMovableItem.EnablePhysics()
@@ -98,6 +112,8 @@ namespace ClusterVR.CreatorKit.Item.Implements
                 return;
             }
 
+            CacheInitialValue();
+            characterController.enableOverlapRecovery = true;
             controlling = true;
         }
 
@@ -118,27 +134,45 @@ namespace ClusterVR.CreatorKit.Item.Implements
             transform.SetPositionAndRotation(position, rotation);
             velocity = Vector3.zero;
             angularVelocity = Vector3.zero;
+            lastPosition = position;
+            lastRotation = rotation;
         }
 
 
         public void SetVelocityXZ(Vector2 value)
         {
+            if (!controlling)
+            {
+                return;
+            }
             velocity.x = value.x;
             velocity.z = value.y;
         }
 
         public void SetVelocityY(float value)
         {
+            if (!controlling)
+            {
+                return;
+            }
             velocity.y = value;
         }
 
         public void SetAngularVelocityY(float value)
         {
+            if (!controlling)
+            {
+                return;
+            }
             angularVelocity.y = value;
         }
 
         public void SetVelocity(Vector3 value)
         {
+            if (!controlling)
+            {
+                return;
+            }
             velocity = value;
         }
 

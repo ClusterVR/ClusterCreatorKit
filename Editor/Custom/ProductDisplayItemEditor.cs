@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Custom
 {
-    [CustomEditor(typeof(ProductDisplayItem), isFallback = true), CanEditMultipleObjects]
+    [CustomEditor(typeof(ProductDisplayItem), editorForChildClasses: true, isFallback = true), CanEditMultipleObjects]
     public class ProductDisplayItemEditor : VisualElementEditor
     {
         public override VisualElement CreateInspectorGUI()

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace ClusterVR.CreatorKit.Item.Implements
 {
     [RequireComponent(typeof(Item)), DisallowMultipleComponent]
-    public sealed class ProductDisplayItem : ContactableItem, IProductDisplayItem
+    public class ProductDisplayItem : ContactableItem, IProductDisplayItem
     {
         [SerializeField, HideInInspector] Item item;
         [SerializeField, Tooltip(TranslationTable.cck_product_id)] ProductId productId;
@@ -55,7 +55,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
 
         void IInteractableItem.Invoke()
         {
-            if (isInteractable)
+            if (IsContactable)
             {
                 OnInvoked?.Invoke();
             }
