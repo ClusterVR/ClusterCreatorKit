@@ -11,6 +11,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
     public sealed class CraftItemValidator : IGltfValidator
     {
         const int MaxTrianglesCount = 5000;
+        const int MaxMaterialsCount = 8;
+        const int MaxTexturesCount = 12;
 
         public IEnumerable<ValidationMessage> Validate(GameObject gameObject)
         {
@@ -26,8 +28,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             validationMessages.AddRange(GltfValidator.ValidateScene(gltfContainer));
             validationMessages.AddRange(GltfValidator.ValidateNode(gltfContainer));
             validationMessages.AddRange(GltfValidator.ValidateMesh(gltfContainer, MaxTrianglesCount));
-            validationMessages.AddRange(GltfValidator.ValidateMaterial(gltfContainer));
-            validationMessages.AddRange(GltfValidator.ValidateTexture(gltfContainer));
+            validationMessages.AddRange(GltfValidator.ValidateMaterial(gltfContainer, MaxMaterialsCount));
+            validationMessages.AddRange(GltfValidator.ValidateTexture(gltfContainer, MaxTexturesCount));
 
             return validationMessages;
         }

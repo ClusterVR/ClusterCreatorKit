@@ -16,8 +16,6 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
         const int MaxMeshesCount = 8;
         const int MaxMeshRenderersCount = 32;
         const int MaxSubMeshesCount = 2;
-        const int MaxMaterialsCount = 2;
-        const int MaxTexturesCount = 3;
 
         const int MaxTextureSize = 8192;
 
@@ -168,7 +166,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             };
         }
 
-        internal static IEnumerable<ValidationMessage> ValidateMaterial(GltfContainer gltfContainer)
+        internal static IEnumerable<ValidationMessage> ValidateMaterial(GltfContainer gltfContainer,
+            int maxMaterialsCount)
         {
             var validationMessages = new List<ValidationMessage>();
             var gltf = gltfContainer.Gltf;
@@ -177,16 +176,17 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             {
                 return validationMessages;
             }
-            if (gltf.Materials.Count > MaxMaterialsCount)
+            if (gltf.Materials.Count > maxMaterialsCount)
             {
                 validationMessages.Add(
-                    CreateCountValidationMessage("Material", gltf.Materials.Count, MaxMaterialsCount));
+                    CreateCountValidationMessage("Material", gltf.Materials.Count, maxMaterialsCount));
             }
 
             return validationMessages;
         }
 
-        internal static IEnumerable<ValidationMessage> ValidateTexture(GltfContainer gltfContainer)
+        internal static IEnumerable<ValidationMessage> ValidateTexture(GltfContainer gltfContainer,
+            int maxTexturesCount)
         {
             var validationMessages = new List<ValidationMessage>();
 
@@ -198,9 +198,9 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 return validationMessages;
             }
 
-            if (gltf.Textures.Count > MaxTexturesCount)
+            if (gltf.Textures.Count > maxTexturesCount)
             {
-                validationMessages.Add(CreateCountValidationMessage("Texture", gltf.Textures.Count, MaxTexturesCount));
+                validationMessages.Add(CreateCountValidationMessage("Texture", gltf.Textures.Count, maxTexturesCount));
             }
 
             foreach (var texture in gltf.Textures)

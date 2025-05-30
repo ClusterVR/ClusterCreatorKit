@@ -8,6 +8,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
     {
         const int MaxTrianglesCount = 2000;
         const int MaxTotalMeshCount = 8;
+        const int MaxMaterialsCount = 2;
+        const int MaxTexturesCount = 3;
 
         public IEnumerable<ValidationMessage> Validate(GameObject gameObject)
         {
@@ -24,8 +26,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             validationMessages.AddRange(GltfValidator.ValidateNode(gltfContainer));
             validationMessages.AddRange(GltfValidator.ValidateMesh(gltfContainer, MaxTrianglesCount)); // 8Mesh, 2subMeshまで、skinnedMesh不可、TRIANGLESのみ
             validationMessages.AddRange(GltfValidator.ValidateTotalMeshNode(gltfContainer, MaxTotalMeshCount)); // のべmesh数8まで
-            validationMessages.AddRange(GltfValidator.ValidateMaterial(gltfContainer)); // 2マテリアルまで
-            validationMessages.AddRange(GltfValidator.ValidateTexture(gltfContainer)); // 3tex、8192pxまで
+            validationMessages.AddRange(GltfValidator.ValidateMaterial(gltfContainer, MaxMaterialsCount)); // 2マテリアルまで
+            validationMessages.AddRange(GltfValidator.ValidateTexture(gltfContainer, MaxTexturesCount)); // 3tex、8192pxまで
 
             return validationMessages;
         }
