@@ -1,7 +1,7 @@
 .token-auth-view {
     flex-direction: row;
     /*!*子要素をwindowいっぱいにするために大きな値入れておく(height: 100vhは使えない...)*!*/
-    height: 100000000px;
+    height: 1000000px;
 }
 
 .side-pane {

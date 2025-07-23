@@ -1,4 +1,6 @@
+using System;
 using ClusterVR.CreatorKit.Editor.Analytics;
+using ClusterVR.CreatorKit.Editor.Utils;
 using ClusterVR.CreatorKit.Editor.Window.View;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
@@ -9,8 +11,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.ExternalEndpoint
 {
     public sealed class ExternalEndpointWindow : EditorWindow
     {
-        readonly ExternalEndpointView externalEndpointView = new();
-        RequireTokenAuthView tokenAuthView;
+        readonly ExternalEndpointViewModel externalEndpointViewModel = new();
+        Disposable disposables;
 
         [MenuItem(TranslationTable.cck_cluster_external_communication_url, priority = 321)]
         public static void Open()
@@ -22,32 +24,26 @@ namespace ClusterVR.CreatorKit.Editor.Window.ExternalEndpoint
 
         void OnEnable()
         {
-            var view = CreateView();
-            rootVisualElement.Add(view);
+            CreateView();
         }
 
         void OnDisable()
         {
             rootVisualElement.Clear();
-            if (tokenAuthView != null)
-            {
-                tokenAuthView.Dispose();
-                tokenAuthView = null;
-            }
+            externalEndpointViewModel?.Dispose();
+            disposables?.Dispose();
         }
 
-        void OnDestroy()
+        void CreateView()
         {
-            externalEndpointView.Dispose();
-        }
-
-        VisualElement CreateView()
-        {
-            tokenAuthView = new RequireTokenAuthView(externalEndpointView);
-            var authView = tokenAuthView.CreateView();
-            authView.SetEnabled(true);
-
-            return authView;
+            var tokenAuth = new TokenAuthFrameViewModel(externalEndpointViewModel);
+            var tokenAuthView = new TokenAuthFrameView();
+            var tokenAuthViewDisposable = tokenAuthView.Bind(tokenAuth);
+            tokenAuthView.SetEnabled(true);
+            disposables = Disposable.Create(
+                tokenAuth,
+                tokenAuthViewDisposable);
+            rootVisualElement.Add(tokenAuthView);
         }
     }
 }

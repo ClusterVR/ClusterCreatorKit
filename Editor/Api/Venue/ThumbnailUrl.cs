@@ -13,5 +13,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.Venue
         {
             this.url = url;
         }
+
+        public bool IsEmpty() => string.IsNullOrEmpty(url);
     }
 }

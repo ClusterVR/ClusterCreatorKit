@@ -1,7 +1,6 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ClusterVR.CreatorKit.Editor.Builder;
-using ClusterVR.CreatorKit.Editor.Package;
 using ClusterVR.CreatorKit.Editor.RPC.Client;
 using ClusterVR.CreatorKit.Proto;
 
@@ -9,28 +8,51 @@ namespace ClusterVR.CreatorKit.Editor.Analytics
 {
     public static class PanamaLogger
     {
-        static void LogEvent(PanamaEvent panamaEvent)
+        static readonly Queue<PanamaEvent> PanamaEvents = new();
+        static string UserId;
+        static string TmpUserId;
+        static string CreatorKitVersion;
+
+        public static void SetUserId(string userId)
         {
-            if (Api.RPC.Constants.IsOverridingHost)
+            UserId = userId;
+        }
+
+        public static void SetTmpUserId(string tmpUserId)
+        {
+            TmpUserId = tmpUserId;
+        }
+
+        public static void SetCreatorKitVersion(string creatorKitVersion)
+        {
+            CreatorKitVersion = creatorKitVersion;
+        }
+
+        public static void SendEvents()
+        {
+            if (UserId == null || TmpUserId == null)
             {
                 return;
             }
-            panamaEvent.EventSource = PanamaEvent.Types.EventSource.CreatorKit;
+            while (PanamaEvents.TryDequeue(out var panamaEvent))
+            {
+                panamaEvent.EventSource = PanamaEvent.Types.EventSource.CreatorKit;
 
-            panamaEvent.UserId = EditorPrefsUtils.SavedUserId;
-            panamaEvent.UserPseudoId = EditorPrefsUtils.TmpUserId;
+                panamaEvent.UserId = UserId;
+                panamaEvent.UserPseudoId = TmpUserId;
 
 #if UNITY_EDITOR_WIN
-            panamaEvent.Platform = PanamaEvent.Types.Platform.Win;
+                panamaEvent.Platform = PanamaEvent.Types.Platform.Win;
 #elif UNITY_EDITOR_OSX
-            panamaEvent.Platform = PanamaEvent.Types.Platform.Mac;
+                panamaEvent.Platform = PanamaEvent.Types.Platform.Mac;
 #endif
 
-            panamaEvent.DeviceType = "ClusterCreatorKit";
-            panamaEvent.Ts = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            panamaEvent.AppVersion = PackageInfo.GetCreatorKitVersion();
+                panamaEvent.DeviceType = "ClusterCreatorKit";
+                panamaEvent.Ts = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                panamaEvent.AppVersion = CreatorKitVersion;
 
-            PanamaApiClient.PostEventAsync(panamaEvent);
+                PanamaApiClient.PostEventAsync(panamaEvent);
+            }
         }
 
         public static void LogCckPing(CckPing cckPing)
@@ -141,6 +163,15 @@ namespace ClusterVR.CreatorKit.Editor.Analytics
                 EventType = PanamaEvent.Types.EventType.CckWorldUploadFailed,
                 CckWorldUploadFailedObject = cckWorldUploadFailed
             });
+        }
+
+        static void LogEvent(PanamaEvent panamaEvent)
+        {
+            if (Api.RPC.Constants.IsOverridingHost)
+            {
+                return;
+            }
+            PanamaEvents.Enqueue(panamaEvent);
         }
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]

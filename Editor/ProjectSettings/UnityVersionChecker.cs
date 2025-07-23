@@ -1,5 +1,6 @@
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
+using PackageInfo = ClusterVR.CreatorKit.Editor.Infrastructure.PackageInfo;
 
 namespace ClusterVR.CreatorKit.Editor.ProjectSettings
 {
@@ -8,10 +9,10 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
     {
         static UnityVersionChecker()
         {
-            if (!Package.PackageInfo.IsRecommendedUnityEditorVersion())
+            if (!PackageInfo.IsRecommendedUnityEditorVersion())
             {
                 EditorUtility.DisplayDialog(TranslationTable.cck_attention,
-                    TranslationUtility.GetMessage(TranslationTable.cck_unity_version_warning, Package.PackageInfo.RecommendedUnityEditorVersion),
+                    TranslationUtility.GetMessage(TranslationTable.cck_unity_version_warning, PackageInfo.RecommendedUnityEditorVersion),
                     TranslationTable.cck_close);
             }
         }

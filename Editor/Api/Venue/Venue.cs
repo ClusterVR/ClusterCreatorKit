@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Api.Venue
@@ -21,5 +22,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.Venue
         public VenueID VenueId => new VenueID(venueId);
         public string WorldDetailUrl => worldDetailUrl;
         public bool IsBeta => isBeta;
+
+        public ThumbnailUrl GetThumbnailUrlForDisplay() => thumbnailUrls.FirstOrDefault(x => x != null) ?? new ThumbnailUrl("");
     }
 }

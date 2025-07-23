@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Editor.Builder;
+using ClusterVR.CreatorKit.Editor.Utils.Extensions;
 using ClusterVR.CreatorKit.Proto;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
@@ -55,9 +56,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             bool isBeta,
             bool isPreview,
             string[] productUgcIds,
-            ExportedAssetInfo exportedAssetInfo,
-            Action<VenueUploadRequestCompletionResponse> onSuccess = null,
-            Action<Exception> onError = null
+            ExportedAssetInfo exportedAssetInfo
         )
         {
             this.accessToken = accessToken;
@@ -66,8 +65,6 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             this.isBeta = isBeta;
             this.isPreview = isPreview;
             this.productUgcIds = productUgcIds;
-            this.onSuccess = onSuccess;
-            this.onError = onError;
             this.exportedAssetInfo = exportedAssetInfo;
 
             uploadStatus = BuildUploadStatus();
@@ -100,43 +97,43 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         public void Run(CancellationToken cancellationToken)
         {
-            foreach (var platformInfo in exportedAssetInfo.PlatformInfos)
-            {
-                if (!ValidatePlatformVenue(platformInfo))
-                {
-                    return;
-                }
-            }
-
-            _ = UploadVenueAsync(cancellationToken);
+            RunAsync(cancellationToken).Forget();
         }
 
-        bool ValidatePlatformVenue(ExportedPlatformAssetInfo platformAssetInfo)
+        public async Task<VenueUploadRequestCompletionResponse> RunAsync(CancellationToken cancellationToken)
+        {
+            foreach (var platformInfo in exportedAssetInfo.PlatformInfos)
+            {
+                ValidatePlatformVenue(platformInfo);
+            }
+
+            return await UploadVenueAsync(cancellationToken);
+        }
+
+        void ValidatePlatformVenue(ExportedPlatformAssetInfo platformAssetInfo)
         {
             {
-                if (!ValidateSceneAssetBundle(platformAssetInfo.MainSceneInfo, true, platformAssetInfo.VenueAssetInfos, platformAssetInfo.BuildTarget))
-                {
-                    return false;
-                }
+                ValidateSceneAssetBundle(
+                    platformAssetInfo.MainSceneInfo,
+                    true,
+                    platformAssetInfo.VenueAssetInfos,
+                    platformAssetInfo.BuildTarget);
             }
             foreach (var subSceneInfo in platformAssetInfo.SubSceneInfos)
             {
-                if (!ValidateSceneAssetBundle(subSceneInfo, false, platformAssetInfo.VenueAssetInfos, platformAssetInfo.BuildTarget))
-                {
-                    return false;
-                }
+                ValidateSceneAssetBundle(
+                    subSceneInfo,
+                    false,
+                    platformAssetInfo.VenueAssetInfos,
+                    platformAssetInfo.BuildTarget);
             }
             foreach (var venueAssetInfo in platformAssetInfo.VenueAssetInfos)
             {
-                if (!ValidateVenueAssetBundle(venueAssetInfo, platformAssetInfo.BuildTarget))
-                {
-                    return false;
-                }
+                ValidateVenueAssetBundle(venueAssetInfo, platformAssetInfo.BuildTarget);
             }
-            return true;
         }
 
-        bool ValidateSceneAssetBundle(ExportedSceneInfo sceneInfo, bool isMainScene, IReadOnlyList<ExportedVenueAssetInfo> venueAssetInfos, BuildTarget target)
+        static void ValidateSceneAssetBundle(ExportedSceneInfo sceneInfo, bool isMainScene, IReadOnlyList<ExportedVenueAssetInfo> venueAssetInfos, BuildTarget target)
         {
             var assetBundlePath = sceneInfo.BuiltAssetBundlePath;
             if (!File.Exists(assetBundlePath))
@@ -144,8 +141,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 var message = isMainScene ?
                     TranslationUtility.GetMessage(TranslationTable.cck_main_scene_build, target.DisplayName()) :
                     TranslationUtility.GetMessage(TranslationTable.cck_sub_scene_build, target.DisplayName(), assetBundlePath);
-                onError?.Invoke(new FileNotFoundException(message));
-                return false;
+                throw new FileNotFoundException(message);
             }
 
             foreach (var assetIdDependsOn in sceneInfo.AssetIdsDependsOn)
@@ -153,27 +149,22 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 if (!venueAssetInfos.Select(i => i.Id).Contains(assetIdDependsOn))
                 {
                     var message = TranslationUtility.GetMessage(TranslationTable.cck_venue_asset_missing, target.DisplayName(), assetIdDependsOn);
-                    onError?.Invoke(new Exception(message));
-                    return false;
+                    throw new Exception(message);
                 }
             }
-
-            return true;
         }
 
-        bool ValidateVenueAssetBundle(ExportedVenueAssetInfo venueAssetInfo, BuildTarget target)
+        static void ValidateVenueAssetBundle(ExportedVenueAssetInfo venueAssetInfo, BuildTarget target)
         {
             var assetBundlePath = venueAssetInfo.BuiltAssetBundlePath;
             if (!File.Exists(assetBundlePath))
             {
                 var message = TranslationUtility.GetMessage(TranslationTable.cck_venue_asset_build, target.DisplayName(), assetBundlePath);
-                onError?.Invoke(new FileNotFoundException(message));
-                return false;
+                throw new FileNotFoundException(message);
             }
-            return true;
         }
 
-        async Task UploadVenueAsync(CancellationToken cancellationToken)
+        async Task<VenueUploadRequestCompletionResponse> UploadVenueAsync(CancellationToken cancellationToken)
         {
             isProcessing = true;
 
@@ -196,11 +187,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 uploadRequestId = null;
                 uploadStatus[UploadPhase.PostProcess] = true;
 
-                onSuccess?.Invoke(completionResponse);
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
+                return completionResponse;
             }
             finally
             {
@@ -230,11 +217,5 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             uploadStatus[BuildTargetToPhase(target)] = true;
         }
 
-        void HandleError(Exception e)
-        {
-            Debug.LogException(e);
-            isProcessing = false;
-            onError?.Invoke(e);
-        }
     }
 }

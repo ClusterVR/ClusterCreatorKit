@@ -1,5 +1,5 @@
 using ClusterVR.CreatorKit.Editor.Analytics;
-using ClusterVR.CreatorKit.Editor.Builder;
+using ClusterVR.CreatorKit.Editor.Repository;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
@@ -18,15 +18,17 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
         const string PrivacyPolicyUrl = "https://help.cluster.mu/hc/en-us/articles/20264222848153-Privacy-Policy";
 #endif
 
+        static EditorPrefsRepository EditorPrefsRepository => EditorPrefsRepository.Instance;
+
         [InitializeOnLoadMethod]
         static void ShowWindowOnlyOnce()
         {
-            if (EditorPrefsUtils.HasAlreadyShownAboutWindow)
+            if (EditorPrefsRepository.HasAlreadyShownAboutWindow.Val)
             {
                 return;
             }
             ShowWindow();
-            EditorPrefsUtils.HasAlreadyShownAboutWindow = true;
+            EditorPrefsRepository.SetHasAlreadyShownAboutWindow(true);
         }
 
         [MenuItem(TranslationTable.cck_cluster_about_menu, priority = 400)]

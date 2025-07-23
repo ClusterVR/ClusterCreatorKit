@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEditor;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
+    [Obsolete]
     public sealed class EditorCoroutine
     {
         public static void Start(IEnumerator routine)

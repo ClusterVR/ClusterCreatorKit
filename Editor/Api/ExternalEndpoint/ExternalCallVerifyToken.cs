@@ -16,7 +16,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.ExternalEndpoint
         public string TokenId => tokenId;
         public string VerifyToken => verifyToken;
 
-        internal ExternalCallVerifyToken(string registeredAt, string tokenId, string verifyToken)
+        public ExternalCallVerifyToken(string registeredAt, string tokenId, string verifyToken)
         {
             this.registeredAt = registeredAt;
             this.tokenId = tokenId;

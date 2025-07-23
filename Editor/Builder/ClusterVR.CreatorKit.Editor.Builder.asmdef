@@ -1,0 +1,24 @@
+{
+    "name": "ClusterVR.CreatorKit.Editor.Builder",
+    "rootNamespace": "",
+    "references": [
+      "ClusterVR.CreatorKit.Translation",
+      "ClusterVR.CreatorKit.World",
+      "ClusterVR.CreatorKit.Item",
+      "ClusterVR.CreatorKit.Item.Implements",
+      "ClusterVR.CreatorKit.Trigger",
+      "ClusterVR.CreatorKit.World.Implements",
+      "ClusterVR.CreatorKit"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -118,16 +118,21 @@ namespace VGltf.Unity
             mat.TryGetColorOrDefault("_Color", Color.white, out var mainColor);
             var mainTexIndex = ExportTextureIfExist(mat, "_MainTex");
 
-            mat.TryGetFloatOrDefault("_Metallic", 1.0f, out var metallic);
-            mat.TryGetFloatOrDefault("_Glossiness", 0.0f, out var smoothness);
-            var metallicRoughnessTexIndex = ExportMetallicRoughnessTextureIfExist(mat, "_MetallicGlossMap", smoothness);
+            var metallicRoughnessTexIndex = ExportMetallicRoughnessTextureIfExist(mat, "_MetallicGlossMap", "_GlossMapScale");
 
-            var roughness = ValueConv.SmoothnessToRoughness(smoothness);
+            float metallicFactor, roughnessFactor;
             if (metallicRoughnessTexIndex != null)
             {
-                // Values are already baked into metallicRoughnessTexIndex
-                metallic = 1.0f;
-                roughness = 1.0f;
+                // not use these factors (values in metallicRoughnessTex are used for metallic and roughness)
+                // Smoothness is already baked into metallicRoughnessTex
+                metallicFactor = 1.0f;
+                roughnessFactor = 1.0f;
+            }
+            else
+            {
+                mat.TryGetFloatOrDefault("_Metallic", 1.0f, out metallicFactor);
+                mat.TryGetFloatOrDefault("_Glossiness", 0.0f, out var smoothness);
+                roughnessFactor = ValueConv.SmoothnessToRoughness(smoothness);
             }
 
             var normalMapIndex = ExportNormalTextureIfExist(mat, "_BumpMap");
@@ -165,8 +170,8 @@ namespace VGltf.Unity
                         Index = mainTexIndex.Value,
                         TexCoord = 0, // NOTE: mesh.primitive must have TEXCOORD_<TexCoord>.
                     } : null,
-                    MetallicFactor = metallic,
-                    RoughnessFactor = roughness,
+                    MetallicFactor = metallicFactor,
+                    RoughnessFactor = roughnessFactor,
                     MetallicRoughnessTexture = metallicRoughnessTexIndex != null ? new Types.Material.MetallicRoughnessTextureInfoType
                     {
                         Index = metallicRoughnessTexIndex.Value,
@@ -295,13 +300,15 @@ namespace VGltf.Unity
 
         static readonly int SmoothnessProp = Shader.PropertyToID("_Smoothness");
 
-        int? ExportMetallicRoughnessTextureIfExist(Material texMat, string name, float smoothness)
+        int? ExportMetallicRoughnessTextureIfExist(Material texMat, string texturePropertyName, string smoothnessPropertyName)
         {
-            var tex = FindTex(texMat, name);
+            var tex = FindTex(texMat, texturePropertyName);
             if (tex == null)
             {
                 return null;
             }
+
+            texMat.TryGetFloatOrDefault(smoothnessPropertyName, 0.0f, out var smoothness);
 
             // Linear
             using (var mat = new Utils.DestroyOnDispose<Material>(new Material(_convertingMetallicRoughnessTexShader)))

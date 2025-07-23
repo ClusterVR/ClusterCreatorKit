@@ -9,7 +9,8 @@
         "ClusterVR.CreatorKit.Editor.Preview.Trigger",
         "ClusterVR.CreatorKit.Gimmick",
         "ClusterVR.CreatorKit.Trigger",
-        "ClusterVR.CreatorKit.Translation"
+        "ClusterVR.CreatorKit.Translation",
+        "ClusterVR.CreatorKit.Editor.Analytics"
     ],
     "includePlatforms": [
         "Editor"

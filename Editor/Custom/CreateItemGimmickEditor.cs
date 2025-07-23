@@ -1,4 +1,4 @@
-﻿using ClusterVR.CreatorKit.Editor.Extensions;
+﻿using ClusterVR.CreatorKit.Editor.Utils.Extensions;
 using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;

@@ -1,0 +1,21 @@
+{
+    "name": "ClusterVR.CreatorKit.Editor.Repository",
+    "rootNamespace": "",
+    "references": [
+      "ClusterVR.CreatorKit.Editor.Api",
+      "ClusterVR.CreatorKit.Editor.Infrastructure",
+      "ClusterVR.CreatorKit.Editor.Utils",
+      "Unity.net.yutopp.vgltf"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

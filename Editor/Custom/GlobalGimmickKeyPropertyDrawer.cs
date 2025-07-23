@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using ClusterVR.CreatorKit.Editor.Extensions;
+using ClusterVR.CreatorKit.Editor.Utils.Extensions;
 using ClusterVR.CreatorKit.Editor.Validator;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Gimmick.Implements;

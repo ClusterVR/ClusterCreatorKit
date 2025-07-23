@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ClusterVR.CreatorKit.Editor.Extensions;
+using ClusterVR.CreatorKit.Editor.Utils.Extensions;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Operation;
 using ClusterVR.CreatorKit.Operation.Implements;

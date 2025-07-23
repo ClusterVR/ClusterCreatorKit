@@ -1,6 +1,6 @@
 using System;
 using ClusterVR.CreatorKit.Editor.Analytics;
-using ClusterVR.CreatorKit.Editor.Builder;
+using ClusterVR.CreatorKit.Editor.Repository;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
@@ -13,9 +13,11 @@ namespace ClusterVR.CreatorKit.Editor.Enquete
         public const int SuggestIntervalOnCancel = 60 * 60 * 24 * 7; // 7 days
         public const string EnqueteUrl = "https://forms.gle/6TYFtREQBcEUqqUb6";
 
+        static EditorPrefsRepository EditorPrefsRepository => EditorPrefsRepository.Instance;
+
         public static bool ShouldShowEnqueteRequest()
         {
-            return EditorPrefsUtils.NextEnqueteAskTime <= GetCurrentTimeStamp();
+            return EditorPrefsRepository.NextEnqueteAskTime.Val <= GetCurrentTimeStamp();
         }
 
         public static void ShowEnqueteDialog()
@@ -38,13 +40,13 @@ namespace ClusterVR.CreatorKit.Editor.Enquete
 
         public static void OpenEnqueteLink()
         {
-            EditorPrefsUtils.NextEnqueteAskTime = GetCurrentTimeStamp() + SuggestIntervalOnOpen;
+            EditorPrefsRepository.SetNextEnqueteAskTime(GetCurrentTimeStamp() + SuggestIntervalOnOpen);
             Application.OpenURL(EnqueteUrl);
             PanamaLogger.LogCckOpenLink(EnqueteUrl, "EnqueteService_OpenEnqueteLink");
         }
         public static void CancelEnquete()
         {
-            EditorPrefsUtils.NextEnqueteAskTime = GetCurrentTimeStamp() + SuggestIntervalOnCancel;
+            EditorPrefsRepository.SetNextEnqueteAskTime(GetCurrentTimeStamp() + SuggestIntervalOnCancel);
         }
 
         static int GetCurrentTimeStamp()

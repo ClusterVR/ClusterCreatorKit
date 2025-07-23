@@ -1,5 +1,5 @@
 using ClusterVR.CreatorKit.Constants;
-using ClusterVR.CreatorKit.Editor.Extensions;
+using ClusterVR.CreatorKit.Editor.Utils.Extensions;
 using ClusterVR.CreatorKit.Translation;
 using ClusterVR.CreatorKit.World.Implements.WorldRuntimeSetting;
 using UnityEditor;

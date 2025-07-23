@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ClusterVR.CreatorKit.Editor.Repository;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Translation;
 

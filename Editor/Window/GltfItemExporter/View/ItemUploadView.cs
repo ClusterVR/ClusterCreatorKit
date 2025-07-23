@@ -1,139 +1,79 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using ClusterVR.CreatorKit.Editor.Analytics;
-using ClusterVR.CreatorKit.Editor.Api.RPC;
-using ClusterVR.CreatorKit.Editor.ProjectSettings;
-using ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter;
-using ClusterVR.CreatorKit.Editor.Window.View;
-using ClusterVR.CreatorKit.ItemExporter;
+using ClusterVR.CreatorKit.Editor.Utils;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
-using UserInfo = ClusterVR.CreatorKit.Editor.Api.User.UserInfo;
 
 namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
 {
-    public sealed class ItemUploadView : IRequireTokenAuthMainView, IDisposable
+    public sealed class ItemUploadView : VisualElement
     {
         const string MainTemplatePath = "Packages/mu.cluster.cluster-creator-kit/Editor/Window/GltfItemExporter/Uxml/ItemUploaderWindow.uxml";
-        const string ItemTemplatePath = "Packages/mu.cluster.cluster-creator-kit/Editor/Window/GltfItemExporter/Uxml/ItemView.uxml";
         const string MainStyleSheetPath = "Packages/mu.cluster.cluster-creator-kit/Editor/Window/GltfItemExporter/Uss/ItemUploaderWindow.uss";
         const string ItemViewStyleSheetPath = "Packages/mu.cluster.cluster-creator-kit/Editor/Window/GltfItemExporter/Uss/ItemView.uss";
 
         const int ItemViewHeight = 95;
 
-        readonly List<ItemView> itemViews = new List<ItemView>();
-
-        readonly Reactive<ItemUploadProgressWindow.ItemUploadStatus> reactiveItemUploadStatus =
-            new Reactive<ItemUploadProgressWindow.ItemUploadStatus>();
-
-        UserInfo? loginUserInfo;
-
-        Label itemCountLabel;
-        ListView itemList;
-        VisualElement itemContainer;
-        VisualElement helpViewContainer;
-        VisualElement dragAreaPanel;
-        IDisposable uploadStatusBinding;
-
-        Button clearItemViewsButton;
-        Button uploadItemsButton;
-
-        ItemUploadProgressWindow progressWindow;
-
-        CancellationTokenSource uploadCancellationTokenSource;
-        readonly IItemExporter itemExporter;
-        readonly IComponentValidator componentValidator;
-        readonly IGltfValidator gltfValidator;
-        readonly IItemTemplateBuilder itemTemplateBuilder;
-        readonly IItemUploadService uploadService;
         readonly string editorTypeName;
 
-        public Reactive<ItemUploadProgressWindow.ItemUploadStatus> ReactiveItemUploadStatus() =>
-            reactiveItemUploadStatus;
+        readonly Label itemCountLabel;
+        readonly ListView itemList;
+        readonly VisualElement itemContainer;
+        readonly VisualElement helpViewContainer;
+        readonly VisualElement dragAreaPanel;
 
-        public static event Action<IReadOnlyList<(GameObject item, string itemTemplateId)>> OnItemUploaded;
+        readonly Button clearItemViewsButton;
+        readonly Button uploadItemsButton;
 
-        public ItemUploadView(IItemExporter itemExporter,
-            IComponentValidator componentValidator,
-            IGltfValidator gltfValidator,
-            IItemTemplateBuilder itemTemplateBuilder,
-            IItemUploadService uploadService,
-            string editorTypeName)
+        readonly Button addItemButton;
+
+        readonly List<ItemViewModel> itemViewModels = new();
+
+        ItemUploadProgressWindow progressWindow;
+        event Action OnProgressWindowClosed;
+
+        event Action<Object[]> OnDropItems;
+
+        public ItemUploadView(string editorTypeName)
         {
-            this.itemExporter = itemExporter;
-            this.componentValidator = componentValidator;
-            this.gltfValidator = gltfValidator;
-            this.itemTemplateBuilder = itemTemplateBuilder;
-            this.uploadService = uploadService;
             this.editorTypeName = editorTypeName;
-        }
-
-        public VisualElement LoginAndCreateView(UserInfo userInfo)
-        {
-            loginUserInfo = userInfo;
-
             var mainTemplate = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(MainTemplatePath);
             VisualElement view = mainTemplate.CloneTree();
             var mainStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(MainStyleSheetPath);
             var itemViewStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ItemViewStyleSheetPath);
             view.styleSheets.Add(mainStyleSheet);
             view.styleSheets.Add(itemViewStyleSheet);
-
-            var itemTemplate = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(ItemTemplatePath);
+            hierarchy.Add(view);
 
             itemCountLabel = view.Q<Label>("item-count-label");
 
-            var addItemButton = view.Q<Button>("add-item-button");
+            addItemButton = view.Q<Button>("add-item-button");
             addItemButton.text = TranslationUtility.GetMessage(TranslationTable.cck_editor_type_addition, editorTypeName);
             var addItemButtonLabel = view.Q<Label>("select-prefab-to-upload");
             addItemButtonLabel.text = TranslationTable.cck_select_prefab_to_upload;
-            addItemButton.clicked += () =>
-            {
-                EditorGUIUtility.ShowObjectPicker<GameObject>(null, false, "", 0);
-            };
 
             clearItemViewsButton = view.Q<Button>("clear-item-list-button");
             clearItemViewsButton.text = TranslationTable.cck_delete_all;
-            clearItemViewsButton.clicked += () =>
-            {
-                var result = EditorUtility.DisplayDialog(TranslationTable.cck_delete_multiple_items,
-                    TranslationTable.cck_confirm_delete_all_items,
-                    TranslationTable.cck_yes, TranslationTable.cck_no);
-                if (result)
-                {
-                    ClearItemViews();
-                }
-            };
 
             uploadItemsButton = view.Q<Button>("upload-button");
-            uploadItemsButton.clicked += () => UploadItems(ClusterCreatorKitSettings.instance.IsBeta);
-            uploadItemsButton.text = uploadService.ApplyBeta && ClusterCreatorKitSettings.instance.IsBeta
-                ? TranslationTable.cck_upload_as_beta_feature_item
-                : TranslationTable.cck_upload;
-
-            Func<VisualElement> makeItemView = () =>
-            {
-                var template = itemTemplate.CloneTree();
-                return template;
-            };
-
-            Action<VisualElement, int> bindItemView = (itemElement, itemIdx) =>
-            {
-                var itemView = itemViews[itemIdx];
-                itemView.BindItemView(itemElement);
-            };
 
             itemList = view.Q<ListView>("item-list-view");
-            itemList.makeItem = makeItemView;
-            itemList.bindItem = bindItemView;
-            itemList.itemsSource = itemViews;
-            itemList.itemHeight = ItemViewHeight;
+            itemList.makeItem = () =>
+            {
+                var template = new ItemView();
+                return template;
+            };
+            itemList.bindItem = (itemElement, itemIdx) =>
+            {
+                var itemView = itemViewModels[itemIdx];
+                ItemView.Bind(itemView, (ItemView) itemElement);
+            };
+            itemList.itemsSource = itemViewModels;
+            itemList.fixedItemHeight = ItemViewHeight;
             itemList.selectionType = SelectionType.None;
 
             itemContainer = view.Q<VisualElement>("item-list-view-container");
@@ -141,90 +81,84 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             dragAreaPanel = view.Q<VisualElement>("drag-area-panel");
             var dragAreaLabel = view.Q<Label>("drag-and-drop-prefab");
             dragAreaLabel.text = TranslationTable.cck_drag_and_drop_prefab;
-            var itemListPanel = view.Q<VisualElement>("item-list-panel");
 
+            var itemListPanel = view.Q<VisualElement>("item-list-panel");
             itemListPanel.RegisterCallback<DragEnterEvent>(OnDragEnter);
             itemListPanel.RegisterCallback<DragLeaveEvent>(OnDragLeave);
             itemListPanel.RegisterCallback<DragUpdatedEvent>(OnDragUpdate);
-            itemListPanel.RegisterCallback<DragExitedEvent>(OnDragExited);
+            itemListPanel.RegisterCallback<DragPerformEvent>(OnDragPerform);
 
             EnableDragAreaPanel(false);
-            RefreshItemList();
+        }
 
-            uploadStatusBinding = ReactiveBinder.Bind(reactiveItemUploadStatus, (status) =>
+        public IDisposable Bind(ItemUploadViewModel viewModel)
+        {
+            OnDropItems += viewModel.OnDropItems;
+            addItemButton.clicked += viewModel.OnAddItemButtonClicked;
+            clearItemViewsButton.clicked += viewModel.OnClearItemViewsButtonClicked;
+            uploadItemsButton.clicked += viewModel.OnUploadItemsButtonClicked;
+            OnProgressWindowClosed += viewModel.OnProgressWindowClosed;
+
+            var disposables = new[]
             {
-                switch (status)
+                new Disposable(() =>
                 {
-                    case ItemUploadProgressWindow.ItemUploadStatus.Standby:
-                        progressWindow?.Close();
-                        progressWindow = null;
-                        break;
-                    case ItemUploadProgressWindow.ItemUploadStatus.Uploading:
-                        var viewRect = GUIUtility.GUIToScreenRect(view.worldBound);
+                    OnDropItems -= viewModel.OnDropItems;
+                    addItemButton.clicked -= viewModel.OnAddItemButtonClicked;
+                    clearItemViewsButton.clicked -= viewModel.OnClearItemViewsButtonClicked;
+                    uploadItemsButton.clicked -= viewModel.OnUploadItemsButtonClicked;
+                    OnProgressWindowClosed -= viewModel.OnProgressWindowClosed;
+                }),
+                new Disposable(() =>
+                {
+                    progressWindow?.Close();
+                    progressWindow = null;
+                }),
+                ReactiveBinder.Bind(viewModel.ItemViewModels, SetItemList),
+                ReactiveBinder.Bind(viewModel.UploadAsBeta, SetUploadItemsButtonAsBeta),
+                ReactiveBinder.Bind(viewModel.UploadProgress, rate => progressWindow?.SetProgressRate(rate)),
+                ReactiveBinder.Bind(viewModel.UploadStatus, SetUploadStatus)
+            };
 
-                        progressWindow = ItemUploadProgressWindow.CreateWindow(viewRect, editorTypeName);
-                        progressWindow.OnClose += OnProgressWindowClosed;
-                        progressWindow.SetStatus(ItemUploadProgressWindow.ItemUploadStatus.Uploading);
-                        break;
-                    case ItemUploadProgressWindow.ItemUploadStatus.Finish:
-                        ClearItemViews();
-                        progressWindow.SetStatus(ItemUploadProgressWindow.ItemUploadStatus.Finish);
-                        break;
-                    default:
-                        throw new NotImplementedException();
+            return new Disposable(() =>
+            {
+                foreach (var disposable in disposables)
+                {
+                    disposable.Dispose();
                 }
             });
-
-            return view;
         }
 
-        public void Logout()
+        void SetUploadStatus(ItemUploadProgressWindow.ItemUploadStatus status)
         {
-            Clear();
-        }
-
-        void Clear()
-        {
-            ClearItemViews();
-
-            loginUserInfo = null;
-
-            itemCountLabel = null;
-            itemList = null;
-            itemContainer = null;
-            helpViewContainer = null;
-            dragAreaPanel = null;
-
-            clearItemViewsButton = null;
-            uploadItemsButton = null;
-
-            progressWindow?.Close();
-            progressWindow = null;
-
-            uploadStatusBinding?.Dispose();
-            uploadStatusBinding = null;
-        }
-
-        public void AddObjectPickerItem()
-        {
-            if (loginUserInfo == null)
+            switch (status)
             {
-                return;
-            }
-            if (Event.current.type == EventType.ExecuteCommand)
-            {
-                if (Event.current.commandName == "ObjectSelectorClosed")
-                {
-                    var obj = EditorGUIUtility.GetObjectPickerObject();
-                    AddItems(new[] { obj }, ClusterCreatorKitSettings.instance.IsBeta);
-                    Event.current.Use();
-                }
+                case ItemUploadProgressWindow.ItemUploadStatus.Standby:
+                    progressWindow?.Close();
+                    progressWindow = null;
+                    break;
+                case ItemUploadProgressWindow.ItemUploadStatus.Uploading:
+                    var viewRect = GUIUtility.GUIToScreenRect(worldBound);
+                    progressWindow = CreateProgressWindow(viewRect);
+                    progressWindow.SetStatus(ItemUploadProgressWindow.ItemUploadStatus.Uploading);
+                    break;
+                case ItemUploadProgressWindow.ItemUploadStatus.Finish:
+                    progressWindow?.SetStatus(ItemUploadProgressWindow.ItemUploadStatus.Finish);
+                    break;
+                default:
+                    throw new NotImplementedException();
             }
         }
 
-        void UploadItems(bool isBeta)
+        ItemUploadProgressWindow CreateProgressWindow(Rect viewRect)
         {
-            _ = UploadAsync(isBeta);
+            var window = ItemUploadProgressWindow.CreateWindow(viewRect, editorTypeName);
+            window.OnClose += () =>
+            {
+                progressWindow = null;
+                OnProgressWindowClosed?.Invoke();
+            };
+            return window;
         }
 
         void OnDragEnter(DragEnterEvent arg)
@@ -237,10 +171,11 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             EnableDragAreaPanel(false);
         }
 
-        void OnDragExited(DragExitedEvent arg)
+        void OnDragPerform(DragPerformEvent arg)
         {
             EnableDragAreaPanel(false);
-            AddItems(DragAndDrop.objectReferences, ClusterCreatorKitSettings.instance.IsBeta);
+            OnDropItems?.Invoke(DragAndDrop.objectReferences);
+            DragAndDrop.AcceptDrag();
         }
 
         void OnDragUpdate(DragUpdatedEvent arg)
@@ -265,58 +200,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             return (obj is GameObject gameObject) && EditorUtility.IsPersistent(gameObject);
         }
 
-        void AddItems(Object[] objects, bool isBeta)
-        {
-            foreach (var obj in objects)
-            {
-                if (!(obj is GameObject gameObject) || !IsPrefabAsset(gameObject))
-                {
-                    continue;
-                }
-
-                var targetItemView =
-                    itemViews.FirstOrDefault(item =>
-                        item.Item != null && item.Item.GetInstanceID() == gameObject.GetInstanceID());
-                if (targetItemView != null)
-                {
-                    targetItemView.SetItem(gameObject, isBeta);
-                }
-                else
-                {
-                    AddNewItem(gameObject, isBeta);
-                }
-            }
-            RefreshItemList();
-        }
-
-        void AddNewItem(GameObject gameObject, bool isBeta)
-        {
-            var itemView = new ItemView(itemExporter, componentValidator, gltfValidator, itemTemplateBuilder);
-            itemView.SetItem(gameObject, isBeta);
-            itemView.OnRemoveButtonClicked += RemoveItem;
-
-            itemViews.Insert(0, itemView);
-        }
-
-        void RemoveItem(ItemView itemView)
-        {
-            itemViews.Remove(itemView);
-            itemView.Dispose();
-
-            RefreshItemList();
-        }
-
-        void ClearItemViews()
-        {
-            foreach (var itemView in itemViews)
-            {
-                itemView.Dispose();
-            }
-            itemViews.Clear();
-
-            RefreshItemList();
-        }
-
         void EnableDragAreaPanel(bool isEnable)
         {
             if (dragAreaPanel == null)
@@ -327,20 +210,31 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             dragAreaPanel.style.display = isEnable ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
-        void RefreshItemList()
+        void SetUploadItemsButtonAsBeta(bool uploadAsBeta)
         {
+            uploadItemsButton.text = uploadAsBeta
+                ? TranslationTable.cck_upload_as_beta_feature_item
+                : TranslationTable.cck_upload;
+        }
+
+        void SetItemList(ItemViewModel[] itemViewModels)
+        {
+            this.itemViewModels.Clear();
+            this.itemViewModels.AddRange(itemViewModels);
+            var itemCount = itemViewModels.Length;
+
             itemList?.Rebuild();
             if (itemContainer != null)
             {
-                itemContainer.style.height = ItemViewHeight * itemViews.Count;
+                itemContainer.style.height = ItemViewHeight * itemCount;
             }
             if (itemCountLabel != null)
             {
-                itemCountLabel.text = TranslationUtility.GetMessage(TranslationTable.cck_item_count, itemViews.Count);
+                itemCountLabel.text = TranslationUtility.GetMessage(TranslationTable.cck_item_count, itemCount);
             }
 
-            var hasItem = itemViews.Count > 0;
-            var hasInvalidItem = itemViews.Any(itemView => !itemView.IsValid);
+            var hasItem = itemCount > 0;
+            var hasInvalidItem = itemViewModels.Any(itemView => !itemView.IsValid);
 
             clearItemViewsButton?.SetEnabled(hasItem);
             uploadItemsButton?.SetEnabled(hasItem && !hasInvalidItem);
@@ -349,76 +243,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.GltfItemExporter.View
             {
                 helpViewContainer.style.display = hasItem ? DisplayStyle.None : DisplayStyle.Flex;
             }
-        }
-
-        void OnProgressWindowClosed()
-        {
-            CancelUpload();
-            progressWindow = null;
-            reactiveItemUploadStatus.Val = ItemUploadProgressWindow.ItemUploadStatus.Standby;
-        }
-
-        async Task UploadAsync(bool isBeta)
-        {
-            if (!loginUserInfo.HasValue ||
-                reactiveItemUploadStatus.Val == ItemUploadProgressWindow.ItemUploadStatus.Uploading)
-            {
-                return;
-            }
-            try
-            {
-                reactiveItemUploadStatus.Val = ItemUploadProgressWindow.ItemUploadStatus.Uploading;
-                CancelUpload();
-                uploadCancellationTokenSource = new CancellationTokenSource();
-
-                await UploadItemAsync(loginUserInfo.Value.VerifiedToken, isBeta, uploadCancellationTokenSource.Token);
-
-                reactiveItemUploadStatus.Val = ItemUploadProgressWindow.ItemUploadStatus.Finish;
-                Application.OpenURL(uploadService.UploadedItemsManagementUrl);
-                PanamaLogger.LogCckOpenLink(uploadService.UploadedItemsManagementUrl, "ItemUploadView_UploadComplete");
-            }
-            catch (OperationCanceledException)
-            {
-                Debug.LogWarning(TranslationTable.cck_upload_interrupted);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(TranslationUtility.GetMessage(TranslationTable.cck_item_upload_failed, e.Message));
-                reactiveItemUploadStatus.Val = ItemUploadProgressWindow.ItemUploadStatus.Standby;
-                throw;
-            }
-        }
-
-        async Task UploadItemAsync(string verifiedToken, bool isBeta, CancellationToken cancellationToken)
-        {
-            uploadService.SetAccessToken(verifiedToken);
-
-            var validItemViews = itemViews.Where(item => item.IsValid).ToArray();
-            var length = validItemViews.Length;
-            var itemList = new List<(GameObject item, string itemTemplateId)>(validItemViews.Length);
-            foreach (var (itemView, i) in validItemViews.Select((item, i) => (item, i)))
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                progressWindow?.SetProgressRate(i * 100f / length);
-                var zipBinary = await itemView.BuildZippedItemBinary();
-                var itemTemplateId = await uploadService.UploadItemAsync(zipBinary, isBeta, cancellationToken);
-                itemList.Add((itemView.Item, itemTemplateId));
-            }
-            OnItemUploaded?.Invoke(itemList);
-        }
-
-        void CancelUpload()
-        {
-            uploadCancellationTokenSource?.Cancel();
-            uploadCancellationTokenSource?.Dispose();
-            uploadCancellationTokenSource = null;
-        }
-
-        public void Dispose()
-        {
-            CancelUpload();
-            Clear();
         }
     }
 }

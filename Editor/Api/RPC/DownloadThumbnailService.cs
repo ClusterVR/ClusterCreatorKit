@@ -1,7 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
+using ClusterVR.CreatorKit.Editor.Utils.Extensions;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -28,16 +30,30 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         public void Run()
         {
-            EditorCoroutine.Start(GetVenues());
+            RunAsync(CancellationToken.None).Forget();
         }
 
-        IEnumerator GetVenues()
+        async Task RunAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                await GetVenuesAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                onError?.Invoke(e);
+                cacheMap.Remove(thumbnailUrl);
+                throw;
+            }
+        }
+
+        async Task GetVenuesAsync(CancellationToken cancellationToken)
         {
             Texture2D cache;
             if (cacheMap.TryGetValue(thumbnailUrl, out cache) && cache)
             {
                 onSuccess?.Invoke(cache);
-                yield break;
+                return;
             }
 
             var downloadThumbnailRequest =
@@ -48,40 +64,24 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
             while (!downloadThumbnailRequest.isDone)
             {
-                yield return null;
+                await Task.Delay(50, cancellationToken);
             }
 
             if (downloadThumbnailRequest.result == UnityWebRequest.Result.ConnectionError)
             {
-                HandleError(new Exception(downloadThumbnailRequest.error));
-                yield break;
+                throw new Exception(downloadThumbnailRequest.error);
             }
 
             if (downloadThumbnailRequest.result == UnityWebRequest.Result.ProtocolError)
             {
-                HandleError(new Exception(downloadThumbnailRequest.downloadHandler.text));
-                yield break;
+                throw new Exception(downloadThumbnailRequest.downloadHandler.text);
             }
 
-            try
-            {
-                var texture = new Texture2D(1, 1);
-                texture.LoadImage(downloadThumbnailRequest.downloadHandler.data);
-                texture.filterMode = FilterMode.Point;
-                onSuccess?.Invoke(texture);
-                cacheMap[thumbnailUrl] = texture;
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
-            }
-        }
-
-        void HandleError(Exception e)
-        {
-            Debug.LogException(e);
-            onError?.Invoke(e);
-            cacheMap.Remove(thumbnailUrl);
+            var texture = new Texture2D(1, 1);
+            texture.LoadImage(downloadThumbnailRequest.downloadHandler.data);
+            texture.filterMode = FilterMode.Point;
+            onSuccess?.Invoke(texture);
+            cacheMap[thumbnailUrl] = texture;
         }
     }
 }

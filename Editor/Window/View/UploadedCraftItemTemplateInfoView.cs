@@ -1,51 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.ItemTemplate;
-using ClusterVR.CreatorKit.Editor.Api.RPC;
+using ClusterVR.CreatorKit.Editor.Utils;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
-using UnityEngine;
 using UnityEngine.UIElements;
-using UserInfo = ClusterVR.CreatorKit.Editor.Api.User.UserInfo;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
-    public sealed class UploadedCraftItemTemplateInfoView : IRequireTokenAuthMainView, IDisposable
+    public sealed class UploadedCraftItemTemplateInfoView : VisualElement
     {
         const string MainTemplatePath = "Packages/mu.cluster.cluster-creator-kit/Editor/Window/Uxml/UploadedCraftItemTemplateInfoView.uxml";
         const string MainStyleSheetPath = "Packages/mu.cluster.cluster-creator-kit/Editor/Window/Uss/UploadedCraftItemTemplateInfoView.uss";
 
-        VisualElement mainView;
-        TextField textField;
-        Button prevButton;
-        Button nextButton;
-        Button refreshButton;
+        readonly TextField textField;
+        readonly Button prevButton;
+        readonly Button nextButton;
+        readonly Button refreshButton;
 
-        bool isCreated;
-        UserInfo userInfo;
-
-        bool isUpdating;
-        int currentPage;
-        int prevPage;
-        int nextPage;
-
-        CancellationTokenSource ctx;
-
-        public VisualElement LoginAndCreateView(UserInfo userInfo)
+        public UploadedCraftItemTemplateInfoView()
         {
-            this.userInfo = userInfo;
-            if (ctx != null)
-            {
-                ctx.Cancel();
-                ctx.Dispose();
-            }
-            ctx = new();
-
-            mainView = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(MainTemplatePath).CloneTree();
+            VisualElement mainView = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(MainTemplatePath).CloneTree();
             mainView.styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>(MainStyleSheetPath));
+            hierarchy.Add(mainView);
 
             textField = mainView.Q<TextField>("main-field");
 
@@ -55,65 +33,43 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             prevButton.text = TranslationTable.cck_previous;
             nextButton.text = TranslationTable.cck_next;
             refreshButton.text = TranslationTable.cck_refresh;
-
-            prevButton.clicked += OnPrevClicked;
-            nextButton.clicked += OnNextClicked;
-            refreshButton.clicked += () => RequestUpdatePage(currentPage);
-
-            currentPage = 1;
-            prevPage = 0;
-            nextPage = 0;
-
-            RequestUpdatePage(currentPage);
-
-            isCreated = true;
-            return mainView;
         }
 
-        void RequestUpdatePage(int page)
+        public IDisposable Bind(UploadedCraftItemTemplateInfoViewModel viewModel)
         {
-            _ = RequestUpdatePageAsync(page, ctx.Token);
+            prevButton.clicked += viewModel.OnPrevClicked;
+            nextButton.clicked += viewModel.OnNextClicked;
+            refreshButton.clicked += viewModel.OnRefreshClicked;
+            var disposables = new[]
+            {
+                new Disposable(() =>
+                {
+                    prevButton.clicked -= viewModel.OnPrevClicked;
+                    nextButton.clicked -= viewModel.OnNextClicked;
+                    refreshButton.clicked -= viewModel.OnRefreshClicked;
+                }),
+                ReactiveBinder.Bind(viewModel.PrevButtonEnabled, enabled => prevButton.SetEnabled(enabled)),
+                ReactiveBinder.Bind(viewModel.NextButtonEnabled, enabled => nextButton.SetEnabled(enabled)),
+                ReactiveBinder.Bind(viewModel.OwnItemTemplates, RenderOwnItemTemplates),
+            };
+
+            return new Disposable(() =>
+            {
+                foreach (var disposable in disposables)
+                {
+                    disposable.Dispose();
+                }
+            });
         }
 
-        async Task RequestUpdatePageAsync(int page, CancellationToken cancellationToken)
+        void RenderOwnItemTemplates((IReadOnlyList<OwnItemTemplate> ownItemTemplates, bool fetchFailed) v)
         {
-            if (isUpdating)
+            textField.value = v switch
             {
-                return;
-            }
-            isUpdating = true;
-            try
-            {
-                DisablePageButtons();
-                var result = await APIServiceClient.GetOwnItemTemplatesAsync(userInfo.VerifiedToken, 30, "not-hidden", page, cancellationToken);
-                var pageData = result.PageData;
-                currentPage = page;
-                prevPage = pageData.Prev;
-                nextPage = pageData.Next;
-                textField.value = AsHumanReadableText(result.OwnItemTemplates);
-                UpdatePageButtons(pageData.Prev, pageData.Next, page);
-            }
-            catch (Exception e) when (e is not OperationCanceledException)
-            {
-                textField.value = TranslationTable.cck_information_fetch_failed;
-                Debug.LogException(e);
-            }
-            finally
-            {
-                isUpdating = false;
-            }
-        }
-
-        void DisablePageButtons()
-        {
-            prevButton.SetEnabled(false);
-            nextButton.SetEnabled(false);
-        }
-
-        void UpdatePageButtons(int prev, int next, int current)
-        {
-            prevButton.SetEnabled(prev != 0);
-            nextButton.SetEnabled(next != 0);
+                (_, true) => TranslationTable.cck_information_fetch_failed,
+                ({ } ownItemTemplates, false) => AsHumanReadableText(ownItemTemplates),
+                _ => ""
+            };
         }
 
         string AsHumanReadableText(IReadOnlyList<OwnItemTemplate> ownItemTemplates)
@@ -137,42 +93,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             {
                 return TranslationTable.cck_no_uploaded_item_info;
             }
-        }
-
-        void OnPrevClicked()
-        {
-            RequestUpdatePage(prevPage);
-        }
-
-        void OnNextClicked()
-        {
-            RequestUpdatePage(nextPage);
-        }
-
-        public void Logout()
-        {
-            Clear();
-        }
-
-        void Clear()
-        {
-            if (!isCreated)
-            {
-                return;
-            }
-            if (ctx != null)
-            {
-                ctx.Cancel();
-                ctx.Dispose();
-                ctx = null;
-            }
-
-            isCreated = false;
-        }
-
-        public void Dispose()
-        {
-            Clear();
         }
     }
 }

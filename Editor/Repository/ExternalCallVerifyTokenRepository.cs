@@ -1,9 +1,10 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.ExternalEndpoint;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
-using ClusterVR.CreatorKit.Editor.Window.View;
+using ClusterVR.CreatorKit.Editor.Utils;
 
 namespace ClusterVR.CreatorKit.Editor.Repository
 {
@@ -12,14 +13,27 @@ namespace ClusterVR.CreatorKit.Editor.Repository
         public static readonly ExternalCallVerifyTokenRepository Instance = new();
 
         readonly Reactive<ExternalCallVerifyToken[]> verifyTokenList = new();
-        public Reactive<ExternalCallVerifyToken[]> VerifyTokenList => verifyTokenList;
+        public IReadOnlyReactive<ExternalCallVerifyToken[]> VerifyTokenList => verifyTokenList;
 
         private ExternalCallVerifyTokenRepository() { }
 
+        public void Clear()
+        {
+            verifyTokenList.Val = null;
+        }
+
         public async Task LoadVerifyTokenListAsync(string accessToken, CancellationToken cancellationToken)
         {
-            var response = await APIServiceClient.GetVerifyTokenListAsync(accessToken, cancellationToken);
-            verifyTokenList.Val = response.Tokens;
+            try
+            {
+                var response = await APIServiceClient.GetVerifyTokenListAsync(accessToken, cancellationToken);
+                verifyTokenList.Val = response.Tokens;
+            }
+            catch (Exception)
+            {
+                verifyTokenList.Val = null;
+                throw;
+            }
         }
 
         public async Task RegisterVerifyTokenAsync(string accessToken, CancellationToken cancellationToken)

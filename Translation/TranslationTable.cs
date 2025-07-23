@@ -85,7 +85,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_confirm_delete_all_save_data = "全てのセーブデータを削除します。よろしいですか？";
         public const string cck_confirm_delete_current_scene_save_data = "現在のシーンのセーブデータを削除します。よろしいですか？";
         public const string cck_confirm_ui_before_move = "移動前に確認UIを表示するか";
-        public const string cck_confirm_upload_named_venue = "{0}'としてアップロードします。よろしいですか？";
+        public const string cck_confirm_upload_named_venue = "'{0}'としてアップロードします。よろしいですか？";
         public const string cck_contactableitem_multiple_components = "複数のContactableItemを含めることはできません";
         public const string cck_copy = "コピー";
         public const string cck_copy_to_clipboard = "クリップボードにコピー";

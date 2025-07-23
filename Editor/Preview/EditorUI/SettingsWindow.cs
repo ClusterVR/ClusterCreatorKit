@@ -1,8 +1,8 @@
 using System.Linq;
 using ClusterVR.CreatorKit.Editor.Analytics;
-using ClusterVR.CreatorKit.Editor.Extensions;
 using ClusterVR.CreatorKit.Editor.Preview.RoomState;
 using ClusterVR.CreatorKit.Editor.Preview.World;
+using ClusterVR.CreatorKit.Editor.Utils.Extensions;
 using ClusterVR.CreatorKit.Editor.Window.View;
 using ClusterVR.CreatorKit.Preview.PlayerController;
 using ClusterVR.CreatorKit.Translation;

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using ClusterVR.CreatorKit.Editor.Repository;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Translation;
 using UnityEngine;

@@ -1,84 +1,28 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ClusterVR.CreatorKit.Editor.Api.Analytics;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
-using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Proto;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.XR;
 
 namespace ClusterVR.CreatorKit.Editor.Analytics
 {
-    [InitializeOnLoad]
     public static class EventSender
     {
-        const int IntervalSec = 60 * 5;
-
-        sealed class SessionInfo : ScriptableSingleton<SessionInfo>
+        public static void Ping(string accessToken, string sessionId, string tmpUserId)
         {
-            [SerializeField] string sessionId;
-            [SerializeField] double lastSentAt;
-
-            public string SessionId
-            {
-                get
-                {
-                    if (string.IsNullOrEmpty(sessionId))
-                    {
-                        sessionId = Guid.NewGuid().ToString();
-                    }
-
-                    return sessionId;
-                }
-            }
-
-            public double LastSentAt
-            {
-                get => lastSentAt;
-                set => lastSentAt = value;
-            }
-        }
-
-        static EventSender()
-        {
-            EditorApplication.update += Update;
-        }
-
-        static void Update()
-        {
-            var now = EditorApplication.timeSinceStartup;
-            if (now - SessionInfo.instance.LastSentAt < IntervalSec)
-            {
-                return;
-            }
-
             var payload = new CreatorKitEventPayload
             {
-                TmpUserId = GetOrCreateTmpUserId(),
-                SessionId = SessionInfo.instance.SessionId,
+                TmpUserId = tmpUserId,
+                SessionId = sessionId,
                 Environment = CreateEnvironment(),
                 EventType = CreatorKitEventPayload.Types.EventType.Ping
             };
 
-            _ = APIServiceClient.PostAnalyticsEvent(new EventPayload(payload), EditorPrefsUtils.SavedAccessToken.Token,
+            _ = APIServiceClient.PostAnalyticsEvent(new EventPayload(payload), accessToken,
                 default);
             PanamaLogger.LogCckPing(Convert(payload));
-
-            SessionInfo.instance.LastSentAt = now;
-        }
-
-        static string GetOrCreateTmpUserId()
-        {
-            var tmpUserId = EditorPrefsUtils.TmpUserId;
-            if (!string.IsNullOrEmpty(tmpUserId))
-            {
-                return tmpUserId;
-            }
-            tmpUserId = Guid.NewGuid().ToString();
-            EditorPrefsUtils.TmpUserId = tmpUserId;
-            return tmpUserId;
         }
 
         static CreatorKitEnvironment CreateEnvironment()

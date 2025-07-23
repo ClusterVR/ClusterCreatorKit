@@ -3,7 +3,8 @@
     "references": [
         "ClusterVR.CreatorKit",
         "ClusterVR.CreatorKit.Editor",
-        "ClusterVR.CreatorKit.Translation"
+        "ClusterVR.CreatorKit.Translation",
+        "ClusterVR.CreatorKit.Editor.Builder"
     ],
     "includePlatforms": [
         "Editor"

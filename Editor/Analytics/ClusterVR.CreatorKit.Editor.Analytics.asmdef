@@ -1,0 +1,19 @@
+{
+    "name": "ClusterVR.CreatorKit.Editor.Analytics",
+    "rootNamespace": "",
+    "references": [
+        "ClusterVR.CreatorKit.Editor.Api",
+        "ClusterVR.CreatorKit"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -72,15 +72,11 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 {
                     return await Call(request, accessToken, url, httpVerb, deserializer, cancellationToken);
                 }
-                catch (OperationCanceledException)
-                {
-                    throw;
-                }
                 catch (Failure e) when (e.StatusCode is >= 400 and < 500)
                 {
                     throw;
                 }
-                catch (Exception)
+                catch (Exception e) when (e is not OperationCanceledException)
                 {
                     await Task.Delay((int) backoffMs, cancellationToken);
                     backoffMs *= 1.5f;

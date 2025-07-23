@@ -267,9 +267,8 @@ namespace VGltf.Unity
                         );
                     mat.SetTexture("_MetallicGlossMap", texture);
 
-                    // Values are already baked into textures, thus set 1.0 to make no effects.
-                    mat.SetFloat("_Metallic", 1.0f);
-                    mat.SetFloat("_Glossiness", 1.0f);
+                    // _Metallic and _Glossiness are unused if _MetallicGlossMap exists
+                    // MetallicFactor and RoughnessFactor are baked into texture
                 }
                 else
                 {

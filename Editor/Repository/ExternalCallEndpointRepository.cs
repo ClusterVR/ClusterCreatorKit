@@ -1,9 +1,10 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.ExternalEndpoint;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
-using ClusterVR.CreatorKit.Editor.Window.View;
+using ClusterVR.CreatorKit.Editor.Utils;
 
 namespace ClusterVR.CreatorKit.Editor.Repository
 {
@@ -12,14 +13,27 @@ namespace ClusterVR.CreatorKit.Editor.Repository
         public static readonly ExternalCallEndpointRepository Instance = new();
 
         readonly Reactive<ExternalCallEndpoint[]> endpointList = new();
-        public Reactive<ExternalCallEndpoint[]> EndpointList => endpointList;
+        public IReadOnlyReactive<ExternalCallEndpoint[]> EndpointList => endpointList;
 
         private ExternalCallEndpointRepository() { }
 
+        public void Clear()
+        {
+            endpointList.Val = null;
+        }
+
         public async Task LoadEndpointListAsync(string accessToken, CancellationToken cancellationToken)
         {
-            var response = await APIServiceClient.GetEndpointListAsync(accessToken, cancellationToken);
-            endpointList.Val = response.Endpoints;
+            try
+            {
+                var response = await APIServiceClient.GetEndpointListAsync(accessToken, cancellationToken);
+                endpointList.Val = response.Endpoints;
+            }
+            catch (Exception)
+            {
+                endpointList.Val = null;
+                throw;
+            }
         }
 
         public async Task RegisterEndpointAsync(string accessToken, string url, CancellationToken cancellationToken)

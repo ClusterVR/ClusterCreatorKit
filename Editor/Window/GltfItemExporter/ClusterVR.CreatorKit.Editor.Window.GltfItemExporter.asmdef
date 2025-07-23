@@ -12,7 +12,11 @@
         "ClusterVR.CreatorKit.ItemExporter",
         "ClusterVR.CreatorKit.AccessoryExporter",
         "ClusterVR.CreatorKit.Editor.AccessoryExporter",
-        "ClusterVR.CreatorKit.Translation"
+        "ClusterVR.CreatorKit.Translation",
+        "ClusterVR.CreatorKit.Editor.Utils",
+        "ClusterVR.CreatorKit.Editor.Analytics",
+        "ClusterVR.CreatorKit.Editor.Builder",
+        "ClusterVR.CreatorKit.Editor.Repository"
     ],
     "includePlatforms": [
         "Editor"

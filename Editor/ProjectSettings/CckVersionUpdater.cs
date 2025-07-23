@@ -1,6 +1,6 @@
 using ClusterVR.CreatorKit.Editor.Analytics;
 using UnityEditor;
-using PackageInfo = ClusterVR.CreatorKit.Editor.Package.PackageInfo;
+using PackageInfo = ClusterVR.CreatorKit.Editor.Infrastructure.PackageInfo;
 
 namespace ClusterVR.CreatorKit.Editor.ProjectSettings
 {

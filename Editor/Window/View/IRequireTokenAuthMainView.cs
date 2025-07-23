@@ -1,11 +1,11 @@
-using ClusterVR.CreatorKit.Editor.Api.User;
+using System;
 using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
     public interface IRequireTokenAuthMainView
     {
-        VisualElement LoginAndCreateView(UserInfo userInfo);
+        (VisualElement, IDisposable) LoginAndCreateView();
         void Logout();
     }
 }

@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.User;
-using ClusterVR.CreatorKit.Editor.Builder;
-using ClusterVR.CreatorKit.Editor.Window.View;
+using ClusterVR.CreatorKit.Editor.Infrastructure;
+using ClusterVR.CreatorKit.Editor.Utils;
 
 namespace ClusterVR.CreatorKit.Editor.Repository
 {
@@ -17,9 +17,22 @@ namespace ClusterVR.CreatorKit.Editor.Repository
         bool isLoggingIn;
         readonly Reactive<UserInfo?> userInfo = new();
 
-        public Reactive<UserInfo?> UserInfo => userInfo;
+        readonly Reactive<AuthenticationInfo> savedAccessToken = new();
+        public IReadOnlyReactive<AuthenticationInfo> SavedAccessToken => savedAccessToken;
+        public IReadOnlyReactive<string> SavedUserId => ReactiveEditorPrefs.SavedUserId;
 
-        private TokenAuthRepository() { }
+        public IReadOnlyReactive<UserInfo?> UserInfo => userInfo;
+        public UserInfo GetLoggedIn() => userInfo.Val ?? throw new TokenAuthFailedException();
+
+        ReactiveEditorPrefs ReactiveEditorPrefs => ReactiveEditorPrefs.Instance;
+
+        TokenAuthRepository()
+        {
+            ReactiveBinder.Bind(ReactiveEditorPrefs.SavedAccessToken, token =>
+            {
+                savedAccessToken.Val = new AuthenticationInfo(token);
+            });
+        }
 
         public async Task LoginAsync(AuthenticationInfo authInfo, CancellationToken cancellationToken)
         {
@@ -45,8 +58,8 @@ namespace ClusterVR.CreatorKit.Editor.Repository
                 }
 
                 userInfo.Val = new UserInfo(user.Username, authInfo.Token);
-                EditorPrefsUtils.SavedAccessToken = authInfo;
-                EditorPrefsUtils.SavedUserId = user.UserId;
+                ReactiveEditorPrefs.SetSavedAccessToken(authInfo.RawValue);
+                ReactiveEditorPrefs.SetSavedUserId(user.UserId);
             }
             finally
             {
@@ -62,8 +75,8 @@ namespace ClusterVR.CreatorKit.Editor.Repository
             }
 
             userInfo.Val = null;
-            EditorPrefsUtils.SavedAccessToken = null;
-            EditorPrefsUtils.SavedUserId = null;
+            ReactiveEditorPrefs.SetSavedAccessToken("");
+            ReactiveEditorPrefs.SetSavedUserId("");
         }
     }
 }

@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
-using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
@@ -14,12 +11,8 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         readonly Venue.Venue venue;
         readonly string name;
         readonly string description;
-        List<ThumbnailUrl> thumbnailUrls;
+        readonly List<ThumbnailUrl> thumbnailUrls;
         readonly string thumbnailImagePath;
-        readonly Action<Exception> onError;
-        readonly Action<Venue.Venue> onSuccess;
-
-        bool isProcessing;
 
         public PatchVenueSettingService(
             string accessToken,
@@ -27,9 +20,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             string name,
             string description,
             List<ThumbnailUrl> thumbnailUrls,
-            string thumbnailImagePath = "",
-            Action<Venue.Venue> onSuccess = null,
-            Action<Exception> onError = null
+            string thumbnailImagePath = ""
         )
         {
             this.accessToken = accessToken;
@@ -38,77 +29,34 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             this.description = description;
             this.thumbnailUrls = thumbnailUrls;
             this.thumbnailImagePath = thumbnailImagePath;
-            this.onSuccess = onSuccess;
-            this.onError = onError;
         }
 
-        public void Run(CancellationToken cancellationToken)
+        public async Task RunAsync(CancellationToken cancellationToken)
         {
-            EditorCoroutine.Start(PatchVenue(cancellationToken));
+            await PatchVenueAsync(cancellationToken);
         }
 
-        IEnumerator PatchVenue(CancellationToken cancellationToken)
+        async Task PatchVenueAsync(CancellationToken cancellationToken)
         {
-            isProcessing = true;
-            var isUploading = false;
             var thumbnailUrl = "";
 
             if (!string.IsNullOrEmpty(thumbnailImagePath))
             {
-                var uploadThumbnail = new UploadThumbnailService(
-                    accessToken,
-                    thumbnailImagePath,
-                    policy =>
-                    {
-                        thumbnailUrl = policy.url;
-                        isUploading = false;
-                    },
-                    e =>
-                    {
-                        isUploading = false;
-                        Debug.LogException(e);
-                        onError?.Invoke(e);
-                        isProcessing = false;
-                    }
-                );
-                isUploading = true;
-                uploadThumbnail.Run(cancellationToken);
-
-                while (isUploading)
-                {
-                    yield return null;
-                }
-
-                if (!isProcessing)
-                {
-                    yield break;
-                }
+                var uploadThumbnail = new UploadThumbnailService(accessToken, thumbnailImagePath);
+                var policy = await uploadThumbnail.RunAsync(cancellationToken);
+                thumbnailUrl = policy.url;
             }
 
             var payload = new PatchVenuePayload(name, description,
                 string.IsNullOrEmpty(thumbnailUrl)
                     ? thumbnailUrls
                     : new List<ThumbnailUrl> { new ThumbnailUrl(thumbnailUrl) });
-            _ = PatchVenueAsync(payload, cancellationToken);
+            await PatchVenueAsync(payload, cancellationToken);
         }
 
         async Task PatchVenueAsync(PatchVenuePayload payload, CancellationToken cancellationToken)
         {
-            try
-            {
-                var response =
-                    await APIServiceClient.PatchVenue(venue.VenueId, payload, accessToken, cancellationToken);
-                onSuccess?.Invoke(response);
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-                onError?.Invoke(e);
-            }
-            finally
-            {
-                isProcessing = false;
-            }
+            await APIServiceClient.PatchVenue(venue.VenueId, payload, accessToken, cancellationToken);
         }
     }
 }

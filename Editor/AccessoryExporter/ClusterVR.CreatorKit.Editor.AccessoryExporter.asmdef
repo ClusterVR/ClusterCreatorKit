@@ -5,7 +5,9 @@
       "ClusterVR.CreatorKit.Editor",
       "ClusterVR.CreatorKit.Editor.ItemExporter",
       "ClusterVR.CreatorKit.ItemExporter",
-      "ClusterVR.CreatorKit.Translation"
+      "ClusterVR.CreatorKit.Translation",
+      "ClusterVR.CreatorKit.Editor.Utils",
+      "ClusterVR.CreatorKit.Editor.Api"
   ],
   "includePlatforms": [
       "Editor"

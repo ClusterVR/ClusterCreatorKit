@@ -1,59 +1,48 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using ClusterVR.CreatorKit.Editor.Api.Exceptions;
 using ClusterVR.CreatorKit.Editor.Api.ExternalEndpoint;
-using ClusterVR.CreatorKit.Editor.Api.User;
-using ClusterVR.CreatorKit.Editor.Extensions;
-using ClusterVR.CreatorKit.Editor.Repository;
 using ClusterVR.CreatorKit.Editor.Utils;
+using ClusterVR.CreatorKit.Editor.Utils.Extensions;
 using ClusterVR.CreatorKit.Editor.Window.View;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
-using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.ExternalEndpoint
 {
-    public sealed class ExternalEndpointView : IRequireTokenAuthMainView, IDisposable
+    public sealed class ExternalEndpointView : VisualElement
     {
         const string MainTemplatePath = "Packages/mu.cluster.cluster-creator-kit/Editor/Window/ExternalEndpoint/Uxml/ExternalEndpointView.uxml";
         const string StyleSheetPath = "Packages/mu.cluster.cluster-creator-kit/Editor/Window/ExternalEndpoint/Uss/ExternalEndpointView.uss";
 
-        UserInfo userInfo;
-
-        VisualElement endpointsPanel;
-        Label endpointsLabel;
-        ListView endpointsList;
-        TextField newEndpointUrlField;
-        Button createNewEndpointButton;
-        HelpBox createNewEndpointNotice;
-
-        VisualElement verifyTokensPanel;
-        Label verifyTokensLabel;
-        ListView verifyTokensList;
-        Button createNewVerifyTokenButton;
-        HelpBox createNewVerifyTokenNotice;
-
         readonly List<ExternalCallEndpoint> endpoints = new();
         readonly List<ExternalCallVerifyToken> verifyTokens = new();
 
-        static ExternalCallEndpointRepository EndpointRepository => ExternalCallEndpointRepository.Instance;
-        static ExternalCallVerifyTokenRepository VerifyTokenRepository => ExternalCallVerifyTokenRepository.Instance;
+        readonly VisualElement endpointsPanel;
+        readonly Label endpointsLabel;
+        readonly ListView endpointsList;
+        readonly TextField newEndpointUrlField;
+        readonly Button createNewEndpointButton;
+        readonly HelpBox createNewEndpointNotice;
 
-        readonly CancellationTokenSource cancellationTokenSource = new();
-        readonly List<IDisposable> disposables = new();
+        readonly VisualElement verifyTokensPanel;
+        readonly Label verifyTokensLabel;
+        readonly ListView verifyTokensList;
+        readonly Button createNewVerifyTokenButton;
+        readonly HelpBox createNewVerifyTokenNotice;
+
         readonly Dictionary<object, IDisposable> listItemDisposables = new();
 
-        public VisualElement LoginAndCreateView(UserInfo userInfo)
-        {
-            this.userInfo = userInfo;
+        event Action<string> OnNewEndpointUrlFieldChanged;
+        event Action<string> OnDeleteEndpointButtonClicked;
+        event Action<string> OnDeleteVerifyTokenButtonClicked;
 
+        public ExternalEndpointView()
+        {
             var mainView = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(MainTemplatePath).CloneTree();
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(StyleSheetPath);
             mainView.styleSheets.Add(styleSheet);
+            hierarchy.Add(mainView);
 
             mainView.Q<Label>("new-endpoint-title-label").text = TranslationTable.cck_external_call_new_endpoint_title_label;
 
@@ -91,9 +80,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.ExternalEndpoint
                 {
                     disposable.Dispose();
                 }
-                Action onDeleteButtonClicked = () => OnDeleteEndpointButtonClicked(endpoint.EndpointId);
+                Action onDeleteButtonClicked = () => OnDeleteEndpointButtonClicked?.Invoke(endpoint.EndpointId);
                 listItemView.OnDeleteButtonClicked += onDeleteButtonClicked;
-                listItemDisposables.Add(listItemView, new Disposable(() =>
+                listItemDisposables.Add(listItemView, Disposable.Create(() =>
                 {
                     listItemView.OnDeleteButtonClicked -= onDeleteButtonClicked;
                 }));
@@ -119,9 +108,9 @@ namespace ClusterVR.CreatorKit.Editor.Window.ExternalEndpoint
                 {
                     disposable.Dispose();
                 }
-                Action onDeleteButtonClicked = () => OnDeleteVerifyTokenButtonClicked(verifyToken.TokenId);
+                Action onDeleteButtonClicked = () => OnDeleteVerifyTokenButtonClicked?.Invoke(verifyToken.TokenId);
                 listItemView.OnDeleteButtonClicked += onDeleteButtonClicked;
-                listItemDisposables.Add(listItemView, new Disposable(() =>
+                listItemDisposables.Add(listItemView, Disposable.Create(() =>
                 {
                     listItemView.OnDeleteButtonClicked -= onDeleteButtonClicked;
                 }));
@@ -134,134 +123,28 @@ namespace ClusterVR.CreatorKit.Editor.Window.ExternalEndpoint
                 }
             };
 
-            createNewEndpointButton.clicked += OnCreateNewEndpointButtonClicked;
-            createNewVerifyTokenButton.clicked += OnCreateNewVerifyTokenButtonClicked;
-
-            disposables.Add(ReactiveBinder.Bind(EndpointRepository.EndpointList, SetEndpoints));
-            disposables.Add(ReactiveBinder.Bind(VerifyTokenRepository.VerifyTokenList, SetVerifyTokens));
-
-            InitializeAsync(cancellationTokenSource.Token).Forget();
-
-            return mainView;
+            newEndpointUrlField.RegisterValueChangedCallback(ev => OnNewEndpointUrlFieldChanged?.Invoke(ev.newValue));
         }
 
-        void OnCreateNewVerifyTokenButtonClicked()
+        public IDisposable Bind(ExternalEndpointViewModel viewModel)
         {
-            CreateNewVerifyTokenAsync(cancellationTokenSource.Token).Forget();
-        }
+            createNewEndpointButton.clicked += viewModel.OnCreateNewEndpointButtonClicked;
+            createNewVerifyTokenButton.clicked += viewModel.OnCreateNewVerifyTokenButtonClicked;
+            OnDeleteEndpointButtonClicked += viewModel.OnDeleteEndpointButtonClicked;
+            OnDeleteVerifyTokenButtonClicked += viewModel.OnDeleteVerifyTokenButtonClicked;
+            OnNewEndpointUrlFieldChanged += viewModel.OnNewEndpointUrlFieldChanged;
 
-        void OnCreateNewEndpointButtonClicked()
-        {
-            CreateNewEndpointAsync(cancellationTokenSource.Token).Forget();
-        }
-
-        void OnDeleteEndpointButtonClicked(string endpointId)
-        {
-            DeleteEndpointAsync(endpointId, cancellationTokenSource.Token).Forget();
-        }
-
-        void OnDeleteVerifyTokenButtonClicked(string tokenId)
-        {
-            DeleteVerifyTokenAsync(tokenId, cancellationTokenSource.Token).Forget();
-        }
-
-        async Task InitializeAsync(CancellationToken cancellationToken)
-        {
-            try
-            {
-                await EndpointRepository.LoadEndpointListAsync(userInfo.VerifiedToken, cancellationToken);
-                await VerifyTokenRepository.LoadVerifyTokenListAsync(userInfo.VerifiedToken, cancellationToken);
-            }
-            catch (OperationCanceledException)
-            {
-                throw;
-            }
-            catch (Exception)
-            {
-                SetEndpoints(null);
-                SetVerifyTokens(null);
-                throw;
-            }
-        }
-
-        async Task CreateNewEndpointAsync(CancellationToken cancellationToken)
-        {
-            if (EditorUtility.DisplayDialog(TranslationTable.cck_confirm,
-                    TranslationTable.cck_external_call_new_endpoint_confirm_message,
-                    TranslationTable.cck_ok, TranslationTable.cck_cancel))
-            {
-                try
+            return Disposable.Create(() =>
                 {
-                    await EndpointRepository.RegisterEndpointAsync(userInfo.VerifiedToken, newEndpointUrlField.value,
-                        cancellationToken);
-                    newEndpointUrlField.value = "";
-                    const string message = TranslationTable.cck_external_call_new_endpoint_success_message;
-                    EditorUtility.DisplayDialog(message, message, TranslationTable.cck_ok);
-                }
-                catch (ExternalCallInvalidUrlException)
-                {
-                    const string message = TranslationTable.cck_external_call_invalid_url_exception_message;
-                    EditorUtility.DisplayDialog(TranslationTable.cck_error, message, TranslationTable.cck_ok);
-                    Debug.LogError(message);
-                }
-                catch (ExternalCallUrlAlreadyExistsException)
-                {
-                    const string message = TranslationTable.cck_external_call_url_already_exists_exception_message;
-                    EditorUtility.DisplayDialog(TranslationTable.cck_error, message, TranslationTable.cck_ok);
-                    Debug.LogError(message);
-                }
-                catch (ExternalCallEndpointCountLimitExceededException)
-                {
-                    const string message = TranslationTable.cck_external_call_endpoint_count_limit_exceeded_exception_message;
-                    EditorUtility.DisplayDialog(TranslationTable.cck_error, message, TranslationTable.cck_ok);
-                    Debug.LogError(message);
-                }
-            }
-        }
-
-        async Task CreateNewVerifyTokenAsync(CancellationToken cancellationToken)
-        {
-            if (EditorUtility.DisplayDialog(TranslationTable.cck_confirm,
-                    TranslationTable.cck_external_call_new_verify_token_confirm_message,
-                    TranslationTable.cck_ok, TranslationTable.cck_cancel))
-            {
-                try
-                {
-                    await VerifyTokenRepository.RegisterVerifyTokenAsync(userInfo.VerifiedToken, cancellationToken);
-                    const string message = TranslationTable.cck_external_call_new_verify_token_success_message;
-                    EditorUtility.DisplayDialog(message, message, TranslationTable.cck_ok);
-                }
-                catch (ExternalCallVerifyTokenCountLimitExceededException)
-                {
-                    const string message = TranslationTable.cck_external_call_verify_token_count_limit_exceeded_exception_message;
-                    EditorUtility.DisplayDialog(TranslationTable.cck_error, message, TranslationTable.cck_ok);
-                    Debug.LogError(message);
-                }
-            }
-        }
-
-        async Task DeleteEndpointAsync(string endpointId, CancellationToken cancellationToken)
-        {
-            if (EditorUtility.DisplayDialog(TranslationTable.cck_confirm,
-                    TranslationTable.cck_external_call_delete_endpoint_confirm_message,
-                    TranslationTable.cck_delete_action, TranslationTable.cck_cancel))
-            {
-                await EndpointRepository.DeleteEndpointAsync(userInfo.VerifiedToken, endpointId, cancellationToken);
-                const string message = TranslationTable.cck_external_call_delete_endpoint_success_message;
-                EditorUtility.DisplayDialog(message, message, TranslationTable.cck_ok);
-            }
-        }
-
-        async Task DeleteVerifyTokenAsync(string tokenId, CancellationToken cancellationToken)
-        {
-            if (EditorUtility.DisplayDialog(TranslationTable.cck_confirm,
-                    TranslationTable.cck_external_call_delete_verify_token_confirm_message,
-                    TranslationTable.cck_delete_action, TranslationTable.cck_cancel))
-            {
-                await VerifyTokenRepository.DeleteVerifyTokenAsync(userInfo.VerifiedToken, tokenId, cancellationToken);
-                const string message = TranslationTable.cck_external_call_delete_verify_token_success_message;
-                EditorUtility.DisplayDialog(message, message, TranslationTable.cck_ok);
-            }
+                    createNewEndpointButton.clicked -= viewModel.OnCreateNewEndpointButtonClicked;
+                    createNewVerifyTokenButton.clicked -= viewModel.OnCreateNewVerifyTokenButtonClicked;
+                    OnDeleteEndpointButtonClicked -= viewModel.OnDeleteEndpointButtonClicked;
+                    OnDeleteVerifyTokenButtonClicked -= viewModel.OnDeleteVerifyTokenButtonClicked;
+                    OnNewEndpointUrlFieldChanged -= viewModel.OnNewEndpointUrlFieldChanged;
+                },
+                ReactiveBinder.Bind(viewModel.EndpointList, SetEndpoints),
+                ReactiveBinder.Bind(viewModel.VerifyTokenList, SetVerifyTokens),
+                ReactiveBinder.Bind(viewModel.NewEndpointUrl, url => newEndpointUrlField.SetValueWithoutNotify(url)));
         }
 
         void SetEndpoints(ExternalCallEndpoint[] endpoints)
@@ -311,28 +194,6 @@ namespace ClusterVR.CreatorKit.Editor.Window.ExternalEndpoint
                 createNewVerifyTokenNotice.text = TranslationUtility.GetMessage(TranslationTable.cck_external_call_create_new_verify_token_notice,
                     ExternalCallVerifyToken.MaxVerifyTokenCount);
             }
-        }
-
-        public void Logout()
-        {
-            SetEndpoints(null);
-            SetVerifyTokens(null);
-        }
-
-        public void Dispose()
-        {
-            foreach (var disposable in disposables)
-            {
-                disposable.Dispose();
-            }
-            disposables.Clear();
-            foreach (var disposable in listItemDisposables.Values)
-            {
-                disposable.Dispose();
-            }
-            listItemDisposables.Clear();
-            cancellationTokenSource.Cancel();
-            cancellationTokenSource.Dispose();
         }
     }
 }

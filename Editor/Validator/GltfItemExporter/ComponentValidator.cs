@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ClusterVR.CreatorKit.Editor.Repository;
 using ClusterVR.CreatorKit.Editor.Utils;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;

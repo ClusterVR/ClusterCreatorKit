@@ -15,8 +15,10 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         string accessToken;
 
+        [Obsolete]
         public bool ApplyBeta => true;
 
+        [Obsolete]
         public string UploadedItemsManagementUrl => Constants.WebBaseUrl + "/account/contents/items";
 
         public void SetAccessToken(string accessToken)

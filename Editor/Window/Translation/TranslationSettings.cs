@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using ClusterVR.CreatorKit.Editor.Builder;
+using ClusterVR.CreatorKit.Editor.Repository;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEngine;
@@ -10,6 +10,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.Translation
     public static class TranslationSettings
     {
         public static readonly string[] EditorLanguages = { "en", "ja" };
+
+        static EditorPrefsRepository EditorPrefsRepository => EditorPrefsRepository.Instance;
 
         [InitializeOnLoadMethod]
         public static void UpdateLanguageSettings()
@@ -22,7 +24,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.Translation
         }
         public static void ApplySymbolsForTarget()
         {
-            var languageSettingKey = EditorPrefsUtils.LanguageSetting;
+            var languageSettingKey = EditorPrefsRepository.LanguageSettings.Val;
             var target = NamedBuildTarget.FromBuildTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
 
             PlayerSettings.GetScriptingDefineSymbols(target, out var defines);
@@ -38,7 +40,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.Translation
 
         static bool IsLanguageSettingExists()
         {
-            var languageSettingKey = EditorPrefsUtils.LanguageSetting;
+            var languageSettingKey = EditorPrefsRepository.LanguageSettings.Val;
             return !string.IsNullOrEmpty(languageSettingKey);
         }
 
@@ -48,7 +50,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.Translation
                 ? "ja"
                 : "en";
             var languageSettingKey = GetLanguageSettingKey(currentLanguage);
-            EditorPrefsUtils.LanguageSetting = languageSettingKey;
+            EditorPrefsRepository.SetLanguageSetting(languageSettingKey);
         }
 
         static List<string> ConvertToScriptingDefineSymbols(string to, List<string> symbolsList)

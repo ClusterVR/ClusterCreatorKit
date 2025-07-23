@@ -1,6 +1,6 @@
 using System;
 using ClusterVR.CreatorKit.Editor.Api.ExternalEndpoint;
-using ClusterVR.CreatorKit.Editor.Extensions;
+using ClusterVR.CreatorKit.Editor.Utils.Extensions;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine.UIElements;

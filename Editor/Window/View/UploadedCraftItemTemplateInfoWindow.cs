@@ -1,15 +1,15 @@
 using ClusterVR.CreatorKit.Editor.Analytics;
+using ClusterVR.CreatorKit.Editor.Utils;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace ClusterVR.CreatorKit.Editor.Window.View
 {
     public sealed class UploadedCraftItemTemplateInfoWindow : EditorWindow
     {
-        readonly UploadedCraftItemTemplateInfoView infoView = new();
-        RequireTokenAuthView tokenAuthView;
+        readonly UploadedCraftItemTemplateInfoViewModel infoViewModel = new();
+        Disposable disposables;
 
         [MenuItem(TranslationTable.cck_cluster_craftitem_info_fetch, priority = 304)]
         public static void Open()
@@ -22,32 +22,28 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 
         void OnEnable()
         {
-            var view = CreateView();
-            rootVisualElement.Add(view);
+            CreateView();
         }
 
         void OnDisable()
         {
             rootVisualElement.Clear();
-            if (tokenAuthView != null)
-            {
-                tokenAuthView.Dispose();
-                tokenAuthView = null;
-            }
+            infoViewModel.Dispose();
+            disposables?.Dispose();
         }
 
-        void OnDestroy()
+        void CreateView()
         {
-            infoView.Dispose();
-        }
+            var tokenAuth = new TokenAuthFrameViewModel(infoViewModel);
+            var tokenAuthView = new TokenAuthFrameView();
+            var tokenAuthViewDisposable = tokenAuthView.Bind(tokenAuth);
+            tokenAuthView.SetEnabled(true);
 
-        VisualElement CreateView()
-        {
-            tokenAuthView = new RequireTokenAuthView(infoView);
-            var view = tokenAuthView.CreateView();
-            view.SetEnabled(true);
+            disposables = Disposable.Create(
+                tokenAuth,
+                tokenAuthViewDisposable);
 
-            return view;
+            rootVisualElement.Add(tokenAuthView);
         }
     }
 }

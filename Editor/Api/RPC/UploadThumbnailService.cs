@@ -1,10 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
+using ClusterVR.CreatorKit.Editor.Utils.Extensions;
 using ClusterVR.CreatorKit.Translation;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -19,61 +19,38 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
         readonly string accessToken;
         readonly string filePath;
         readonly PostUploadThumbnailPolicyPayload payload;
-        readonly Action<ThumbnailUploadPolicy> onSuccess;
-        readonly Action<Exception> onError;
 
         public UploadThumbnailService(
             string accessToken,
-            string filePath,
-            Action<ThumbnailUploadPolicy> onSuccess = null,
-            Action<Exception> onError = null
-        )
+            string filePath)
         {
             this.accessToken = accessToken;
             this.filePath = filePath;
-            this.onSuccess = onSuccess;
-            this.onError = onError;
 
             var fileInfo = new FileInfo(filePath);
             payload = new PostUploadThumbnailPolicyPayload(ContentType, fileInfo.Name, fileInfo.Length);
         }
 
-        public void Run(CancellationToken cancellationToken)
+        public async Task<ThumbnailUploadPolicy> RunAsync(CancellationToken cancellationToken)
         {
-            _ = UploadAsync(cancellationToken);
+            return await UploadAsync(cancellationToken);
         }
 
-        async Task UploadAsync(CancellationToken cancellationToken)
+        async Task<ThumbnailUploadPolicy> UploadAsync(CancellationToken cancellationToken)
         {
-            try
-            {
-                var policy = await APIServiceClient.PostUploadThumbnailPolicy(payload, accessToken,
-                    JsonConvert.DeserializeObject<ThumbnailUploadPolicy>, cancellationToken);
-                EditorCoroutine.Start(Upload(policy));
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
-            }
+            var policy = await APIServiceClient.PostUploadThumbnailPolicy(payload, accessToken,
+                JsonConvert.DeserializeObject<ThumbnailUploadPolicy>, cancellationToken);
+            await UploadAsync(policy, cancellationToken);
+            return policy;
         }
 
-        IEnumerator Upload(ThumbnailUploadPolicy policy)
+        async Task UploadAsync(ThumbnailUploadPolicy policy, CancellationToken cancellationToken)
         {
-            byte[] fileBytes;
-            try
-            {
-                fileBytes = ReadFile(filePath);
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
-                yield break;
-            }
+            var fileBytes = ReadFile(filePath);
 
             if (policy == null || fileBytes == null)
             {
-                HandleError(new Exception("unknown error"));
-                yield break;
+                throw new Exception("unknown error");
             }
 
             var form = BuildFormSections(fileBytes, policy);
@@ -82,21 +59,20 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             uploadFileWebRequest.SendWebRequest();
             while (!uploadFileWebRequest.isDone)
             {
-                yield return null;
+                await Task.Delay(50, cancellationToken);
             }
 
             if (uploadFileWebRequest.result == UnityWebRequest.Result.ConnectionError)
             {
-                HandleError(new Exception(uploadFileWebRequest.error));
+                throw new Exception(uploadFileWebRequest.error);
             }
             else if (uploadFileWebRequest.result == UnityWebRequest.Result.ProtocolError)
             {
-                HandleError(new Exception(uploadFileWebRequest.downloadHandler.text));
+                throw new Exception(uploadFileWebRequest.downloadHandler.text);
             }
             else
             {
                 Debug.Log(TranslationTable.cck_success_upload_thumbnail);
-                onSuccess?.Invoke(policy);
             }
         }
 
@@ -129,12 +105,6 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
             form.Add(new MultipartFormFileSection("file", file, policy.fileName, policy.contentType));
             return form;
-        }
-
-        void HandleError(Exception e)
-        {
-            Debug.LogException(e);
-            onError?.Invoke(e);
         }
     }
 }

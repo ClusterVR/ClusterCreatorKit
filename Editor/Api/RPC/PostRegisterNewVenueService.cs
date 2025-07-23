@@ -2,10 +2,12 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
+using ClusterVR.CreatorKit.Editor.Utils.Extensions;
 using UnityEngine;
 
 namespace ClusterVR.CreatorKit.Editor.Api.RPC
 {
+    [Obsolete]
     public sealed class PostRegisterNewVenueService
     {
         readonly string accessToken;
@@ -28,21 +30,27 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
         public void Run(CancellationToken cancellationToken)
         {
-            _ = PostRegisterNewVenueAsync(cancellationToken);
+            RunAsync(cancellationToken).Forget();
         }
 
-        async Task PostRegisterNewVenueAsync(CancellationToken cancellationToken)
+        public async Task<Venue.Venue> RunAsync(CancellationToken cancellationToken)
         {
             try
             {
-                var response = await APIServiceClient.PostRegisterNewVenue(payload, accessToken, cancellationToken);
-                onSuccess?.Invoke(response);
+                return await PostRegisterNewVenueAsync(cancellationToken);
             }
             catch (Exception e)
             {
-                Debug.LogException(e);
                 onError?.Invoke(e);
+                throw;
             }
+        }
+
+        async Task<Venue.Venue> PostRegisterNewVenueAsync(CancellationToken cancellationToken)
+        {
+            var response = await APIServiceClient.PostRegisterNewVenue(payload, accessToken, cancellationToken);
+            onSuccess?.Invoke(response);
+            return response;
         }
     }
 }

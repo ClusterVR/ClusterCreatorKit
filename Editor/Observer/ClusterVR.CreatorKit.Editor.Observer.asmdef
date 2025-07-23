@@ -1,0 +1,22 @@
+{
+    "name": "ClusterVR.CreatorKit.Editor.Observer",
+    "rootNamespace": "",
+    "references": [
+        "ClusterVR.CreatorKit.Editor.Api",
+        "ClusterVR.CreatorKit.Editor.Analytics",
+        "ClusterVR.CreatorKit.Editor.Infrastructure",
+        "ClusterVR.CreatorKit.Editor.Repository",
+        "ClusterVR.CreatorKit.Editor.Utils"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

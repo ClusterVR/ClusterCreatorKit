@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using ClusterVR.CreatorKit.Editor.Analytics;
-using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Editor.Enquete;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
+using ClusterVR.CreatorKit.Editor.Repository;
 using ClusterVR.CreatorKit.Editor.Window.Translation;
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
@@ -21,6 +21,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
 #else
         const string PrivacyPolicyUrl = "https://help.cluster.mu/hc/en-us/articles/20264222848153-Privacy-Policy";
 #endif
+
+        static EditorPrefsRepository EditorPrefsRepository => EditorPrefsRepository.Instance;
 
         [MenuItem(TranslationTable.cck_cluster_settings_menu, priority = 320)]
         public static void ShowWindow()
@@ -59,18 +61,18 @@ namespace ClusterVR.CreatorKit.Editor.Window.View
             heading.EnableInClassList("h1", true);
             container.Add(heading);
 
-            var languageSettingKey = EditorPrefsUtils.LanguageSetting;
+            var languageSettingKey = EditorPrefsRepository.LanguageSettings.Val;
             if (string.IsNullOrEmpty(languageSettingKey))
             {
                 TranslationSettings.SetLanguageSettingBySystemLanguage();
-                languageSettingKey = EditorPrefsUtils.LanguageSetting;
+                languageSettingKey = EditorPrefsRepository.LanguageSettings.Val;
             }
             var languageSelectionDropdown = new PopupField<string>("Selected Language",
                 TranslationSettings.EditorLanguages.ToList(),
                 Array.IndexOf(TranslationSettings.EditorLanguages, languageSettingKey.Replace("cck_", "")));
             languageSelectionDropdown.RegisterValueChangedCallback(ev =>
             {
-                EditorPrefsUtils.LanguageSetting = TranslationSettings.GetLanguageSettingKey(ev.newValue);
+                EditorPrefsRepository.SetLanguageSetting(TranslationSettings.GetLanguageSettingKey(ev.newValue));
                 EditorApplication.delayCall += TranslationSettings.ApplySymbolsForTarget;
             });
             container.Add(languageSelectionDropdown);

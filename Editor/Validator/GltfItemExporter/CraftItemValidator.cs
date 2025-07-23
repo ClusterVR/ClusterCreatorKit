@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClusterVR.CreatorKit.Editor.Repository;
 using UnityEngine;
 using VGltf;
 using VGltf.Types;
