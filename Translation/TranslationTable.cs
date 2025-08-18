@@ -13,6 +13,8 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_all_packages_imported = "プレビューに必要なパッケージはすべてインポートされています";
         public const string cck_all_shaders_available = "全てのShaderは利用可能です";
         public const string cck_anchor_setting_completed = "Anchorの設定が完了しました";
+        public const string cck_animation_curve_empty = "空のアニメーションカーブを含むAnimationは使用できません。Id: {0}";
+        public const string cck_animation_empty = "空のAnimationは使用できません。Id: {0}";
         public const string cck_animation_not_found = "Animationがみつかりませんでした。HumanoidAnimationにAnimation Clipを設定してください。(Id: {0})";
         public const string cck_animation_not_found_exception = "Animationがみつかりませんでした。HumanoidAnimationにAnimation Clipを設定してください。(Id: {0})";
         public const string cck_animator_parameter_name = "AnimatorのParameter名";
@@ -452,6 +454,8 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_all_packages_imported = "All necessary packages for Preview have been imported";
         public const string cck_all_shaders_available = "All Shaders can be used";
         public const string cck_anchor_setting_completed = "Completed setting the Anchor";
+        public const string cck_animation_curve_empty = "Animation containing empty animation curve is not allowed. Id: {0}";
+        public const string cck_animation_empty = "Empty Animation is not allowed. Id: {0}";
         public const string cck_animation_not_found = "The Animation cannot be found. Please set an Animation Clip to HumanoidAnimation. (ID: {0})";
         public const string cck_animation_not_found_exception = "Animation cannot be found. Please set Animation Clip to HumanoidAnimation. (ID: {0})";
         public const string cck_animator_parameter_name = "Animator's Parameter Name";

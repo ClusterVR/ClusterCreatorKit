@@ -61,8 +61,16 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                         messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_animation_not_found, id), ValidationMessage.MessageType.Error));
                     }
                 }
+                else if (humanoidAnimation.Curves.Count == 0)
+                {
+                    messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_animation_empty, id), ValidationMessage.MessageType.Error));
+                }
                 else
                 {
+                    if (humanoidAnimation.Curves.Any(curve => curve.Curve.keys.Length == 0))
+                    {
+                        messages.Add(new ValidationMessage(TranslationUtility.GetMessage(TranslationTable.cck_animation_curve_empty, id), ValidationMessage.MessageType.Error));
+                    }
                     totalKeyFrames += humanoidAnimation.Curves.Select(curve => curve.Curve.keys.Length).Sum();
                 }
             }

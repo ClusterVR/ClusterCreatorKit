@@ -1,10 +1,8 @@
 using System;
 using System.Linq;
-using ClusterVR.CreatorKit.Editor.Analytics;
 using ClusterVR.CreatorKit.Editor.Api.RPC;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Editor.Builder;
-using ClusterVR.CreatorKit.Editor.Enquete;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using ClusterVR.CreatorKit.Editor.Utils;
 using ClusterVR.CreatorKit.Translation;
@@ -221,17 +219,10 @@ namespace ClusterVR.CreatorKit.Editor.Window.VenueUpload
             {
                 EditorUtility.ClearProgressBar();
 
-                var succeeded = true;
                 foreach (var status in currentUploadService.UploadStatus.OrderBy(x => x.Key))
                 {
                     var text = status.Value ? TranslationTable.cck_success : TranslationTable.cck_failed;
-                    succeeded &= status.Value;
                     EditorGUILayout.LabelField(status.Key.ToString(), text);
-                }
-
-                if (succeeded && EnqueteService.ShouldShowEnqueteRequest())
-                {
-                    EnqueteService.ShowEnqueteDialog();
                 }
             }
             else

@@ -15,6 +15,11 @@ namespace ClusterVR.CreatorKit.Item.Implements
         [SerializeField, Tooltip(TranslationTable.cck_item_name)] string itemName;
         [SerializeField, Tooltip(TranslationTable.cck_item_size)] Vector3Int size;
 
+        const string StandardShaderName = "Standard";
+        const string UnlitNonTiledWithBackgroundColorShaderName = "ClusterVR/UnlitNonTiledWithBackgroundColor";
+        const string CraftItemTextShaderName = "TextMeshPro/Mobile/Distance Field";
+        const string MirrorShaderName = "ClusterCreatorKit/Mirror";
+
         const float DisbodiedAlpha = 0.5f;
         static readonly Color PlaceableColorMask = Color.green;
         static readonly Color UnplaceableColorMask = Color.red;
@@ -26,6 +31,7 @@ namespace ClusterVR.CreatorKit.Item.Implements
         static readonly int DstBlendId = Shader.PropertyToID("_DstBlend");
         static readonly int ZWriteId = Shader.PropertyToID("_ZWrite");
         static readonly int MetallicId = Shader.PropertyToID("_Metallic");
+        static readonly int FaceColorId = Shader.PropertyToID("_FaceColor");
 
         enum ManipulationState
         {
@@ -52,13 +58,11 @@ namespace ClusterVR.CreatorKit.Item.Implements
         {
             public Material Material { get; }
             public Color BaseColor { get; }
-            public bool HasMode { get; }
 
-            public MaterialInfo(Material material, Color baseColor, bool hasMode)
+            public MaterialInfo(Material material, Color baseColor)
             {
                 Material = material;
                 BaseColor = baseColor;
-                HasMode = hasMode;
             }
         }
 
@@ -176,23 +180,15 @@ namespace ClusterVR.CreatorKit.Item.Implements
                 var instancedMaterials = RendererMaterialUtility.GetSharedMaterials(renderer).Select(Instantiate).ToArray();
                 for (var i = 0; i < instancedMaterials.Length; i++)
                 {
-                    bool hasMode;
                     var m = instancedMaterials[i];
-                    switch (m.shader.name)
+                    var fallback = m.shader.name is MirrorShaderName or
+                        not (StandardShaderName or UnlitNonTiledWithBackgroundColorShaderName or CraftItemTextShaderName);
+                    if (fallback)
                     {
-                        case "Standard" or "ClusterVR/UnlitNonTiledWithBackgroundColor":
-                            hasMode = true;
-                            break;
-                        case "ClusterVR/Text/ZTest Text":
-                            hasMode = false;
-                            break;
-                        default:
-                            m.shader = Shader.Find("Standard");
-                            m.SetFloat(MetallicId, 0);
-                            hasMode = true;
-                            break;
+                        m.shader = Shader.Find(StandardShaderName);
+                        m.SetFloat(MetallicId, 0);
                     }
-                    instanceMaterialInfos.Add(new MaterialInfo(m, GetBaseColor(m, hasMode), hasMode));
+                    instanceMaterialInfos.Add(new MaterialInfo(m, GetBaseColor(m)));
                 }
                 RendererMaterialUtility.SetOverrideMaterials(renderer, instancedMaterials);
             }
@@ -200,32 +196,44 @@ namespace ClusterVR.CreatorKit.Item.Implements
             foreach (var materialInfo in instanceMaterialInfos)
             {
                 var material = materialInfo.Material;
-                if (materialInfo.HasMode && !IsMode(material, TransparentModeValue))
+                if (!IsTransparent(material))
                 {
                     SetTransparent(material);
                 }
                 var color = materialInfo.BaseColor;
                 color.a = color.a * DisbodiedAlpha;
-                material.color = color;
+                SetColor(material, color);
             }
             disbodied = true;
         }
 
-        static Color GetBaseColor(Material material, bool hasMode)
+        static Color GetBaseColor(Material material)
         {
-            var isOpaque = hasMode && IsMode(material, OpaqueModeValue);
-            var color = material.color;
-            if (isOpaque)
+            var color = GetColor(material);
+            if (IsOpaque(material))
             {
                 color.a = 1f;
             }
             return color;
         }
 
-        static bool IsMode(Material material, float value)
-        {
-            return Mathf.Approximately(material.GetFloat(ModeId), value);
-        }
+        static bool IsOpaque(Material material)
+            => material.shader.name switch
+            {
+                StandardShaderName or UnlitNonTiledWithBackgroundColorShaderName => IsValue(material, ModeId, OpaqueModeValue),
+                CraftItemTextShaderName => false,
+                _ => throw new NotSupportedException(),
+            };
+
+        static bool IsTransparent(Material material)
+            => material.shader.name switch
+            {
+                StandardShaderName or UnlitNonTiledWithBackgroundColorShaderName => IsValue(material, ModeId, TransparentModeValue),
+                CraftItemTextShaderName => true,
+                _ => throw new NotSupportedException(),
+            };
+
+        static bool IsValue(Material material, int nameId, float value) => Mathf.Approximately(material.GetFloat(nameId), value);
 
         void IItem.UpdateIsPlaceable(bool isPlaceable)
         {
@@ -256,8 +264,28 @@ namespace ClusterVR.CreatorKit.Item.Implements
         static void SetRGBMask(Material material, Color baseColor, Color maskColor)
         {
             var color = baseColor * maskColor;
-            color.a = material.color.a;
-            material.color = color;
+            color.a = GetColor(material).a;
+            SetColor(material, color);
+        }
+
+        static Color GetColor(Material material)
+            => material.shader.name switch
+            {
+                CraftItemTextShaderName => material.GetColor(FaceColorId),
+                _ => material.color,
+            };
+
+        static void SetColor(Material material, Color color)
+        {
+            switch (material.shader.name)
+            {
+                case CraftItemTextShaderName:
+                    material.SetColor(FaceColorId, color);
+                    break;
+                default:
+                    material.color = color;
+                    break;
+            }
         }
 
         void CacheMovableItem()

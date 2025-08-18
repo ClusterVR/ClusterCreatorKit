@@ -32,7 +32,7 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                     if (!humanoidAnimations.TryGetValue(animationClip, out var humanoidAnimation))
                     {
                         humanoidAnimation = HumanoidAnimationBuilder.Build(animation.Animation);
-                        AssetDatabase.CreateAsset(humanoidAnimation, $"{tempAssetsDirPath}/{GUID.Generate()}");
+                        AssetDatabase.CreateAsset(humanoidAnimation, $"{tempAssetsDirPath}/{GUID.Generate()}.asset");
                         AssetDatabase.SaveAssets();
                         humanoidAnimations.Add(animationClip, humanoidAnimation);
                     }

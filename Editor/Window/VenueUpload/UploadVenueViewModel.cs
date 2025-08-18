@@ -9,6 +9,7 @@ using ClusterVR.CreatorKit.Editor.Api.User;
 using ClusterVR.CreatorKit.Editor.Api.Venue;
 using ClusterVR.CreatorKit.Editor.Builder;
 using ClusterVR.CreatorKit.Editor.EditorEvents;
+using ClusterVR.CreatorKit.Editor.Enquete;
 using ClusterVR.CreatorKit.Editor.ProjectSettings;
 using ClusterVR.CreatorKit.Editor.Utils;
 using ClusterVR.CreatorKit.Editor.Utils.Extensions;
@@ -207,6 +208,12 @@ namespace ClusterVR.CreatorKit.Editor.Window.VenueUpload
                 }
                 ReloadGroupVenuesService.Instance.ReloadGroupVenuesAsync(cancellationTokenSource.Token).Forget();
                 WorldUploadEvents.InvokeOnWorldUploadEnd(true);
+
+                if (EnqueteService.ShouldShowEnqueteRequest())
+                {
+                    EnqueteService.ShowEnqueteDialog();
+                }
+
             }
             catch (Exception exception)
             {
