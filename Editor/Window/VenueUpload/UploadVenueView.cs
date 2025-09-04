@@ -217,22 +217,11 @@ namespace ClusterVR.CreatorKit.Editor.Window.VenueUpload
         {
             if (!currentUploadService.IsProcessing)
             {
-                EditorUtility.ClearProgressBar();
-
                 foreach (var status in currentUploadService.UploadStatus.OrderBy(x => x.Key))
                 {
                     var text = status.Value ? TranslationTable.cck_success : TranslationTable.cck_failed;
                     EditorGUILayout.LabelField(status.Key.ToString(), text);
                 }
-            }
-            else
-            {
-                var statesValue = currentUploadService.UploadStatus.Values.ToList();
-                var finishedProcessCount = statesValue.Count(x => x);
-                var allProcessCount = statesValue.Count;
-                EditorUtility.DisplayProgressBar(TranslationTable.cck_venue_upload,
-                    TranslationUtility.GetMessage(TranslationTable.cck_upload_progress, finishedProcessCount, allProcessCount),
-                    (float) finishedProcessCount / allProcessCount);
             }
 
             if (!currentUploadService.IsProcessing && currentUploadService.UploadStatus.Values.Any(x => !x))

@@ -85,6 +85,22 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
             return uploadStatus;
         }
 
+        void UpdateUploadStatus(UploadPhase uploadPhase)
+        {
+            uploadStatus[uploadPhase] = true;
+
+            if (isProcessing)
+            {
+                var statesValue = uploadStatus.Values.ToList();
+                var finishedProcessCount = statesValue.Count(x => x);
+                var allProcessCount = statesValue.Count;
+
+                EditorUtility.DisplayProgressBar(TranslationTable.cck_venue_upload,
+                    TranslationUtility.GetMessage(TranslationTable.cck_upload_progress, finishedProcessCount, allProcessCount),
+                    (float) finishedProcessCount / allProcessCount);
+            }
+        }
+
         static UploadPhase BuildTargetToPhase(BuildTarget target) =>
             target switch
             {
@@ -174,7 +190,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 var uploadRequestResponse = await uploadRequest.PostUploadRequestAsync(venue.VenueId, cancellationToken);
                 Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_upload_request, uploadRequestResponse.UploadRequestId));
                 uploadRequestId = uploadRequestResponse.UploadRequestId;
-                uploadStatus[UploadPhase.PreProcess] = true;
+                UpdateUploadStatus(UploadPhase.PreProcess);
 
                 await Task.WhenAll(
                     exportedAssetInfo.PlatformInfos.Select(platformInfo => UploadAssetBundlesAsync(platformInfo, cancellationToken)));
@@ -185,13 +201,14 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
 
                 Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_notify_upload_finished, completionResponse.UploadRequestId));
                 uploadRequestId = null;
-                uploadStatus[UploadPhase.PostProcess] = true;
+                UpdateUploadStatus(UploadPhase.PostProcess);
 
                 return completionResponse;
             }
             finally
             {
                 isProcessing = false;
+                EditorUtility.ClearProgressBar();
             }
         }
 
@@ -214,8 +231,7 @@ namespace ClusterVR.CreatorKit.Editor.Api.RPC
                 var policy = await assetUploadService.UploadAsync(venueAssetInfo, target, uploadRequestId, cancellationToken);
                 Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_success_upload_venue_with_url, buildTargetName, policy.uploadUrl));
             }
-            uploadStatus[BuildTargetToPhase(target)] = true;
+            UpdateUploadStatus(BuildTargetToPhase(target));
         }
-
     }
 }
