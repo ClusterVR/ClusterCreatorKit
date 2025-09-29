@@ -7,7 +7,9 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
     {
         static UserBuildSettingsConfigurer()
         {
+#if !UNITY_6000_0_OR_NEWER
             EditorUserBuildSettings.androidBuildSubtarget = MobileTextureSubtarget.ASTC;
+#endif
         }
     }
 }

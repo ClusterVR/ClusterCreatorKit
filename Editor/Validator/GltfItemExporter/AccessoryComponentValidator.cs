@@ -6,7 +6,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 {
     public sealed class AccessoryComponentValidator : IComponentValidator
     {
-        static readonly string[] ShaderNameWhiteList =
+        static readonly string[] ShaderNameAllowList =
         {
             "VRM/MToon"
         };
@@ -37,7 +37,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             validationMessages.AddRange(requireComponentValidator.GetMessage());
 
             validationMessages.AddRange(ComponentValidator.ValidateBounds(gameObject, BoundsCenterLimit, BoundsSizeLimit)); // boundは2m以内
-            validationMessages.AddRange(ComponentValidator.ValidateShader(gameObject, ShaderNameWhiteList, false)); // mtoonシェーダのみを許可
+            validationMessages.AddRange(ComponentValidator.ValidateShader(gameObject, ShaderNameAllowList, false)); // mtoonシェーダのみを許可
 
             return validationMessages;
         }

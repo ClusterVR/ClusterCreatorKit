@@ -1,3 +1,4 @@
+#if !CLUSTER_CREATOR_KIT_DISABLE_PREVIEW
 using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using PackageInfo = ClusterVR.CreatorKit.Editor.Infrastructure.PackageInfo;
@@ -9,7 +10,7 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
     {
         static UnityVersionChecker()
         {
-            if (!PackageInfo.IsRecommendedUnityEditorVersion())
+            if (!PackageInfo.IsSupportedUnityEditorVersion())
             {
                 EditorUtility.DisplayDialog(TranslationTable.cck_attention,
                     TranslationUtility.GetMessage(TranslationTable.cck_unity_version_warning, PackageInfo.RecommendedUnityEditorVersion),
@@ -18,3 +19,4 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
         }
     }
 }
+#endif

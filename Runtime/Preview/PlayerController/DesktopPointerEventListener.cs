@@ -12,17 +12,25 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         public event Action<Vector2> OnMoved;
         public event Action<Vector2> OnClicked;
 
+        InputSystem_Actions.UIActions uiActions;
+
+        void Start()
+        {
+            uiActions = new InputSystem_Actions().UI;
+            uiActions.Enable();
+        }
+
         void Update()
         {
             if (Cursor.lockState == CursorLockMode.Locked)
             {
-                if (Input.GetKeyDown(KeyCode.Escape))
+                if (uiActions.ReleaseCursorLock.WasPressedThisFrame())
                 {
                     Cursor.lockState = CursorLockMode.None;
                     return;
                 }
 
-                var delta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+                var delta = uiActions.Delta.ReadValue<Vector2>();
                 delta *= 0.002f * Mathf.Pow(4f, CameraControlSettings.Sensitivity);
                 if (CameraControlSettings.InvertHorizontal)
                 {

@@ -144,7 +144,10 @@ namespace ClusterVR.CreatorKit.Editor.Window.ExternalEndpoint
                 },
                 ReactiveBinder.Bind(viewModel.EndpointList, SetEndpoints),
                 ReactiveBinder.Bind(viewModel.VerifyTokenList, SetVerifyTokens),
-                ReactiveBinder.Bind(viewModel.NewEndpointUrl, url => newEndpointUrlField.SetValueWithoutNotify(url)));
+                ReactiveBinder.Bind(viewModel.NewEndpointUrl, url =>
+                {
+                    if (newEndpointUrlField.value != url) newEndpointUrlField.SetValueWithoutNotify(url);
+                }));
         }
 
         void SetEndpoints(ExternalCallEndpoint[] endpoints)

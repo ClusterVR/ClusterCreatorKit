@@ -121,7 +121,20 @@ namespace ClusterVR.CreatorKit.Editor.Builder
                 }
 
                 Debug.Log(TranslationUtility.GetMessage(TranslationTable.cck_building_to_directory, exportDirPath));
+
+#if UNITY_6000_0_OR_NEWER
+                BuildPipeline.BuildAssetBundles(
+                    new BuildAssetBundlesParameters
+                    {
+                        outputPath = exportDirPath,
+                        bundleDefinitions = assetBundleBuilds,
+                        options = BuildAssetBundleOptions.ForceRebuildAssetBundle,
+                        targetPlatform = target,
+                        subtarget = target == BuildTarget.Android ? (int) MobileTextureSubtarget.ASTC : default,
+                    });
+#else
                 BuildPipeline.BuildAssetBundles(exportDirPath, assetBundleBuilds, BuildAssetBundleOptions.ForceRebuildAssetBundle, target);
+#endif
 
                 ExportedSceneInfo exportedMainSceneInfo = null;
                 var exportedSubSceneInfos = new List<ExportedSceneInfo>(buildInfos.Count - 1);

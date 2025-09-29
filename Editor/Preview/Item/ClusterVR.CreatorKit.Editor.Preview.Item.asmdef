@@ -1,5 +1,6 @@
-﻿{
+{
     "name": "ClusterVR.CreatorKit.Editor.Preview.Item",
+    "rootNamespace": "",
     "references": [
         "ClusterVR.CreatorKit.Editor.Preview.Common",
         "ClusterVR.CreatorKit.Editor.Preview.World",
@@ -10,7 +11,8 @@
         "ClusterVR.CreatorKit.Gimmick",
         "ClusterVR.CreatorKit.Preview",
         "ClusterVR.CreatorKit.ProductUgc",
-        "ClusterVR.CreatorKit.Translation"
+        "ClusterVR.CreatorKit.Translation",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [
         "Editor"
@@ -21,5 +23,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }

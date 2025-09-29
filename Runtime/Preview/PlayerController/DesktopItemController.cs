@@ -14,6 +14,9 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         [SerializeField] DesktopItemView itemView;
         [SerializeField] ContactableItemRaycaster contactableItemRaycaster;
 
+        InputSystem_Actions.PlayerActions playerActions;
+        InputSystem_Actions.UIActions uiActions;
+
         IGrabbableItem grabbingItem;
         Quaternion grabPointToTargetOffsetRotation;
         Vector3 grabPointToTargetOffsetPosition;
@@ -23,12 +26,17 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
         void Start()
         {
+            var inputSystemActions = new InputSystem_Actions();
+            playerActions = inputSystemActions.Player;
+            uiActions = inputSystemActions.UI;
+            inputSystemActions.Enable();
+
             desktopPointerEventListener.OnClicked += OnClicked;
         }
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (playerActions.ReleaseItem.WasPressedThisFrame())
             {
                 Release(false);
             }
@@ -36,16 +44,16 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
             {
                 Release(false);
             }
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (uiActions.ReleaseCursorLock.WasPressedThisFrame())
             {
                 SetCursorLock(false);
             }
 
-            if (isCursorLocked && Input.GetMouseButtonDown(0))
+            if (isCursorLocked && playerActions.Use.WasPressedThisFrame())
             {
                 InvokeUseTrigger(true);
             }
-            else if (isUsingDown && Input.GetMouseButtonUp(0))
+            else if (isUsingDown && playerActions.Use.WasReleasedThisFrame())
             {
                 InvokeUseTrigger(false);
             }

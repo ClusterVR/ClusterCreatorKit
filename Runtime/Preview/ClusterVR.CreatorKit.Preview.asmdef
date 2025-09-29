@@ -1,11 +1,13 @@
 {
     "name": "ClusterVR.CreatorKit.Preview",
+    "rootNamespace": "",
     "references": [
         "ClusterVR.CreatorKit.Item",
         "ClusterVR.CreatorKit.Trigger",
         "ClusterVR.CreatorKit.Constants",
         "ClusterVR.CreatorKit.World",
-        "SteamAudioUnity"
+        "SteamAudioUnity",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -14,5 +16,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }

@@ -11,25 +11,25 @@ namespace ClusterVR.CreatorKit.World.Implements.MainScreenViews
                 return new Vector4(1, 1, 0, 0);
             }
 
-            var mainTexPosition = Vector2.zero;
-            var mainTexScale = Vector2.one;
-
             var textureSize = new Vector2(texture.width, texture.height);
+            var textureAspectRatio = textureSize.x / textureSize.y;
+            Vector2 mainTexScale;
 
-            mainTexScale.x = textureSize.y / textureSize.x * aspectRatio;
-            if (flipY)
+            if (textureAspectRatio > aspectRatio)
             {
-                mainTexScale /= mainTexScale.x;
-                mainTexScale.y *= -1;
+                mainTexScale = new Vector2(1, textureAspectRatio / aspectRatio);
             }
             else
             {
-                mainTexScale /= Mathf.Min(mainTexScale.x, mainTexScale.y);
+                mainTexScale = new Vector2(aspectRatio / textureAspectRatio, 1);
             }
 
-            mainTexPosition += Vector2.one * 0.5f;
-            mainTexPosition -= mainTexScale / 2.0f;
+            if (flipY)
+            {
+                mainTexScale.y *= -1;
+            }
 
+            var mainTexPosition = Vector2.one * 0.5f - mainTexScale / 2.0f;
             return new Vector4(mainTexScale.x, mainTexScale.y, mainTexPosition.x, mainTexPosition.y);
         }
     }

@@ -7,11 +7,13 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
     [AddComponentMenu("")]
     public sealed class DesktopMoveInputController : MonoBehaviour, IMoveInputController
     {
+        InputSystem_Actions.PlayerActions playerActions;
+
         public Vector2 MoveDirection
         {
             get
             {
-                return new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+                return playerActions.Move.ReadValue<Vector2>();
             }
         }
 
@@ -19,14 +21,11 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         {
             get
             {
-                var result = 0f;
-                if (Input.GetKey(KeyCode.Space)) result += 1f;
-                if (Input.GetKey(KeyCode.LeftShift)) result -= 1f;
-                return result;
+                return playerActions.AdditionalAxis.ReadValue<float>();
             }
         }
 
-        public bool RideOffButtonPressed => Input.GetKey(KeyCode.X);
+        public bool RideOffButtonPressed => playerActions.RideOff.IsPressed();
 
         Vector2 prevMoveDirection;
         public event Action<Vector2> OnMoveDirectionChanged;
@@ -34,10 +33,13 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
         float prevAdditionalAxis;
         public event Action<float> OnAdditionalAxisChanged;
 
-        public bool IsJumpButtonDown => Input.GetKeyDown(KeyCode.Space);
+        public bool IsJumpButtonDown => playerActions.Jump.WasPressedThisFrame();
 
         void Start()
         {
+            playerActions = new InputSystem_Actions().Player;
+            playerActions.Enable();
+
             prevMoveDirection = MoveDirection;
             OnMoveDirectionChanged?.Invoke(prevMoveDirection);
 

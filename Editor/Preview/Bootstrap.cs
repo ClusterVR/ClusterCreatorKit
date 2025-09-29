@@ -27,7 +27,6 @@ using ClusterVR.CreatorKit.World.Implements.DespawnHeights;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.XR;
 
 namespace ClusterVR.CreatorKit.Editor.Preview
 {
@@ -80,7 +79,6 @@ namespace ClusterVR.CreatorKit.Editor.Preview
                     break;
                 case PlayModeStateChange.EnteredPlayMode:
                     await PackageListRepository.UpdatePackageList(cancellationToken);
-                    XRSettings.enabled = SwitchUseVR.EnabledVR();
                     var coroutine = CoroutineGenerator.StartStaticCoroutine(InitializeAsync());
                     cancellationToken.Register(() => CoroutineGenerator.StopStaticCoroutine(coroutine));
                     break;
@@ -122,14 +120,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview
             var localizedAssets = GetComponentsInGameObjectsChildren<ILocalizedAsset>(rootGameObjects);
             ServerLangCodeManager.InitializeLocalizedAssets(localizedAssets);
 
-            var enterDeviceType = EnterDeviceType.Desktop;
-            if (XRSettings.enabled)
-            {
-                enterDeviceType = EnterDeviceType.VR;
-            }
-
             var despawnHeight = GetComponentInGameObjectsChildren<IDespawnHeight>(rootGameObjects).Height;
-            PlayerPresenter = new PlayerPresenter(PermissionType.Audience, enterDeviceType, SpawnPointManager);
+            PlayerPresenter = new PlayerPresenter(PermissionType.Audience, SpawnPointManager);
             new AvatarRespawner(despawnHeight, PlayerPresenter);
 
             var warpPortals = GetComponentsInGameObjectsChildren<IWarpPortal>(rootGameObjects);

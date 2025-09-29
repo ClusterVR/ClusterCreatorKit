@@ -63,7 +63,11 @@ namespace ClusterVR.CreatorKit.Item.Implements
         Vector3 IMovableItem.Position => gameObject.activeInHierarchy ? Rigidbody.position : transform.position;
         Quaternion IMovableItem.Rotation => gameObject.activeInHierarchy ? Rigidbody.rotation : transform.rotation;
 
+#if UNITY_6000_0_OR_NEWER
+        public override Vector3 Velocity => Rigidbody.linearVelocity;
+#else
         public override Vector3 Velocity => Rigidbody.velocity;
+#endif
 
         public override Vector3 AngularVelocity => Rigidbody.angularVelocity;
 
@@ -163,7 +167,11 @@ namespace ClusterVR.CreatorKit.Item.Implements
             CacheInitialValue();
             rb.isKinematic = initialIsKinematic;
             rb.collisionDetectionMode = initialCollisionDetectionMode;
+#if UNITY_6000_0_OR_NEWER
+            rb.linearVelocity = (targetPosition - currentPosition) / interpolateDurationSeconds;
+#else
             rb.velocity = (targetPosition - currentPosition) / interpolateDurationSeconds;
+#endif
             rb.angularVelocity = GetAngularVelocity(currentRotation, targetRotation, interpolateDurationSeconds);
             state = State.Free;
         }
@@ -201,7 +209,11 @@ namespace ClusterVR.CreatorKit.Item.Implements
             CacheInitialValue();
             transform.position = position;
             transform.rotation = rotation;
+#if UNITY_6000_0_OR_NEWER
+            rb.linearVelocity = Vector3.zero;
+#else
             rb.velocity = Vector3.zero;
+#endif
             rb.angularVelocity = Vector3.zero;
         }
 
@@ -242,7 +254,11 @@ namespace ClusterVR.CreatorKit.Item.Implements
                 return;
             }
             CacheInitialValue();
+#if UNITY_6000_0_OR_NEWER
+            rb.linearVelocity = velocity;
+#else
             rb.velocity = velocity;
+#endif
         }
 
         public void SetAngularVelocity(Vector3 angularVelocity)

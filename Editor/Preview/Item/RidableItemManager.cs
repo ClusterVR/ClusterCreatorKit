@@ -2,6 +2,7 @@
 using ClusterVR.CreatorKit.Editor.Preview.World;
 using ClusterVR.CreatorKit.Gimmick;
 using ClusterVR.CreatorKit.Item;
+using ClusterVR.CreatorKit.Preview;
 using ClusterVR.CreatorKit.Preview.Common;
 using UnityEngine;
 
@@ -15,10 +16,14 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Item
         public IRidableItem RidingItem { get; private set; }
         float getOffLongPressDurationSec;
 
+        InputSystem_Actions.PlayerActions playerActions;
+
         public RidableItemManager(ItemCreator itemCreator, ItemDestroyer itemDestroyer,
             PlayerPresenter playerPresenter, IEnumerable<IRidableItem> ridableItems)
         {
             this.playerPresenter = playerPresenter;
+            playerActions = new InputSystem_Actions().Player;
+            playerActions.Enable();
             itemCreator.OnCreate += OnCreate;
             itemDestroyer.OnDestroy += OnDestroy;
             TickGenerator.Instance.OnTick += Tick;
@@ -123,7 +128,7 @@ namespace ClusterVR.CreatorKit.Editor.Preview.Item
                 return;
             }
 
-            if (RidingItem != null && Input.GetKey(KeyCode.X))
+            if (RidingItem != null && playerActions.RideOff.IsPressed())
             {
                 getOffLongPressDurationSec += Time.deltaTime;
             }

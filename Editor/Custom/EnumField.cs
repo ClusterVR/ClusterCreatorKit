@@ -142,7 +142,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             where TEnum : struct, Enum
         {
             Assert.AreEqual(property.propertyType, SerializedPropertyType.Enum);
+#if UNITY_6000_0_OR_NEWER
+            var enumField = new UnityEngine.UIElements.EnumField
+#else
             var enumField = new UnityEditor.UIElements.EnumField
+#endif
             {
                 bindingPath = property.propertyPath
             };

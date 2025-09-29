@@ -59,7 +59,11 @@ namespace ClusterVR.CreatorKit.Editor.Analytics
         static bool IsXRDevicePresent()
         {
             var xrDisplaySubsystems = new List<XRDisplaySubsystem>();
+#if UNITY_6000_0_OR_NEWER
+            SubsystemManager.GetSubsystems(xrDisplaySubsystems);
+#else
             SubsystemManager.GetInstances(xrDisplaySubsystems);
+#endif
             return xrDisplaySubsystems.Any(xrDisplay => xrDisplay.running);
         }
 

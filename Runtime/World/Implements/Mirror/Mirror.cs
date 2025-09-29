@@ -1,6 +1,7 @@
 ﻿/* ========= Copyright 2016-2017, HTC Corporation. All rights reserved. =========== */
 
 using System;
+using System.Linq;
 using ClusterVR.CreatorKit.Extensions;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -11,13 +12,6 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
     [DisallowMultipleComponent, RequireComponent(typeof(MeshRenderer))]
     public class Mirror : MonoBehaviour, IMirror
     {
-        enum Eye
-        {
-            Monaural,
-            Left,
-            Right
-        }
-
 #if CLUSTER_QUEST
         const int MaxResolution = 768;
 #elif UNITY_IOS || UNITY_ANDROID
@@ -40,8 +34,7 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
         Camera preRenderCamera;
         Renderer cachedRenderer;
         Material material;
-        RenderTexture leftRenderTexture;
-        RenderTexture rightRenderTexture;
+        RenderTexture renderTexture;
         bool isRenderPrepared;
 
         protected virtual LayerMask CullingMask { get; } = 704609495;
@@ -55,6 +48,8 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
             false;
 #endif
         const float MonauralAcceptableDistanceRateToConvergence = 0.1f;
+
+        (Camera camera, int frameCount)? preservingFor;
 
         void Start()
         {
@@ -92,8 +87,28 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
             {
                 return;
             }
+            if (insideRendering)
+            {
+                return;
+            }
 
-            if (insideRendering || isRenderPrepared)
+            var targetCamera = Camera.current;
+            var currentRender = (targetCamera, Time.frameCount);
+
+            if (preservingFor is { } preserving)
+            {
+                if (preserving == currentRender)
+                {
+                    preservingFor = null;
+                    return;
+                }
+                else
+                {
+                    preservingFor = null;
+                    OnEndRendering();
+                }
+            }
+            if (isRenderPrepared)
             {
                 return;
             }
@@ -108,37 +123,27 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
                 return;
             }
 
-            var targetCamera = Camera.current;
-
-            preRenderCamera.cullingMask = CullingMask;
-
             Shader.EnableKeyword(MirrorRenderingKeyword);
             GL.invertCulling = true;
 
-            if (targetCamera.stereoEnabled)
+            if (UseLightweightStereo && targetCamera.stereoEnabled)
             {
-                if (UseLightweightStereo)
+                var monauralAcceptableDistance = targetCamera.stereoConvergence *
+                    MonauralAcceptableDistanceRateToConvergence * targetCamera.transform.lossyScale.z;
+                var distance = Vector3.Dot(transform.position - targetCamera.transform.position, transform.forward);
+                if (distance < monauralAcceptableDistance)
                 {
-                    var monauralAcceptableDistance = targetCamera.stereoConvergence *
-                        MonauralAcceptableDistanceRateToConvergence * targetCamera.transform.lossyScale.z;
-                    var distance = Vector3.Dot(transform.position - targetCamera.transform.position, transform.forward);
-                    if (distance < monauralAcceptableDistance)
-                    {
-                        PrepareLightWeightStereo(targetCamera);
-                    }
-                    else
-                    {
-                        PrepareObjectSpaceMonaural(targetCamera);
-                    }
+                    PrepareScreenSpace(targetCamera, AvatarOnlyCullingMask);
                 }
                 else
                 {
-                    PrepareFullStereo(targetCamera);
+                    PrepareObjectSpace(targetCamera, CullingMask);
+                    preservingFor = currentRender;
                 }
             }
             else
             {
-                PrepareScreenSpaceMonaural(targetCamera);
+                PrepareScreenSpace(targetCamera, CullingMask);
             }
 
             isRenderPrepared = true;
@@ -149,93 +154,64 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
             insideRendering = false;
         }
 
-        void PrepareLightWeightStereo(Camera targetCamera)
-        {
-            PrepareStereo(targetCamera, AvatarOnlyCullingMask);
-        }
-
-        void PrepareFullStereo(Camera targetCamera)
-        {
-            PrepareStereo(targetCamera, CullingMask);
-        }
-
-        void PrepareObjectSpaceMonaural(Camera targetCamera)
+        void PrepareObjectSpace(Camera targetCamera, LayerMask cullingMask)
         {
             GetRenderTextureSize(out var width, out var height);
-            var texture = GetOrCreateRenderTexture(Eye.Monaural, width, height);
+            var texture = GetOrCreateRenderTexture(width, height);
 
+            var cullingMatrices = new[]
+            {
+                targetCamera.GetStereoProjectionMatrix(Camera.StereoscopicEye.Left) * targetCamera.GetStereoViewMatrix(Camera.StereoscopicEye.Left),
+                targetCamera.GetStereoProjectionMatrix(Camera.StereoscopicEye.Right) * targetCamera.GetStereoViewMatrix(Camera.StereoscopicEye.Right)
+            };
             RenderObjectSpace(texture, targetCamera.transform.position, targetCamera.farClipPlane,
-                targetCamera.cullingMatrix, Eye.Monaural, CullingMask);
+                cullingMatrices, cullingMask);
 
             material.EnableKeyword(ObjectSpaceKeyword);
             material.SetTexture(LeftEyeTextureId, texture);
             material.SetTexture(RightEyeTextureId, texture);
         }
 
-        void PrepareScreenSpaceMonaural(Camera targetCamera)
+        void PrepareScreenSpace(Camera targetCamera, LayerMask cullingMask)
         {
             GetRenderTextureSize(out var width, out var height);
-            var texture = GetOrCreateRenderTexture(Eye.Monaural, width, height);
 
-            Render(texture, targetCamera.worldToCameraMatrix, targetCamera.projectionMatrix, Eye.Monaural, CullingMask);
+            var texture = GetOrCreateRenderTexture(width, height);
+
+            Matrix4x4 worldToCameraMatrix, projectionMatrix;
+            if (targetCamera.stereoEnabled)
+            {
+                var eye = (Camera.StereoscopicEye) targetCamera.stereoActiveEye;
+                worldToCameraMatrix = targetCamera.GetStereoViewMatrix(eye);
+                projectionMatrix = targetCamera.GetStereoProjectionMatrix(eye);
+            }
+            else
+            {
+                worldToCameraMatrix = targetCamera.worldToCameraMatrix;
+                projectionMatrix = targetCamera.projectionMatrix;
+            }
+
+            Render(texture, worldToCameraMatrix, projectionMatrix, cullingMask);
 
             material.DisableKeyword(ObjectSpaceKeyword);
             material.SetTexture(LeftEyeTextureId, texture);
             material.SetTexture(RightEyeTextureId, texture);
         }
 
-        void PrepareStereo(Camera targetCamera, LayerMask cullingMask)
+        RenderTexture GetOrCreateRenderTexture(int width, int height)
         {
-            GetRenderTextureSize(out var width, out var height);
-
-            var leftTexture = GetOrCreateRenderTexture(Eye.Left, width, height);
-            var rightTexture = GetOrCreateRenderTexture(Eye.Right, width, height);
-
-            RenderForSingleEye(leftTexture, targetCamera, Eye.Left, cullingMask);
-            RenderForSingleEye(rightTexture, targetCamera, Eye.Right, cullingMask);
-
-            material.DisableKeyword(ObjectSpaceKeyword);
-            material.SetTexture(LeftEyeTextureId, leftTexture);
-            material.SetTexture(RightEyeTextureId, rightTexture);
-        }
-
-        void RenderForSingleEye(RenderTexture texture, Camera targetCamera, Eye eye, LayerMask cullingMask)
-        {
-            var stereoscopicEye = eye == Eye.Left ? Camera.StereoscopicEye.Left : Camera.StereoscopicEye.Right;
-            Render(texture,
-                targetCamera.GetStereoViewMatrix(stereoscopicEye),
-                targetCamera.GetStereoProjectionMatrix(stereoscopicEye),
-                eye, cullingMask);
-        }
-
-        RenderTexture GetOrCreateRenderTexture(Eye eye, int width, int height)
-        {
-            if (eye == Eye.Left)
+            Assert.IsNull(renderTexture);
+            if (renderTexture == null) // safety
             {
-                Assert.IsNull(leftRenderTexture);
-                if (leftRenderTexture == null) // safety
-                {
-                    leftRenderTexture = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.Default,
-                        RenderTextureReadWrite.Default, MsaaLevel);
-                }
-
-                return leftRenderTexture;
+                renderTexture = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.Default,
+                    RenderTextureReadWrite.Default, MsaaLevel);
             }
-            else
-            {
-                Assert.IsNull(rightRenderTexture);
-                if (rightRenderTexture == null) // safety
-                {
-                    rightRenderTexture = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.Default,
-                        RenderTextureReadWrite.Default, MsaaLevel);
-                }
 
-                return rightRenderTexture;
-            }
+            return renderTexture;
         }
 
         void Render(RenderTexture targetRenderTexture, Matrix4x4 sourceWorldToCameraMatrix,
-            Matrix4x4 sourceProjectionMatrix, Eye eye, LayerMask cullingMask)
+            Matrix4x4 sourceProjectionMatrix, LayerMask cullingMask)
         {
             var mirrorPosition = transform.position;
             var mirrorNormal = -transform.forward;
@@ -253,7 +229,7 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
             var localPlane = new Vector4(localNormal.x, localNormal.y, localNormal.z,
                 -Vector3.Dot(localPos, localNormal));
             preRenderCamera.projectionMatrix = preRenderCamera.CalculateObliqueMatrix(localPlane);
-            SetRect(rect, preRenderCamera, material, eye);
+            SetRect(rect, material);
 
             preRenderCamera.cullingMask = cullingMask;
             preRenderCamera.targetTexture = targetRenderTexture;
@@ -261,7 +237,7 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
         }
 
         void RenderObjectSpace(RenderTexture targetRenderTexture, Vector3 position, float farClip,
-            Matrix4x4 cullingMatrix, Eye eye, LayerMask cullingMask)
+            Matrix4x4[] cullingMatrices, LayerMask cullingMask)
         {
             var mirrorPosition = transform.position;
             var mirrorNormal = -transform.forward;
@@ -270,7 +246,7 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
             preRenderCamera.worldToCameraMatrix =
                 Matrix4x4.TRS(position, transform.rotation, ZFlip(scale)).inverse * reflection;
             var mirrorLocalCameraPoint = transform.InverseTransformPoint(position);
-            var rect = GetObjectSpaceScissorRect(cullingMatrix);
+            var rect = GetObjectSpaceScissorRect(cullingMatrices);
             if (rect.width <= 0f || rect.height <= 0f)
             {
                 return;
@@ -283,7 +259,7 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
                 -mirrorLocalCameraPoint.z,
                 farClip / scale.z);
             preRenderCamera.projectionMatrix = projectionMatrix;
-            SetRect(rect, preRenderCamera, material, eye);
+            SetRect(rect, material);
 
             preRenderCamera.cullingMask = cullingMask;
             preRenderCamera.targetTexture = targetRenderTexture;
@@ -324,6 +300,16 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
             max = Vector2.Min(max, Vector2.one);
 
             return Rect.MinMaxRect(min.x, min.y, max.x, max.y);
+        }
+
+        Rect GetObjectSpaceScissorRect(Matrix4x4[] mats)
+        {
+            var rects = mats.Select(GetObjectSpaceScissorRect).ToArray();
+            return Rect.MinMaxRect(
+                rects.Select(r => r.xMin).Min(),
+                rects.Select(r => r.yMin).Min(),
+                rects.Select(r => r.xMax).Max(),
+                rects.Select(r => r.yMax).Max());
         }
 
         Rect GetObjectSpaceScissorRect(Matrix4x4 mat)
@@ -399,21 +385,10 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
             return point;
         }
 
-        static void SetRect(Rect rect, Camera camera, Material material, Eye eye)
+        static void SetRect(Rect rect, Material material)
         {
-            switch (eye)
-            {
-                case Eye.Monaural:
-                    SetInversedST(material, LeftEyeTextureId, rect);
-                    SetInversedST(material, RightEyeTextureId, rect);
-                    break;
-                case Eye.Left:
-                    SetInversedST(material, LeftEyeTextureId, rect);
-                    break;
-                case Eye.Right:
-                    SetInversedST(material, RightEyeTextureId, rect);
-                    break;
-            }
+            SetInversedST(material, LeftEyeTextureId, rect);
+            SetInversedST(material, RightEyeTextureId, rect);
         }
 
         static void SetInversedST(Material material, int textureId, Rect rect)
@@ -427,9 +402,10 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
             material.SetTextureScale(textureId, inversedSize);
         }
 
-        void OnRenderObject()
+        void OnRenderObject() => OnEndRendering();
+        void OnEndRendering()
         {
-            if (!insideRendering)
+            if (!insideRendering && !preservingFor.HasValue)
             {
                 ReleaseTemporalRenderTextures();
             }
@@ -455,16 +431,10 @@ namespace ClusterVR.CreatorKit.World.Implements.Mirror
                 preRenderCamera.targetTexture = null;
             }
 
-            if (leftRenderTexture != null)
+            if (renderTexture != null)
             {
-                RenderTexture.ReleaseTemporary(leftRenderTexture);
-                leftRenderTexture = null;
-            }
-
-            if (rightRenderTexture != null)
-            {
-                RenderTexture.ReleaseTemporary(rightRenderTexture);
-                rightRenderTexture = null;
+                RenderTexture.ReleaseTemporary(renderTexture);
+                renderTexture = null;
             }
 
             isRenderPrepared = false;

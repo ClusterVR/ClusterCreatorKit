@@ -19,7 +19,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
     {
         const int ItemNameLengthLimit = 64;
 
-        static readonly Type[] RootComponentWhiteList =
+        static readonly Type[] RootComponentAllowList =
         {
             typeof(Item.Implements.Item),
             typeof(GrabbableItem),
@@ -32,12 +32,12 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             typeof(PlayerScript),
         };
 
-        static readonly Type[] RootInterfaceWhiteList =
+        static readonly Type[] RootInterfaceAllowList =
         {
             typeof(IAttachTargetList),
         };
 
-        static readonly Type[] ItemComponentWhiteList =
+        static readonly Type[] ItemComponentAllowList =
         {
             typeof(Transform),
             typeof(MeshFilter),
@@ -54,13 +54,13 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             typeof(TextView),
         };
 
-        static readonly Type[] AccessoryRootComponentWhiteList =
+        static readonly Type[] AccessoryRootComponentAllowList =
         {
             typeof(Item.Implements.Item),
             typeof(AccessoryItem)
         };
 
-        static readonly Type[] AccessoryComponentWhiteList =
+        static readonly Type[] AccessoryComponentAllowList =
         {
             typeof(Transform),
             typeof(MeshFilter),
@@ -241,9 +241,9 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             var validationMessages = new List<ValidationMessage>();
             var componentType = component.GetType();
 
-            var isValidComponent = Contains(ItemComponentWhiteList, componentType);
-            var isComponentOnlyForRoot = RootComponentWhiteList.Contains(componentType) ||
-                ImplementsAnyInterface(RootInterfaceWhiteList, componentType);
+            var isValidComponent = Contains(ItemComponentAllowList, componentType);
+            var isComponentOnlyForRoot = RootComponentAllowList.Contains(componentType) ||
+                ImplementsAnyInterface(RootInterfaceAllowList, componentType);
 
             var isInvalidComponent = !isValidComponent && !isComponentOnlyForRoot;
             if (isInvalidComponent)
@@ -283,7 +283,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
         {
             var validationMessages = new List<ValidationMessage>();
 
-            var validComponentList = AccessoryRootComponentWhiteList.Concat(AccessoryComponentWhiteList);
+            var validComponentList = AccessoryRootComponentAllowList.Concat(AccessoryComponentAllowList);
             var isInvalidComponent = !validComponentList.Contains(component.GetType());
 
             if (isInvalidComponent)
@@ -295,7 +295,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             }
 
             var isChildAccessoryComponent =
-                !isRoot && AccessoryRootComponentWhiteList.Contains(component.GetType());
+                !isRoot && AccessoryRootComponentAllowList.Contains(component.GetType());
 
             if (isChildAccessoryComponent)
             {
@@ -308,7 +308,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             return validationMessages;
         }
 
-        internal static IEnumerable<ValidationMessage> ValidateShader(GameObject gameObject, string[] shaderNameWhiteList, bool fallbackToStandard)
+        internal static IEnumerable<ValidationMessage> ValidateShader(GameObject gameObject, string[] shaderNameAllowList, bool fallbackToStandard)
         {
             var validationMessages = new List<ValidationMessage>();
 
@@ -317,7 +317,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                 foreach (var material in renderer.sharedMaterials)
                 {
                     var shader = material.shader;
-                    if (shaderNameWhiteList.Contains(shader.name))
+                    if (shaderNameAllowList.Contains(shader.name))
                     {
                         continue;
                     }
@@ -329,7 +329,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
                     }
                     else
                     {
-                        var supportShaderListStr = string.Join(", ", shaderNameWhiteList);
+                        var supportShaderListStr = string.Join(", ", shaderNameAllowList);
                         validationMessages.Add(new ValidationMessage(
                             TranslationUtility.GetMessage(TranslationTable.cck_shader_unsupported_list, material.name, shader.name, supportShaderListStr),
                             ValidationMessage.MessageType.Error));

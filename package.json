@@ -1,7 +1,7 @@
 {
   "author": "Cluster, Inc.",
   "name": "mu.cluster.cluster-creator-kit",
-  "version": "2.37.2",
+  "version": "3.0.0",
   "displayName": "Cluster Creator Kit",
   "unity": "2021.3",
   "description": "Cluster Creator Kit is a tool for creating your own Worlds, Craft Items and Accessories experienced in Cluster.",
@@ -9,7 +9,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "com.unity.nuget.newtonsoft-json": "3.0.2"
+    "com.unity.nuget.newtonsoft-json": "3.0.2",
+    "com.unity.inputsystem": "1.11.0"
   },
   "samples": [
     {

@@ -7,11 +7,13 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
     [AddComponentMenu("")]
     public sealed class VRMoveInputController : MonoBehaviour, IMoveInputController
     {
+        InputSystem_Actions.PlayerActions playerActions;
+
         public Vector2 MoveDirection
         {
             get
             {
-                return new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+                return playerActions.Move.ReadValue<Vector2>();
             }
         }
 
@@ -28,6 +30,8 @@ namespace ClusterVR.CreatorKit.Preview.PlayerController
 
         void Start()
         {
+            playerActions = new InputSystem_Actions().Player;
+            playerActions.Enable();
             prevMoveDirection = MoveDirection;
             OnMoveDirectionChanged?.Invoke(prevMoveDirection);
         }

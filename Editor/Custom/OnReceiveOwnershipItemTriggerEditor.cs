@@ -16,7 +16,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
                     NormalizeEventType(serializedProperty);
                 }
 
+#if UNITY_6000_0_OR_NEWER
+                return new UnityEngine.UIElements.EnumField(
+#else
                 return new UnityEditor.UIElements.EnumField(
+#endif
                     serializedProperty.displayName)
                 {
                     bindingPath = serializedProperty.propertyPath

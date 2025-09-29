@@ -16,30 +16,54 @@ namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
         static async void AsyncInitialize()
         {
             await PackageListRepository.UpdatePackageList(default);
+#if UNITY_6000_0_OR_NEWER
+            var packageStates = new PackageStates(
+                PackageListRepository.Contain("timeline"),
+                PackageListRepository.Contain("postprocessing")
+            );
+#else
             var packageStates = new PackageStates(
                 PackageListRepository.Contain("timeline"),
                 PackageListRepository.Contain("textmeshpro"),
-                PackageListRepository.Contain("postprocessing"),
-                PackageListRepository.Contain("openvr")
+                PackageListRepository.Contain("postprocessing")
             );
+#endif
 
             PackageInstallerWindow.ShowWithState(packageStates);
         }
     }
 
+#if UNITY_6000_0_OR_NEWER
     public readonly struct PackageStates
     {
+
+        public readonly bool TimeLine;
+        public readonly bool PostProcessingStack;
+
+        public PackageStates(bool timeLine, bool postProcessingStack)
+        {
+            TimeLine = timeLine;
+            PostProcessingStack = postProcessingStack;
+        }
+
+        public bool AllPackagesImported => TimeLine && PostProcessingStack;
+    }
+#else
+    public readonly struct PackageStates
+    {
+
         public readonly bool TimeLine;
         public readonly bool TMPro;
         public readonly bool PostProcessingStack;
-        public readonly bool OpenVR;
 
-        public PackageStates(bool timeLine, bool tMPro, bool postProcessingStack, bool openVR)
+        public PackageStates(bool timeLine, bool tMPro, bool postProcessingStack)
         {
             TimeLine = timeLine;
             TMPro = tMPro;
             PostProcessingStack = postProcessingStack;
-            OpenVR = openVR;
         }
+
+        public bool AllPackagesImported => TimeLine && TMPro && PostProcessingStack;
     }
+#endif
 }

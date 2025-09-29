@@ -113,7 +113,10 @@ namespace ClusterVR.CreatorKit.Editor.Window.VenueUpload
                 {
                     OnVenueClicked -= viewModel.OnVenueClicked;
                 },
-                ReactiveBinder.Bind(viewModel.FilterText, filterText => filterField.SetValueWithoutNotify(filterText)),
+                ReactiveBinder.Bind(viewModel.FilterText, filterText =>
+                {
+                    if (filterField.value != filterText) filterField.SetValueWithoutNotify(filterText);
+                }),
                 ReactiveBinder.Bind(viewModel.CurrentGroupId, UpdateGroupSelection),
                 ReactiveBinder.Bind(viewModel.GroupSelectorState, RenderGroupSelector),
                 ReactiveBinder.Bind(viewModel.VenueSelectorState, RenderVenueSelector));

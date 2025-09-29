@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using ClusterVR.CreatorKit.Item;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
 namespace ClusterVR.CreatorKit.Preview.Item
@@ -16,10 +17,15 @@ namespace ClusterVR.CreatorKit.Preview.Item
         [SerializeField] Material grabbableOutlineMaterial;
         [SerializeField] Material interactableOutlineMaterial;
 
+        InputSystem_Actions.UIActions uiActions;
+
         CommandBuffer commandBuffer;
 
         void Start()
         {
+            uiActions = new InputSystem_Actions().UI;
+            uiActions.Enable();
+
             commandBuffer = new CommandBuffer();
             targetCamera.AddCommandBuffer(CameraEvent.BeforeImageEffects, commandBuffer);
         }
@@ -28,7 +34,7 @@ namespace ClusterVR.CreatorKit.Preview.Item
         {
             commandBuffer.Clear();
             if (Cursor.lockState != CursorLockMode.Locked &&
-                contactableItemRaycaster.RaycastItem(Input.mousePosition, out var contactable, out _))
+                contactableItemRaycaster.RaycastItem(uiActions.Point.ReadValue<Vector2>(), out var contactable, out _))
             {
                 var objectToHighlight = contactable.Item.gameObject;
                 Draw(objectToHighlight, outlineStencilMaterial);

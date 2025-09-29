@@ -6,7 +6,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
 {
     public sealed class CraftItemComponentValidator : IComponentValidator
     {
-        static readonly string[] ShaderNameWhiteList =
+        static readonly string[] ShaderNameAllowList =
         {
             "Standard",
             "Unlit/Texture",
@@ -39,7 +39,7 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             validationMessages.AddRange(requireComponentValidator.GetMessage());
 
             validationMessages.AddRange(ComponentValidator.ValidateBounds(gameObject, BoundsCenterLimit, BoundsSizeLimit));
-            validationMessages.AddRange(ComponentValidator.ValidateShader(gameObject, ShaderNameWhiteList, true));
+            validationMessages.AddRange(ComponentValidator.ValidateShader(gameObject, ShaderNameAllowList, true));
             validationMessages.AddRange(ComponentValidator.ValidateItemAudioSetList(gameObject));
             validationMessages.AddRange(ComponentValidator.ValidateMirror(gameObject, MaxMirrorCount));
             validationMessages.AddRange(ComponentValidator.ValidateCollider(gameObject));

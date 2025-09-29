@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -6,7 +6,16 @@ namespace ClusterVR.CreatorKit.Editor.Infrastructure
 {
     public static class PackageInfo
     {
-        public const string RecommendedUnityEditorVersion = "2021.3";
+        const string RecommendedUnity6000EditorVersion = "6000.2.0f1";
+        const string RecommendedUnity2021EditorVersion = "2021.3.4f1";
+
+        public const string RecommendedUnityEditorVersion = RecommendedUnity6000EditorVersion;
+
+        static readonly string[] SupportedUnityEditorVersions =
+        {
+            RecommendedUnity6000EditorVersion,
+            RecommendedUnity2021EditorVersion
+        };
 
         public static string GetCreatorKitVersion()
         {
@@ -16,9 +25,9 @@ namespace ClusterVR.CreatorKit.Editor.Infrastructure
             return package.version;
         }
 
-        public static bool IsRecommendedUnityEditorVersion()
+        public static bool IsSupportedUnityEditorVersion()
         {
-            return Application.unityVersion.StartsWith(RecommendedUnityEditorVersion, StringComparison.Ordinal);
+            return SupportedUnityEditorVersions.Contains(Application.unityVersion);
         }
     }
 }

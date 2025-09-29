@@ -5,6 +5,7 @@ Shader "ClusterCreatorKit/Mirror"
 	Properties
 	{
 		_LeftEyeTexture("Left Eye Texture", 2D) = "white" {}
+		// unused, but keep for compatibility
 		_RightEyeTexture("Right Eye Texture", 2D) = "white" {}
 	}
 
@@ -25,9 +26,7 @@ Shader "ClusterCreatorKit/Mirror"
 			#include "UnityCG.cginc"
 
 			sampler2D _LeftEyeTexture;
-			sampler2D _RightEyeTexture;
 			float4 _LeftEyeTexture_ST;
-			float4 _RightEyeTexture_ST;
 
 #if USE_OBJECT_SPACE
 			struct v2f
@@ -50,28 +49,7 @@ Shader "ClusterCreatorKit/Mirror"
 					discard;
 				#endif
 
-				fixed4 color = float4(0, 0, 0, 0);
-				#ifdef UNITY_SINGLE_PASS_STEREO
-					if (unity_StereoEyeIndex == 0)
-					{
-						color = tex2D(_LeftEyeTexture, TRANSFORM_TEX(uv, _LeftEyeTexture));
-					}
-					else
-					{
-						color = tex2D(_RightEyeTexture, TRANSFORM_TEX(uv, _RightEyeTexture));
-					}
-				#else
-					if (unity_CameraProjection[0][2] < 0)
-					{
-						color = tex2D(_LeftEyeTexture, TRANSFORM_TEX(uv, _LeftEyeTexture));
-					}
-					else
-					{
-						color = tex2D(_RightEyeTexture, TRANSFORM_TEX(uv, _RightEyeTexture));
-					}
-					#endif
-
-				return color;
+				return tex2D(_LeftEyeTexture, TRANSFORM_TEX(uv, _LeftEyeTexture));
 			}
 #else
 			float4 vert (float4 vertex : POSITION) : SV_POSITION
@@ -92,17 +70,7 @@ Shader "ClusterCreatorKit/Mirror"
 				screenUV = (screenUV - scaleOffset.zw) / scaleOffset.xy;
 #endif
 
-				fixed4 color = float4(0, 0, 0, 0);
-				if (unity_StereoEyeIndex == 0)
-				{
-					color = tex2D(_LeftEyeTexture, TRANSFORM_TEX(screenUV, _LeftEyeTexture));
-				}
-				else
-				{
-					color = tex2D(_RightEyeTexture, TRANSFORM_TEX(screenUV, _RightEyeTexture));
-				}
-
-				return color;
+				return tex2D(_LeftEyeTexture, TRANSFORM_TEX(screenUV, _LeftEyeTexture));;
 			}
 #endif
 			ENDCG

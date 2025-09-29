@@ -21,8 +21,8 @@ namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
         {
             var root = rootVisualElement;
 
-            if (packageStates.TimeLine && packageStates.TMPro && packageStates.PostProcessingStack &&
-                packageStates.OpenVR)
+
+            if (packageStates.AllPackagesImported)
             {
                 VisualElement existLabel = new Label(TranslationTable.cck_all_packages_imported);
                 root.Add(existLabel);
@@ -35,19 +35,16 @@ namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
             {
                 notExistingPackage.text += "TimeLine\n";
             }
+#if !UNITY_6000_0_OR_NEWER
             if (!packageStates.TMPro)
             {
                 notExistingPackage.text += "TextMeshPro\n";
             }
+#endif
             if (!packageStates.PostProcessingStack)
             {
                 notExistingPackage.text += "PostProcessingStack\n";
             }
-            if (!packageStates.OpenVR)
-            {
-                notExistingPackage.text += "OpenVR";
-            }
-
             VisualElement certificationLabel = new Label(TranslationTable.cck_import_packages_prompt);
 
             var acceptButton = new Button(() => ImportPackages(packageStates));
@@ -73,17 +70,15 @@ namespace ClusterVR.CreatorKit.Editor.Preview.PackageInstaller
             {
                 Client.Add("com.unity.timeline");
             }
+#if !UNITY_6000_0_OR_NEWER
             if (!packageStates.TMPro)
             {
                 Client.Add("com.unity.textmeshpro");
             }
+#endif
             if (!packageStates.PostProcessingStack)
             {
                 Client.Add("com.unity.postprocessing");
-            }
-            if (!packageStates.OpenVR)
-            {
-                Client.Add("com.unity.xr.openvr.standalone");
             }
             Close();
         }

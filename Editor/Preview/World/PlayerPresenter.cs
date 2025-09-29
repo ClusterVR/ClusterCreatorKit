@@ -1,5 +1,4 @@
-﻿using System;
-using ClusterVR.CreatorKit.Constants;
+﻿using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Preview.PlayerController;
 using UnityEditor;
@@ -13,14 +12,10 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 {
     public sealed class PlayerPresenter
     {
-        const string NonVRPrefabPath =
+        const string PreviewOnlyPrefabPath =
             "Packages/mu.cluster.cluster-creator-kit/Editor/Preview/Prefabs/PreviewOnly.prefab";
 
-        const string VRPrefabPath =
-            "Packages/mu.cluster.cluster-creator-kit/Editor/Preview/Prefabs/VRPlayerController.prefab";
-
         readonly IPlayerController playerController;
-        readonly EnterDeviceType enterDeviceType;
         readonly SpawnPointManager spawnPointManager;
 
         Vector3? recordedPosition;
@@ -35,14 +30,13 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
 
         public PermissionType PermissionType { get; private set; }
 
-        public PlayerPresenter(PermissionType permissionType, EnterDeviceType enterDeviceType,
+        public PlayerPresenter(PermissionType permissionType,
             SpawnPointManager spawnPointManager)
         {
             PermissionType = permissionType;
-            this.enterDeviceType = enterDeviceType;
             this.spawnPointManager = spawnPointManager;
 
-            var previewOnlyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(PreviewOnlyPrefabPath());
+            var previewOnlyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(PreviewOnlyPrefabPath);
             var previewOnly = PrefabUtility.InstantiatePrefab(previewOnlyPrefab) as GameObject;
             playerController = previewOnly.GetComponentInChildren<IPlayerController>();
             PlayerTransform = playerController.PlayerTransform;
@@ -64,19 +58,6 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
             var spawnPoint = spawnPointManager.GetRespawnPoint(PermissionType);
             WarpTo(spawnPoint.Position);
             RotateTo(Quaternion.Euler(0f, spawnPoint.YRotation, 0f));
-        }
-
-        string PreviewOnlyPrefabPath()
-        {
-            switch (enterDeviceType)
-            {
-                case EnterDeviceType.Desktop:
-                    return NonVRPrefabPath;
-                case EnterDeviceType.VR:
-                    return VRPrefabPath;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(enterDeviceType), enterDeviceType, null);
-            }
         }
 
         public void ChangePermissionType(PermissionType permissionType)
@@ -130,11 +111,5 @@ namespace ClusterVR.CreatorKit.Editor.Preview.World
     {
         Performer,
         Audience
-    }
-
-    public enum EnterDeviceType
-    {
-        Desktop,
-        VR
     }
 }
