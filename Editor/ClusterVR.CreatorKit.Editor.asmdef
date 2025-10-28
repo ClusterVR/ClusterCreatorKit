@@ -3,6 +3,7 @@
     "rootNamespace": "",
     "references": [
         "ClusterVR.CreatorKit",
+        "ClusterVR.CreatorKit.Common",
         "ClusterVR.CreatorKit.Constants",
         "ClusterVR.CreatorKit.Editor.Utils",
         "ClusterVR.CreatorKit.Extensions",

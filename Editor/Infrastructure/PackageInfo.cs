@@ -6,7 +6,7 @@ namespace ClusterVR.CreatorKit.Editor.Infrastructure
 {
     public static class PackageInfo
     {
-        const string RecommendedUnity6000EditorVersion = "6000.2.0f1";
+        const string RecommendedUnity6000EditorVersion = "6000.2.6f2";
         const string RecommendedUnity2021EditorVersion = "2021.3.4f1";
 
         public const string RecommendedUnityEditorVersion = RecommendedUnity6000EditorVersion;

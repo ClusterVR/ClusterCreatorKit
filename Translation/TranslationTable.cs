@@ -82,6 +82,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_component_type_disabled_require_component_list = "{0}の{1}は無効化されます。{2}のいずれかをGameObjectに設定してください。";
         public const string cck_component_type_not_supported = "{0}の{1}は対応していないため正しく動作しません。";
         public const string cck_component_type_root_required = "{0}の{1}は無効化されます。RootのGameObjectに設定してください。";
+        public const string cck_component_urp_shadow_notice = "URP の場合、この設定は常に有効になります";
         public const string cck_confirm = "確認";
         public const string cck_confirm_delete_all_items = "アイテムをすべて削除しますか？";
         public const string cck_confirm_delete_all_save_data = "全てのセーブデータを削除します。よろしいですか？";
@@ -301,11 +302,13 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_quality_improvement_survey_invitation = "Creator Kit の品質を向上するためのアンケートにご協力いただけると助かります。\nアンケートへの回答は Cluster > Settings メニューからも始められます。";
         public const string cck_read_json = "JSONを読み込む";
         public const string cck_recommend_prefab_for_item_template_property = "{0} には Prefab の指定を推奨しています。";
+        public const string cck_recommend_prefab_for_property = "{0} には Prefab の指定を推奨しています。";
         public const string cck_recommended_image_size = "※推奨サイズ：1920×1080px";
         public const string cck_refresh = "更新";
         public const string cck_register = "登録";
         public const string cck_registered_at = "登録日時";
         public const string cck_registered_url = "登録中のURL";
+        public const string cck_render_pipeline_urp_warning = "この Cluster Creator Kit バージョンは Universal Render Pipeline に非対応です。作成したワールドは正常に動作しません。 Project Settings の Graphics から Default Render Pipeline を None に変更するか、 Built-in Render Pipeline で新しいプロジェクトを作成してください。";
         public const string cck_renderer_needed_for_auto_setting_item_size = "ItemのSizeを自動設定するにはRendererが必要です";
         public const string cck_required_components_for_preview = "ワールドをプレビューするためには以下のコンポーネントが必要です: {0}";
         public const string cck_respawn = "リスポーン";
@@ -523,6 +526,7 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_component_type_disabled_require_component_list = "The {0} of {1} will be disabled. {2} to the GameObject.";
         public const string cck_component_type_not_supported = "The {0} of {1} is not supported so will not operate correctly.";
         public const string cck_component_type_root_required = "The {0} of {1} will be disabled. Please set it to the Root GameObject.";
+        public const string cck_component_urp_shadow_notice = "For URP, this setting is always enabled";
         public const string cck_confirm = "Confirmation";
         public const string cck_confirm_delete_all_items = "Would you like to delete all items?";
         public const string cck_confirm_delete_all_save_data = "Are you sure you want to delete all save data?";
@@ -742,11 +746,13 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_quality_improvement_survey_invitation = "It would be greatly appreciated if you could answer the survey below about the Creator Kit for us to improve quality. \n You can answer the survey from the Cluster > Settings menu.";
         public const string cck_read_json = "Read JSON";
         public const string cck_recommend_prefab_for_item_template_property = "Setting a prefab to {0} is recommended.";
+        public const string cck_recommend_prefab_for_property = "Setting a prefab to {0} is recommended.";
         public const string cck_recommended_image_size = "*Recommended Size: 1920×1080px";
         public const string cck_refresh = "Refresh";
         public const string cck_register = "Register";
         public const string cck_registered_at = "Registered At";
         public const string cck_registered_url = "Registered URL";
+        public const string cck_render_pipeline_urp_warning = "This version of the Cluster Creator Kit does not support the Universal Render Pipeline. The created world will not work properly. Change Default Render Pipeline to None in the Graphics section of Project Settings, or create a new project with the Built-in Render Pipeline.";
         public const string cck_renderer_needed_for_auto_setting_item_size = "Renderer is necessary to automatically set Item Size";
         public const string cck_required_components_for_preview = "You need the following components to preview the World: {0}";
         public const string cck_respawn = "Respawn";

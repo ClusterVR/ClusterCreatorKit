@@ -8,14 +8,20 @@ namespace ClusterVR.CreatorKit.Editor.ProjectSettings
     [InitializeOnLoad]
     public static class UnityVersionChecker
     {
+        const string UnityVersionCheckedKey = "ClusterCreatorKitUnityVersionChecker";
         static UnityVersionChecker()
         {
+            if (SessionState.GetBool(UnityVersionCheckedKey, false))
+            {
+                return;
+            }
             if (!PackageInfo.IsSupportedUnityEditorVersion())
             {
                 EditorUtility.DisplayDialog(TranslationTable.cck_attention,
                     TranslationUtility.GetMessage(TranslationTable.cck_unity_version_warning, PackageInfo.RecommendedUnityEditorVersion),
                     TranslationTable.cck_close);
             }
+            SessionState.SetBool(UnityVersionCheckedKey, true);
         }
     }
 }
