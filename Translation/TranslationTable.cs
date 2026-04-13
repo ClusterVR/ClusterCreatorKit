@@ -699,8 +699,8 @@ namespace ClusterVR.CreatorKit.Translation
         public const string cck_open_privacy_policy = "Open Privacy Policy";
         public const string cck_open_settings = "Open Settings";
         public const string cck_open_world_detail_page = "Open the World page";
-        public const string cck_open_world_management_page = "Open the My Contents – World page";
-        public const string cck_open_world_management_page_after_upload = "Open My Contents — World page after uploading";
+        public const string cck_open_world_management_page = "Open the My Content – World page";
+        public const string cck_open_world_management_page_after_upload = "Open My Content — World page after uploading";
         public const string cck_optional_generation_position = "Generated Position (Optional)";
         public const string cck_package_installer = "PackageInstaller";
         public const string cck_package_list_fetch_error = "Failing to acquire package list";

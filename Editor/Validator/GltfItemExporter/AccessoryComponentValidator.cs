@@ -8,7 +8,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
     {
         static readonly string[] ShaderNameAllowList =
         {
-            "VRM/MToon"
+            "VRM/MToon",
+            "VRM/Universal Render Pipeline/MToon",
         };
 
         static readonly Vector3Int ItemSizeLimit = new Vector3Int(2, 2, 2);

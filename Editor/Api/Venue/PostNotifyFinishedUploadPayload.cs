@@ -12,16 +12,19 @@ namespace ClusterVR.CreatorKit.Editor.Api.Venue
         [SerializeField] VenueRevisionDisplayItemType[] displayItems;
         [SerializeField] string worldDescriptor;
         [SerializeField] bool isPreview;
+        [SerializeField] string renderPipelinePresetId;
 
         public PostNotifyFinishedUploadPayload(
             VenueRevisionDisplayItemType[] displayItems,
             WorldDescriptor worldDescriptor,
-            bool isPreview
+            bool isPreview,
+            string renderPipelinePresetId
             )
         {
             this.displayItems = displayItems;
             this.worldDescriptor = worldDescriptor.ToByteArray().ToSafeBase64();
             this.isPreview = isPreview;
+            this.renderPipelinePresetId = renderPipelinePresetId;
         }
     }
 }

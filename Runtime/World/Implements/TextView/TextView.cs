@@ -35,6 +35,7 @@ namespace ClusterVR.CreatorKit.World.Implements.TextView
         public TextAnchor TextAnchor => textAnchor;
         public TextAlignment TextAlignment => textAlignment;
         public Color Color => color;
+        public bool Visible => visible;
 
         public void SetFontAndShader(Font font, Shader shader)
         {

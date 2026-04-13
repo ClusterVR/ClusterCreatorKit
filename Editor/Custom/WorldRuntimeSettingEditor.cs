@@ -1,3 +1,4 @@
+using ClusterVR.CreatorKit.Common;
 using ClusterVR.CreatorKit.Constants;
 using ClusterVR.CreatorKit.Editor.Utils.Extensions;
 using ClusterVR.CreatorKit.Translation;
@@ -12,6 +13,11 @@ namespace ClusterVR.CreatorKit.Editor.Custom
     [CustomEditor(typeof(WorldRuntimeSetting), isFallback = true)]
     public class WorldRuntimeSettingEditor : VisualElementEditor
     {
+        static void SetIndent(VisualElement element, int indent)
+        {
+            element.style.marginLeft = 10 * indent;
+        }
+
         public override VisualElement CreateInspectorGUI()
         {
             var hudcheckbox = false;
@@ -26,8 +32,8 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             var hudTypeField =
                 FindPropertyField(container, "useHUDType");
 
-            movingPlatformHorizontalInertiaField.style.marginLeft = 10;
-            movingPlatformVerticalInertiaField.style.marginLeft = 10;
+            SetIndent(movingPlatformHorizontalInertiaField, 1);
+            SetIndent(movingPlatformVerticalInertiaField, 1);
 
             void UpdateMovingPlatformDetailSettingVisibility(bool useMovingPlatformEnabled)
             {
@@ -44,6 +50,20 @@ namespace ClusterVR.CreatorKit.Editor.Custom
 
             var useMantlingField = FindPropertyField(container, "useMantling");
             useMantlingField.label = "Use Clambering";
+
+            if (RenderPipelineUtils.IsUrp())
+            {
+                var useWorldShadowField = FindPropertyField(container, "useWorldShadow");
+                useWorldShadowField.SetEnabled(false);
+                var shadowNotice = new HelpBox
+                {
+                    messageType = HelpBoxMessageType.Info,
+                    text = TranslationTable.cck_component_urp_shadow_notice,
+                };
+                SetIndent(shadowNotice, 1);
+                container.Insert(container.IndexOf(useWorldShadowField) + 1, shadowNotice);
+            }
+
             hudTypeField.SetVisibility(false);
             var wrts = target as WorldRuntimeSetting;
             if (wrts == null)
@@ -56,7 +76,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             container.Add(hudTypeCheckbox);
 
             var enableCrouchWalkField = FindPropertyField(container, "enableCrouchWalk");
-            enableCrouchWalkField.style.marginLeft = 10;
+            SetIndent(enableCrouchWalkField, 1);
             container.Add(enableCrouchWalkField);
 
             void UpdateHudTypeCheckbox(bool useClusterHudV2)
@@ -76,7 +96,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
             {
                 var clippingPlaneField = new VisualElement();
                 clippingPlaneField.style.flexDirection = FlexDirection.Row;
-                clippingPlaneField.style.marginLeft = 10;
+                SetIndent(clippingPlaneField, 1);
 
                 var distanceField = FindPropertyField(container, propertyName);
                 distanceField.style.flexGrow = 1;

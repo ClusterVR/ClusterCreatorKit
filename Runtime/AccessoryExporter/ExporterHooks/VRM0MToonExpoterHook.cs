@@ -8,7 +8,7 @@ namespace ClusterVR.CreatorKit.AccessoryExporter.ExporterHooks
     {
         public override IndexedResource<Material> Export(IExporterContext context, Material mat)
         {
-            if (mat.shader.name != "VRM/MToon")
+            if (mat.shader.name is not ("VRM/MToon" or "VRM/Universal Render Pipeline/MToon"))
             {
                 return context.Exporters.Materials.ForceExportUnlit(mat);
             }

@@ -7,6 +7,7 @@ namespace ClusterVR.CreatorKit.AccessoryExporter.Bridge
     public sealed class VRM0MToonExporterBridge
     {
         const string MToonUtilsShaderName = "VRM/MToon";
+        const string UrpMToonShaderName = "VRM/Universal Render Pipeline/MToon";
 
         readonly VGltf.Ext.Vrm0.Unity.DefaultMaterialExporterBridge defaultMaterialBridge = new();
 
@@ -15,6 +16,7 @@ namespace ClusterVR.CreatorKit.AccessoryExporter.Bridge
             switch (mat.shader.name)
             {
                 case MToonUtilsShaderName:
+                case UrpMToonShaderName:
                     return CreateMaterialPropForMToon(context, mat);
                 default:
                     return defaultMaterialBridge.CreateMaterialProp(context, mat);
@@ -28,7 +30,7 @@ namespace ClusterVR.CreatorKit.AccessoryExporter.Bridge
             {
                 NormalMapAsGltfFormat = normalMapAsGltfFormat,
                 Name = mat.name,
-                Shader = MToonUtilsShaderName,
+                Shader = mat.shader.name,
                 RenderQueue = mat.renderQueue
             };
 

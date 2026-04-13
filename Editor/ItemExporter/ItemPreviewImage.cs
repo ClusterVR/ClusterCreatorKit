@@ -12,7 +12,7 @@ namespace ClusterVR.CreatorKit.Editor.ItemExporter
     {
         const int TextureSize = 1024;
 
-        readonly RenderTexture renderTexture = RenderTexture.GetTemporary(TextureSize, TextureSize);
+        readonly RenderTexture renderTexture = RenderTexture.GetTemporary(TextureSize, TextureSize, 16);
         readonly Texture2D texture = new Texture2D(TextureSize, TextureSize);
 
         public byte[] CreatePNG(GameObject go)

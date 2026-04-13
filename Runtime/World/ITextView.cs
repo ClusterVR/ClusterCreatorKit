@@ -18,5 +18,6 @@ namespace ClusterVR.CreatorKit.World
         TextAnchor TextAnchor { get; }
         TextAlignment TextAlignment { get; }
         Color Color { get; }
+        bool Visible { get; }
     }
 }

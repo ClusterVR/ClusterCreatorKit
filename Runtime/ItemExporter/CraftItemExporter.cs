@@ -9,8 +9,10 @@ namespace ClusterVR.CreatorKit.ItemExporter
     {
         static VGltf.Unity.Exporter CreateExporter()
         {
-            var exporter = new VGltf.Unity.Exporter();
+            var config = new VGltf.Unity.Exporter.Config();
+            var exporter = new VGltf.Unity.Exporter(config);
             exporter.AddHook(new ItemExporterHook());
+            exporter.Context.Exporters.Materials.AddHook(new LitMaterialExporterHook(config));
             exporter.Context.Exporters.Nodes.AddHook(new ItemNodeExporterHook());
 
             return exporter;

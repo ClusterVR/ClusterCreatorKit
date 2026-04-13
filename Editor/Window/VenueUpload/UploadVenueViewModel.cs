@@ -20,6 +20,7 @@ using ClusterVR.CreatorKit.Translation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 namespace ClusterVR.CreatorKit.Editor.Window.VenueUpload
@@ -137,6 +138,8 @@ namespace ClusterVR.CreatorKit.Editor.Window.VenueUpload
             currentUploadService.Val = null;
             this.errorMessage.Val = "";
 
+            var renderPipelinePresetId = RenderPipelinePresetIdProvider.GetRenderPipelinePresetId();
+
             LogWorldUploadStart(isPreviewUpload, isBeta, isPreviewWindows, isPreviewMac, isPreviewIOS, isPreviewAndroid);
 
             if (!WorldUploadEvents.InvokeOnWorldUploadStart(SceneManager.GetActiveScene()))
@@ -184,6 +187,7 @@ namespace ClusterVR.CreatorKit.Editor.Window.VenueUpload
                 WorldDescriptorCreator.Create(SceneManager.GetActiveScene()),
                 isBeta, isPreviewUpload,
                 displayIds,
+                renderPipelinePresetId,
                 exportedAssetInfo);
 
             try

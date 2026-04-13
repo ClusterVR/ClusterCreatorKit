@@ -12,7 +12,8 @@ namespace ClusterVR.CreatorKit.Editor.Validator.GltfItemExporter
             "Unlit/Texture",
             "ClusterVR/InternalSDK/MainScreen",
             "ClusterVR/UnlitNonTiledWithBackgroundColor",
-            "ClusterCreatorKit/Mirror"
+            "ClusterCreatorKit/Mirror",
+            "Universal Render Pipeline/Lit",
         };
 
         static readonly Vector3Int ItemSizeLimit = new Vector3Int(4, 4, 4);

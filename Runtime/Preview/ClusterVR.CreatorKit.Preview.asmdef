@@ -7,7 +7,10 @@
         "ClusterVR.CreatorKit.Constants",
         "ClusterVR.CreatorKit.World",
         "SteamAudioUnity",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "ClusterVR.CreatorKit.Common",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -16,6 +19,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "0.0.0",
+            "define": "CLUSTER_USE_URP"
+        }
+    ],
     "noEngineReferences": false
 }

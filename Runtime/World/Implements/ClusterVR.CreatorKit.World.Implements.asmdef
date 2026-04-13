@@ -6,7 +6,8 @@
         "ClusterVR.CreatorKit",
         "ClusterVR.CreatorKit.Validator",
         "ClusterVR.CreatorKit.Translation",
-        "ClusterVR.CreatorKit.Constants"
+        "ClusterVR.CreatorKit.Constants",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -15,5 +16,11 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "",
+            "define": "UNITY_URP"
+        }
+    ]
 }

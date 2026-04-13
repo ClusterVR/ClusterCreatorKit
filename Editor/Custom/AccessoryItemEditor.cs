@@ -1,5 +1,6 @@
 using System.IO;
 using System.Linq;
+using ClusterVR.CreatorKit.Common;
 using ClusterVR.CreatorKit.Editor.Utils.Extensions;
 using ClusterVR.CreatorKit.Item;
 using ClusterVR.CreatorKit.Item.Implements;
@@ -14,7 +15,7 @@ namespace ClusterVR.CreatorKit.Editor.Custom
     public class AccessoryItemEditor : VisualElementEditor
     {
         const string SetUsableShaderText = TranslationTable.cck_change_to_supported_shader_for_accessory;
-        const string MToonShaderName = "VRM/MToon";
+        static string MToonShaderName => RenderPipelineUtils.IsUrp() ? "VRM/Universal Render Pipeline/MToon" : "VRM/MToon";
 
         Button setUsableShaderButton;
 

@@ -20,10 +20,6 @@ namespace ClusterVR.CreatorKit.Item
         void SetNormalizedScale(Vector3 scale);
         void SetRawScale(Vector3 scale);
         void EnablePhysics();
-
-        void Embody();
-        void Disbody();
-        void UpdateIsPlaceable(bool isPlaceable);
     }
 
     public static class IItemExtensions
